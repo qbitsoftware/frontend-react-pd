@@ -57,7 +57,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredTournaments.map((tournament) => (
           <Card key={tournament.ID} className="overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer hover:scale-105">
-            <Link to={"/tournaments/" + tournament.ID}>
+            <Link to={"/tournaments/" + tournament.ID} preload={"intent"}>
               <CardHeader className="bg-primary/5">
                 <CardTitle className="flex items-center justify-between">
                   <span className="truncate">{tournament.name}</span>

@@ -1,14 +1,14 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient } from "@tanstack/react-query"
 import { Link, Outlet, createRootRouteWithContext } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { TanStackRouterDevtools } from "@/React.lazy"
+import { TanStackQueryDevtools, TanStackRouterDevtools } from "@/React.lazy"
 
-const queryClient = new QueryClient()
-
-export const Route = createRootRouteWithContext<{}>()({
-    component: () => (
-        <>
-            <QueryClientProvider client={queryClient}>
+export const Route = createRootRouteWithContext<{
+    queryClient: QueryClient
+}>()({
+    component: () => {
+        return (
+            <>
                 <div className="p-2 flex gap-2">
                     <Link to="/" className="[&.active]:font-bold">
                         Home
@@ -16,15 +16,20 @@ export const Route = createRootRouteWithContext<{}>()({
                     <Link to="/about" className="[&.active]:font-bold">
                         About
                     </Link>
+                    <Link to="/tournaments" className="[&.active]:font-bold">
+                        Tournaments
+                    </Link>
                 </div>
                 <hr />
+
                 <Outlet />
                 <Suspense >
                     <TanStackRouterDevtools />
+                    <TanStackQueryDevtools />
                 </Suspense>
-            </QueryClientProvider>
-        </>
-    ),
+            </>
+        )
+    },
     notFoundComponent: () => {
         return (
             <div>
