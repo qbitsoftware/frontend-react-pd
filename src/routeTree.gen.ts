@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TournamentsIndexImport } from './routes/tournaments/index'
+import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as TournamentsTournamentidImport } from './routes/tournaments/$tournamentid'
 
 // Create Virtual Routes
@@ -38,6 +39,12 @@ const IndexLazyRoute = IndexLazyImport.update({
 const TournamentsIndexRoute = TournamentsIndexImport.update({
   id: '/tournaments/',
   path: '/tournaments/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const KontaktIndexRoute = KontaktIndexImport.update({
+  id: '/kontakt/',
+  path: '/kontakt/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -72,6 +79,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TournamentsTournamentidImport
       parentRoute: typeof rootRoute
     }
+    '/kontakt/': {
+      id: '/kontakt/'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/tournaments/': {
       id: '/tournaments/'
       path: '/tournaments'
@@ -88,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
+  '/kontakt': typeof KontaktIndexRoute
   '/tournaments': typeof TournamentsIndexRoute
 }
 
@@ -95,6 +110,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
+  '/kontakt': typeof KontaktIndexRoute
   '/tournaments': typeof TournamentsIndexRoute
 }
 
@@ -103,19 +119,31 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
+  '/kontakt/': typeof KontaktIndexRoute
   '/tournaments/': typeof TournamentsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/tournaments/$tournamentid' | '/tournaments'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/tournaments/$tournamentid'
+    | '/kontakt'
+    | '/tournaments'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/tournaments/$tournamentid' | '/tournaments'
+  to:
+    | '/'
+    | '/about'
+    | '/tournaments/$tournamentid'
+    | '/kontakt'
+    | '/tournaments'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/tournaments/$tournamentid'
+    | '/kontakt/'
     | '/tournaments/'
   fileRoutesById: FileRoutesById
 }
@@ -124,6 +152,7 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
   TournamentsTournamentidRoute: typeof TournamentsTournamentidRoute
+  KontaktIndexRoute: typeof KontaktIndexRoute
   TournamentsIndexRoute: typeof TournamentsIndexRoute
 }
 
@@ -131,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
   TournamentsTournamentidRoute: TournamentsTournamentidRoute,
+  KontaktIndexRoute: KontaktIndexRoute,
   TournamentsIndexRoute: TournamentsIndexRoute,
 }
 
@@ -147,6 +177,7 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/tournaments/$tournamentid",
+        "/kontakt/",
         "/tournaments/"
       ]
     },
@@ -158,6 +189,9 @@ export const routeTree = rootRoute
     },
     "/tournaments/$tournamentid": {
       "filePath": "tournaments/$tournamentid.tsx"
+    },
+    "/kontakt/": {
+      "filePath": "kontakt/index.tsx"
     },
     "/tournaments/": {
       "filePath": "tournaments/index.tsx"

@@ -2,6 +2,8 @@ import { QueryClient } from "@tanstack/react-query"
 import { Link, Outlet, createRootRouteWithContext } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { TanStackQueryDevtools, TanStackRouterDevtools } from "@/React.lazy"
+import Footer from "./-components/footer"
+import Navbar from "@/components/navbar"
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
@@ -9,20 +11,11 @@ export const Route = createRootRouteWithContext<{
     component: () => {
         return (
             <>
-                <div className="p-2 flex gap-2">
-                    <Link to="/" className="[&.active]:font-bold">
-                        Home
-                    </Link>{' '}
-                    <Link to="/about" className="[&.active]:font-bold">
-                        About
-                    </Link>
-                    <Link to="/tournaments" className="[&.active]:font-bold">
-                        Tournaments
-                    </Link>
+                <Navbar />
+                <div className="min-h-screen">
+                    <Outlet />
                 </div>
-                <hr />
-
-                <Outlet />
+                <Footer />
                 <Suspense >
                     <TanStackRouterDevtools />
                     <TanStackQueryDevtools />

@@ -9,7 +9,7 @@ import { Link } from "@tanstack/react-router"
 export type TournamentColumn = {
   ID: number
   name: string
-  createdAt: string
+  CreatedAt: string
   start_date: string
   end_date: string
   type: string

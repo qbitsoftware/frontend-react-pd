@@ -25,9 +25,12 @@ export const Route = createFileRoute('/tournaments/$tournamentid')({
 });
 
 function RouteComponent() {
-  const { tournamentData, playersResponse, statisticsData, groupBracket } = Route.useLoaderData()
+  const { playersResponse, statisticsData, groupBracket } = Route.useLoaderData()
 
-  return <>
-    <GroupBracket teams={groupBracket.data} players={playersResponse} statisticsData={statisticsData} />
-  </>
+  return (
+    <>
+      <GroupBracket teams={groupBracket.data} players={playersResponse} statisticsData={statisticsData} />
+    </>
+  )
 }
+

@@ -17,7 +17,7 @@ export type TournamentResponse = {
 
 
 export function useGetTournaments() {
-    return useQuery<TournamentsResponse>({
+    return queryOptions<TournamentsResponse>({
         queryKey: ["tournaments"],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments`, {
@@ -28,16 +28,10 @@ export function useGetTournaments() {
     });
 }
 
-// export function useGetTournament(id: number) {
-//     ({
-//         queryKey: ["tournament"],
-//         queryFn: () => fetchTournament(id)
-//     });
-// }
 
 export const useGetTournament = (id: number) => {
     return queryOptions<TournamentResponse>({
-        queryKey: ["tournament"],
+        queryKey: ["tournament", id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}`, {
                 withCredentials: true

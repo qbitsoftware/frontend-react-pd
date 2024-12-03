@@ -35,10 +35,10 @@ export type Round = {
     name?: string,
 }
 export type TeamMatch = {
-    ID?: number;            // gorm.Model's 'ID' field (typically primary key)
-    createdAt?: string;     // gorm.Model's 'CreatedAt' field as ISO date string
-    updatedAt?: string      // gorm.Model's 'UpdatedAt' field as ISO date string
-    deletedAt?: string | null; // gorm.Model's 'DeletedAt' field (nullable)
+    ID?: number;
+    createdAt?: string;
+    updatedAt?: string
+    deletedAt?: string | null;
 
     tournament_id: number;
     winner_id?: number;
@@ -105,25 +105,25 @@ export type Match = {
 }
 
 export type Match2 = {
-    ID: number; // Equivalent to gorm.Model.ID
-    CreatedAt: Date; // Equivalent to gorm.Model.CreatedAt
-    UpdatedAt: Date; // Equivalent to gorm.Model.UpdatedAt
-    DeletedAt: Date | null; // Equivalent to gorm.Model.DeletedAt (nullable)
+    ID: number; 
+    CreatedAt: Date;
+    UpdatedAt: Date; 
+    DeletedAt: Date | null;
 
-    tournamentId: number; // Equivalent to TournamentID
-    p1Id: number; // Equivalent to P1ID
-    p2Id: number; // Equivalent to P2ID
-    type: string; // Equivalent to Type
-    currentRound: number; // Equivalent to CurrentRound
-    identifier: number; // Equivalent to Identifier
-    winnerId: number; // Equivalent to WinnerID
-    bracket: string; // Equivalent to Bracket
-    startDate: Date; // Equivalent to StartDate
+    tournamentId: number; 
+    p1Id: number;
+    p2Id: number;
+    type: string;
+    currentRound: number; 
+    identifier: number; 
+    winnerId: number; 
+    bracket: string;
+    startDate: Date;
     place: string;
-    table: number; // Equivalent to Table
-    winnerNextMatch: number; // Equivalent to WinnerNextMatch
-    loserNextMatch: number; // Equivalent to LoserNextMatch
-    teamMatchId: number; // Equivalent to TeamMatchID
+    table: number; 
+    winnerNextMatch: number;
+    loserNextMatch: number;
+    teamMatchId: number; 
 }
 
 export type Contestant = {

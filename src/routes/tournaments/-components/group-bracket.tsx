@@ -42,7 +42,7 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
     return team1.matches.filter(m =>
       (m.match.p1_id === team1Id && m.match.p2_id === team2Id) ||
       (m.match.p1_id === team2Id && m.match.p2_id === team1Id)
-    ).sort((a, b) => a.regrouped ? 1 : -1);
+    ).sort((a, _) => a.regrouped ? 1 : -1)
   };
 
   useEffect(() => {

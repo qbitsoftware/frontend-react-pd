@@ -1,107 +1,145 @@
-// "use client"
+"use client"
 
-// import { useEffect, useState } from 'react'
-// import Link from 'next/link'
-// import { LoginButton } from './ui/login-button'
-// import { LogoutButton } from './ui/logout-button'
-// import { Menu, Plus } from 'lucide-react'
-// import { Button } from '@/components/ui/button'
-// import Image from 'next/image'
-// import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'
-// import useAuthStore from '@/hooks/use-user'
-// import { User } from '@/types/d'
+import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { cn } from "@/lib/utils"
+import { useTranslation } from 'react-i18next';
+import { Button } from './ui/button'
 
+const menuItems = [
+    {
+        name: 'Uudised',
+        href: '/uudised',
+        dropdownItems: [
+            { name: 'All', href: '/uudised' },
+            { name: 'International', href: '/uudised?category=International' },
+            { name: 'National', href: '/uudised?category=National' },
+            { name: 'Youth', href: '/uudised?category=Youth' },
+            { name: 'Facilities', href: '/uudised?category=Facilities' },
+            { name: 'Tournaments', href: '/uudised?category=Tournaments' },
+        ]
+    },
+    {
+        name: 'ELTL',
+        href: '/eltl',
+        dropdownItems: [
+            { name: 'About Us', href: '/eltl/about' },
+            { name: 'History', href: '/eltl/history' },
+            { name: 'Board Members', href: '/eltl/board' },
+        ]
+    },
+    {
+        name: 'Võistlused',
+        href: '/voistlused',
+        dropdownItems: [
+            { name: 'Upcoming', href: '/voistlused/upcoming' },
+            { name: 'Results', href: '/voistlused/results' },
+            { name: 'Calendar', href: '/voistlused/calendar' },
+        ]
+    },
+    {
+        name: 'Klubid',
+        href: '/klubid',
+        dropdownItems: [
+            { name: 'All Clubs', href: '/klubid' },
+            { name: 'Register a Club', href: '/klubid/register' },
+            { name: 'Club Rankings', href: '/klubid/rankings' },
+        ]
+    },
+    { name: 'Noortesport', href: '/noortesport' },
+    { name: 'Reiting', href: '/reiting' },
+    { name: 'Reeglid', href: '/reeglid' },
+    { name: 'Kontakt', href: '/kontakt' },
 
-// const NavBar = () => {
-//   const [isOpen, setIsOpen] = useState(false)
-//   const [isClient, setIsClient] = useState(false)
-//   const [user, setUser] = useState<User | null>()
-//   const authStore = useAuthStore()
+]
 
-//   useEffect(() => {
-//     setUser(authStore.user)
-//     setIsClient(true);
-//   }, [authStore, isClient]);
+export default function Navbar() {
+    const [activeItem, setActiveItem] = useState('')
+    const { t, i18n } = useTranslation();
 
-//   return (
-//     <nav className="bg-white shadow-sm">
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="flex justify-between h-16">
-//           <div className="flex items-center">
-//             <Link href="/tournaments" className="flex-shrink-0 flex items-center">
-//               <Image className="h-8 w-auto" src="/RLogo.png" width={150} height={90} alt="Logo" />
-//             </Link>
-//             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-//               <Link href="/tournaments" className="text-gray-900 inline-flex items-center ml-5 px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-lg font-medium">
-//                 Turniirid
-//               </Link>
-//               {user && (
-//                 <Link href="/tournaments/new" className="text-gray-900 inline-flex items-center ml-5 px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-lg font-medium">
-//                   <Plus className="h-5 w-5 mr-1" />
-//                   Lisa uus turniir
-//                 </Link>
-//               )}
-//             </div>
-//           </div>
-//           <div className="hidden sm:ml-6 sm:flex sm:items-center">
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
+    return (
+        <header className="bg-white shadow-sm border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between h-16">
+                    <div className="flex">
+                        <div className="flex-shrink-0 flex items-center">
+                            <Link href="/">
+                                <img className="h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
+                            </Link>
+                        </div>
+                    </div>
+                    <div>
+                        <Button type="button" onClick={() => changeLanguage('en')}>
+                            en
+                        </Button>
+                        <Button type="button" onClick={() => changeLanguage('et')}>
+                            et
+                        </Button>
+                    </div>
 
-//             {
-//               user ? (
-//                 <LogoutButton />
-//               ) : (
-//                 <LoginButton />
-//               )}
-//           </div>
-//           <div className="flex items-center sm:hidden">
-//             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-//               <SheetTrigger asChild>
-//                 <Button variant="outline" size="icon" className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-//                   <span className="sr-only">Ava peamenüü</span>
-//                   <Menu className="h-6 w-6" aria-hidden="true" />
-//                 </Button>
-//               </SheetTrigger>
-//               <SheetContent side="right" className="w-[240px] sm:w-[540px]">
-//                 <div className="pt-5 pb-6 px-5">
-//                   <div className="flex items-center justify-between">
-//                     <Link href={"/tournaments"}>
-//                       <div>
-//                         <Image className="h-8 w-auto" src="/RLogo.png" width={150} height={90} alt="Logo" />
-//                       </div>
-//                     </Link>
-//                   </div>
-//                   <div className="mt-6">
-//                     <nav className="grid gap-y-8">
-//                       <Link href="/tournaments" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-//                         <span className="ml-3 text-base font-medium text-gray-900">
-//                           Turniirid
-//                         </span>
-//                       </Link>
-//                       {user && (
-//                         <Link href="/tournaments/new" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-//                           <Plus className="h-5 w-5 mr-1" />
-//                           <span className="ml-3 text-base font-medium text-gray-900">
-//                             Lisa uus turniir
-//                           </span>
-//                         </Link>
-//                       )}
-//                     </nav>
-//                   </div>
-//                 </div>
-//                 <div className="py-6 px-5 space-y-6">
-//                   {
-//                     user ? (
-//                       <LogoutButton />
-//                     ) : (
-//                       <LoginButton />
-//                     )}
-//                 </div>
-//               </SheetContent>
-//             </Sheet>
-//           </div>
-//         </div>
-//       </div>
-//     </nav>
-//   )
-// }
+                    <NavigationMenu className="hidden md:flex">
+                        <NavigationMenuList className="flex space-x-4">
+                            {menuItems.map((item) => (
+                                <NavigationMenuItem key={item.name}>
+                                    {item.dropdownItems ? (
+                                        <NavigationMenuTrigger className={cn(
+                                            "text-sm font-medium transition-colors hover:text-primary",
+                                            activeItem === item.name
+                                                ? "text-blue-600"
+                                                : "text-gray-700 hover:text-blue-600"
+                                        )}>
+                                            {item.name}
+                                        </NavigationMenuTrigger>
+                                    ) : (
+                                        <NavigationMenuLink
+                                            href={item.href}
+                                            className={cn(
+                                                "text-sm font-medium transition-colors hover:text-primary",
+                                                activeItem === item.name
+                                                    ? "text-blue-600"
+                                                    : "text-gray-700 hover:text-blue-600"
+                                            )}
+                                            onClick={() => setActiveItem(item.name)}
+                                        >
+                                            {item.name}
+                                        </NavigationMenuLink>
+                                    )}
+                                    {item.dropdownItems && (
+                                        <NavigationMenuContent>
+                                            <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] md:grid-cols-1 lg:w-[400px]">
+                                                {item.dropdownItems.map((dropdownItem) => (
+                                                    <li key={dropdownItem.name}>
+                                                        <NavigationMenuLink asChild>
+                                                            <Link
+                                                                href={dropdownItem.href}
+                                                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                            >
+                                                                <div className="text-sm font-medium leading-none">{dropdownItem.name}</div>
+                                                            </Link>
+                                                        </NavigationMenuLink>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </NavigationMenuContent>
+                                    )}
+                                </NavigationMenuItem>
+                            ))}
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+            </div>
+        </header >
+    )
+}
 
-// export default NavBar
