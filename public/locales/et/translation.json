@@ -1,7 +1,49 @@
 {
-    "title": "Eesti Lauatenniseliit",
-    "description": {
-        "part1": "Edendame lauatennise tipptaset üle Eesti",
-        "part2": "Part 2 eesti keelest"
+    "navbar": {
+        "language": {
+            "estonian": "Eesti",
+            "english": "Inglise",
+            "choose": "🇪🇪 "
+        },
+        "menu": {
+            "news": {
+                "name": "Uudised",
+                "all": "Kõik",
+                "announcements": "Teadaanded",
+                "tournaments": "Võistlused",
+                "youth": "Noored",
+                "newsletter": "Uudiskiri"
+            },
+            "eltl": "ELTL",
+            "competition": "Võistlused",
+            "clubs": "Klubid",
+            "young_sport": "Noortesport",
+            "ratings": "Reiting",
+            "rules": "Reeglid",
+            "contact": "Kontakt"
+        }
+    },
+    "homepage": {
+        "title": "Eesti Lauatenniseliit",
+        "title_button": "Uuri võistlusi",
+        "description": "Eesti lauatennise spordi tugevdamine",
+        "upcoming_tournaments": "Tulevased võistlused",
+        "latest_news": "Viimased uudised",
+        "details": "Üksikasjad",
+        "tournaments": {
+            "name": "Nimi",
+            "date": "Kuupäev",
+            "location": "Asukoht"
+        },
+        "news": {
+            "read_more": "Loe lähemalt"
+        },
+        "best_performers": {
+            "title": "Kuu parimad mängijad",
+            "button": "Vaata veel"
+        }
+    },
+    "news": {
+        "title": "Uudised"
     }
 }

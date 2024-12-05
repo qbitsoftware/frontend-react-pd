@@ -1,7 +1,49 @@
 {
-    "title": "Estonian Table Tennis Association",
-    "description": {
-        "part1": "Empowering table tennis in Estonia",
-        "part2": "Switch language between english and german using buttons above."
+    "navbar": {
+        "language": {
+            "estonian": "Estonian",
+            "english": "English",
+            "choose": "🇬🇧 "
+        },
+        "menu": {
+            "news": {
+                "name": "News",
+                "all": "All",
+                "announcements": "Announcements",
+                "tournaments": "Tournaments",
+                "youth": "Youth",
+                "newsletter": "Newsletter"
+            },
+            "eltl": "ELTL",
+            "competition": "Competitions",
+            "clubs": "Clubs",
+            "young_sport": "Youths",
+            "ratings": "Ratings",
+            "rules": "Rules",
+            "contact": "Contact"
+        }
+    },
+    "homepage": {
+        "title": "Estonian Tabletennis Association",
+        "title_button": "Check tournaments",
+        "description": "Empowering Estonian Tabletennis",
+        "upcoming_tournaments": "Upcoming Tournaments",
+        "latest_news": "Latest News",
+        "details": "Details",
+        "tournaments": {
+            "name": "Name",
+            "date": "Date",
+            "location": "Location"
+        },
+        "news": {
+            "read_more": "Read more"
+        },
+        "best_performers": {
+            "title": "Best Performers of the Month",
+            "button": "Check more"
+        }
+    },
+    "news": {
+        "title": "News and Updates"
     }
 }

@@ -11,63 +11,60 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
-import { useTranslation } from 'react-i18next';
-import { Button } from './ui/button'
+import { LanguageDropdown } from './languageSelector'
+import { useTranslation } from 'react-i18next'
 
-const menuItems = [
-    {
-        name: 'Uudised',
-        href: '/uudised',
-        dropdownItems: [
-            { name: 'All', href: '/uudised' },
-            { name: 'International', href: '/uudised?category=International' },
-            { name: 'National', href: '/uudised?category=National' },
-            { name: 'Youth', href: '/uudised?category=Youth' },
-            { name: 'Facilities', href: '/uudised?category=Facilities' },
-            { name: 'Tournaments', href: '/uudised?category=Tournaments' },
-        ]
-    },
-    {
-        name: 'ELTL',
-        href: '/eltl',
-        dropdownItems: [
-            { name: 'About Us', href: '/eltl/about' },
-            { name: 'History', href: '/eltl/history' },
-            { name: 'Board Members', href: '/eltl/board' },
-        ]
-    },
-    {
-        name: 'Võistlused',
-        href: '/voistlused',
-        dropdownItems: [
-            { name: 'Upcoming', href: '/voistlused/upcoming' },
-            { name: 'Results', href: '/voistlused/results' },
-            { name: 'Calendar', href: '/voistlused/calendar' },
-        ]
-    },
-    {
-        name: 'Klubid',
-        href: '/klubid',
-        dropdownItems: [
-            { name: 'All Clubs', href: '/klubid' },
-            { name: 'Register a Club', href: '/klubid/register' },
-            { name: 'Club Rankings', href: '/klubid/rankings' },
-        ]
-    },
-    { name: 'Noortesport', href: '/noortesport' },
-    { name: 'Reiting', href: '/reiting' },
-    { name: 'Reeglid', href: '/reeglid' },
-    { name: 'Kontakt', href: '/kontakt' },
 
-]
 
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
+    const menuItems = [
+        {
+            name: t('navbar.menu.news.name'),
+            href: '/uudised',
+            dropdownItems: [
+                { name: t('navbar.menu.news.all'), href: '/uudised' },
+                { name: t('navbar.menu.news.announcements'), href: `/uudised?category=Announcements` },
+                { name: t('navbar.menu.news.tournaments'), href: `/uudised?category=Tournaments` },
+                { name: t('navbar.menu.news.youth'), href: `/uudised?category=Youth` },
+                { name: t('navbar.menu.news.newsletter'), href: `/uudised?category=Newsletter` },
+            ]
+        },
+        {
+            name: t('navbar.menu.eltl'),
+            href: '/eltl',
+            dropdownItems: [
+                { name: 'About Us', href: '/eltl/about' },
+                { name: 'History', href: '/eltl/history' },
+                { name: 'Board Members', href: '/eltl/board' },
+            ]
+        },
+        {
+            name: t('navbar.menu.competition'),
+            href: '/voistlused',
+            dropdownItems: [
+                { name: 'Upcoming', href: '/voistlused/upcoming' },
+                { name: 'Results', href: '/voistlused/results' },
+                { name: 'Calendar', href: '/voistlused/calendar' },
+            ]
+        },
+        {
+            name: t('navbar.menu.clubs'),
+            href: '/klubid',
+            dropdownItems: [
+                { name: 'All Clubs', href: '/klubid' },
+                { name: 'Register a Club', href: '/klubid/register' },
+                { name: 'Club Rankings', href: '/klubid/rankings' },
+            ]
+        },
+        { name: t('navbar.menu.young_sport'), href: '/noortesport' },
+        { name: t('navbar.menu.ratings'), href: '/reiting' },
+        { name: t('navbar.menu.rules'), href: '/reeglid' },
+        { name: t('navbar.menu.contact'), href: '/kontakt' },
 
-    const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
-    };
+    ]
+
     return (
         <header className="bg-white shadow-sm border-b border-gray-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,14 +75,6 @@ export default function Navbar() {
                                 <img className="h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
                             </Link>
                         </div>
-                    </div>
-                    <div>
-                        <Button type="button" onClick={() => changeLanguage('en')}>
-                            en
-                        </Button>
-                        <Button type="button" onClick={() => changeLanguage('et')}>
-                            et
-                        </Button>
                     </div>
 
                     <NavigationMenu className="hidden md:flex">
@@ -105,7 +94,7 @@ export default function Navbar() {
                                         <NavigationMenuLink
                                             href={item.href}
                                             className={cn(
-                                                "text-sm font-medium transition-colors hover:text-primary",
+                                                "text-sm font-medium px-2 transition-colors hover:text-primary",
                                                 activeItem === item.name
                                                     ? "text-blue-600"
                                                     : "text-gray-700 hover:text-blue-600"
@@ -135,6 +124,7 @@ export default function Navbar() {
                                     )}
                                 </NavigationMenuItem>
                             ))}
+                            <LanguageDropdown />
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
