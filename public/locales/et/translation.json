@@ -1,4 +1,7 @@
 {
+    "eltl": {
+        "name": "Eesti lauatenniseliit"
+    },
     "navbar": {
         "language": {
             "estonian": "Eesti",
@@ -22,6 +25,14 @@
             "rules": "Reeglid",
             "contact": "Kontakt"
         }
+    },
+    "footer": {
+        "contact": {
+            "name": "Kontakt",
+            "email": "Email",
+            "phone": "Tel nr"
+        },
+        "links": "Menüü"
     },
     "homepage": {
         "title": "Eesti Lauatenniseliit",

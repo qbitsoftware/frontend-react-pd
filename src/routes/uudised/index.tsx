@@ -6,16 +6,9 @@ import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFadeIn } from '@/hooks/useFadeIn'
+import { Blog, BlogCard } from './-components/blog-card'
 
 
-interface Blog {
-    id: number
-    title: string
-    date: string
-    category: string
-    excerpt: string
-    image: string
-}
 
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
@@ -54,7 +47,6 @@ export default function RouteComponent() {
     const [heroControls, heroRef] = useFadeIn()
 
     const blogCategories = ['All', 'Announcements', 'Tournaments', 'Youth', 'Newsletter']
-
     const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.youth'), t('navbar.menu.news.newsletter')]
 
     useEffect(() => {
@@ -83,35 +75,14 @@ export default function RouteComponent() {
     const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE)
     const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
-    const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: string }) => (
-        <Card className={`overflow-hidden ${className}`}>
-            {blog.image && (
-                <img
-                    src={blog.image}
-                    alt={blog.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-48 object-cover"
-                />
-            )}
-            <CardHeader>
-                <div className="text-sm font-medium text-blue-600">{blog.category}</div>
-                <CardTitle className="mt-2">{blog.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-gray-500">{blog.excerpt}</p>
-            </CardContent>
-            <CardFooter>
-                <Link href={`/uudised/${blog.id}`}>
-                    <Button variant="outline">Read More</Button>
-                </Link>
-            </CardFooter>
-        </Card>
-    )
+    const handleCategoryChange = (index: number) => {
+        setActiveCategory(blogCategories[index])
+        setCurrentPage(1)
+    }
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">News and Updates</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">{t('news.title')}</h1>
 
             <Tabs value={activeCategory} className="mb-8">
                 <TabsList className="bg-blue-100 p-1 rounded-lg">
@@ -119,7 +90,7 @@ export default function RouteComponent() {
                         <TabsTrigger
                             key={category}
                             value={blogCategories[index]}
-                            onClick={() => setActiveCategory(blogCategories[index])}
+                            onClick={() => handleCategoryChange(index)}
                             className="px-4 py-2 rounded-md data-[state=active]:bg-blue-600 data-[state=active]:text-white"
                         >
                             {category}
@@ -139,7 +110,6 @@ export default function RouteComponent() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={heroControls}
                         >
-                            {/* First blog - full width */}
                             <Card className="overflow-hidden bg-blue-600 text-white">
                                 <div className="md:flex items-center">
                                     <div className="md:w-1/3 p-8">
@@ -179,7 +149,6 @@ export default function RouteComponent() {
                                 <BlogCard key={blog.id} blog={blog} />
                             ))}
                         </motion.div>
-                        {/* Third row - 4 text-only blogs, responsive grid */}
                         <motion.div
                             initial={{ opacity: 0, x: 50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -204,7 +173,6 @@ export default function RouteComponent() {
                                 ))}
                             </div>
                         </motion.div>
-                        {/* Fourth row - 2 blogs with images, different layout */}
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -241,7 +209,6 @@ export default function RouteComponent() {
                                 </Card>
                             ))}
                         </motion.div>
-                        {/* Last blog - full width, different layout */}
                         {paginatedBlogs[9] && (
                             <motion.div
                                 initial={{ opacity: 0, x: 50 }}
@@ -291,13 +258,17 @@ export default function RouteComponent() {
                         <Button
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
+                            variant='outline'
+                            className='border border-blue-500'
                         >
                             Previous
                         </Button>
-                        <span className="flex items-center px-4 py-2 bg-blue-100 rounded-md">
+                        <span className="flex items-center px-4 py-2 rounded-md">
                             {currentPage} of {totalPages}
                         </span>
                         <Button
+                            variant="outline"
+                            className='border border-blue-500 hover:bg-blue-100'
                             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages}
                         >

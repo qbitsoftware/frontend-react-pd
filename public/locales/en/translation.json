@@ -1,4 +1,7 @@
 {
+    "eltl": {
+        "name": "Estonian Tabletennis Association"
+    },
     "navbar": {
         "language": {
             "estonian": "Estonian",
@@ -22,6 +25,14 @@
             "rules": "Rules",
             "contact": "Contact"
         }
+    },
+    "footer": {
+        "contact": {
+            "name": "Contacts",
+            "email": "Email",
+            "phone": "Phone"
+        },
+        "links": "Quick links"
     },
     "homepage": {
         "title": "Estonian Tabletennis Association",
