@@ -18,6 +18,7 @@ import { Route as TournamentsIndexImport } from './routes/tournaments/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
 import { Route as TournamentsTournamentidImport } from './routes/tournaments/$tournamentid'
+import { Route as TestPageImport } from './routes/test/page'
 
 // Create Virtual Routes
 
@@ -68,6 +69,12 @@ const TournamentsTournamentidRoute = TournamentsTournamentidImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TestPageRoute = TestPageImport.update({
+  id: '/test/page',
+  path: '/test/page',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -84,6 +91,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/test/page': {
+      id: '/test/page'
+      path: '/test/page'
+      fullPath: '/test/page'
+      preLoaderRoute: typeof TestPageImport
       parentRoute: typeof rootRoute
     }
     '/tournaments/$tournamentid': {
@@ -129,6 +143,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/test/page': typeof TestPageRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/kontakt': typeof KontaktIndexRoute
@@ -139,6 +154,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/test/page': typeof TestPageRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/kontakt': typeof KontaktIndexRoute
@@ -150,6 +166,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/test/page': typeof TestPageRoute
   '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/kontakt/': typeof KontaktIndexRoute
@@ -162,6 +179,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/test/page'
     | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/kontakt'
@@ -171,6 +189,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/test/page'
     | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/kontakt'
@@ -180,6 +199,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/test/page'
     | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/kontakt/'
@@ -191,6 +211,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
+  TestPageRoute: typeof TestPageRoute
   TournamentsTournamentidRoute: typeof TournamentsTournamentidRoute
   UudisedBlogidRoute: typeof UudisedBlogidRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
@@ -201,6 +222,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
+  TestPageRoute: TestPageRoute,
   TournamentsTournamentidRoute: TournamentsTournamentidRoute,
   UudisedBlogidRoute: UudisedBlogidRoute,
   KontaktIndexRoute: KontaktIndexRoute,
@@ -220,6 +242,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/test/page",
         "/tournaments/$tournamentid",
         "/uudised/$blogid",
         "/kontakt/",
@@ -232,6 +255,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.lazy.tsx"
+    },
+    "/test/page": {
+      "filePath": "test/page.tsx"
     },
     "/tournaments/$tournamentid": {
       "filePath": "tournaments/$tournamentid.tsx"
