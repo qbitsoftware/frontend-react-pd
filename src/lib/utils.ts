@@ -78,3 +78,7 @@ export const formatDate = (time: string) => {
 
   return formattedDate
 }
+
+export const radians = (angle: number) => {
+  return angle * (Math.PI / 180);
+};

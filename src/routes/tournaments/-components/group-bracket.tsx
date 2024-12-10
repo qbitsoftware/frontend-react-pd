@@ -118,7 +118,7 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
           </SelectContent>
         </Select>
       </div>
-      <ScrollArea className="w-full">
+      <ScrollArea className="w-full mx-auto rounded-sm">
         <div className="min-w-[640px]">
           <Table className="w-full border-collapse">
             <TableHeader>
