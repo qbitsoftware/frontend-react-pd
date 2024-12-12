@@ -90,7 +90,7 @@ export const CalculateSVGWidth = (matches: Match[], vertical_gap: number, width:
 }
 
 export const CalculateSVGHeight = (matches: Match[], horisontal_gap: number, height: number) => {
-  const count = matches.filter(item => item.roundIndex === 1).length || 0
+  const count = matches.filter(item => item.roundIndex === 0).length || 0
   const SVG_HEIGTH = count * (height + horisontal_gap)
   return SVG_HEIGTH
 }

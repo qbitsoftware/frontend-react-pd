@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import { CalcCurrentRoundMatches, CalculateSVGHeight, CalculateSVGWidth } from '@/lib/utils';
+import { CalculateSVGHeight, CalculateSVGWidth } from '@/lib/utils';
 import { Data } from '@/types/types';
 
 interface BracketProps {
@@ -14,23 +14,19 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
     const VERTICAL_GAP = 80;
     const HORIZONTAL_GAP = 240;
     const SVG_WIDTH = CalculateSVGWidth(data.matches, VERTICAL_GAP, WIDTH);
-    const SVG_HEIGHT = CalculateSVGHeight(data.matches, HORIZONTAL_GAP, HEIGHT);
+    const SVG_HEIGHT = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGHT);
 
+    console.log("svg heigth", SVG_HEIGHT)
     if (data && data.matches) {
         return (
             <div className="relative">
                 {data.matches.map((match, index) => {
                     let topCoord;
-                    // if (match.roundIndex < 4) { // Winners bracket
-                    // topCoord = match.order * (HEIGHT + VERTICAL_GAP);
-                    // } else { // Losers bracket
                     const prevMatches = data.matches!.filter(
                         (m) => m.roundIndex === match.roundIndex - 1
                     );
 
-                    // Align losers' matches at the same level
-                    console.log("match round index", match.roundIndex)
-                    if (match.roundIndex % 2 === 0) {
+                    if (match.roundIndex % 2 === 0 && match.roundIndex != 0) {
                         const firstMatch = prevMatches[2 * match.order];
                         const secondMatch = prevMatches[2 * match.order + 1];
 
@@ -38,11 +34,22 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                             topCoord = (firstMatch.topCoord + secondMatch.topCoord) / 2;
                         } else {
                             topCoord = match.order * (HEIGHT + VERTICAL_GAP);
+                            console.log("we are never getting her")
                         }
                     } else {
-                        topCoord = match.order * (HEIGHT + VERTICAL_GAP);
+                        if (match.roundIndex == 0) {
+                            topCoord = match.order * (HEIGHT + VERTICAL_GAP);
+                        } else {
+                            //check if final match
+                            if (match.bracket == "5-6") {
+                                const firstMatch = prevMatches[2 * match.order];
+                                const secondMatch = prevMatches[2 * match.order + 1];
+                                topCoord = (firstMatch.topCoord + secondMatch.topCoord) / 2;
+                            } else {
+                                topCoord = prevMatches[match.order].topCoord
+                            }
+                        }
                     }
-                    // }
                     match.topCoord = topCoord;
                     return (
                         <div
@@ -79,8 +86,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                             (m) => m.roundIndex === match.roundIndex - 1
                         );
 
-                        // For winners' bracket, connect to previous round in the winners' bracket
-                        if (match.roundIndex % 2 == 0) {
+                        if (match.roundIndex % 2 == 0 || match.bracket == "5-6") {
                             const firstMatch = prevMatches[2 * match.order];
                             const secondMatch = prevMatches[2 * match.order + 1];
 
@@ -109,18 +115,13 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                     />
                                 </g>
                             );
-                        } else { // Losers' bracket
-                            const firstMatch = prevMatches[2 * match.order];
-                            const secondMatch = prevMatches[2 * match.order + 1];
+                        } else {
+                            const startX = match.roundIndex * HORIZONTAL_GAP
+                            const startY = match.topCoord + HEIGHT / 2
 
-                            if (!firstMatch || !secondMatch) return null;
-
-                            const startX = match.roundIndex * HORIZONTAL_GAP;
-                            const startY = match.topCoord + HEIGHT / 2;
-
-                            const endX = (match.roundIndex - 1) * HORIZONTAL_GAP + WIDTH;
-                            const endY1 = firstMatch.topCoord + HEIGHT / 2;
-                            const endY2 = secondMatch.topCoord + HEIGHT / 2;
+                            const endX = (match.roundIndex - 1) * HORIZONTAL_GAP + WIDTH
+                            const endY1 = prevMatches[match.order].topCoord + HEIGHT / 2
+                            const endY2 = prevMatches[match.order].topCoord + HEIGHT / 2
 
                             return (
                                 <g key={`line-${match.roundIndex}-${match.order}`}>

@@ -26,7 +26,8 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
                     {bracket === 0 ? (
                         data.map((item, index) => {
                             const topCoord = previousTop
-                            previousTop += CalculateSVGHeight(item.tables[0].matches, 180, 80) + 500
+
+                            previousTop += CalculateSVGHeight(item.tables[0].matches, 80, 80)
                             if (item.tables[0].name == "Miinusring") {
                                 return (
                                     <div key={index}>

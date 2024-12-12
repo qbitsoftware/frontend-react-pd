@@ -9,7 +9,7 @@ import { useGetBracket } from '@/queries/tournaments'
 export const Route = createFileRoute('/test/page')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    const brackets = await queryClient.ensureQueryData(useGetBracket(12))
+    const brackets = await queryClient.ensureQueryData(useGetBracket(15))
     return brackets
   }
 
