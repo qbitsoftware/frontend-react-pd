@@ -72,15 +72,15 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
           } key={index} className="flex flex-col items-center justify-center cursor-pointer">
             {matches[index] ? (
               <>
-                <span className="font-bold text-sm text-blue-600">
+                <span className="font-bold text-xs md:text-sm text-blue-600">
                   {matches[index].points_gained}
                 </span>
-                <div className="flex items-center space-x-1">
-                  <p className="w-6 text-center font-medium">
+                <div className="flex items-center space-x-1 text-xs md:text-sm">
+                  <p className="w-4 md:w-6 text-center font-medium">
                     {matches[index].match.p1_id === team1Id ? matches[index].player_1_score : matches[index].player_2_score}
                   </p>
                   <span className="text-gray-500">-</span>
-                  <p className="w-6 text-center font-medium">
+                  <p className="w-4 md:w-6 text-center font-medium">
                     {matches[index].match.p1_id === team1Id ? matches[index].player_2_score : matches[index].player_1_score}
                   </p>
                 </div>
@@ -89,9 +89,9 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
               <>
                 <Skeleton className="h-4 w-8 mb-1" />
                 <div className="flex items-center space-x-1">
-                  <Skeleton className="h-4 w-6" />
+                  <Skeleton className="h-4 w-4 md:w-6" />
                   <span>-</span>
-                  <Skeleton className="h-4 w-6" />
+                  <Skeleton className="h-4 w-4 md:w-6" />
                 </div>
               </>
             )}
@@ -121,15 +121,15 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
       <ScrollArea className="w-full mx-auto rounded-sm">
         <div className="min-w-[640px]">
           <Table className="w-full border-collapse">
-            <TableHeader>
+            <TableHeader className=''>
               <TableRow>
-                <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">Meeskonnad</TableHead>
+                <TableHead className="w-[150px] text-center bg-secondary text-primary-foreground text-xs md:text-sm px-0">Meeskonnad</TableHead>
                 {Array(8).fill(0).map((_, index) => (
-                  <TableHead key={index} className="w-[120px] text-center bg-primary text-primary-foreground">
+                  <TableHead key={index} className="text-center bg-secondary text-primary-foreground text-xs md:text-sm p-1">
                     {displayTeams[index]?.team.name || <Skeleton className="h-6 w-20 mx-auto" />}
                   </TableHead>
                 ))}
-                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
+                <TableHead className="w-[120px] text-center bg-secondary text-primary-foreground">Punktid kokku</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -137,11 +137,11 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
                 <TableRow
                   key={rowIndex}
                   className={cn(
-                    rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
+                    rowIndex % 2 === 0 ? 'bg-[#f1f5f9]/20' : 'bg-background',
                     selectedTeam === displayTeams[rowIndex]?.team.ID.toString() ? 'bg-blue-100' : ''
                   )}
                 >
-                  <TableCell className="font-medium border text-center">
+                  <TableCell className="font-medium border text-center text-xs md:text-sm p-1">
                     {displayTeams[rowIndex]?.team.name || <Skeleton className="h-6 w-20 mx-auto" />}
                   </TableCell>
                   {Array(8).fill(0).map((_, colIndex) => (
@@ -159,7 +159,7 @@ export default function GroupBracket({ teams, statisticsData, players }: Props) 
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="font-bold border text-center bg-secondary/30">
+                  <TableCell className="font-bold border text-center bg-[#f1f5f9]/30">
                     {displayTeams[rowIndex]?.total_points !== undefined ?
                       displayTeams[rowIndex].total_points :
                       <Skeleton className="h-6 w-12 mx-auto" />

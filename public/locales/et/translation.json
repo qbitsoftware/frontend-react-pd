@@ -56,5 +56,19 @@
     },
     "news": {
         "title": "Uudised"
+    },
+    "tournaments": {
+        "header": "Turniirid",
+        "inputs": {
+            "search":"Otsi turniiri...",
+            "start_date":"Alguskuupäev",
+            "end_date":"Lõppkuupäev",
+            "reset_dates": "Lähtesta kuupäevad",
+            "type": "Vali turniiri tüüp"
+        },
+        "show": {
+            "more":"Näita kõiki",
+            "less": "Näita vähem"
+        }
     }
 }

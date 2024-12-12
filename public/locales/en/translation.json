@@ -56,5 +56,19 @@
     },
     "news": {
         "title": "News and Updates"
+    },
+    "tournaments": {
+        "header": "Tournaments",
+        "inputs": {
+            "search":"Search tournament...",
+            "start_date":"Start date",
+            "end_date":"End date",
+            "reset_dates": "Reset dates",
+            "type": "Choose tournament type"
+        },
+        "show": {
+            "more":"Show more",
+            "less": "Show less"
+        }
     }
 }

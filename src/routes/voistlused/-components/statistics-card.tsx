@@ -78,7 +78,8 @@ export const StatisticsCard = ({ protocol, players, index }: StatsiticProps) => 
                                                     return (
                                                         <Badge
                                                             key={gameIndex}
-                                                            variant={set.team_1_score > set.team_2_score ? "default" : "secondary"}
+                                                            variant={set.team_1_score > set.team_2_score ? "default" : "outline"}
+                                                            className={set.team_1_score > set.team_2_score ? "" : "bg-[#f1f4f9]"}
                                                         >
                                                             {`${set.team_1_score} - ${set.team_2_score}`}
                                                         </Badge>

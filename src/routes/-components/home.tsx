@@ -24,7 +24,7 @@ export default function Home() {
                     >
                         <h1 className="text-5xl font-bold mb-4">{t('homepage.title')}</h1>
                         <p className="text-xl mb-8">{t('homepage.description')}</p>
-                        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">{t('homepage.title_button')}</Button>
+                        <Button size="lg" className="bg-secondary hover:bg-blue-700 text-white">{t('homepage.title_button')}</Button>
                     </motion.div>
                 </div>
             </div>

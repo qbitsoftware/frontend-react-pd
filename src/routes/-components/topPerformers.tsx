@@ -17,7 +17,7 @@ export function TopMonthPerformers() {
             <div className="bg-white shadow-lg rounded-lg overflow-hidden mb-5">
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-blue-600 text-white">
+                        <thead className="bg-secondary text-white">
                             <tr>
                                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">NR</th>
                                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
@@ -51,7 +51,7 @@ export function TopMonthPerformers() {
                 </div>
             </div>
             <div className='text-center'>
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">{t('homepage.best_performers.button')}</Button>
+                <Button size="lg" className="bg-secondary hover:bg-blue-700 text-white">{t('homepage.best_performers.button')}</Button>
             </div>
         </div>
     )

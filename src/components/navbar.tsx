@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils"
 import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
+import { Button } from './ui/button'
 
 
 
@@ -44,7 +45,7 @@ export default function Navbar() {
             name: t('navbar.menu.competition'),
             href: '/voistlused',
             dropdownItems: [
-                { name: 'Upcoming', href: '/voistlused/upcoming' },
+                { name: 'Kõik võistlused', href: '/voistlused' },
                 { name: 'Results', href: '/voistlused/results' },
                 { name: 'Calendar', href: '/voistlused/calendar' },
             ]
@@ -125,6 +126,9 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                             ))}
                             <LanguageDropdown />
+                            <Link to='/login'>
+                                <Button variant="secondary" className='text-white rounded-xl px-6  hover:bg-secondary'>Logi sisse</Button>
+                            </Link>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>

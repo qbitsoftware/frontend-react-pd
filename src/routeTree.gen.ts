@@ -13,11 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
-import { Route as TournamentsIndexImport } from './routes/tournaments/index'
+import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
+import { Route as VoistlusedTournamentidImport } from './routes/voistlused/$tournamentid'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
-import { Route as TournamentsTournamentidImport } from './routes/tournaments/$tournamentid'
 
 // Create Virtual Routes
 
@@ -38,15 +39,21 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const VoistlusedIndexRoute = VoistlusedIndexImport.update({
+  id: '/voistlused/',
+  path: '/voistlused/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const UudisedIndexRoute = UudisedIndexImport.update({
   id: '/uudised/',
   path: '/uudised/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const TournamentsIndexRoute = TournamentsIndexImport.update({
-  id: '/tournaments/',
-  path: '/tournaments/',
+const LoginIndexRoute = LoginIndexImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,15 +63,15 @@ const KontaktIndexRoute = KontaktIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const UudisedBlogidRoute = UudisedBlogidImport.update({
-  id: '/uudised/$blogid',
-  path: '/uudised/$blogid',
+const VoistlusedTournamentidRoute = VoistlusedTournamentidImport.update({
+  id: '/voistlused/$tournamentid',
+  path: '/voistlused/$tournamentid',
   getParentRoute: () => rootRoute,
 } as any)
 
-const TournamentsTournamentidRoute = TournamentsTournamentidImport.update({
-  id: '/tournaments/$tournamentid',
-  path: '/tournaments/$tournamentid',
+const UudisedBlogidRoute = UudisedBlogidImport.update({
+  id: '/uudised/$blogid',
+  path: '/uudised/$blogid',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -86,18 +93,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/tournaments/$tournamentid': {
-      id: '/tournaments/$tournamentid'
-      path: '/tournaments/$tournamentid'
-      fullPath: '/tournaments/$tournamentid'
-      preLoaderRoute: typeof TournamentsTournamentidImport
-      parentRoute: typeof rootRoute
-    }
     '/uudised/$blogid': {
       id: '/uudised/$blogid'
       path: '/uudised/$blogid'
       fullPath: '/uudised/$blogid'
       preLoaderRoute: typeof UudisedBlogidImport
+      parentRoute: typeof rootRoute
+    }
+    '/voistlused/$tournamentid': {
+      id: '/voistlused/$tournamentid'
+      path: '/voistlused/$tournamentid'
+      fullPath: '/voistlused/$tournamentid'
+      preLoaderRoute: typeof VoistlusedTournamentidImport
       parentRoute: typeof rootRoute
     }
     '/kontakt/': {
@@ -107,11 +114,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KontaktIndexImport
       parentRoute: typeof rootRoute
     }
-    '/tournaments/': {
-      id: '/tournaments/'
-      path: '/tournaments'
-      fullPath: '/tournaments'
-      preLoaderRoute: typeof TournamentsIndexImport
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
     '/uudised/': {
@@ -119,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: '/uudised'
       fullPath: '/uudised'
       preLoaderRoute: typeof UudisedIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/voistlused/': {
+      id: '/voistlused/'
+      path: '/voistlused'
+      fullPath: '/voistlused'
+      preLoaderRoute: typeof VoistlusedIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -129,32 +143,35 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
-  '/tournaments': typeof TournamentsIndexRoute
+  '/login': typeof LoginIndexRoute
   '/uudised': typeof UudisedIndexRoute
+  '/voistlused': typeof VoistlusedIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
-  '/tournaments': typeof TournamentsIndexRoute
+  '/login': typeof LoginIndexRoute
   '/uudised': typeof UudisedIndexRoute
+  '/voistlused': typeof VoistlusedIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt/': typeof KontaktIndexRoute
-  '/tournaments/': typeof TournamentsIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/uudised/': typeof UudisedIndexRoute
+  '/voistlused/': typeof VoistlusedIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -162,50 +179,55 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
+    | '/voistlused/$tournamentid'
     | '/kontakt'
-    | '/tournaments'
+    | '/login'
     | '/uudised'
+    | '/voistlused'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
+    | '/voistlused/$tournamentid'
     | '/kontakt'
-    | '/tournaments'
+    | '/login'
     | '/uudised'
+    | '/voistlused'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
+    | '/voistlused/$tournamentid'
     | '/kontakt/'
-    | '/tournaments/'
+    | '/login/'
     | '/uudised/'
+    | '/voistlused/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
-  TournamentsTournamentidRoute: typeof TournamentsTournamentidRoute
   UudisedBlogidRoute: typeof UudisedBlogidRoute
+  VoistlusedTournamentidRoute: typeof VoistlusedTournamentidRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
-  TournamentsIndexRoute: typeof TournamentsIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
+  VoistlusedIndexRoute: typeof VoistlusedIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
-  TournamentsTournamentidRoute: TournamentsTournamentidRoute,
   UudisedBlogidRoute: UudisedBlogidRoute,
+  VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
   KontaktIndexRoute: KontaktIndexRoute,
-  TournamentsIndexRoute: TournamentsIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
+  VoistlusedIndexRoute: VoistlusedIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -220,11 +242,12 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/tournaments/$tournamentid",
         "/uudised/$blogid",
+        "/voistlused/$tournamentid",
         "/kontakt/",
-        "/tournaments/",
-        "/uudised/"
+        "/login/",
+        "/uudised/",
+        "/voistlused/"
       ]
     },
     "/": {
@@ -233,20 +256,23 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.lazy.tsx"
     },
-    "/tournaments/$tournamentid": {
-      "filePath": "tournaments/$tournamentid.tsx"
-    },
     "/uudised/$blogid": {
       "filePath": "uudised/$blogid.tsx"
+    },
+    "/voistlused/$tournamentid": {
+      "filePath": "voistlused/$tournamentid.tsx"
     },
     "/kontakt/": {
       "filePath": "kontakt/index.tsx"
     },
-    "/tournaments/": {
-      "filePath": "tournaments/index.tsx"
+    "/login/": {
+      "filePath": "login/index.tsx"
     },
     "/uudised/": {
       "filePath": "uudised/index.tsx"
+    },
+    "/voistlused/": {
+      "filePath": "voistlused/index.tsx"
     }
   }
 }

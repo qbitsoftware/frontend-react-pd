@@ -91,7 +91,7 @@ export default function RouteComponent() {
                             key={category}
                             value={blogCategories[index]}
                             onClick={() => handleCategoryChange(index)}
-                            className="px-4 py-2 rounded-md data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                            className="px-4 py-2 rounded-md data-[state=active]:bg-blue-secondary data-[state=active]:text-white"
                         >
                             {category}
                         </TabsTrigger>
@@ -110,7 +110,7 @@ export default function RouteComponent() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={heroControls}
                         >
-                            <Card className="overflow-hidden bg-blue-600 text-white">
+                            <Card className="overflow-hidden bg-blue-secondary text-white">
                                 <div className="md:flex items-center">
                                     <div className="md:w-1/3 p-8">
                                         <CardHeader>

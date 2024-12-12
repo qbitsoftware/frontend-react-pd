@@ -31,7 +31,7 @@ export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: str
         </CardContent>
         <CardFooter>
             <Link href={`/uudised/${blog.id}`}>
-                <Button variant="outline" className=" border border-blue-600 hover:bg-blue-100">Read More</Button>
+                <Button variant="outline" className=" border border-blue-secondary hover:bg-blue-100">Read More</Button>
             </Link>
         </CardFooter>
     </Card>
