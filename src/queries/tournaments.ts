@@ -1,7 +1,7 @@
 
-import { queryOptions, useQuery } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import axiosInstance from "./axiosconf";
-import { Tournament } from "@/types/types";
+import { Bracket, Data, Tournament } from "@/types/types";
 
 export type TournamentsResponse = {
     data: Tournament[] | null
@@ -38,6 +38,24 @@ export const useGetTournament = (id: number) => {
             })
             return data;
         }
-        
+
+    })
+}
+
+interface BracketReponse {
+    data: Bracket[] | null
+    message: string;
+    error: string | null;
+}
+
+export const useGetBracket = (id: number) => {
+    return queryOptions<BracketReponse>({
+        queryKey: ["bracket_info", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/bracket`, {
+                withCredentials: true
+            })
+            return data;
+        }
     })
 }
