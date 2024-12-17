@@ -1,10 +1,14 @@
 export type Data = {
     rounds: Round[],
-    matches?: Match[],
+    matches: Match[],
     contestants?: {
         [contestantId: string]: Contestant
     }
     name: string;
+}
+
+export type Bracket = {
+    tables: Data[]
 }
 
 export interface User {
@@ -98,6 +102,7 @@ export type Match = {
     bracket: string,
     CreatedAt: string
     winner_id: number
+    topCoord: number
     p1_id: number
     p2_id: number
     p1_id_2: number
@@ -105,25 +110,25 @@ export type Match = {
 }
 
 export type Match2 = {
-    ID: number; 
+    ID: number;
     CreatedAt: Date;
-    UpdatedAt: Date; 
+    UpdatedAt: Date;
     DeletedAt: Date | null;
 
-    tournamentId: number; 
+    tournamentId: number;
     p1Id: number;
     p2Id: number;
     type: string;
-    currentRound: number; 
-    identifier: number; 
-    winnerId: number; 
+    currentRound: number;
+    identifier: number;
+    winnerId: number;
     bracket: string;
     startDate: Date;
     place: string;
-    table: number; 
+    table: number;
     winnerNextMatch: number;
     loserNextMatch: number;
-    teamMatchId: number; 
+    teamMatchId: number;
 }
 
 export type Contestant = {

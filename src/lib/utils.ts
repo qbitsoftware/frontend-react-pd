@@ -1,4 +1,4 @@
-import { User } from "@/types/types"
+import { Match, User } from "@/types/types"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -82,3 +82,20 @@ export const formatDate = (time: string) => {
 export const radians = (angle: number) => {
   return angle * (Math.PI / 180);
 };
+
+export const CalculateSVGWidth = (matches: Match[], vertical_gap: number, width: number) => {
+  const matches_len = matches.reduce((max, item) => item.roundIndex > max.roundIndex ? item : max, { roundIndex: -Infinity }).roundIndex
+  const SVG_WIDTH = (matches_len) * (width + vertical_gap)
+  return SVG_WIDTH
+}
+
+export const CalculateSVGHeight = (matches: Match[], horisontal_gap: number, height: number) => {
+  const count = matches.filter(item => item.roundIndex === 0).length || 0
+  const SVG_HEIGTH = count * (height + horisontal_gap)
+  return SVG_HEIGTH
+}
+
+export const CalcCurrentRoundMatches = (matches: Match[], round: number) => {
+  const count = matches.filter(item => item.roundIndex === round).length || 0
+  return count
+}
