@@ -3,6 +3,9 @@ const TestBracket2 = () => {
 
     return (
         <div>
+            <div className="absolute top-[-100px] left-[100px] w-40 h-20 bg-green-500 rounded-lg flex items-center justify-center">
+                Element 1
+            </div>
             <div className="absolute top-[100px] left-[100px] w-40 h-20 bg-green-500 rounded-lg flex items-center justify-center">
                 Element 1
             </div>

@@ -100,6 +100,37 @@ export const CalcCurrentRoundMatches = (matches: Match[], round: number) => {
   return count
 }
 
+export function formatName(fullName: string) {
+  let nameParts = fullName.trim().split(/[-\s]+/);
+
+  if (nameParts.length === 1) {
+    return capitalize(fullName)
+  }
+
+  let lastName = nameParts.pop();
+
+  let initials = nameParts.map(part => part.charAt(0).toUpperCase() + '.').join(' ');
+
+  if (lastName) {
+    return `${initials} ${capitalize(lastName)}`;
+  }
+  return `${initials}`;
+}
+
+export function capitalize(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}
+
+export const getRandomFlag = () => {
+  const flags = ["🇺🇸", "🇨🇦", "🇬🇧", "🇫🇷", "🇩🇪", "🇯🇵", "🇮🇹", "🇪🇸", "🇧🇷", "🇦🇺"];
+  return flags[Math.floor(Math.random() * flags.length)];
+}
+
+export const isMaxUInt32 = (num: number) => {
+  const MAX_UINT32 = 4294967295;
+  return num === MAX_UINT32;
+}
+
 export const FindContestant = (data: Data, contestantId: string) => {
   const emptyContestant: Contestant = {
     entryStatus: "",

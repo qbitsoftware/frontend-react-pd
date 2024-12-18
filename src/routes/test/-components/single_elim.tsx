@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { CalculateSVGHeight, CalculateSVGWidth, FindContestant } from "@/lib/utils";
+import { CalculateSVGHeight, CalculateSVGWidth, FindContestant, formatName, getRandomFlag, isMaxUInt32 } from "@/lib/utils";
 import { Data } from "@/types/types";
 
 interface BracketProps {
@@ -9,17 +9,19 @@ interface BracketProps {
 }
 
 const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
-    const WIDTH = 200
+    const WIDTH = 250
     const HEIGTH = 80
     const VERTICAL_GAP = 80
-    const HORISONTAL_GAP = 290
+    const HORISONTAL_GAP = 330
     const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP)
     const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH)
+    const matches_len = data.matches.reduce((max, item) => item.roundIndex > max.roundIndex ? item : max, { roundIndex: -Infinity }).roundIndex
 
     if (data && data.matches) {
         return (
             <div>
                 <div className="relative">
+                    {/* Match boxes */}
                     {data.matches.map((match, index) => {
 
                         let topCoord;
@@ -55,21 +57,66 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                     height: `${HEIGTH}px`,
                                 }}
                                 key={index}
-                                className={`absolute flex flex-col bg-red-400 items-center justify-center`}>
-                                <div>
-                                    {match.sides &&
-                                        <div>{FindContestant(data, match.sides[0].contestantId).players[0].title}</div>
-                                    }
+                                className={`absolute flex flex-col border border-gray-500  hover:border-blue-600 z-10`}>
+                                <div style={{ height: `${HEIGTH / 2}px` }} className="flex items-center">
+                                    {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
+                                    {(match.sides && isMaxUInt32(Number(match.sides[0].contestantId))) ? (
+                                        <>
+                                            <div className="text-center px-2">{"👋"}</div>
+                                            <div className="w-full">Bye-Bye</div>
+                                            <div className="text-right pr-4">{"-"}</div>
+                                        </>
+                                    ) : match.sides && Number(match.sides[0].contestantId) === 0 ? (
+                                        <div></div>
+                                    ) : (
+                                        <>
+                                            <div className="text-center px-2">{getRandomFlag()}</div>
+                                            <div className="w-full">
+                                                {match.sides && (
+                                                    <div>
+                                                        {formatName(
+                                                            FindContestant(data, match.sides[0].contestantId).players[0].title
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* If another player is byebye, don't show score, but only - */}
+                                            <div className="text-right pr-4">{match.sides && isMaxUInt32(Number(match.sides[1].contestantId)) ? "-" : Math.round(Math.random() * 10)}</div>
+                                        </>
+                                    )}
                                 </div>
-                                <Separator />
-                                <div>
-                                    {match.sides &&
-                                        <div> {FindContestant(data, match.sides[1].contestantId).players[0].title}</div>
-                                    }
+                                <Separator className="bg-gray-300" />
+                                <div style={{ height: `${HEIGTH / 2}px` }} className="flex items-center">
+                                    {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
+                                    {(match.sides && isMaxUInt32(Number(match.sides[1].contestantId))) ? (
+                                        <>
+                                            <div className="text-center px-2">{"👋"}</div>
+                                            <div className="w-full">Bye-Bye</div>
+                                            <div className="text-right pr-4">{"-"}</div>
+                                        </>
+                                    ) : match.sides && Number(match.sides[1].contestantId) === 0 ? (
+                                        <div></div>
+                                    ) : (
+                                        <>
+                                            <div className="text-center px-2">{getRandomFlag()}</div>
+                                            <div className="w-full">
+                                                {match.sides && (
+                                                    <div>
+                                                        {formatName(
+                                                            FindContestant(data, match.sides[1].contestantId).players[0].title
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* If another player is byebye, don't show score, but only - */}
+                                            <div className="text-right pr-4">{match.sides && isMaxUInt32(Number(match.sides[0].contestantId)) ? "-" : Math.round(Math.random() * 10)}</div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         )
                     })}
+                    {/* Bracket lines */}
                     <svg className="absolute" style={{ top: `${starting_y}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGTH}>
                         {data.matches.map((match) => {
                             if (match.roundIndex === 0) return null
@@ -94,22 +141,36 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 <g key={`line-${match.roundIndex}-${match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGTH / 2} V${endY1} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        className="stroke-gray-500"
+                                        strokeWidth="1"
                                         fill="none"
                                     />
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGTH / 2} V${endY2} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        strokeWidth="1"
+                                        className="stroke-gray-500"
                                         fill="none"
                                     />
                                 </g>
                             );
                         })}
                     </svg>
+                    {/* Bracket info */}
+                    {Array.from({ length: matches_len + 1 }).map((_, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                top: `${starting_y - 100}px`,
+                                left: `${starting_x + (WIDTH + VERTICAL_GAP) * index}px`,
+                                width: `${WIDTH}px`
+                            }}
+                            className="absolute text-center border border-gray-300 py-2"
+                        >
+                            <div className="">Round {index + 1}</div>
+                        </div>
+                    ))}
                 </div>
-            </div>
+            </div >
         );
     }
 }
