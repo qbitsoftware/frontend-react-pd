@@ -19,7 +19,6 @@ import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as VoistlusedTournamentidImport } from './routes/voistlused/$tournamentid'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
-import { Route as TournamentsTournamentidImport } from './routes/tournaments/$tournamentid'
 import { Route as TestPageImport } from './routes/test/page'
 
 // Create Virtual Routes
@@ -108,13 +107,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestPageImport
       parentRoute: typeof rootRoute
     }
-    '/tournaments/$tournamentid': {
-      id: '/tournaments/$tournamentid'
-      path: '/tournaments/$tournamentid'
-      fullPath: '/tournaments/$tournamentid'
-      preLoaderRoute: typeof TournamentsTournamentidImport
-      parentRoute: typeof rootRoute
-    }
     '/uudised/$blogid': {
       id: '/uudised/$blogid'
       path: '/uudised/$blogid'
@@ -166,7 +158,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/test/page': typeof TestPageRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
@@ -179,7 +170,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/test/page': typeof TestPageRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
@@ -193,7 +183,6 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/test/page': typeof TestPageRoute
-  '/tournaments/$tournamentid': typeof TournamentsTournamentidRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt/': typeof KontaktIndexRoute
@@ -208,7 +197,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/test/page'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt'
@@ -220,7 +208,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/test/page'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt'
@@ -232,7 +219,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/test/page'
-    | '/tournaments/$tournamentid'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt/'
@@ -246,7 +232,6 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
   TestPageRoute: typeof TestPageRoute
-  TournamentsTournamentidRoute: typeof TournamentsTournamentidRoute
   UudisedBlogidRoute: typeof UudisedBlogidRoute
   VoistlusedTournamentidRoute: typeof VoistlusedTournamentidRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
@@ -259,7 +244,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
   TestPageRoute: TestPageRoute,
-  TournamentsTournamentidRoute: TournamentsTournamentidRoute,
   UudisedBlogidRoute: UudisedBlogidRoute,
   VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
   KontaktIndexRoute: KontaktIndexRoute,
@@ -281,7 +265,6 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/test/page",
-        "/tournaments/$tournamentid",
         "/uudised/$blogid",
         "/voistlused/$tournamentid",
         "/kontakt/",
@@ -298,9 +281,6 @@ export const routeTree = rootRoute
     },
     "/test/page": {
       "filePath": "test/page.tsx"
-    },
-    "/tournaments/$tournamentid": {
-      "filePath": "tournaments/$tournamentid.tsx"
     },
     "/uudised/$blogid": {
       "filePath": "uudised/$blogid.tsx"

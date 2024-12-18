@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/utils"
 import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
-import { Button } from './ui/button'
+import { AuthButton } from './ui/auth-button'
 
 
 
@@ -126,9 +126,7 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                             ))}
                             <LanguageDropdown />
-                            <Link to='/login'>
-                                <Button variant="secondary" className='text-white rounded-xl px-6  hover:bg-secondary'>Logi sisse</Button>
-                            </Link>
+                            <AuthButton />
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>

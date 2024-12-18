@@ -13,10 +13,9 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
     const HEIGHT = 80;
     const VERTICAL_GAP = 80;
     const HORIZONTAL_GAP = 240;
-    const SVG_WIDTH = CalculateSVGWidth(data.matches, VERTICAL_GAP, WIDTH);
+    const SVG_WIDTH = CalculateSVGWidth(data.matches, HORIZONTAL_GAP);
     const SVG_HEIGHT = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGHT);
 
-    console.log("svg heigth", SVG_HEIGHT)
     if (data && data.matches) {
         return (
             <div className="relative">
@@ -60,9 +59,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 height: `${HEIGHT}px`,
                             }}
                             key={index}
-                            className={`absolute flex flex-col ${match.roundIndex === 0 ? "bg-red-200" :
-                                match.roundIndex === 1 ? "bg-green-200" :
-                                    match.roundIndex === 3 ? "bg-yellow-200" : "bg-blue-200"} flex items-center justify-center`}>
+                            className={`absolute flex flex-col bg-red-200 items-center justify-center`}>
                             <div>
                                 {match.sides &&
                                     <div> Contestant 0: {match.sides[0].contestantId}</div>

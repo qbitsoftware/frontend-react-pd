@@ -1,4 +1,4 @@
-import { Match, User } from "@/types/types"
+import { Match, User, Data, Contestant } from "@/types/types"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -83,9 +83,9 @@ export const radians = (angle: number) => {
   return angle * (Math.PI / 180);
 };
 
-export const CalculateSVGWidth = (matches: Match[], vertical_gap: number, width: number) => {
+export const CalculateSVGWidth = (matches: Match[], vertical_gap: number) => {
   const matches_len = matches.reduce((max, item) => item.roundIndex > max.roundIndex ? item : max, { roundIndex: -Infinity }).roundIndex
-  const SVG_WIDTH = (matches_len) * (width + vertical_gap)
+  const SVG_WIDTH = (matches_len) * (vertical_gap)
   return SVG_WIDTH
 }
 
@@ -98,4 +98,28 @@ export const CalculateSVGHeight = (matches: Match[], horisontal_gap: number, hei
 export const CalcCurrentRoundMatches = (matches: Match[], round: number) => {
   const count = matches.filter(item => item.roundIndex === round).length || 0
   return count
+}
+
+export const FindContestant = (data: Data, contestantId: string) => {
+  const emptyContestant: Contestant = {
+    entryStatus: "",
+    players: [
+      {
+        title: "",
+        nationality: "",
+      },
+      {
+        title: "",
+        nationality: "",
+      }
+    ],
+  }
+  if (data.contestants) {
+    if (data.contestants[contestantId]) {
+      return data.contestants[contestantId]
+    }
+    return emptyContestant
+  } else {
+    return emptyContestant
+  }
 }

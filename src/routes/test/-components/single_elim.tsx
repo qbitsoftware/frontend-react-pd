@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
+import { CalculateSVGHeight, CalculateSVGWidth, FindContestant } from "@/lib/utils";
 import { Data } from "@/types/types";
 
 interface BracketProps {
@@ -9,11 +9,11 @@ interface BracketProps {
 }
 
 const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
-    const WIDTH = 160
+    const WIDTH = 200
     const HEIGTH = 80
     const VERTICAL_GAP = 80
-    const HORISONTAL_GAP = 240
-    const SVG_WIDTH = CalculateSVGWidth(data.matches, VERTICAL_GAP, WIDTH)
+    const HORISONTAL_GAP = 290
+    const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP)
     const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH)
 
     if (data && data.matches) {
@@ -55,16 +55,16 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                     height: `${HEIGTH}px`,
                                 }}
                                 key={index}
-                                className={`absolute flex flex-col ${match.roundIndex == 0 ? "bg-red-200" : match.roundIndex == 1 ? "bg-green-200" : match.roundIndex == 3 ? "bg-yellow-200" : "bg-blue-200"} flex items-center justify-center`}>
+                                className={`absolute flex flex-col bg-red-400 items-center justify-center`}>
                                 <div>
                                     {match.sides &&
-                                        <div> Contestant 0: {match.sides[0].contestantId}</div>
+                                        <div>{FindContestant(data, match.sides[0].contestantId).players[0].title}</div>
                                     }
                                 </div>
                                 <Separator />
                                 <div>
                                     {match.sides &&
-                                        <div> Contestant 1: {match.sides[1].contestantId}</div>
+                                        <div> {FindContestant(data, match.sides[1].contestantId).players[0].title}</div>
                                     }
                                 </div>
                             </div>
