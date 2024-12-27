@@ -1,5 +1,5 @@
 import { TournamentTable } from "@/types/types";
-import axiosInstance from "./axiosconf";
+import {axiosInstance} from "./axiosconf";
 import { queryOptions} from "@tanstack/react-query";
 
 export type GroupBracketResponse = {

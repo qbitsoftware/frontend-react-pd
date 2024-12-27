@@ -1,7 +1,7 @@
 
 import { queryOptions } from "@tanstack/react-query"
-import axiosInstance from "./axiosconf";
-import { Bracket, Data, Tournament } from "@/types/types";
+import {axiosInstance} from "./axiosconf";
+import { Bracket, Tournament } from "@/types/types";
 
 export type TournamentsResponse = {
     data: Tournament[] | null

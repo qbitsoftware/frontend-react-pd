@@ -1,6 +1,6 @@
 import { MatchWithTeamAndSets } from "@/types/types";
 import { queryOptions} from "@tanstack/react-query";
-import axiosInstance from "./axiosconf";
+import {axiosInstance} from "./axiosconf";
 
 export type ProtocolResponse = {
     data: MatchWithTeamAndSets[];

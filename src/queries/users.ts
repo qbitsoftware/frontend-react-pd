@@ -1,7 +1,7 @@
 import { User } from "@/types/types"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import axiosInstance from "./axiosconf"
 import { LoginFormData } from "@/routes/login"
+import { axiosInstance } from "./axiosconf"
 
 export interface LoginResponse {
     data: User

@@ -1,30 +1,23 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-
-const getBlogPost = (id: string) => {
-    const blogPost = blogs.find(blog => blog.id.toString() === id)
-    if (!blogPost) {
-        return null
-    }
-    return blogPost
-}
-
-const blogs = [
-    { id: 1, title: 'Estonian Team Shines in European Championships', date: '2024-02-28', category: 'International', content: 'The Estonian national team showcased exceptional skill and teamwork in the recent European Championships. Our players demonstrated remarkable prowess, securing several medals and establishing Estonia as a formidable force in the international table tennis arena. This performance not only brings pride to our nation but also inspires the next generation of players.', image: '/test/blog.jpg' },
-    { id: 2, title: 'Youth Development Program Launched', date: '2024-02-25', category: 'Youth', content: 'A new initiative aims to nurture young table tennis talent across Estonia. The program, launched by the Estonian Table Tennis Association, will provide structured training, mentorship, and competitive opportunities for aspiring players aged 8-16. This comprehensive approach is designed to build a strong foundation for the future of Estonian table tennis.', image: '/placeholder.svg?height=300&width=400' },
-    // Add more blog posts here...
-]
+import { useGetArticle } from '@/queries/articles'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute('/uudised/$blogid')({
+    errorComponent: ({ error, reset }) => {
+        return <ErrorPage error={error} reset={reset} />
+      },
     component: RouteComponent,
+    loader: async ({ context: { queryClient }, params }) => {
+        const articledata = queryClient.ensureQueryData(useGetArticle(Number(params.blogid)))
+        return articledata
+    }
 })
 
 function RouteComponent() {
-    const post = getBlogPost(String(1))
-    if (!post) {
-        return
-    }
+
+    const article = Route.useLoaderData()
 
 
     return (
@@ -36,25 +29,25 @@ function RouteComponent() {
                             <Button variant="link">&larr; Back to News</Button>
                         </Link>
                     </div>
-                    <div className="text-sm font-medium text-blue-600 mb-2">{post.category}</div>
-                    <CardTitle className="text-3xl font-bold">{post.title}</CardTitle>
-                    <div className="text-gray-500 mt-2">{post.date}</div>
+                    <div className="text-sm font-medium text-blue-600 mb-2">{article.data.category}</div>
+                    <CardTitle className="text-3xl font-bold">{article.data.title}</CardTitle>
+                    <div className="text-gray-500 mt-2">{article.data.created_at}</div>
                 </CardHeader>
-                {post.image && (
+                {article.data.thumbnail && (
                     <img
-                        src={post.image}
-                        alt={post.title}
+                        src={article.data.thumbnail}
+                        alt={article.data.title}
                         width={800}
                         height={500}
                         className="w-full h-[500px] object-cover"
                     />
                 )}
                 <CardContent className="prose max-w-none mt-6">
-                    <p>{post.content}</p>
+                    <p dangerouslySetInnerHTML={{__html: article.data.content_html}}></p>
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
                     <div className="text-sm text-gray-500">
-                        Published on {post.date}
+                        Published on {article.data.created_at}
                     </div>
                     <Button asChild>
                         <Link href="/uudised">Back to News</Link>

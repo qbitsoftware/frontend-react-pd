@@ -1,12 +1,27 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { useFadeIn } from '@/hooks/useFadeIn'
-import { useTranslation } from 'react-i18next';
-import { UpcomingTournaments } from './comingTournaments';
-import { LatestNews } from './latestNews';
-import { TopMonthPerformers } from './topPerformers';
+import { UpcomingTournaments } from './-components/comingTournaments';
 
-export default function Home() {
+import { TopMonthPerformers } from './-components/topPerformers';
+import { LatestArticles } from './-components/latestArticles';
+import { useGetArticles } from '@/queries/articles';
+
+
+export const Route = createFileRoute('/')({
+    component: Index,
+    loader: async ({ context: { queryClient } }) => {
+        const articledata = queryClient.ensureQueryData(useGetArticles())
+        return articledata
+    }
+})
+
+function Index() {
+
+    const articledata = Route.useLoaderData()
+
     const { t } = useTranslation();
 
     const [heroControls, heroRef] = useFadeIn()
@@ -45,7 +60,7 @@ export default function Home() {
                     transition={{ duration: 0.5, delay: 0.6 }}
                     className="mb-16"
                 >
-                    <LatestNews />
+                    <LatestArticles articles={articledata.data.slice(0, 3)} />
                 </motion.div>
 
                 <motion.div

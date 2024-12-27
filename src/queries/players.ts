@@ -1,6 +1,6 @@
 import { User } from "@/types/types"
 import { queryOptions} from "@tanstack/react-query"
-import axiosInstance from "./axiosconf"
+import {axiosInstance} from "./axiosconf"
 
 export interface PlayerResponse {
     error: string

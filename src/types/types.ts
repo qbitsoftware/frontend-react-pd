@@ -34,6 +34,17 @@ export interface User {
     img_url?: string;
 }
 
+export interface Article {
+    id: number;
+    title: string,
+    thumbnail: string,
+    user: string,
+    category: string,
+    content_html: string,
+    created_at: string,
+    updated_at: string,
+}
+
 
 export type Round = {
     name?: string,
