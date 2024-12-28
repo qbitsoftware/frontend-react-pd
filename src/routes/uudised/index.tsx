@@ -4,40 +4,30 @@ import { useEffect, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFadeIn } from '@/hooks/useFadeIn'
-import { Blog, BlogCard } from './-components/blog-card'
+import { BlogCard } from './-components/blog-card'
+import { UseGetArticles } from '@/queries/articles'
 
 
 
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
+    loader: async ({ context: { queryClient } }) => {
+        const articles_data = queryClient.ensureQueryData(UseGetArticles())
+        return articles_data
+    }
 })
 
-
-const blogs: Blog[] = [
-    { id: 1, title: 'Estonian Team Shines in European Championships', date: '2024-02-28', category: 'International', excerpt: 'The Estonian national team showcased exceptional skill and teamwork...', image: '/test/blog.jpg?height=400&width=600' },
-    { id: 2, title: 'Youth Development Program Launched', date: '2024-02-25', category: 'Youth', excerpt: 'A new initiative aims to nurture young table tennis talent across Estonia...', image: '/test/blog.jpg?height=300&width=400' },
-    { id: 3, title: 'New Training Facilities Open in Tallinn', date: '2024-02-20', category: 'Facilities', excerpt: 'State-of-the-art training center unveiled in the capital city...', image: '/test/blog.jpg?height=300&width=400' },
-    { id: 4, title: 'National Championships Recap', date: '2024-02-15', category: 'National', excerpt: 'Exciting matches and surprising upsets marked this year\'s national championships...', image: '/test/blog.jpg' },
-    { id: 5, title: 'Upcoming International Tournament in Tartu', date: '2024-02-10', category: 'Tournaments', excerpt: 'Tartu prepares to host a major international table tennis event...', image: '/test/blog.jpg' },
-    { id: 6, title: 'Rising Star: Interview with Junior Champion', date: '2024-02-05', category: 'Youth', excerpt: 'We sit down with Estonia\'s latest junior champion to discuss their journey...', image: '/test/blog.jpg?height=300&width=400' },
-    { id: 7, title: 'Table Tennis in Schools Initiative', date: '2024-01-30', category: 'Youth', excerpt: 'New program aims to introduce table tennis to more schools across Estonia...', image: '/test/blog.jpg' },
-    { id: 8, title: 'Veteran Players Reunion Tournament', date: '2024-01-25', category: 'National', excerpt: 'Former champions gather for a special reunion tournament...', image: '/test/blog.jpg?height=300&width=400' },
-    { id: 9, title: 'Estonia Hosts International Coaching Seminar', date: '2024-01-20', category: 'International', excerpt: 'Top coaches from around the world gather in Tallinn for a week-long seminar...', image: '/test/blog.jpg?height=400&width=800' },
-    { id: 10, title: 'Local Club Spotlight: Narva Net Smashers', date: '2024-01-15', category: 'National', excerpt: 'We take a closer look at one of Estonia\'s most vibrant table tennis clubs...', image: '/test/blog.jpg?height=400&width=800' },
-    { id: 11, title: 'New Ranking System Announced', date: '2024-01-10', category: 'National', excerpt: 'The Estonian Table Tennis Association unveils a new player ranking system...', image: '/test/blog.jpg' },
-    { id: 12, title: 'Youth Summer Camp Registration Opens', date: '2024-01-05', category: 'Youth', excerpt: 'Annual summer camp for young table tennis enthusiasts now accepting registrations...', image: '/test/blog.jpg?height=300&width=400' },
-    { id: 13, title: 'Tallinn to Host 2025 European Championships', date: '2023-12-30', category: 'International', excerpt: 'Breaking news: Estonia selected as the host for next year\'s European Championships...', image: '/test/blog.jpg?height=400&width=600' },
-    { id: 14, title: 'Year in Review: Top 10 Estonian Table Tennis Moments', date: '2023-12-25', category: 'National', excerpt: 'We count down the most memorable moments in Estonian table tennis this year...', image: '/test/blog.jpg' },
-    { id: 15, title: 'Fundraising Initiative for Para Table Tennis', date: '2023-12-20', category: 'National', excerpt: 'New campaign launched to support Estonia\'s para table tennis athletes...', image: '/test/blog.jpg?height=300&width=400' },
-]
 
 interface SearchParams {
     [key: string]: string;
 }
 
 export default function RouteComponent() {
+
+    const articles_data = Route.useLoaderData()
+
     const [activeCategory, setActiveCategory] = useState('All')
     const [searchParams, setSearchParams] = useState<SearchParams>({});
     const { t } = useTranslation()
@@ -45,9 +35,10 @@ export default function RouteComponent() {
     const ITEMS_PER_PAGE = 10
 
     const [heroControls, heroRef] = useFadeIn()
-
-    const blogCategories = ['All', 'Announcements', 'Tournaments', 'Youth', 'Newsletter']
-    const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.youth'), t('navbar.menu.news.newsletter')]
+    
+    const blogCategories = [...new Set(articles_data.data.map(blog => blog.category.split('/').map(category => category.trim())).flat())];
+    console.log(blogCategories)
+    const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
     useEffect(() => {
         const queryString = window.location.search;
@@ -55,7 +46,7 @@ export default function RouteComponent() {
         const params = new URLSearchParams(queryString);
 
         const paramsObj: SearchParams = {};
-        for (let [key, value] of params.entries()) {
+        for (const [key, value] of params.entries()) {
             paramsObj[key] = value;
         }
 
@@ -68,12 +59,12 @@ export default function RouteComponent() {
         }
     }, [searchParams])
 
-    const filteredBlogs = activeCategory === 'All'
-        ? blogs
-        : blogs.filter(blog => blog.category === activeCategory)
+    const filtered_articles = activeCategory === 'All'
+        ? articles_data.data
+        : articles_data.data.filter(article => article.category.includes(activeCategory))
 
-    const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE)
-    const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+    const totalPages = Math.ceil(filtered_articles.length / ITEMS_PER_PAGE)
+    const paginated_articles = filtered_articles.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
     const handleCategoryChange = (index: number) => {
         setActiveCategory(blogCategories[index])
@@ -91,7 +82,7 @@ export default function RouteComponent() {
                             key={category}
                             value={blogCategories[index]}
                             onClick={() => handleCategoryChange(index)}
-                            className="px-4 py-2 rounded-md data-[state=active]:bg-blue-secondary data-[state=active]:text-white"
+                            className="px-4 py-2 rounded-md data-[state=active]:bg-blue-500 data-[state=active]:text-white"
                         >
                             {category}
                         </TabsTrigger>
@@ -102,7 +93,7 @@ export default function RouteComponent() {
 
             <div className="space-y-12">
 
-                {paginatedBlogs.length > 0 && (
+                {paginated_articles.length > 0 && (
                     <>
                         <motion.div
                             className="text-center text-white"
@@ -110,33 +101,42 @@ export default function RouteComponent() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={heroControls}
                         >
-                            <Card className="overflow-hidden bg-blue-secondary text-white">
+                            {/* <Card className="overflow-hidden bg-blue-500 text-white">
                                 <div className="md:flex items-center">
                                     <div className="md:w-1/3 p-8">
                                         <CardHeader>
-                                            <div className="uppercase tracking-wide text-sm font-semibold">{paginatedBlogs[0].category}</div>
-                                            <CardTitle className="mt-2 text-2xl">{paginatedBlogs[0].title}</CardTitle>
+                                            <div className="uppercase tracking-wide text-sm font-semibold">{paginated_articles[0].category}</div>
+                                            <CardTitle className="mt-2 text-2xl">{paginated_articles[0].title}</CardTitle>
                                         </CardHeader>
-                                        <CardContent>
-                                            <p className="mt-2">{paginatedBlogs[0].excerpt}</p>
-                                        </CardContent>
                                         <CardFooter>
-                                            <Link href={`/uudised/${paginatedBlogs[0].id}`}>
+                                            <Link to={`/uudised/${paginated_articles[0].id}`}>
                                                 <Button variant="secondary" className="mt-4">Read More</Button>
                                             </Link>
                                         </CardFooter>
                                     </div>
-                                    <div className="md:w-2/3">
-                                        <img
-                                            src={paginatedBlogs[0].image}
-                                            alt={paginatedBlogs[0].title}
-                                            width={800}
-                                            height={400}
-                                            className="w-full h-64 object-cover md:h-full"
-                                        />
+                                    <div className="md:w-2/3 h-32 md:h-full overflow-hidden">
+                                        {paginated_articles[0].thumbnail ? (
+                                            <img
+                                                src={paginated_articles[0].thumbnail}
+                                                alt={paginated_articles[0].title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-blue-400 flex items-center justify-center">
+                                                {paginated_articles[0].thumbnail ? (
+                                                    <img
+                                                        src={paginated_articles[0].thumbnail}
+                                                        alt={paginated_articles[0].title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <img src="/racket.svg" alt={paginated_articles[0].title} className="w-full h-full object-fill" />
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            </Card>
+                            </Card> */}
 
                         </motion.div>
                         <motion.div
@@ -145,7 +145,7 @@ export default function RouteComponent() {
                             transition={{ duration: 0.5, delay: 0.2 }}
                             className="grid md:grid-cols-2 gap-8"
                         >
-                            {paginatedBlogs.slice(1, 3).map(blog => (
+                            {paginated_articles.slice(1, 3).map(blog => (
                                 <BlogCard key={blog.id} blog={blog} />
                             ))}
                         </motion.div>
@@ -155,21 +155,8 @@ export default function RouteComponent() {
                             transition={{ duration: 0.5, delay: 0.4 }}
                         >
                             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                                {paginatedBlogs.slice(3, 7).map(blog => (
-                                    <Card key={blog.id} className="flex flex-col justify-between">
-                                        <CardHeader>
-                                            <div className="text-sm font-medium text-blue-600">{blog.category}</div>
-                                            <CardTitle className="mt-2">{blog.title}</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-gray-500 line-clamp-3">{blog.excerpt}</p>
-                                        </CardContent>
-                                        <CardFooter>
-                                            <Link href={`/uudised/${blog.id}`}>
-                                                <Button variant="link">Read More</Button>
-                                            </Link>
-                                        </CardFooter>
-                                    </Card>
+                                {paginated_articles.slice(3, 7).map(blog => (
+                                    <BlogCard key={blog.id} blog={blog} />
                                 ))}
                             </div>
                         </motion.div>
@@ -179,29 +166,30 @@ export default function RouteComponent() {
                             transition={{ duration: 0.5, delay: 0.6 }}
                             className="grid md:grid-cols-2 gap-8"
                         >
-                            {paginatedBlogs.slice(7, 9).map(blog => (
+                            {paginated_articles.slice(7, 9).map(blog => (
                                 <Card key={blog.id} className="overflow-hidden">
                                     <div className="md:flex flex-col md:flex-row-reverse">
-                                        <div className="md:w-1/2">
-                                            <img
-                                                src={blog.image}
-                                                alt={blog.title}
-                                                width={400}
-                                                height={300}
-                                                className="w-full h-48 object-cover md:h-full"
-                                            />
+                                        <div className="md:w-1/2 h-48 md:h-full overflow-hidden">
+                                            {blog.thumbnail ? (
+                                                <img
+                                                    src={blog.thumbnail}
+                                                    alt={blog.title}
+                                                    className="w-full h-full object-fill"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                    <span className="text-gray-400">No image available</span>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="p-6 md:w-1/2">
                                             <CardHeader>
                                                 <div className="text-sm font-medium text-blue-600">{blog.category}</div>
                                                 <CardTitle className="mt-2">{blog.title}</CardTitle>
                                             </CardHeader>
-                                            <CardContent>
-                                                <p className="text-gray-500">{blog.excerpt}</p>
-                                            </CardContent>
                                             <CardFooter>
-                                                <Link href={`/uudised/${blog.id}`}>
-                                                    <Button variant="outline">Read More</Button>
+                                                <Link to={`/uudised/${blog.id}`}>
+                                                    <Button variant="outline" className="border-blue-500 hover:bg-blue-100">Read More</Button>
                                                 </Link>
                                             </CardFooter>
                                         </div>
@@ -209,7 +197,7 @@ export default function RouteComponent() {
                                 </Card>
                             ))}
                         </motion.div>
-                        {paginatedBlogs[9] && (
+                        {paginated_articles[9] && (
                             <motion.div
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -217,26 +205,27 @@ export default function RouteComponent() {
                             >
                                 <Card className="overflow-hidden">
                                     <div className="md:flex">
-                                        <div className="md:flex-shrink-0 md:w-2/5">
-                                            <img
-                                                src={paginatedBlogs[9].image}
-                                                alt={paginatedBlogs[9].title}
-                                                width={600}
-                                                height={400}
-                                                className="h-64 w-full object-cover md:h-full"
-                                            />
+                                        <div className="md:flex-shrink-0 md:w-2/5 h-64 md:h-full overflow-hidden">
+                                            {paginated_articles[9].thumbnail ? (
+                                                <img
+                                                    src={paginated_articles[9].thumbnail}
+                                                    alt={paginated_articles[9].title}
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                    <span className="text-gray-400">No image available</span>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="p-8 md:w-3/5">
                                             <CardHeader>
-                                                <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">{paginatedBlogs[9].category}</div>
-                                                <CardTitle className="mt-2 text-2xl">{paginatedBlogs[9].title}</CardTitle>
+                                                <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">{paginated_articles[9].category}</div>
+                                                <CardTitle className="mt-2 text-2xl">{paginated_articles[9].title}</CardTitle>
                                             </CardHeader>
-                                            <CardContent>
-                                                <p className="mt-2 text-gray-500">{paginatedBlogs[9].excerpt}</p>
-                                            </CardContent>
                                             <CardFooter>
-                                                <Link href={`/uudised/${paginatedBlogs[9].id}`}>
-                                                    <Button className="mt-4">Read More</Button>
+                                                <Link to={`/uudised/${paginated_articles[9].id}`}>
+                                                    <Button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white">Read More</Button>
                                                 </Link>
                                             </CardFooter>
                                         </div>
@@ -249,7 +238,7 @@ export default function RouteComponent() {
                     </>
                 )}
 
-                {paginatedBlogs.length === 0 && (
+                {paginated_articles.length === 0 && (
                     <p className="text-center text-gray-500">No blog posts found for this category.</p>
                 )}
 
@@ -280,3 +269,4 @@ export default function RouteComponent() {
         </div >
     )
 }
+

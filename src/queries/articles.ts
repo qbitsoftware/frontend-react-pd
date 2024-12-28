@@ -10,7 +10,7 @@ interface ArticlesResponse {
     error: string | null
 }
 
-export function useGetArticles() {
+export function UseGetArticles() {
     return queryOptions<ArticlesResponse>({
         queryKey: ["blogs"],
         queryFn: async() => {
@@ -28,7 +28,7 @@ interface ArticleResponse {
     error: string | null
 }
 
-export function useGetArticle(id: number) {
+export function UseGetArticle(id: number) {
     return queryOptions<ArticleResponse>({
         queryKey: ["blogs", id],
         queryFn: async() => {

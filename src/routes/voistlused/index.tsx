@@ -1,4 +1,4 @@
-import { useGetTournaments } from '@/queries/tournaments'
+import { UseGetTournaments } from '@/queries/tournaments'
 import { createFileRoute } from '@tanstack/react-router'
 import TournamentList from './-components/tournamentList'
 import ErrorPage from '@/components/error'
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/voistlused/')({
   },
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    const tournaments = await queryClient.ensureQueryData(useGetTournaments())
+    const tournaments = await queryClient.ensureQueryData(UseGetTournaments())
     return { tournaments }
   },
 })

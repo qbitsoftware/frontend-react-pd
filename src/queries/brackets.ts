@@ -9,7 +9,7 @@ export type GroupBracketResponse = {
 }
 
 
-export function useGetGroupBrackets(id: number) {
+export function UseGetGroupBrackets(id: number) {
     return queryOptions<GroupBracketResponse>({
         queryKey: ["group_bracket", id],
         queryFn: async () => {

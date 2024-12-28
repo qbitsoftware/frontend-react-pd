@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import GroupBracket from './-components/group-bracket'
-import { useGetPlayers } from '@/queries/players'
-import { useGetTournament } from '@/queries/tournaments'
-import { useGetProtocols } from '@/queries/protocols'
-import { useGetGroupBrackets } from '@/queries/brackets'
+import { UseGetPlayers } from '@/queries/players'
+import { UseGetTournament } from '@/queries/tournaments'
+import { UseGetProtocols } from '@/queries/protocols'
+import { UseGetGroupBrackets } from '@/queries/brackets'
 import ErrorPage from '../../components/error'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Statistics from './-components/statistics'
@@ -15,35 +15,34 @@ export const Route = createFileRoute('/voistlused/$tournamentid')({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params }) => {
     const tournamentData = await queryClient.ensureQueryData(
-      useGetTournament(Number(params.tournamentid)),
+      UseGetTournament(Number(params.tournamentid)),
     )
-    const playersResponse = await queryClient.ensureQueryData(useGetPlayers())
+    const playersResponse = await queryClient.ensureQueryData(UseGetPlayers())
     const statisticsData = await queryClient.ensureQueryData(
-      useGetProtocols(Number(params.tournamentid)),
+      UseGetProtocols(Number(params.tournamentid)),
     )
     const groupBracket = await queryClient.ensureQueryData(
-      useGetGroupBrackets(Number(params.tournamentid)),
+      UseGetGroupBrackets(Number(params.tournamentid)),
     )
     return { tournamentData, playersResponse, statisticsData, groupBracket }
   },
 })
 
 function RouteComponent() {
-  const { playersResponse, statisticsData, groupBracket, tournamentData } =
-    Route.useLoaderData()
+  const { playersResponse, statisticsData, groupBracket, tournamentData } = Route.useLoaderData()
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl sm:text-4xl font-semibold text-center mb-4 sm:mb-6 md:my-10 mx-8">
         {tournamentData.data?.name}
       </h1>
-      <Tabs defaultValue="tulemused" className="max-w-[1440px] mx-auto md:px-4">
+      <Tabs defaultValue="tulemUsed" className="max-w-[1440px] mx-auto md:px-4">
         <TabsList className="flex flex-wrap justify-center items-center gap-2 mb-4 md:mx-4 bg-secondary text-white">
           <TabsTrigger value="ajakava" className="text-sm sm:text-base">
             Ajakava
           </TabsTrigger>
-          <TabsTrigger value="tulemused" className="text-sm sm:text-base">
-            Tulemused
+          <TabsTrigger value="tulemUsed" className="text-sm sm:text-base">
+            TulemUsed
           </TabsTrigger>
           <TabsTrigger value="meeskonnad" className="text-sm sm:text-base">
             Meeskonnad
@@ -61,12 +60,12 @@ function RouteComponent() {
             Meedia
           </TabsTrigger>
 
-          {/* {user && <TabsTrigger value="admin" className="text-sm sm:text-base">Admin</TabsTrigger>} */}
+          {/* {User && <TabsTrigger value="admin" className="text-sm sm:text-base">Admin</TabsTrigger>} */}
         </TabsList>
         <TabsContent value="ajakava" className="mt-10 md:mt-0">
           {/* <TimeTable tournament={tournamentData} statisticsData={statisticData} players={playersResponse} /> */}
         </TabsContent>
-        <TabsContent value="tulemused" className="mt-10 md:mt-0 mx-auto">
+        <TabsContent value="tulemUsed" className="mt-10 md:mt-0 mx-auto">
           {
             tournamentData.data?.type == 'meistriliiga' &&
               playersResponse &&
@@ -93,7 +92,7 @@ function RouteComponent() {
           {teamResponse && <Teams tournament={tournamentData?.data!} />}
         </TabsContent>
         <TabsContent value="galerii" className='mt-10 md:mt-0'>
-          <GameDayGallery user={user} tournament_id={String(tournamentData.data?.ID)} />
+          <GameDayGallery User={User} tournament_id={String(tournamentData.data?.ID)} />
         </TabsContent>
         <TabsContent value="juhend" className='mt-10 md:mt-0'>
           <Instructions />
@@ -103,7 +102,7 @@ function RouteComponent() {
         </TabsContent>
         <TabsContent value='meedia' className='mt-10 md:mt-0'>
           <EditorContextProvider>
-            {user ? (
+            {User ? (
               blogisLoading ? (
                 <div className="flex justify-center items-center h-[50vh]">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />

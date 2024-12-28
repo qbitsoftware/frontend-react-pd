@@ -5,7 +5,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-export default function ErrorPage({ error, reset }: { error: Error; reset: () => void }) {
+export default function ErrorPage({ error}: { error: Error; reset: () => void }) {
 
     const router = useRouter()
     const queryErrorResetBoundary = useQueryErrorResetBoundary()

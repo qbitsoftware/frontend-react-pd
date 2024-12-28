@@ -64,3 +64,30 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.blog-content p {
+  margin-top: 32px;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+  padding-left: 32px;
+}
+
+.blog-content ul {
+  list-style-type: disc;
+  padding-left: 32px;
+}
+
+.blog-content a {
+  color: var(--primary);
+  text-underline-offset: 4px;
+  text-decoration: underline;
+  padding-right: 16px;
+}
+
+
+.wp-block-file {
+  margin-top: 16px;
+}

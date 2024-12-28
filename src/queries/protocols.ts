@@ -8,7 +8,7 @@ export type ProtocolResponse = {
     error: string | null;
 }
 
-export const useGetProtocols = (tournament_id: number) => {
+export const UseGetProtocols = (tournament_id: number) => {
     return queryOptions<ProtocolResponse>({
         queryKey: ["protocols"],
         queryFn: async () => {

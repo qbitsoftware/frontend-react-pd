@@ -16,11 +16,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
+import { Route as TereIndexImport } from './routes/tere/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as VoistlusedTournamentidImport } from './routes/voistlused/$tournamentid'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
-import { Route as TestPageImport } from './routes/test/page'
 
 // Create Virtual Routes
 
@@ -52,6 +52,12 @@ const UudisedIndexRoute = UudisedIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TereIndexRoute = TereIndexImport.update({
+  id: '/tere/',
+  path: '/tere/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginIndexRoute = LoginIndexImport.update({
   id: '/login/',
   path: '/login/',
@@ -76,12 +82,6 @@ const UudisedBlogidRoute = UudisedBlogidImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TestPageRoute = TestPageImport.update({
-  id: '/test/page',
-  path: '/test/page',
-  getParentRoute: () => rootRoute,
-} as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -98,13 +98,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/test/page': {
-      id: '/test/page'
-      path: '/test/page'
-      fullPath: '/test/page'
-      preLoaderRoute: typeof TestPageImport
       parentRoute: typeof rootRoute
     }
     '/uudised/$blogid': {
@@ -135,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/tere/': {
+      id: '/tere/'
+      path: '/tere'
+      fullPath: '/tere'
+      preLoaderRoute: typeof TereIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/uudised/': {
       id: '/uudised/'
       path: '/uudised'
@@ -157,11 +157,11 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/test/page': typeof TestPageRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
+  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
 }
@@ -169,11 +169,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/test/page': typeof TestPageRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
+  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
 }
@@ -182,11 +182,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/test/page': typeof TestPageRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/kontakt/': typeof KontaktIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/tere/': typeof TereIndexRoute
   '/uudised/': typeof UudisedIndexRoute
   '/voistlused/': typeof VoistlusedIndexRoute
 }
@@ -196,33 +196,33 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/test/page'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt'
     | '/login'
+    | '/tere'
     | '/uudised'
     | '/voistlused'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/test/page'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt'
     | '/login'
+    | '/tere'
     | '/uudised'
     | '/voistlused'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/test/page'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
     | '/kontakt/'
     | '/login/'
+    | '/tere/'
     | '/uudised/'
     | '/voistlused/'
   fileRoutesById: FileRoutesById
@@ -231,11 +231,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutLazyRoute: typeof AboutLazyRoute
-  TestPageRoute: typeof TestPageRoute
   UudisedBlogidRoute: typeof UudisedBlogidRoute
   VoistlusedTournamentidRoute: typeof VoistlusedTournamentidRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  TereIndexRoute: typeof TereIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
 }
@@ -243,11 +243,11 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutLazyRoute: AboutLazyRoute,
-  TestPageRoute: TestPageRoute,
   UudisedBlogidRoute: UudisedBlogidRoute,
   VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
   KontaktIndexRoute: KontaktIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
+  TereIndexRoute: TereIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
 }
@@ -264,11 +264,11 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/test/page",
         "/uudised/$blogid",
         "/voistlused/$tournamentid",
         "/kontakt/",
         "/login/",
+        "/tere/",
         "/uudised/",
         "/voistlused/"
       ]
@@ -278,9 +278,6 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.lazy.tsx"
-    },
-    "/test/page": {
-      "filePath": "test/page.tsx"
     },
     "/uudised/$blogid": {
       "filePath": "uudised/$blogid.tsx"
@@ -293,6 +290,9 @@ export const routeTree = rootRoute
     },
     "/login/": {
       "filePath": "login/index.tsx"
+    },
+    "/tere/": {
+      "filePath": "tere/index.tsx"
     },
     "/uudised/": {
       "filePath": "uudised/index.tsx"

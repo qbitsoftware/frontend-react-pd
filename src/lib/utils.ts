@@ -7,12 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function parsePlaces(s: string): number | null {
-  let parts = s.split(" ")
+  const parts = s.split(" ")
   if (parts.length != 2) {
     return null
   }
 
-  let startingPlace = parts[1].split("-")[0]
+  const startingPlace = parts[1].split("-")[0]
 
   return Number(startingPlace)
 }
@@ -101,15 +101,15 @@ export const CalcCurrentRoundMatches = (matches: Match[], round: number) => {
 }
 
 export function formatName(fullName: string) {
-  let nameParts = fullName.trim().split(/[-\s]+/);
+  const nameParts = fullName.trim().split(/[-\s]+/);
 
   if (nameParts.length === 1) {
     return capitalize(fullName)
   }
 
-  let lastName = nameParts.pop();
+  const lastName = nameParts.pop();
 
-  let initials = nameParts.map(part => part.charAt(0).toUpperCase() + '.').join(' ');
+  const initials = nameParts.map(part => part.charAt(0).toUpperCase() + '.').join(' ');
 
   if (lastName) {
     return `${initials} ${capitalize(lastName)}`;
@@ -153,4 +153,16 @@ export const FindContestant = (data: Data, contestantId: string) => {
   } else {
     return emptyContestant
   }
+}
+
+export const replaceSpecialCharacters = (str: string) => {
+  return str.replace(/[äöõü]/gi, (char) => {
+    switch (char.toLowerCase()) {
+      case 'ä': return 'a';
+      case 'ö': return 'o';
+      case 'õ': return 'o';
+      case 'ü': return 'u';
+      default: return char;
+    }
+  })
 }

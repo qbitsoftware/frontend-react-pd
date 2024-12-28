@@ -16,7 +16,7 @@ export type TournamentResponse = {
 };
 
 
-export function useGetTournaments() {
+export function UseGetTournaments() {
     return queryOptions<TournamentsResponse>({
         queryKey: ["tournaments"],
         queryFn: async () => {
@@ -29,7 +29,7 @@ export function useGetTournaments() {
 }
 
 
-export const useGetTournament = (id: number) => {
+export const UseGetTournament = (id: number) => {
     return queryOptions<TournamentResponse>({
         queryKey: ["tournament", id],
         queryFn: async () => {
@@ -48,7 +48,7 @@ interface BracketReponse {
     error: string | null;
 }
 
-export const useGetBracket = (id: number) => {
+export const UseGetBracket = (id: number) => {
     return queryOptions<BracketReponse>({
         queryKey: ["bracket_info", id],
         queryFn: async () => {

@@ -16,6 +16,9 @@ import { useTranslation } from 'react-i18next'
 import { AuthButton } from './ui/auth-button'
 
 
+// [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
+
+
 
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
@@ -28,7 +31,6 @@ export default function Navbar() {
                 { name: t('navbar.menu.news.all'), href: '/uudised' },
                 { name: t('navbar.menu.news.announcements'), href: `/uudised?category=Announcements` },
                 { name: t('navbar.menu.news.tournaments'), href: `/uudised?category=Tournaments` },
-                { name: t('navbar.menu.news.youth'), href: `/uudised?category=Youth` },
                 { name: t('navbar.menu.news.newsletter'), href: `/uudised?category=Newsletter` },
             ]
         },

@@ -8,7 +8,7 @@ export interface PlayerResponse {
     message: string
 }
 
-export const useGetPlayers = () => {
+export const UseGetPlayers = () => {
     return queryOptions<PlayerResponse>({
         queryKey: ["players"],
         queryFn: async () => {

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 interface ToastNotificationProps {
-    toast: (options: any) => void // Adjust this type as needed
+    toast: (options: object) => void // Adjust this type as needed
   }
 
 export const useToastNotification = ({ toast }: ToastNotificationProps) => {

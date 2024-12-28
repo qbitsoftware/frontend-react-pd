@@ -7,13 +7,13 @@ import { UpcomingTournaments } from './-components/comingTournaments';
 
 import { TopMonthPerformers } from './-components/topPerformers';
 import { LatestArticles } from './-components/latestArticles';
-import { useGetArticles } from '@/queries/articles';
+import { UseGetArticles } from '@/queries/articles';
 
 
 export const Route = createFileRoute('/')({
     component: Index,
     loader: async ({ context: { queryClient } }) => {
-        const articledata = queryClient.ensureQueryData(useGetArticles())
+        const articledata = queryClient.ensureQueryData(UseGetArticles())
         return articledata
     }
 })
