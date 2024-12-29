@@ -12,7 +12,6 @@ export const Route = createFileRoute('/tere/')({
 
 function RouteComponent() {
   const { data, error } = Route.useLoaderData()
-  console.log('REALDATA', data)
   if (error) {
     return <div>Error</div>
   }

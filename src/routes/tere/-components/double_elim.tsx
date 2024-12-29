@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import { CalculateSVGHeight, CalculateSVGWidth } from '@/lib/utils';
+import { CalculateSVGHeight, CalculateSVGWidth, FindContestant, formatName, getRandomFlag } from '@/lib/utils';
 import { Data } from '@/types/types';
 
 interface BracketProps {
@@ -9,10 +9,10 @@ interface BracketProps {
 }
 
 const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
-    const WIDTH = 160;
+    const WIDTH = 250;
     const HEIGHT = 80;
     const VERTICAL_GAP = 80;
-    const HORIZONTAL_GAP = 240;
+    const HORIZONTAL_GAP = 330;
     const SVG_WIDTH = CalculateSVGWidth(data.matches, HORIZONTAL_GAP);
     const SVG_HEIGHT = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGHT);
 
@@ -59,18 +59,69 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 height: `${HEIGHT}px`,
                             }}
                             key={index}
-                            className={`absolute flex flex-col bg-red-200 items-center justify-center`}>
-                            <div>
+                            className={`absolute flex flex-col border border-gray-500 hover:border-blue-600 z-10`}>
+                            {/* <div>
                                 {match.sides &&
                                     <div> Contestant 0: {match.sides[0].contestantId}</div>
                                 }
+                            </div> */}
+                            <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
+                                {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
+                                {(match.sides && match.sides[0].contestantId == "empty") ? (
+                                    <>
+                                        <div className="text-center px-2">{"👋"}</div>
+                                        <div className="w-full">Bye-Bye</div>
+                                        <div className="text-right pr-4">{"-"}</div>
+                                    </>
+                                ) : match.sides && match.sides[0].contestantId === "" ? (
+                                    <div></div>
+                                ) : (
+                                    <>
+                                        <div className="text-center px-2">{getRandomFlag()}</div>
+                                        <div className="w-full">
+                                            {match.sides && match.sides[0].contestantId && (
+                                                <div>
+                                                    {formatName(
+                                                        FindContestant(data, match.sides[0].contestantId).players[0].title
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* If another player is byebye, don't show score, but only - */}
+                                        <div className="text-right pr-4">{match.sides && match.sides[1].contestantId == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
+                                    </>
+                                )}
                             </div>
-                            <Separator />
-                            <div>
-                                {match.sides &&
-                                    <div> Contestant 1: {match.sides[1].contestantId}</div>
-                                }
+
+                            <Separator className="bg-gray-300" />
+                            <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
+                                {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
+                                {(match.sides && match.sides[1].contestantId == "empty") ? (
+                                    <>
+                                        <div className="text-center px-2">{"👋"}</div>
+                                        <div className="w-full">Bye-Bye</div>
+                                        <div className="text-right pr-4">{"-"}</div>
+                                    </>
+                                ) : match.sides && match.sides[1].contestantId === "" ? (
+                                    <div></div>
+                                ) : (
+                                    <>
+                                        <div className="text-center px-2">{getRandomFlag()}</div>
+                                        <div className="w-full">
+                                            {match.sides && match.sides[1].contestantId && (
+                                                <div>
+                                                    {formatName(
+                                                        FindContestant(data, match.sides[1].contestantId).players[0].title
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* If another player is byebye, don't show score, but only - */}
+                                        <div className="text-right pr-4">{match.sides && match.sides[0].contestantId == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
+                                    </>
+                                )}
                             </div>
+
                         </div>
                     );
                 })}
@@ -100,14 +151,14 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 <g key={`line-${match.roundIndex}-${match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        className="stroke-gray-500"
+                                        strokeWidth="1"
                                         fill="none"
                                     />
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY2} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        className="stroke-gray-500"
+                                        strokeWidth="1"
                                         fill="none"
                                     />
                                 </g>
@@ -124,14 +175,14 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 <g key={`line-${match.roundIndex}-${match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        className="stroke-gray-500"
+                                        strokeWidth="1"
                                         fill="none"
                                     />
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY2} H${endX}`}
-                                        stroke="black"
-                                        strokeWidth="2"
+                                        className="stroke-gray-500"
+                                        strokeWidth="1"
                                         fill="none"
                                     />
                                 </g>

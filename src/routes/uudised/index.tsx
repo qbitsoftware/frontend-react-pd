@@ -37,7 +37,6 @@ export default function RouteComponent() {
     const [heroControls, heroRef] = useFadeIn()
     
     const blogCategories = [...new Set(articles_data.data.map(blog => blog.category.split('/').map(category => category.trim())).flat())];
-    console.log(blogCategories)
     const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
     useEffect(() => {

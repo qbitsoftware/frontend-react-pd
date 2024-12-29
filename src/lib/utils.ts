@@ -68,7 +68,6 @@ export const formatDateTime = (dateTime: string) => {
 };
 
 export const formatDate = (time: string) => {
-  console.log("Time", time)
   const date = new Date(time);
 
   const formattedDate = date.toLocaleDateString("et-EE", {
@@ -122,8 +121,9 @@ export function capitalize(word: string) {
 }
 
 export const getRandomFlag = () => {
-  const flags = ["🇺🇸", "🇨🇦", "🇬🇧", "🇫🇷", "🇩🇪", "🇯🇵", "🇮🇹", "🇪🇸", "🇧🇷", "🇦🇺"];
-  return flags[Math.floor(Math.random() * flags.length)];
+  // const flags = ["🇺🇸", "🇨🇦", "🇬🇧", "🇫🇷", "🇩🇪", "🇯🇵", "🇮🇹", "🇪🇸", "🇧🇷", "🇦🇺"];
+  // return flags[Math.floor(Math.random() * flags.length)];
+  return "🇪🇪"
 }
 
 export const isMaxUInt32 = (num: number) => {

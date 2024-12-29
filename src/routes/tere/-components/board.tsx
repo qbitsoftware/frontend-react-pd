@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { ReactNode } from '@tanstack/react-router';
+import useScreenSize from '@/hooks/use-screen-size';
+import { ReactNode, useEffect, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
 interface BoardProps {
@@ -7,33 +7,59 @@ interface BoardProps {
 }
 
 const Board: React.FC<BoardProps> = ({ children }) => {
-    return (
-        <TransformWrapper
-            initialScale={0.7}
-            initialPositionX={100}
-            initialPositionY={100}
-            limitToBounds={false}
-            minScale={0.1}
-            maxScale={3}
-            wheel={{ step: 0.05 }}
-        >
-            {({ resetTransform }) => (
-                <>
-                    <div className="absolute top-50 left-50 z-10 flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => resetTransform()}>
-                            Reset
-                        </Button>
-                    </div>
-                    <TransformComponent wrapperClass="w-full h-full">
-                        <div className="w-[5000px] h-[5000px] bg-white relative">
-                            {children}
-                        </div>
-                    </TransformComponent>
-                </>
-            )}
-        </TransformWrapper>
-    )
+    const [initialScale, setInitialScale] = useState(0)
+    const { width, height } = useScreenSize()
+    void height
 
+    useEffect(() => {
+        switch (true) {
+            case width < 768:
+                setInitialScale(0.4)
+                break
+            case width < 1024:
+                setInitialScale(0.5)
+                break
+            case width < 1280:
+                setInitialScale(0.6)
+                break
+            default:
+                setInitialScale(0.7)
+                break
+        }
+    }, [width])
+
+    if (initialScale > 0) {
+        return (
+            <TransformWrapper
+                initialScale={initialScale}
+                initialPositionX={100 * initialScale}
+                initialPositionY={100}
+                limitToBounds={false}
+                minScale={0.1}
+                maxScale={2}
+                wheel={{ step: 0.05 }}
+            >
+                {({ resetTransform }) => {
+                    useEffect(() => {
+                        resetTransform()
+                    }, [children])
+
+                    return (
+                        <>
+                            <TransformComponent wrapperClass="w-full h-full">
+                                <div className="w-[5000px] h-[5000px] bg-white relative">
+                                    {children}
+                                </div>
+                            </TransformComponent>
+                        </>
+                    )
+                }}
+            </TransformWrapper>
+        )
+
+    } else {
+        "Laadimine"
+    }
 }
 
 export default Board

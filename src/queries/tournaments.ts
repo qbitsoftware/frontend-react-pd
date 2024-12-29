@@ -1,6 +1,6 @@
 
 import { queryOptions } from "@tanstack/react-query"
-import {axiosInstance} from "./axiosconf";
+import { axiosInstance } from "./axiosconf";
 import { Bracket, Tournament } from "@/types/types";
 
 export type TournamentsResponse = {
@@ -53,6 +53,8 @@ export const UseGetBracket = (id: number) => {
         queryKey: ["bracket_info", id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/bracket`, {
+
+            // const { data } = await axiosInstance.get(`/tournaments/test`, {
                 withCredentials: true
             })
             return data;

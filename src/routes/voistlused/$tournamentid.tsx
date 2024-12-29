@@ -36,13 +36,13 @@ function RouteComponent() {
       <h1 className="text-2xl sm:text-4xl font-semibold text-center mb-4 sm:mb-6 md:my-10 mx-8">
         {tournamentData.data?.name}
       </h1>
-      <Tabs defaultValue="tulemUsed" className="max-w-[1440px] mx-auto md:px-4">
+      <Tabs defaultValue="tulemused" className="max-w-[1440px] mx-auto md:px-4">
         <TabsList className="flex flex-wrap justify-center items-center gap-2 mb-4 md:mx-4 bg-secondary text-white">
           <TabsTrigger value="ajakava" className="text-sm sm:text-base">
             Ajakava
           </TabsTrigger>
-          <TabsTrigger value="tulemUsed" className="text-sm sm:text-base">
-            TulemUsed
+          <TabsTrigger value="tulemused" className="text-sm sm:text-base">
+            Tulemused
           </TabsTrigger>
           <TabsTrigger value="meeskonnad" className="text-sm sm:text-base">
             Meeskonnad
@@ -68,14 +68,14 @@ function RouteComponent() {
         <TabsContent value="tulemUsed" className="mt-10 md:mt-0 mx-auto">
           {
             tournamentData.data?.type == 'meistriliiga' &&
-              playersResponse &&
-              statisticsData && (
-                <GroupBracket
-                  teams={groupBracket?.data}
-                  players={playersResponse}
-                  statisticsData={statisticsData}
-                />
-              )
+            playersResponse &&
+            statisticsData && (
+              <GroupBracket
+                teams={groupBracket?.data}
+                players={playersResponse}
+                statisticsData={statisticsData}
+              />
+            )
             // : <TournamentBracket tournament_id={params.tournamentid} tournament_type={tournamentData.data?.type!} />
           }
           <h1 className="text-2xl sm:text-4xl font-semibold text-center mb-4 sm:mb-6 md:my-10 mx-8">
