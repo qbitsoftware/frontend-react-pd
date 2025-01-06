@@ -1,5 +1,5 @@
 
-import { queryOptions } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
 import { Bracket, Tournament } from "@/types/types";
 
@@ -42,6 +42,27 @@ export const UseGetTournament = (id: number) => {
     })
 }
 
+export const UseDeleteTournament = (id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.delete(`/api/v1/tournaments/${id}`, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.setQueryData(['tournaments'], (oldData: any) => {
+                if (!oldData?.data) return oldData;
+                return {
+                    ...oldData,
+                    data: oldData.data.filter((tournament: any) => tournament.id !== id),
+                };
+            });
+        }, 
+    })
+}
+
 interface BracketReponse {
     data: Bracket[] | null
     message: string;
@@ -61,3 +82,4 @@ export const UseGetBracket = (id: number) => {
         }
     })
 }
+
