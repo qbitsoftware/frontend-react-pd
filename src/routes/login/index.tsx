@@ -68,6 +68,7 @@ function RouteComponent() {
             onSuccess: (response) => {
                 successToast("Edukalt sisse logitud")
                 // authStore.setUser(response.data)
+                
                 successToast('Edukalt sisse logitud')
                 navigate({ to: '/' })
             },

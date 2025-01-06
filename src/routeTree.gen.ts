@@ -19,6 +19,7 @@ import { Route as UudisedIndexImport } from './routes/uudised/index'
 import { Route as TereIndexImport } from './routes/tere/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as VoistlusedTournamentidImport } from './routes/voistlused/$tournamentid'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
 
@@ -70,6 +71,12 @@ const KontaktIndexRoute = KontaktIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminIndexRoute = AdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const VoistlusedTournamentidRoute = VoistlusedTournamentidImport.update({
   id: '/voistlused/$tournamentid',
   path: '/voistlused/$tournamentid',
@@ -112,6 +119,13 @@ declare module '@tanstack/react-router' {
       path: '/voistlused/$tournamentid'
       fullPath: '/voistlused/$tournamentid'
       preLoaderRoute: typeof VoistlusedTournamentidImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
     '/kontakt/': {
@@ -159,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutLazyRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
+  '/admin': typeof AdminIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/tere': typeof TereIndexRoute
@@ -171,6 +186,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutLazyRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
+  '/admin': typeof AdminIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/tere': typeof TereIndexRoute
@@ -184,6 +200,7 @@ export interface FileRoutesById {
   '/about': typeof AboutLazyRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
+  '/admin/': typeof AdminIndexRoute
   '/kontakt/': typeof KontaktIndexRoute
   '/login/': typeof LoginIndexRoute
   '/tere/': typeof TereIndexRoute
@@ -198,6 +215,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
+    | '/admin'
     | '/kontakt'
     | '/login'
     | '/tere'
@@ -209,6 +227,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
+    | '/admin'
     | '/kontakt'
     | '/login'
     | '/tere'
@@ -220,6 +239,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
+    | '/admin/'
     | '/kontakt/'
     | '/login/'
     | '/tere/'
@@ -233,6 +253,7 @@ export interface RootRouteChildren {
   AboutLazyRoute: typeof AboutLazyRoute
   UudisedBlogidRoute: typeof UudisedBlogidRoute
   VoistlusedTournamentidRoute: typeof VoistlusedTournamentidRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   TereIndexRoute: typeof TereIndexRoute
@@ -245,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutLazyRoute: AboutLazyRoute,
   UudisedBlogidRoute: UudisedBlogidRoute,
   VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
+  AdminIndexRoute: AdminIndexRoute,
   KontaktIndexRoute: KontaktIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   TereIndexRoute: TereIndexRoute,
@@ -266,6 +288,7 @@ export const routeTree = rootRoute
         "/about",
         "/uudised/$blogid",
         "/voistlused/$tournamentid",
+        "/admin/",
         "/kontakt/",
         "/login/",
         "/tere/",
@@ -284,6 +307,9 @@ export const routeTree = rootRoute
     },
     "/voistlused/$tournamentid": {
       "filePath": "voistlused/$tournamentid.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
     },
     "/kontakt/": {
       "filePath": "kontakt/index.tsx"

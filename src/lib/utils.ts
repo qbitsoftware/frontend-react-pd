@@ -6,6 +6,22 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function parseTournamentType(s: string): string {
+
+  const parts = s.split("_")
+
+  if (parts.length == 1) {
+    return capitalize(s)
+  }
+
+  let res = ""
+  parts.forEach(part => {
+    res += capitalize(part) + " "
+  })
+
+  return res.trim()
+}
+
 export function parsePlaces(s: string): number | null {
   const parts = s.split(" ")
   if (parts.length != 2) {
@@ -45,16 +61,9 @@ export function findEnemyName(p1: number, p2: number, current: number, players: 
   return ""
 }
 
-export function formatTime(time: string): string {
-  const date = new Date(time);
-
-  // Extract day, month, and year
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const year = date.getUTCFullYear();
-
-  // Format as dd.mm.yyyy
-  return `${day}.${month}.${year}`;
+export const formatDateString = (date: string) => {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 

@@ -52,9 +52,9 @@ export const UseGetBracket = (id: number) => {
     return queryOptions<BracketReponse>({
         queryKey: ["bracket_info", id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/bracket`, {
+            // const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/bracket`, {
 
-            // const { data } = await axiosInstance.get(`/tournaments/test`, {
+            const { data } = await axiosInstance.get(`/tournaments/test`, {
                 withCredentials: true
             })
             return data;

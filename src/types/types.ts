@@ -86,17 +86,24 @@ export type Participant = {
 }
 
 export type Tournament = {
-    CreatedAt: string;
-    DeletedAt: string | null;
-    ID: number;
-    UpdatedAt: string;
-    cap: number;
-    end_date: string;
+    created_at: string;
+    deleted_at: string | null;
+    id: number;
+    updated_at: string;
     name: string;
     start_date: string;
-    type: 'single_elimination' | 'double_elimination' | 'round_robin' | 'meistriliiga';
-    State: string;
+    end_date: string;
+    location: string;
+    image: string;
+    type: string;
+    sport: string;
+    state: string;
     private: boolean;
+    solo: boolean;
+    min_team_size: number;
+    max_team_size: number;
+    max_players: number;
+    information: string;
 };
 
 
