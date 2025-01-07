@@ -11,6 +11,12 @@ export type Bracket = {
     tables: Data[]
 }
 
+export type ErrorResponse = {
+    response: {
+        status: number
+    }
+}
+
 export interface User {
     ID: number;
     CreatedAt: Date;
@@ -74,15 +80,28 @@ export type TeamMatch = {
 }
 
 export type Participant = {
-    ID: number;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: string | null;
+    id: string;
+    name: string;
+    rank: number;
+    sport_type: string;
+    tournament_id: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    players: PlayerNew[];
+}
+
+export type PlayerNew = {
+    id: string;
     first_name: string;
     last_name: string;
-    birthDate: string;
-    email: string;
-    password: string;
+    sport_type: string;
+    number: number;
+    rank: number;
+    sex: string;
+    created_at: string;
+    deleted_at: string | null;
+    updated_at: string;
 }
 
 export type Tournament = {

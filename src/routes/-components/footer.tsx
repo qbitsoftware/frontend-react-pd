@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next"
 
 export default function Footer() {
     const { t } = useTranslation()
+    if (location.pathname.includes('admin')) {
+        return null
+    }
     return (
         <footer className="bg-secondary border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-white">

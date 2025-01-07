@@ -3,30 +3,17 @@ import { Card } from '@/components/ui/card';
 import { PlusCircle, Search } from 'lucide-react';
 import TournamentCard from './tournament';
 import React, { useState } from 'react';
-import { Trophy } from 'lucide-react';
 import { Tournament } from '@/types/types';
 import { Link } from '@tanstack/react-router';
 
 interface AdminTournamentProps {
-    tournaments: Tournament[] | null
+    tournaments: Tournament[] 
 }
 
 const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [status, setStatus] = useState('all');
     const [sortOrder, setSortOrder] = useState('newest');
-
-    if (!tournaments) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[400px] bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                <Trophy className="w-16 h-16 text-gray-300 mb-4" />
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Tournaments Found</h3>
-                <p className="text-gray-500 text-center max-w-md">
-                    There are currently no tournaments to display. Create a new tournament to get started.
-                </p>
-            </div>
-        );
-    }
 
     const filteredTournaments = tournaments
         .filter(tournament => {

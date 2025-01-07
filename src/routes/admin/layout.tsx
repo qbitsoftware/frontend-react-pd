@@ -6,6 +6,9 @@ import {
   FileText,
   Settings,
 } from 'lucide-react'
+import { useRouter } from '@tanstack/react-router'
+import { useEffect } from 'react'
+
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
@@ -13,7 +16,17 @@ export const Route = createFileRoute('/admin')({
 
 function RouteComponent() {
 
+  const router = useRouter()
   const location = useLocation()
+  useEffect(() => {
+    if (location.pathname === '/admin' || location.pathname === "/admin/") {
+      router.navigate({
+        to: '/admin/dashboard',
+      })
+    }
+  }, [location.pathname])
+
+
 
   const menuItems = [
     {
@@ -49,7 +62,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">
@@ -65,7 +78,7 @@ function RouteComponent() {
             <Link
               key={item.id}
               to={item.to}
-              className={`w-full flex items-center justify-center md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to) 
+              className={`w-full flex items-center justify-center md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
                 ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600 font-medium'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
@@ -78,8 +91,8 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto px-8 pt-4">
-        <Outlet />
+      <div className="flex-1 overflow-auto px-8 py-10 pt-4 ">
+          <Outlet />
       </div>
     </div>
   )

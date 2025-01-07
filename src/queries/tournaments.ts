@@ -2,6 +2,7 @@
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
 import { Bracket, Tournament } from "@/types/types";
+import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
 
 export type TournamentsResponse = {
     data: Tournament[] | null
@@ -42,6 +43,38 @@ export const UseGetTournament = (id: number) => {
     })
 }
 
+export const UsePostTournament = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: TournamentFormValues) => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments`, formData, {
+                withCredentials: true
+            })
+            return data;
+        },
+
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ['tournaments'] })
+        }
+    })
+}
+
+export const UsePatchTournament = (id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: TournamentFormValues) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}`, formData, {
+                withCredentials: true
+            })
+            return data;
+        },
+
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ['tournaments'] })
+        }
+    })
+}
+
 export const UseDeleteTournament = (id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -52,14 +85,15 @@ export const UseDeleteTournament = (id: number) => {
             return data;
         },
         onSuccess: () => {
-            queryClient.setQueryData(['tournaments'], (oldData: any) => {
-                if (!oldData?.data) return oldData;
-                return {
-                    ...oldData,
-                    data: oldData.data.filter((tournament: any) => tournament.id !== id),
-                };
-            });
-        }, 
+            // queryClient.setQueryData(['tournaments'], (oldData: any) => {
+            //     if (!oldData?.data) return oldData;
+            //     return {
+            //         ...oldData,
+            //         data: oldData.data.filter((tournament: any) => tournament.id !== id),
+            //     };
+            // });
+            queryClient.resetQueries({ queryKey: ['tournaments'] })
+        },
     })
 }
 

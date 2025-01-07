@@ -4,6 +4,7 @@ import { Suspense } from "react"
 import { TanStackQueryDevtools, TanStackRouterDevtools } from "@/React.lazy"
 import Footer from "./-components/footer"
 import Navbar from "@/components/navbar"
+import { Toaster } from "@/components/ui/toaster"
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
@@ -16,7 +17,8 @@ export const Route = createRootRouteWithContext<{
                     <Outlet />
                 </div>
                 <Footer />
-                <Suspense >
+                <Toaster />
+                <Suspense>
                     <TanStackRouterDevtools />
                     <TanStackQueryDevtools />
                 </Suspense>

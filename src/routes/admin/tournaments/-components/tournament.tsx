@@ -11,7 +11,6 @@ import {
     Trophy,
     Calendar,
     MapPin,
-    DollarSign,
     Clock,
     Info,
     ChevronRight
@@ -35,13 +34,20 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const { successToast, errorToast } = useToastNotification(toast)
 
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
+
+    const additionalInfo = tournament.information ?
+        (typeof tournament.information === 'string'
+            ? JSON.parse(tournament.information)
+            : tournament.information)
+        : { fields: [] }
 
     const handleDelete = async () => {
         try {
             await deleteMutation.mutateAsync()
             router.navigate({
-                to: "/admin/tournaments", // Navigate to the current path
-                replace: true, // Optional: Avoid adding to the history stack
+                to: "/admin/tournaments",
+                replace: true,
             });
             successToast("Turniir on edukalt kustutatud")
             setShowDeleteDialog(false)
@@ -144,29 +150,27 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
 
                         <Separator />
 
-                        {/* Extended Info */}
+                        {/* Modified Extended Info */}
                         <div className="space-y-6">
-                            {/* Prize Pool Section */}
-                            <div className="space-y-3">
-                                <h3 className="text-sm font-semibold flex items-center gap-2">
-                                    <DollarSign className="w-4 h-4 text-yellow-500" />
-                                    Prize Pool
-                                </h3>
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p className="text-sm text-gray-600">1st Place</p>
-                                            <p className="font-semibold">$10,000</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-gray-600">2nd Place</p>
-                                            <p className="font-semibold">$5,000</p>
-                                        </div>
+                            {/* Replace the hardcoded Prize Pool section with this */}
+                            {showDetails && additionalInfo.fields?.length > 0 && (
+                                <div className="space-y-3">
+                                    <h3 className="text-sm font-semibold flex items-center gap-2">
+                                        <Info className="w-4 h-4 text-blue-500" />
+                                        Additional Information
+                                    </h3>
+                                    <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                                        {additionalInfo.fields.map((field: any, index: number) => (
+                                            <div key={index} className="border-b last:border-b-0 pb-3 last:pb-0">
+                                                <p className="text-sm text-gray-600">{field.title}</p>
+                                                <p className="font-semibold whitespace-pre-wrap">{field.information}</p>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Registration Info */}
+                            {/* Keep your Registration Info section */}
                             <div className="space-y-3">
                                 <h3 className="text-sm font-semibold flex items-center gap-2">
                                     <Clock className="w-4 h-4 text-orange-500" />
@@ -187,17 +191,23 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             </div>
                         </div>
 
-                        {/* Bottom Actions */}
+                        {/* Update the Bottom Actions section */}
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4">
                             <div className="flex flex-wrap items-center gap-4">
-                                <Button variant="outline" size="sm">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setShowDetails(!showDetails)}
+                                >
                                     <Info className="w-4 h-4 mr-2" />
-                                    View Details
+                                    {showDetails ? 'Hide Details' : 'View Details'}
                                 </Button>
-                                <Button variant="outline" size="sm">
-                                    <Users className="w-4 h-4 mr-2" />
-                                    Manage Teams
-                                </Button>
+                                <Link href={`/admin/tournaments/${tournament.id}/participants`}>
+                                    <Button variant="outline" size="sm">
+                                        <Users className="w-4 h-4 mr-2" />
+                                        Manage Participants
+                                    </Button>
+                                </Link>
                             </div>
                             <Button variant="ghost" size="sm" className="text-blue-600">
                                 View Brackets
