@@ -1,17 +1,18 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, UserPlus, Users } from 'lucide-react'
+import { ArrowLeft, Eye, MoreHorizontal, Pencil, Trash, UserPlus, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ParticipantsList } from '../-components/participant-list'
 import { AddParticipantDialog } from '../-components/player-form'
 import { useState } from 'react'
-import { ErrorResponse } from '@/types/types'
+import { ErrorResponse, Participant } from '@/types/types'
 import { UseGetParticipants } from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
 import { Tournament } from '@/types/types'
 import AddTeamDialog from '../-components/team-form'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 
 export const Route = createFileRoute(
@@ -51,18 +52,50 @@ function RouteComponent() {
     const { tournamentid } = Route.useParams()
     const { participants, tournamentData } = Route.useLoaderData()
 
-    console.log("idddd", tournamentid, participants)
-
     const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false)
     const [isAddTeamOpen, setIsAddTeamOpen] = useState(false)
-    console.log("Tournament", tournamentData)
+
+    const [editParticipantData, setEditParticipantData] = useState<Participant | undefined>()
+
+
+    const handleEditParticipant = (participant: Participant) => {
+        setEditParticipantData(participant)
+        if (tournamentData?.data?.solo) {
+            setIsAddParticipantOpen(true)
+        } else {
+            setIsAddTeamOpen(true)
+        }
+    }
+
+    const handleDeleteParticipant = (participantId: string) => {
+        // Implement delete functionality here
+        console.log(`Delete participant with ID: ${participantId}`)
+    }
+
+    const handleViewParticipant = (participantId: string) => {
+        // Implement view functionality here
+        console.log(`View participant with ID: ${participantId}`)
+    }
+
+    const handleAddNewTeam = () => {
+        setEditParticipantData(undefined)
+        setIsAddTeamOpen(true)
+    }
+
+    const handleAddNewParticipant = () => {
+        setEditParticipantData(undefined)
+        setIsAddParticipantOpen(true)
+    }
 
 
     if (participants && participants.data && tournamentData && tournamentData.data) {
         return (
             <div className="container py-6 space-y-6">
-                <ParticipantHeader tournamentData={tournamentData.data} setIsAddParticipantOpen={setIsAddParticipantOpen} setIsAddTeamOpen={setIsAddTeamOpen} />
-
+                <ParticipantHeader
+                    tournamentData={tournamentData.data}
+                    setIsAddParticipantOpen={handleAddNewParticipant}
+                    setIsAddTeamOpen={handleAddNewTeam}
+                />
                 <Tabs defaultValue="participants">
                     <TabsList>
                         <TabsTrigger value="participants">
@@ -77,7 +110,48 @@ function RouteComponent() {
                                 <CardTitle>Registered Participants</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ParticipantsList participants={participants.data} />
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Name</TableHead>
+                                            <TableHead>Email</TableHead>
+                                            <TableHead>Team</TableHead>
+                                            <TableHead>Actions</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {participants.data.map((participant) => (
+                                            <TableRow key={participant.id}>
+                                                <TableCell className="font-medium">{participant.name}</TableCell>
+                                                <TableCell>{participant.rank}</TableCell>
+                                                <TableCell>{participant.name}</TableCell>
+                                                <TableCell>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="sm">
+                                                                <MoreHorizontal className="w-4 h-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
+                                                                <Pencil className="w-4 h-4 mr-2" />
+                                                                Edit
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
+                                                                <Trash className="w-4 h-4 mr-2" />
+                                                                Delete
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleViewParticipant(participant.id)}>
+                                                                <Eye className="w-4 h-4 mr-2" />
+                                                                View
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -87,6 +161,7 @@ function RouteComponent() {
                     open={isAddTeamOpen}
                     onOpenChange={setIsAddTeamOpen}
                     tournamentId={tournamentid}
+                    initialData={editParticipantData}
                 />
                 <AddParticipantDialog
                     open={isAddParticipantOpen}
@@ -100,7 +175,11 @@ function RouteComponent() {
         if (tournamentData && tournamentData.data) {
             return (
                 <div className="container py-6 space-y-6">
-                    <ParticipantHeader tournamentData={tournamentData.data} setIsAddParticipantOpen={setIsAddParticipantOpen} setIsAddTeamOpen={setIsAddTeamOpen} />
+                    <ParticipantHeader
+                        tournamentData={tournamentData.data}
+                        setIsAddParticipantOpen={handleAddNewParticipant}
+                        setIsAddTeamOpen={handleAddNewTeam}
+                    />
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
                             <Users className="w-12 h-12 text-gray-400 mb-4" />
@@ -110,6 +189,7 @@ function RouteComponent() {
                     </Card>
 
                     <AddTeamDialog
+                        initialData={editParticipantData}
                         open={isAddTeamOpen}
                         onOpenChange={setIsAddTeamOpen}
                         tournamentId={tournamentid}
@@ -130,7 +210,6 @@ function RouteComponent() {
 
 function ParticipantHeader({ tournamentData, setIsAddParticipantOpen, setIsAddTeamOpen }: { tournamentData: Tournament, setIsAddParticipantOpen: (open: boolean) => void, setIsAddTeamOpen: (open: boolean) => void }) {
     const navigate = useNavigate()
-    
     return (
         <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -141,7 +220,7 @@ function ParticipantHeader({ tournamentData, setIsAddParticipantOpen, setIsAddTe
             </div>
             <Button onClick={
                 () => {
-                    if (tournamentData.solo) {
+                    if (!tournamentData.solo) {
                         setIsAddTeamOpen(true)
                     } else {
                         setIsAddParticipantOpen(true)
@@ -149,7 +228,7 @@ function ParticipantHeader({ tournamentData, setIsAddParticipantOpen, setIsAddTe
                 }
             }>
                 <UserPlus className="w-4 h-4 mr-2" />
-                {tournamentData.solo ? 'Add Team' : 'Add Participant'}
+                {!tournamentData.solo ? 'Add Team' : 'Add Participant'}
             </Button>
         </div>
     )

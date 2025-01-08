@@ -5,7 +5,10 @@ const baseURL = import.meta.env.NODE_ENV === 'production' ? import.meta.env.VITE
 const blog_base_URL = import.meta.env.NODE_ENV === 'production' ? import.meta.env.VITE_BLOG_BACKEND_API_URL : import.meta.env.VITE_BLOG_BACKEND_API_URL;
 
 export const axiosInstance = axios.create({
-    baseURL
+    baseURL,
+    headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_TOURNAMENT10_API_KEY}` 
+    }
 })
 
 export const blog_instance = axios.create({

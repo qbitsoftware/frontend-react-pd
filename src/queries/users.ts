@@ -1,4 +1,4 @@
-import { User } from "@/types/types"
+import { User, UserNew } from "@/types/types"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { LoginFormData } from "@/routes/login"
 import { axiosInstance } from "./axiosconf"
@@ -8,6 +8,14 @@ export interface LoginResponse {
     message: string
     error: string | null
 }
+
+
+export interface UsersResponse {
+    data: UserNew[]
+    message: string
+    error: string | null
+}
+
 
 export const useGetUser = () => {
     return queryOptions<LoginResponse>({
@@ -69,4 +77,30 @@ export const useLogout = () => {
             queryClient.refetchQueries({ queryKey: ["user"] })
         }
     })
+}
+
+
+export const UseGetUsersDebounce = (searchTerm: string) => {
+    return useQuery<UsersResponse>({
+        queryKey: ["users", searchTerm],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/users?search=${searchTerm}`, {
+                withCredentials: true
+            })
+            return data
+        },
+        enabled: !!searchTerm,
+    })
+}
+
+export const fetchUserByName = async (name: string): Promise<UserNew | null> => {
+    try {
+        const { data } = await axiosInstance.get(`/api/v1/users?search=${name}`, {
+            withCredentials: true
+        })
+        return data.data[0] || null
+    } catch (error) {
+        console.error("Error fetching user by name:", error)
+        return null
+    }
 }

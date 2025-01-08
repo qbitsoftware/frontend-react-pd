@@ -65,6 +65,9 @@
   }
 }
 
+/* ::-webkit-scrollbar {
+  display: none;
+} */
 
 .blog-content p {
   margin-top: 32px;

@@ -17,6 +17,15 @@ export type ErrorResponse = {
     }
 }
 
+export type UserNew = {
+    id: number
+    email: string
+    organization_id: number
+    first_name: string
+    last_name: string
+    created_at: string
+}
+
 export interface User {
     ID: number;
     CreatedAt: Date;
@@ -93,6 +102,7 @@ export type Participant = {
 
 export type PlayerNew = {
     id: string;
+    user_id: number
     first_name: string;
     last_name: string;
     sport_type: string;
