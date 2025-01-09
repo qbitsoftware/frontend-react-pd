@@ -144,7 +144,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             <InfoItem
                                 icon={<Calendar className="w-4 h-4 text-purple-500" />}
                                 label="Duration"
-                                value={`${getDurationDays(tournament.start_date, tournament.end_date)} days`}
+                                value={`${getDurationDays(tournament.start_date, tournament.end_date) + 1} days`}
                             />
                         </div>
 

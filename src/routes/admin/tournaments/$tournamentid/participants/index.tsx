@@ -1,18 +1,20 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { ArrowLeft, Eye, MoreHorizontal, Pencil, Trash, UserPlus, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { AddParticipantDialog } from '../-components/player-form'
 import { useState } from 'react'
 import { ErrorResponse, Participant } from '@/types/types'
-import { UseGetParticipants } from '@/queries/participants'
+import { UseDeleteParticipant, UseGetParticipants } from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
 import { Tournament } from '@/types/types'
-import AddTeamDialog from '../-components/team-form'
+import AddTeamDialog from '../-components/participant-form'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useToast } from '@/hooks/use-toast'
+import { useToastNotification } from '@/components/toast-notification'
+import { capitalize } from '@/lib/utils'
 
 
 export const Route = createFileRoute(
@@ -53,24 +55,33 @@ function RouteComponent() {
     const { participants, tournamentData } = Route.useLoaderData()
 
     const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false)
-    const [isAddTeamOpen, setIsAddTeamOpen] = useState(false)
 
     const [editParticipantData, setEditParticipantData] = useState<Participant | undefined>()
+    const deleteMutation = UseDeleteParticipant(Number(tournamentid))
+
+    const toast = useToast()
+    const router = useRouter()
+    const { successToast, errorToast } = useToastNotification(toast)
+
+    const handleDeleteParticipant = async (participantId: string) => {
+        try {
+            const res = await deleteMutation.mutateAsync(participantId)
+            router.navigate({
+                to: `/admin/tournaments/${tournamentid}/participants`
+            })
+            successToast(res.message)
+        } catch (error) {
+            errorToast("Osaleja kustutamisel tekkis viga")
+        }
+        console.log(`Delete participant with ID: ${participantId}`)
+    }
 
 
     const handleEditParticipant = (participant: Participant) => {
         setEditParticipantData(participant)
-        if (tournamentData?.data?.solo) {
-            setIsAddParticipantOpen(true)
-        } else {
-            setIsAddTeamOpen(true)
-        }
+        setIsAddParticipantOpen(true)
     }
 
-    const handleDeleteParticipant = (participantId: string) => {
-        // Implement delete functionality here
-        console.log(`Delete participant with ID: ${participantId}`)
-    }
 
     const handleViewParticipant = (participantId: string) => {
         // Implement view functionality here
@@ -79,22 +90,15 @@ function RouteComponent() {
 
     const handleAddNewTeam = () => {
         setEditParticipantData(undefined)
-        setIsAddTeamOpen(true)
-    }
-
-    const handleAddNewParticipant = () => {
-        setEditParticipantData(undefined)
         setIsAddParticipantOpen(true)
     }
-
 
     if (participants && participants.data && tournamentData && tournamentData.data) {
         return (
             <div className="container py-6 space-y-6">
                 <ParticipantHeader
                     tournamentData={tournamentData.data}
-                    setIsAddParticipantOpen={handleAddNewParticipant}
-                    setIsAddTeamOpen={handleAddNewTeam}
+                    setIsAddParticipantOpen={handleAddNewTeam}
                 />
                 <Tabs defaultValue="participants">
                     <TabsList>
@@ -113,18 +117,39 @@ function RouteComponent() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Name</TableHead>
-                                            <TableHead>Email</TableHead>
-                                            <TableHead>Team</TableHead>
-                                            <TableHead>Actions</TableHead>
+                                            {tournamentData.data && tournamentData.data.solo ? (
+                                                <>
+                                                    <TableHead>First Name</TableHead>
+                                                    <TableHead>Last Name</TableHead>
+                                                    <TableHead>Rank</TableHead>
+                                                    <TableHead>Actions</TableHead>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <TableHead>Name</TableHead>
+                                                    <TableHead>Participants</TableHead>
+                                                    <TableHead>Sport</TableHead>
+                                                    <TableHead>Actions</TableHead>
+                                                </>
+                                            )}
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {participants.data.map((participant) => (
                                             <TableRow key={participant.id}>
-                                                <TableCell className="font-medium">{participant.name}</TableCell>
-                                                <TableCell>{participant.rank}</TableCell>
-                                                <TableCell>{participant.name}</TableCell>
+                                                {tournamentData.data && tournamentData.data.solo ? (
+                                                    <>
+                                                        <TableCell className="font-medium">{capitalize(participant.players[0].first_name)}</TableCell>
+                                                        <TableCell className="font-medium">{capitalize(participant.players[0].last_name)}</TableCell>
+                                                        <TableCell>{participant.rank}</TableCell>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <TableCell className="font-medium">{capitalize(participant.name)}</TableCell>
+                                                        <TableCell>{participant.players.length}</TableCell>
+                                                        <TableCell>{participant.sport_type}</TableCell>
+                                                    </>
+                                                )}
                                                 <TableCell>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
@@ -141,10 +166,10 @@ function RouteComponent() {
                                                                 <Trash className="w-4 h-4 mr-2" />
                                                                 Delete
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => handleViewParticipant(participant.id)}>
+                                                            {/* <DropdownMenuItem onClick={() => handleViewParticipant(participant.id)}>
                                                                 <Eye className="w-4 h-4 mr-2" />
                                                                 View
-                                                            </DropdownMenuItem>
+                                                            </DropdownMenuItem> */}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
@@ -158,17 +183,11 @@ function RouteComponent() {
                 </Tabs>
 
                 <AddTeamDialog
-                    open={isAddTeamOpen}
-                    onOpenChange={setIsAddTeamOpen}
-                    tournamentId={tournamentid}
-                    initialData={editParticipantData}
-                />
-                <AddParticipantDialog
                     open={isAddParticipantOpen}
                     onOpenChange={setIsAddParticipantOpen}
-                    tournamentId={tournamentid}
+                    tournament={tournamentData.data}
+                    initialData={editParticipantData}
                 />
-
             </div>
         )
     } else {
@@ -177,8 +196,7 @@ function RouteComponent() {
                 <div className="container py-6 space-y-6">
                     <ParticipantHeader
                         tournamentData={tournamentData.data}
-                        setIsAddParticipantOpen={handleAddNewParticipant}
-                        setIsAddTeamOpen={handleAddNewTeam}
+                        setIsAddParticipantOpen={handleAddNewTeam}
                     />
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
@@ -190,14 +208,9 @@ function RouteComponent() {
 
                     <AddTeamDialog
                         initialData={editParticipantData}
-                        open={isAddTeamOpen}
-                        onOpenChange={setIsAddTeamOpen}
-                        tournamentId={tournamentid}
-                    />
-                    <AddParticipantDialog
                         open={isAddParticipantOpen}
                         onOpenChange={setIsAddParticipantOpen}
-                        tournamentId={tournamentid}
+                        tournament={tournamentData.data}
                     />
                 </div>
             )
@@ -208,7 +221,7 @@ function RouteComponent() {
 
 }
 
-function ParticipantHeader({ tournamentData, setIsAddParticipantOpen, setIsAddTeamOpen }: { tournamentData: Tournament, setIsAddParticipantOpen: (open: boolean) => void, setIsAddTeamOpen: (open: boolean) => void }) {
+function ParticipantHeader({ tournamentData, setIsAddParticipantOpen }: { tournamentData: Tournament, setIsAddParticipantOpen: (open: boolean) => void }) {
     const navigate = useNavigate()
     return (
         <div className="flex justify-between items-center">
@@ -216,19 +229,15 @@ function ParticipantHeader({ tournamentData, setIsAddParticipantOpen, setIsAddTe
                 <Button variant="ghost" size="icon" onClick={() => navigate({ to: '/admin/tournaments' })}>
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <h1 className="text-2xl font-bold">Manage Teams</h1>
+                <div>
+                    <h1 className="text-2xl font-bold">Manage Participants</h1>
+                    <p className="text-sm text-gray-500">{tournamentData.name}</p>
+                </div>
             </div>
             <Button onClick={
-                () => {
-                    if (!tournamentData.solo) {
-                        setIsAddTeamOpen(true)
-                    } else {
-                        setIsAddParticipantOpen(true)
-                    }
-                }
-            }>
+                () => { setIsAddParticipantOpen(true) }}>
                 <UserPlus className="w-4 h-4 mr-2" />
-                {!tournamentData.solo ? 'Add Team' : 'Add Participant'}
+                Add Participant
             </Button>
         </div>
     )

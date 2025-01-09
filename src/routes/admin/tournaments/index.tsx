@@ -10,8 +10,7 @@ import { Button } from '@/components/ui/button'
 export const Route = createFileRoute('/admin/tournaments/')({
     loader: async ({ context: { queryClient } }) => {
         try {
-            const tournaments_data =
-                await queryClient.ensureQueryData(UseGetTournaments())
+            const tournaments_data = await queryClient.ensureQueryData(UseGetTournaments())
             return { tournaments_data, error: null }
         } catch (error) {
             return { tournaments_data: null, error }

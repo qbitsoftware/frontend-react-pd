@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
 import { Participant } from "@/types/types";
-import { TeamFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/team-form";
+import { ParticipantFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participant-form";
 
 export type ParticipantResponse = {
     data: Participant | null
@@ -32,7 +32,7 @@ export function UseGetParticipants(tournament_id: number) {
 export function UseCreateParticipants(tournament_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (formData: TeamFormValues) => {
+        mutationFn: async (formData: ParticipantFormValues) => {
             const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/participants`, formData, {
                 withCredentials: true,
             })
@@ -47,11 +47,14 @@ export function UseCreateParticipants(tournament_id: number) {
 export function UseUpdateParticipant(tournament_id: number, participant_id: string) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (formData: TeamFormValues) => {
+        mutationFn: async (formData: ParticipantFormValues) => {
             const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/participants/${participant_id}`, formData, {
                 withCredentials: true,
             })
             return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
         }
     })
 }
@@ -59,7 +62,7 @@ export function UseUpdateParticipant(tournament_id: number, participant_id: stri
 export function UseDeleteParticipant(tournament_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (participantId: number) => {
+        mutationFn: async (participantId: string) => {
             const { data } = await axiosInstance.delete(`/api/v1/tournaments/${tournament_id}/participants/${participantId}`, {
                 withCredentials: true,
             })

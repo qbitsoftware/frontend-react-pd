@@ -17,12 +17,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { X } from 'lucide-react'
 import { fetchUserByName, UseGetUsersDebounce } from '@/queries/users'
 import { UseCreateParticipants, UseUpdateParticipant } from '@/queries/participants'
-import { useDebounce } from '@/lib/utils'
-import { ErrorResponse, Participant, UserNew } from '@/types/types'
+import { cn, useDebounce } from '@/lib/utils'
 import { useToastNotification } from '@/components/toast-notification'
-import { UseMutationResult } from '@tanstack/react-query'
+import { Participant, UserNew } from '@/types/types'
+import { Tournament } from '@/types/types'
+import { capitalize } from '@/lib/utils'
 
-const teamSchema = z.object({
+export const participantSchemna = z.object({
     name: z.string().min(1, 'Team name is required'),
     tournament_id: z.number().min(1),
     sport_type: z.string().default('tabletennis'),
@@ -45,25 +46,25 @@ const teamSchema = z.object({
     })).min(1, "Team must have at least one player"),
 })
 
-export type TeamFormValues = z.infer<typeof teamSchema>
+export type ParticipantFormValues = z.infer<typeof participantSchemna>
 
 interface AddTeamDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
-    tournamentId: string
     initialData: Participant | undefined
+    tournament: Tournament
 }
 
-const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournamentId, initialData }) => {
+const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament, initialData }) => {
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const [formKey, setFormKey] = useState(0)
 
-    const form = useForm<TeamFormValues>({
-        resolver: zodResolver(teamSchema),
+    const form = useForm<ParticipantFormValues>({
+        resolver: zodResolver(participantSchemna),
         defaultValues: {
             name: '',
-            tournament_id: parseInt(tournamentId),
+            tournament_id: tournament.id,
             players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0 }],
         }
     })
@@ -74,9 +75,9 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
                 console.log(initialData)
                 form.reset({
                     name: initialData.name,
-                    tournament_id: parseInt(tournamentId),
+                    tournament_id: tournament.id,
                     sport_type: initialData.sport_type || 'tabletennis',
-                    players: initialData.players.map(player => ({
+                    players: (initialData.players || []).map(player => ({
                         id: player.id,
                         user_id: player.user_id,
                         first_name: player.first_name,
@@ -91,30 +92,31 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
         } else {
             form.reset({
                 name: '',
-                tournament_id: parseInt(tournamentId),
+                tournament_id: tournament.id,
                 players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0 }],
             });
             setFormKey(prevKey => prevKey + 1);
         }
-    }, [open, initialData, tournamentId]);
+    }, [open, initialData, tournament]);
 
     const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
     const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
-    const usePostParticipant = UseCreateParticipants(parseInt(tournamentId))
-    const usePatchParticipant = UseUpdateParticipant(parseInt(tournamentId), initialData?.id!)
+    const usePostParticipant = UseCreateParticipants(tournament.id)
+    const usePatchParticipant = UseUpdateParticipant(tournament.id, initialData?.id!)
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
 
+    console.log(playerSuggestions)
     useEffect(() => {
         if (debouncedSearchTerm) {
             refetch()
         }
     }, [debouncedSearchTerm, refetch])
 
-    const onSubmit = async (values: TeamFormValues) => {
+    const onSubmit = async (values: ParticipantFormValues) => {
         for (const player of values.players) {
-            if (player.user_id === 0  || !player.user_id) {
+            if (player.user_id === 0 || !player.user_id) {
                 try {
                     const user = await fetchUserByName(player.name)
                     if (user) {
@@ -171,25 +173,30 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader className='px-4'>
-                    <DialogTitle>{initialData ? 'Edit Team' : 'Add New Team'}</DialogTitle>
+                    <DialogTitle>
+                        {initialData
+                            ? (tournament.solo ? 'Edit Participant' : 'Edit Team')
+                            : (tournament.solo ? 'Add Participant' : 'Add New Team')}
+                    </DialogTitle>
                 </DialogHeader>
                 <Form {...form} key={formKey}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col px-4 max-h-[80vh] min-h-[33vh] overflow-y-auto">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className={cn('flex flex-col px-4 max-h-[80vh] overflow-y-auto', tournament.solo ? 'min-h-[16vh]' : 'min-h-[33vh]')}>
                         <div className='mb-5 flex flex-col gap-3'>
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className='text-lg font-semibold'>Team Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Enter team name" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
+                            {!tournament.solo &&
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className='text-lg font-semibold'>Team Name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Enter team name" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            }
                             {players.map((_, index) => (
                                 <div key={index} className="space-y-4">
                                     <div className="flex items-center gap-4">
@@ -198,7 +205,11 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
                                             name={`players.${index}.name`}
                                             render={({ field }) => (
                                                 <FormItem className="flex-1 relative">
-                                                    <FormLabel>Player {index + 1}</FormLabel>
+                                                    {tournament.solo ?
+                                                        <FormLabel>Player</FormLabel>
+                                                        :
+                                                        <FormLabel>Player {index + 1}</FormLabel>
+                                                    }
                                                     <FormControl>
                                                         <div className='flex justify-between gap-4'>
                                                             <Input
@@ -208,36 +219,44 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
                                                                 onChange={(e) => {
                                                                     field.onChange(e)
                                                                     setSearchTerm(e.target.value)
+                                                                    if (tournament.solo) {
+                                                                        form.setValue('name', e.target.value)
+                                                                    }
                                                                 }}
                                                                 onFocus={() => setFocusedIndex(index)}
                                                                 onBlur={() => {
                                                                     setTimeout(() => setFocusedIndex(null), 200)
                                                                 }}
                                                             />
-                                                            <Button
-                                                                type="button"
-                                                                variant="destructive"
-                                                                onClick={() => removePlayer(index)}
-                                                            >
-                                                                <X className="w-4 h-4" />
-                                                            </Button>
+                                                            {!tournament.solo &&
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="destructive"
+                                                                    onClick={() => removePlayer(index)}
+                                                                >
+                                                                    <X className="w-4 h-4" />
+                                                                </Button>
+                                                            }
                                                         </div>
                                                     </FormControl>
                                                     <FormMessage />
                                                     {playerSuggestions && focusedIndex === index && playerSuggestions.data.length > 0 && (
                                                         <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
-                                                            {playerSuggestions.data.map((user, i) => (
-                                                                <div
-                                                                    key={i}
-                                                                    className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                    onClick={() => {
-                                                                        setFormValues(user, index)
-                                                                        setFocusedIndex(null)
-                                                                    }}
-                                                                >
-                                                                    {user.first_name} {user.last_name}
-                                                                </div>
-                                                            ))}
+                                                            {playerSuggestions.data.map((user, i) => {
+                                                                return (
+                                                                    <div
+                                                                        key={i}
+                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                        onClick={() => {
+                                                                            setFormValues(user, index)
+                                                                            setFocusedIndex(null)
+                                                                        }}
+                                                                    >
+                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                    </div>
+
+                                                                )
+                                                            })}
                                                         </div>
                                                     )}
                                                 </FormItem>
@@ -246,14 +265,22 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
                                     </div>
                                 </div>
                             ))}
-                            <Button className='mt-6 mb-2' type="button" onClick={addPlayer}>
-                                Add Player
-                            </Button>
+                            {!tournament.solo &&
+                                <Button className='mt-6 mb-2' type="button" onClick={addPlayer}>
+                                    Add Player
+                                </Button>
+                            }
                         </div>
                         <div className="sticky bottom-0 bg-white">
-                            <Button type="submit" className="w-full">
-                                {initialData ? 'Update Team' : 'Add Team'}
-                            </Button>
+                            {tournament.solo ?
+                                <Button type="submit" className="w-full">
+                                    {initialData ? 'Update Player' : 'Add Player'}
+                                </Button>
+                                :
+                                <Button type="submit" className="w-full">
+                                    {initialData ? 'Update Team' : 'Add Team'}
+                                </Button>
+                            }
                         </div>
                     </form>
                 </Form>
