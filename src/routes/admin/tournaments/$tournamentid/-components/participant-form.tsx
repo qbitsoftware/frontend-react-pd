@@ -22,6 +22,7 @@ import { useToastNotification } from '@/components/toast-notification'
 import { Participant, UserNew } from '@/types/types'
 import { Tournament } from '@/types/types'
 import { capitalize } from '@/lib/utils'
+import { useRouter } from '@tanstack/react-router'
 
 export const participantSchemna = z.object({
     name: z.string().min(1, 'Team name is required'),
@@ -59,6 +60,7 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const [formKey, setFormKey] = useState(0)
+    const router = useRouter()
 
     const form = useForm<ParticipantFormValues>({
         resolver: zodResolver(participantSchemna),
@@ -142,6 +144,9 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
                 await usePostParticipant.mutateAsync(values)
             }
             successToast("Team added successfully")
+            router.navigate({
+                to: `/admin/tournaments/${tournament.id}/participants`
+            })
             onOpenChange(false)
         } catch (error) {
             errorToast(`Error adding team: ${error}`)

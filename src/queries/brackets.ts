@@ -1,6 +1,7 @@
 import { TournamentTable } from "@/types/types";
 import {axiosInstance} from "./axiosconf";
 import { queryOptions} from "@tanstack/react-query";
+import { BracketReponse } from "./tournaments";
 
 export type GroupBracketResponse = {
     data: TournamentTable
@@ -17,5 +18,17 @@ export function UseGetGroupBrackets(id: number) {
             return data;
         },
     });
+}
 
+
+export function UseGetBracket(id: number) {
+    return queryOptions<BracketReponse>({
+        queryKey: ["bracket", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/brackets`, {
+                withCredentials: true
+            });
+            return data
+        }
+    })
 }

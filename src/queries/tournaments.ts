@@ -59,6 +59,27 @@ export const UsePostTournament = () => {
     })
 }
 
+export interface BracketReponse {
+    data: Bracket[] | null
+    message: string;
+    error: string | null;
+}
+
+export const UseStartTournament = (tournament_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation<BracketReponse, unknown, boolean>({
+        mutationFn: async (start: boolean) => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}`, JSON.stringify({ start }), {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ['tournaments', tournament_id] })
+        }
+    })
+}
+
 export const UsePatchTournament = (id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -85,35 +106,8 @@ export const UseDeleteTournament = (id: number) => {
             return data;
         },
         onSuccess: () => {
-            // queryClient.setQueryData(['tournaments'], (oldData: any) => {
-            //     if (!oldData?.data) return oldData;
-            //     return {
-            //         ...oldData,
-            //         data: oldData.data.filter((tournament: any) => tournament.id !== id),
-            //     };
-            // });
             queryClient.resetQueries({ queryKey: ['tournaments'] })
         },
-    })
-}
-
-interface BracketReponse {
-    data: Bracket[] | null
-    message: string;
-    error: string | null;
-}
-
-export const UseGetBracket = (id: number) => {
-    return queryOptions<BracketReponse>({
-        queryKey: ["bracket_info", id],
-        queryFn: async () => {
-            // const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}/bracket`, {
-
-            const { data } = await axiosInstance.get(`/tournaments/test`, {
-                withCredentials: true
-            })
-            return data;
-        }
     })
 }
 

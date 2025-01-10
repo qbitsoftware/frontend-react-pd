@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, Trash } from 'lucide-react'
 import { Edit } from 'lucide-react'
-import { Tournament } from '@/types/types'
+import { Bracket, Tournament } from '@/types/types'
 import React, { useState } from 'react'
 import { formatDateString, parseTournamentType } from '@/lib/utils'
 import { Link, useRouter } from '@tanstack/react-router'
@@ -21,6 +21,9 @@ import { UseDeleteTournament } from '@/queries/tournaments'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import { UseStartTournament } from '@/queries/tournaments'
+import { Dialog, DialogTitle, DialogContent, DialogDescription } from '@/components/ui/dialog'
+import { Window } from '@/routes/tere/-components-2/window'
 
 interface TournamentCardProps {
     tournament: Tournament
@@ -28,11 +31,13 @@ interface TournamentCardProps {
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const deleteMutation = UseDeleteTournament(tournament.id)
+    const startMutation = UseStartTournament(tournament.id)
     const router = useRouter()
 
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
-
+    const [exampleDialog, setExampleDialog] = useState(false)
+    const [exampleDialogData, setExampleDialogData] = useState<Bracket[]>([])
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
 
@@ -56,6 +61,31 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
             console.error(error)
         }
     };
+
+    const ShowExample = async () => {
+        try {
+            const result = await startMutation.mutateAsync(false)
+            if (result.data) {
+                setExampleDialog(true)
+                setExampleDialogData(result.data)
+            }
+            setShowDeleteDialog(false)
+        } catch (error) {
+            errorToast("There are some problems with starting a tournament")
+            console.error(error)
+        }
+    }
+
+    const CreateTournament = async () => {
+        try {
+            await startMutation.mutateAsync(true)
+            setExampleDialog(false)
+            successToast("Tournament created successfully")
+        } catch (error) {
+            errorToast("There are some problems with starting a tournament")
+            console.error(error)
+        }
+    }
 
     return (
         <>
@@ -87,6 +117,23 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+
+            {exampleDialogData &&
+                // <TournamentDialog data={exampleDialogData} isOpen={exampleDialog} setIsOpen={setExampleDialog} />
+                <Dialog open={exampleDialog} onOpenChange={setExampleDialog}>
+                    <DialogContent >
+                        <DialogTitle>Tournament Details</DialogTitle>
+                        <DialogDescription>
+                            Here you can manage the details of the tournament.
+                        </DialogDescription>
+                        <div className='w-full h-[70vh]'>
+                            <Window data={exampleDialogData} />
+                        </div>
+                        <Button onClick={() => { CreateTournament() }}>Start tournament</Button>
+                    </DialogContent>
+                </Dialog>
+            }
 
             <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <CardHeader className="flex flex-col space-y-4">
@@ -209,10 +256,22 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                     </Button>
                                 </Link>
                             </div>
-                            <Button variant="ghost" size="sm" className="text-blue-600">
-                                View Brackets
-                                <ChevronRight className="w-4 h-4 ml-2" />
-                            </Button>
+                            {tournament.state === "created" ? (
+                                <Button variant="ghost" size="sm" className="text-blue-600" onClick={() => ShowExample()}>
+                                    Start Tournament
+                                    <ChevronRight className="w-4 h-4 ml-2" />
+                                </Button>
+                            ) : tournament.state === "started" ? (
+                                <Button variant="ghost" size="sm" className="text-green-600">
+                                    View Brackets
+                                    <ChevronRight className="w-4 h-4 ml-2" />
+                                </Button>
+                            ) : tournament.state === "" ? (
+                                <Button variant="ghost" size="sm" className="text-red-600">
+                                    View Results
+                                    <ChevronRight className="w-4 h-4 ml-2" />
+                                </Button>
+                            ) : null}
                         </div>
                     </div>
                 </CardContent>

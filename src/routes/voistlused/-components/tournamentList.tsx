@@ -14,18 +14,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
-
-export type TournamentColumn = {
-  ID: number
-  name: string
-  CreatedAt: string
-  start_date: string
-  end_date: string
-  type: string
-}
+import { Tournament } from "@/types/types"
 
 interface TournamentProps {
-  tournaments: TournamentColumn[]
+  tournaments: Tournament[]
 }
 
 export default function TournamentList({ tournaments }: TournamentProps) {
@@ -63,7 +55,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
       }
       acc[type].push(tournament)
       return acc
-    }, {} as Record<string, TournamentColumn[]>)
+    }, {} as Record<string, Tournament[]>)
   }, [filteredTournaments])
 
   const tournamentTypes = useMemo(() => {
@@ -186,8 +178,8 @@ export default function TournamentList({ tournaments }: TournamentProps) {
             <Separator className="w-full h-[0.5px] p-0 m-0 bg-secondary/50" />
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
               {(expandedType === type ? typeTournaments : typeTournaments.slice(0, 6)).map((tournament) => (
-                <Card key={tournament.ID} className="overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer hover:scale-105 border-blue-200">
-                  <Link to={"/voistlused/" + tournament.ID} preload="intent">
+                <Card key={tournament.id} className="overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer hover:scale-105 border-blue-200">
+                  <Link to={"/voistlused/" + tournament.id} preload="intent">
                     <CardHeader className="bg-secondary text-white p-0">
                       <div className="relative w-full aspect-[16/9]">
                         <img className="absolute w-full h-full object-fill" src="/public/test/table_tennis_background.png" alt="Tournament background" />

@@ -1,22 +1,36 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Window } from './-components/window'
-import { UseGetBracket } from '@/queries/tournaments'
-
+import { UseStartTournament } from '@/queries/tournaments'
+import { useEffect, useState } from 'react'
+import { Bracket } from '@/types/types'
+import { Window } from './-components-2/window'
 export const Route = createFileRoute('/tere/')({
   component: RouteComponent,
-  loader: async ({ context: { queryClient } }) => {
-    const brackets = await queryClient.ensureQueryData(UseGetBracket(15))
-    return brackets
-  },
+
 })
 
 function RouteComponent() {
-  const { data, error } = Route.useLoaderData()
-  if (error) {
-    return <div>Error</div>
+  const tournamentMutation = UseStartTournament(1)
+  const [data, setData] = useState<Bracket[]>([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await tournamentMutation.mutateAsync(false)
+      if (data.data) {
+        console.log(data.data)
+        setData(data.data)
+      }
+    }
+    fetch()
+  }, [])
+  if (data && data.length > 1) {
+    return (
+      <div className='w-screen h-screen'>
+        <div className='h-[90vh] w-[90vw] mx-auto'>
+          <Window data={data} />
+        </div>
+      </div>
+    )
+  } else {
+    return <div>Somethign wvery bad</div>
   }
-  if (data) {
-    return <Window data={data} />
-  }
-  return <div>Somethign wvery bad</div>
 }
