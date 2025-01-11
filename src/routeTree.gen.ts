@@ -26,6 +26,7 @@ import { Route as AdminTournamentsIndexImport } from './routes/admin/tournaments
 import { Route as AdminDashboardIndexImport } from './routes/admin/dashboard/index'
 import { Route as AdminTournamentsTournamentidIndexImport } from './routes/admin/tournaments/$tournamentid/index'
 import { Route as AdminTournamentsTournamentidParticipantsIndexImport } from './routes/admin/tournaments/$tournamentid/participants/index'
+import { Route as AdminTournamentsTournamentidBracketsIndexImport } from './routes/admin/tournaments/$tournamentid/brackets/index'
 
 // Create Virtual Routes
 
@@ -116,6 +117,13 @@ const AdminTournamentsTournamentidParticipantsIndexRoute =
   AdminTournamentsTournamentidParticipantsIndexImport.update({
     id: '/tournaments/$tournamentid/participants/',
     path: '/tournaments/$tournamentid/participants/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidBracketsIndexRoute =
+  AdminTournamentsTournamentidBracketsIndexImport.update({
+    id: '/tournaments/$tournamentid/brackets/',
+    path: '/tournaments/$tournamentid/brackets/',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
 
@@ -214,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTournamentsTournamentidIndexImport
       parentRoute: typeof AdminLayoutImport
     }
+    '/admin/tournaments/$tournamentid/brackets/': {
+      id: '/admin/tournaments/$tournamentid/brackets/'
+      path: '/tournaments/$tournamentid/brackets'
+      fullPath: '/admin/tournaments/$tournamentid/brackets'
+      preLoaderRoute: typeof AdminTournamentsTournamentidBracketsIndexImport
+      parentRoute: typeof AdminLayoutImport
+    }
     '/admin/tournaments/$tournamentid/participants/': {
       id: '/admin/tournaments/$tournamentid/participants/'
       path: '/tournaments/$tournamentid/participants'
@@ -230,6 +245,7 @@ interface AdminLayoutRouteChildren {
   AdminDashboardIndexRoute: typeof AdminDashboardIndexRoute
   AdminTournamentsIndexRoute: typeof AdminTournamentsIndexRoute
   AdminTournamentsTournamentidIndexRoute: typeof AdminTournamentsTournamentidIndexRoute
+  AdminTournamentsTournamentidBracketsIndexRoute: typeof AdminTournamentsTournamentidBracketsIndexRoute
   AdminTournamentsTournamentidParticipantsIndexRoute: typeof AdminTournamentsTournamentidParticipantsIndexRoute
 }
 
@@ -238,6 +254,8 @@ const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminTournamentsIndexRoute: AdminTournamentsIndexRoute,
   AdminTournamentsTournamentidIndexRoute:
     AdminTournamentsTournamentidIndexRoute,
+  AdminTournamentsTournamentidBracketsIndexRoute:
+    AdminTournamentsTournamentidBracketsIndexRoute,
   AdminTournamentsTournamentidParticipantsIndexRoute:
     AdminTournamentsTournamentidParticipantsIndexRoute,
 }
@@ -260,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidIndexRoute
+  '/admin/tournaments/$tournamentid/brackets': typeof AdminTournamentsTournamentidBracketsIndexRoute
   '/admin/tournaments/$tournamentid/participants': typeof AdminTournamentsTournamentidParticipantsIndexRoute
 }
 
@@ -277,6 +296,7 @@ export interface FileRoutesByTo {
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidIndexRoute
+  '/admin/tournaments/$tournamentid/brackets': typeof AdminTournamentsTournamentidBracketsIndexRoute
   '/admin/tournaments/$tournamentid/participants': typeof AdminTournamentsTournamentidParticipantsIndexRoute
 }
 
@@ -295,6 +315,7 @@ export interface FileRoutesById {
   '/admin/dashboard/': typeof AdminDashboardIndexRoute
   '/admin/tournaments/': typeof AdminTournamentsIndexRoute
   '/admin/tournaments/$tournamentid/': typeof AdminTournamentsTournamentidIndexRoute
+  '/admin/tournaments/$tournamentid/brackets/': typeof AdminTournamentsTournamentidBracketsIndexRoute
   '/admin/tournaments/$tournamentid/participants/': typeof AdminTournamentsTournamentidParticipantsIndexRoute
 }
 
@@ -314,6 +335,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/tournaments'
     | '/admin/tournaments/$tournamentid'
+    | '/admin/tournaments/$tournamentid/brackets'
     | '/admin/tournaments/$tournamentid/participants'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -330,6 +352,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/tournaments'
     | '/admin/tournaments/$tournamentid'
+    | '/admin/tournaments/$tournamentid/brackets'
     | '/admin/tournaments/$tournamentid/participants'
   id:
     | '__root__'
@@ -346,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard/'
     | '/admin/tournaments/'
     | '/admin/tournaments/$tournamentid/'
+    | '/admin/tournaments/$tournamentid/brackets/'
     | '/admin/tournaments/$tournamentid/participants/'
   fileRoutesById: FileRoutesById
 }
@@ -407,6 +431,7 @@ export const routeTree = rootRoute
         "/admin/dashboard/",
         "/admin/tournaments/",
         "/admin/tournaments/$tournamentid/",
+        "/admin/tournaments/$tournamentid/brackets/",
         "/admin/tournaments/$tournamentid/participants/"
       ]
     },
@@ -444,6 +469,10 @@ export const routeTree = rootRoute
     },
     "/admin/tournaments/$tournamentid/": {
       "filePath": "admin/tournaments/$tournamentid/index.tsx",
+      "parent": "/admin"
+    },
+    "/admin/tournaments/$tournamentid/brackets/": {
+      "filePath": "admin/tournaments/$tournamentid/brackets/index.tsx",
       "parent": "/admin"
     },
     "/admin/tournaments/$tournamentid/participants/": {

@@ -5,10 +5,11 @@ import { Data } from "@/types/types";
 interface BracketProps {
     starting_x: number,
     starting_y: number,
-    data: Data
+    data: Data,
+    onClick: () => void,
 }
 
-const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
+const SingleElimBracket = ({ data, starting_x, starting_y, onClick }: BracketProps) => {
     const WIDTH = 180
     const HEIGTH = 60
     const VERTICAL_GAP = 80
@@ -55,6 +56,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 height: `${HEIGTH}px`,
                             }}
                             key={index}
+                            onClick={() => onClick()}
                             className={`absolute flex flex-col border border-black/30 rounded-sm hover:border-blue-600 z-10 text-sm`}>
                             <div style={{ height: `${HEIGTH / 2}px` }} className="flex items-center">
                                 {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}

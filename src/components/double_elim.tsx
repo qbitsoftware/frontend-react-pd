@@ -6,6 +6,7 @@ interface BracketProps {
     starting_x: number,
     starting_y: number,
     data: Data
+    onClick: () => void,
 }
 
 const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {

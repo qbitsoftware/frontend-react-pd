@@ -23,7 +23,7 @@ import { useToastNotification } from '@/components/toast-notification'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { UseStartTournament } from '@/queries/tournaments'
 import { Dialog, DialogTitle, DialogContent, DialogDescription } from '@/components/ui/dialog'
-import { Window } from '@/routes/tere/-components-2/window'
+import { Window } from '@/components/window'
 
 interface TournamentCardProps {
     tournament: Tournament
@@ -262,10 +262,12 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                     <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             ) : tournament.state === "started" ? (
-                                <Button variant="ghost" size="sm" className="text-green-600">
-                                    View Brackets
-                                    <ChevronRight className="w-4 h-4 ml-2" />
-                                </Button>
+                                <Link href={`${tournament.id}/brackets`}>
+                                    <Button variant="ghost" size="sm" className="text-green-600">
+                                        View Brackets
+                                        <ChevronRight className="w-4 h-4 ml-2" />
+                                    </Button>
+                                </Link>
                             ) : tournament.state === "" ? (
                                 <Button variant="ghost" size="sm" className="text-red-600">
                                     View Results

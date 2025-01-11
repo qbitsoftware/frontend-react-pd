@@ -1,7 +1,7 @@
 import { DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Dialog } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
-import { Window } from '@/routes/tere/-components-2/window'
+import { Window } from '@/components/window'
 import { Bracket } from '@/types/types'
 import { SetStateAction } from 'react'
 import { Dispatch } from 'react'

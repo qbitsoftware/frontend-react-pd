@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { UseStartTournament } from '@/queries/tournaments'
 import { useEffect, useState } from 'react'
 import { Bracket } from '@/types/types'
-import { Window } from './-components-2/window'
+import { Window } from '../../components/window'
 export const Route = createFileRoute('/tere/')({
   component: RouteComponent,
 
