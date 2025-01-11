@@ -3,11 +3,10 @@ import { Bracket } from "@/types/types"
 import SingleElimBracket from "./single_elim"
 import DoubleElimBracket from "./double_elim"
 import { CalculateSVGHeight } from "@/lib/utils"
-import {motion} from "framer-motion"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface WindowProps {
-    data: Bracket[]
+    data: Bracket[],
 }
 
 export const Window: React.FC<WindowProps> = ({ data }) => {
@@ -23,12 +22,12 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
                     }
                     if (table.name === "Miinusring") {
                         return (
-                            <DoubleElimBracket key={index} starting_x={0} starting_y={previousTop} data={table} />
+                            <DoubleElimBracket key={index} starting_x={0} starting_y={previousTop} data={table}/>
 
                         );
                     } else {
                         return (
-                            <SingleElimBracket key={index + 1} starting_x={0} starting_y={previousTop} data={table} />
+                            <SingleElimBracket key={index + 1} starting_x={0} starting_y={previousTop} data={table}/>
                         );
                     }
                 })}
@@ -53,7 +52,7 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
                     </TabsList>
                 </Tabs>
             </div>
-            <div className="w-full h-full rounded-lg shadow-lg p-4 overflow-auto max-w-[1440px]">
+            <div className="w-full h-full rounded-lg shadow-lg p-4 overflow-auto">
                 {renderBracket()}
             </div >
         </div >

@@ -1,10 +1,14 @@
 export type Data = {
     rounds: Round[],
-    matches: Match[],
-    contestants?: {
-        [contestantId: string]: Contestant
-    }
+    matches: TableMatch[],
     name: string;
+}
+
+export type TableMatch = {
+    match: Match
+    participant_1: Participant
+    participant_2: Participant
+    is_bronze_match: boolean
 }
 
 export type Bracket = {
@@ -137,23 +141,19 @@ export type Tournament = {
 
 
 export type Match = {
-    ID: number
+    id: number
     tournament_id: number
-    roundIndex: number,
-    order: number,
-    matchId: number,
-    sides?: Side[],
-    matchStatus?: string,
-    isLive?: boolean
-    isBronzeMatch?: string,
-    bracket: string,
-    CreatedAt: string
-    winner_id: number
-    topCoord: number
-    p1_id: number
-    p2_id: number
-    p1_id_2: number
-    p2_id_2: number
+    type: string
+    round: number
+    p1_id: string
+    p2_id: string
+    winner_id: string
+    order: number
+    location: string
+    bracket: string
+    forfeit: boolean
+    extra_data: any
+    topCoord: number // for front end purposes
 }
 
 export type Match2 = {
