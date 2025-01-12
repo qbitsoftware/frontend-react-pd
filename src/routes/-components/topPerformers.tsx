@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { Link } from "@tanstack/react-router";
 
 export function TopMonthPerformers() {
 
@@ -51,7 +52,9 @@ export function TopMonthPerformers() {
                 </div>
             </div>
             <div className='text-center'>
+              <Link to="/reiting">
                 <Button size="lg" className="bg-secondary hover:bg-blue-700 text-white">{t('homepage.best_performers.button')}</Button>
+              </Link>
             </div>
         </div>
     )

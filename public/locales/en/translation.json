@@ -53,6 +53,12 @@
         "best_performers": {
             "title": "Best Performers of the Month",
             "button": "Check more"
+        },
+        "top_players": {
+          "titles": {
+            "men": "Top Ranked Men",
+            "women": "Top Ranked Women"
+          }
         }
     },
     "news": {
@@ -70,6 +76,69 @@
         "show": {
             "more":"Show more",
             "less": "Show less"
+        }
+    },
+    "rating": {
+        "header": "National Ranking",
+        "header_prefix": {
+          "men": "Men's",
+          "senior_men": "Senior Men's",
+          "women": "Women's",
+          "senior_women": "Senior Women's",
+          "junior_boys": "Junior Boys",
+          "cadet_boys": "Cadet Boys",
+          "junior_girls": "Junior Girls",
+          "cadet_girls": "Cadet Girls",
+          "combined": "Combined"
+        },
+        "last_updated": "Last updated",
+        "filtering": {
+          "buttons": {
+            "men": "Men",
+            "women": "Women",
+            "combined": "Combined"
+          },
+          "select": {
+            "options": {
+              "all": "All age groups",
+              "cadets_boys": "Cadets - Boys",
+              "juniors_boys": "Juniors - Boys",
+              "cadets_girls": "Cadets - Girls",
+              "juniors_girls": "Juniors - Girls",
+              "seniors_men": "Seniors - Men",
+              "seniors_women": "Seniors - Women"
+            }
+          },
+          "search_placeholder": "Search by player or club..."
+        },
+        "table": {
+          "head": {
+            "first_name": "First Name",
+            "last_name": "Surname",
+            "birthyear": "YOB",
+            "profile": "Profile",
+            "club": "Club"
+          },
+          "body": {
+            "profile_button": "Player profile"
+          }
+        },
+        "player_modal": {
+          "basic_information": {
+            "birthyear": "Birth Year",
+            "gender": "Gender"
+          },
+          "menus": {
+            "latest_matches": {
+              "title": "Latest matches"
+            },
+            "temp_placeholder": {
+              "title": "Temp placeholder"
+            },
+            "rating_change_graph": {
+              "title": "Ranking change graph"
+            }
+          }
         }
     }
 }

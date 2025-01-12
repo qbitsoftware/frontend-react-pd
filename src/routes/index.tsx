@@ -8,6 +8,7 @@ import { UpcomingTournaments } from './-components/comingTournaments';
 import { TopMonthPerformers } from './-components/topPerformers';
 import { LatestArticles } from './-components/latestArticles';
 import { UseGetArticles } from '@/queries/articles';
+import { TopFive } from './-components/topFive';
 
 
 export const Route = createFileRoute('/')({
@@ -62,7 +63,25 @@ function Index() {
                 >
                     <LatestArticles articles={articledata.data.slice(0, 3)} />
                 </motion.div>
-
+                
+                <div className="flex justify-center gap-10 w-full mb-8">
+                  <motion.div
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                      className="flex-1"
+                  >
+                      <TopFive gender="men" />
+                  </motion.div>
+                  <motion.div
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                      className="flex-1"
+                  >
+                      <TopFive gender="women"/>
+                  </motion.div>
+                </div>
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}

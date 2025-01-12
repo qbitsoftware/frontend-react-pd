@@ -53,6 +53,12 @@
         "best_performers": {
             "title": "Kuu parimad mängijad",
             "button": "Vaata veel"
+        },
+        "top_players": {
+          "titles": {
+            "men": "Kõrgeima Asetusega Mehed",
+            "women": "Kõrgeima Asetusega Naised"
+          }
         }
     },
     "news": {
@@ -70,6 +76,69 @@
         "show": {
             "more":"Näita kõiki",
             "less": "Näita vähem"
+        }
+    },
+    "rating": {
+        "header": "Reiting",
+        "header_prefix": {
+          "men": "Meeste",
+          "senior_men": "Seeniorite Meeste",
+          "junior_boys": "Juuniorite Noormeeste",
+          "cadet_boys": "Kadettide Poiste",
+          "women": "Naiste",
+          "senior_women": "Seeniorite Naiste",
+          "junior_girls": "Juuniorite Neiude",
+          "cadet_girls": "Kadettide Tüdrukute",
+          "combined": "Ühine"
+        },
+        "last_updated": "Viimati uuendatud",
+        "filtering": {
+          "buttons": {
+            "men": "Mehed",
+            "women": "Naised",
+            "combined": "Kombineeritud"
+          },
+          "select": {
+            "options": {
+              "all": "Kõik vanuserühmad",
+              "cadets_boys": "Kadetid - Poisid",
+              "juniors_boys": "Juuniorid - Noormehed ",
+              "cadets_girls": "Kadetid - Tüdrukud",
+              "juniors_girls": "Juuniorid - Neiud",
+              "seniors_men": "Seeniorid - Mehed",
+              "seniors_women": "Seeniorid - Naised"
+            }
+          },
+          "search_placeholder": "Otsi mängijat või klubi..."
+        },
+        "table": {
+          "head": {
+            "first_name": "Eesnimi",
+            "last_name": "Perenimi",
+            "birthyear": "SA",
+            "profile": "Profiil",
+            "club": "Klubi"
+          },
+          "body": {
+            "profile_button": "Mängija profiil"
+          }
+        },
+        "player_modal": {
+          "basic_information": {
+            "birthyear": "Sünniaasta",
+            "gender": "Sugu"
+          },
+        "menus": {
+            "latest_matches": {
+              "title": "Hiljutised kohtumised"
+            },
+            "temp_placeholder": {
+              "title": "Temp asendaja"
+            },
+            "rating_change_graph": {
+              "title": "Reitingu muutuse graafik"
+            }
+          }
         }
     }
 }
