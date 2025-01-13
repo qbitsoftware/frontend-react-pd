@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { TableMatch } from '@/types/types'
+import React, { useEffect, useState } from 'react'
+import { Score, TableMatch } from '@/types/types'
 import { formatName, getRandomFlag } from '@/lib/utils'
 import { Separator } from './ui/separator'
 import MatchDialog from './match-dialog'
+import { useLocation, useRouter } from '@tanstack/react-router'
 
 interface MatchComponentProps {
     match: TableMatch
@@ -15,10 +16,35 @@ interface MatchComponentProps {
     starting_x: number
 }
 
+interface SetScores {
+    p1_sets: number;
+    p2_sets: number;
+}
 
+const setScore = (score: Score[]) => {
+    let p1_sets = 0
+    let p2_sets = 0
+
+    console.log(score)
+    if (score) {
+        score.forEach((set) => {
+            const player1Points = set.p1_score
+            const player2Points = set.p2_score
+
+            if (player1Points >= 11 && (player1Points - player2Points) >= 2) {
+                p1_sets++
+            } else if (player2Points >= 11 && (player2Points - player1Points) >= 2) {
+                p2_sets++
+            }
+        })
+    }
+    return { p1_sets, p2_sets }
+}
 
 const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, HORIZONTAL_GAP, topCoord, starting_y, starting_x, WIDTH }) => {
     const [isOpen, setIsOpen] = useState(false)
+
+    const {p1_sets, p2_sets} = setScore(match.match.extra_data.score)
 
     return (
         <div>
@@ -50,7 +76,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                                 {formatName(match.participant_1.name)}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
-                            <div className="text-right pr-4">{match.participant_2.id == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
+                            <div className="text-right pr-4">{p1_sets}</div>
                         </>
                     )}
                 </div>
@@ -73,7 +99,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                                 {formatName(match.participant_2.name)}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
-                            <div className="text-right pr-4">{match.participant_1.id == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
+                            <div className="text-right pr-4">{p2_sets}</div>
                         </>
                     )}
                 </div>
