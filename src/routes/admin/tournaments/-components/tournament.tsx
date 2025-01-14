@@ -26,6 +26,7 @@ import { Dialog, DialogTitle, DialogContent, DialogDescription } from '@/compone
 import { Window } from '@/components/window'
 import { UseDeleteBrackets } from '@/queries/brackets'
 import { UseGetParticipantsQuery } from '@/queries/participants'
+import { useTranslation } from 'react-i18next'
 
 interface TournamentCardProps {
     tournament: Tournament
@@ -37,6 +38,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const startMutation = UseStartTournament(tournament.id)
     const { data: participants } = UseGetParticipantsQuery(tournament.id)
     const router = useRouter()
+    const { t } = useTranslation()
 
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
@@ -116,14 +118,13 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('admin.tournaments.confirmations.delete.question')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the tournament
-                            and remove all associated data.
+                            {t('admin.tournaments.confirmations.delete.description')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>{t('admin.tournaments.confirmations.delete.cancel')}</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDelete}
                             className="bg-red-600 text-white hover:bg-red-700"
@@ -132,10 +133,10 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             {deleteMutation.isPending ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Deleting...
+                                    {t('admin.tournaments.confirmations.delete.deleting')}
                                 </>
                             ) : (
-                                "Delete Tournament"
+                                t('admin.tournaments.confirmations.delete.title')
                             )}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -145,14 +146,13 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
             <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('admin.tournaments.confirmations.reset.question')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the matches
-                            and remove all associated data.
+                            {t('admin.tournaments.confirmations.reset.description')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>{t('admin.tournaments.confirmations.reset.cancel')}</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleReset}
                             className="bg-red-600 text-white hover:bg-red-700"
@@ -161,27 +161,26 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             {resetMutation.isPending ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Deleting...
+                                    {t('admin.tournaments.confirmations.reset.deleting')}
                                 </>
                             ) : (
-                                "Reset Matches"
+                                t('admin.tournaments.confirmations.reset.title')
                             )}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
             {exampleDialogData &&
-                // <TournamentDialog data={exampleDialogData} isOpen={exampleDialog} setIsOpen={setExampleDialog} />
                 <Dialog open={exampleDialog} onOpenChange={setExampleDialog}>
                     <DialogContent >
-                        <DialogTitle>Tournament Details</DialogTitle>
+                        <DialogTitle>{t('admin.tournaments.confirmations.create_tournament.title')}</DialogTitle>
                         <DialogDescription>
-                            Here you can manage the details of the tournament.
+                            {t('admin.tournaments.confirmations.create_tournament.description')}
                         </DialogDescription>
                         <div className='w-full h-[70vh]'>
                             <Window data={exampleDialogData} />
                         </div>
-                        <Button onClick={() => { CreateTournament() }}>Start tournament</Button>
+                        <Button onClick={() => { CreateTournament() }}>{t('admin.tournaments.confirmations.create_tournament.button')}</Button>
                     </DialogContent>
                 </Dialog>
             }
@@ -205,7 +204,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                         <Link href={`/admin/tournaments/${tournament.id}`}>
                             <Button variant="outline" size="sm">
                                 <Edit className="w-4 h-4 mr-2" />
-                                Edit
+                                {t('admin.tournaments.actions.edit')}
                             </Button>
                         </Link>
                         <Button
@@ -215,7 +214,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             onClick={() => setShowDeleteDialog(true)}
                         >
                             <Trash className="w-4 h-4 mr-2" />
-                            Delete
+                            {t('admin.tournaments.actions.delete')}
                         </Button>
                         <Button
                             variant="outline"
@@ -224,7 +223,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             onClick={() => setShowResetDialog(true)}
                         >
                             <Trash className="w-4 h-4 mr-2" />
-                            Reset Matches
+                            {t('admin.tournaments.actions.reset_matches')}
                         </Button>
                     </div>
                 </CardHeader>
@@ -235,22 +234,22 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <InfoItem
                                 icon={<Trophy className="w-4 h-4 text-blue-500" />}
-                                label="Type"
+                                label={t('admin.tournaments.info.type')}
                                 value={parseTournamentType(tournament.type)}
                             />
                             <InfoItem
                                 icon={<Users className="w-4 h-4 text-green-500" />}
-                                label="Participants"
+                                label={t('admin.tournaments.info.participants')}
                                 value={`${participants && participants.data ? participants.data.length : "-"} / ${tournament.max_players}`}
                             />
                             <InfoItem
                                 icon={<MapPin className="w-4 h-4 text-red-500" />}
-                                label="Location"
+                                label={t('admin.tournaments.info.location')}
                                 value={tournament.location}
                             />
                             <InfoItem
                                 icon={<Calendar className="w-4 h-4 text-purple-500" />}
-                                label="Duration"
+                                label={t('admin.tournaments.info.duration')}
                                 value={`${getDurationDays(tournament.start_date, tournament.end_date) + 1} days`}
                             />
                         </div>
@@ -264,7 +263,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                 <div className="space-y-3">
                                     <h3 className="text-sm font-semibold flex items-center gap-2">
                                         <Info className="w-4 h-4 text-blue-500" />
-                                        Additional Information
+                                        {t('admin.tournaments.info.extra_info')}
                                     </h3>
                                     <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                                         {additionalInfo.fields.map((field: any, index: number) => (
@@ -281,16 +280,16 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             <div className="space-y-3">
                                 <h3 className="text-sm font-semibold flex items-center gap-2">
                                     <Clock className="w-4 h-4 text-orange-500" />
-                                    Registration Period
+                                    {t('admin.tournaments.info.registration_period')}
                                 </h3>
                                 <div className="bg-gray-50 p-4 rounded-lg">
                                     <div className="space-y-2">
                                         <p className="text-sm">
-                                            <span className="text-gray-600">Opens: </span>
+                                            <span className="text-gray-600">{t('admin.tournaments.info.registration_period_opens')}: </span>
                                             <span className="font-semibold">{formatDateString(tournament.start_date)}</span>
                                         </p>
                                         <p className="text-sm">
-                                            <span className="text-gray-600">Closes: </span>
+                                            <span className="text-gray-600">{t('admin.tournaments.info.registration_period_closes')}: </span>
                                             <span className="font-semibold">{formatDateString(tournament.end_date)}</span>
                                         </p>
                                     </div>
@@ -307,30 +306,30 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                     onClick={() => setShowDetails(!showDetails)}
                                 >
                                     <Info className="w-4 h-4 mr-2" />
-                                    {showDetails ? 'Hide Details' : 'View Details'}
+                                    {showDetails ? t('admin.tournaments.actions.hide_details') : t('admin.tournaments.actions.view_details')}
                                 </Button>
                                 <Link href={`/admin/tournaments/${tournament.id}/participants`}>
                                     <Button variant="outline" size="sm">
                                         <Users className="w-4 h-4 mr-2" />
-                                        Manage Participants
+                                        {t('admin.tournaments.actions.manage_participants')}
                                     </Button>
                                 </Link>
                             </div>
                             {tournament.state === "created" ? (
                                 <Button variant="ghost" size="sm" className="text-blue-600" onClick={() => ShowExample()}>
-                                    Start Tournament
+                                    {t('admin.tournaments.actions.start_tournament')}
                                     <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             ) : tournament.state === "started" ? (
                                 <Link href={`${tournament.id}/brackets`}>
                                     <Button variant="ghost" size="sm" className="text-green-600">
-                                        View Brackets
+                                        {t('admin.tournaments.actions.view_brackets')}
                                         <ChevronRight className="w-4 h-4 ml-2" />
                                     </Button>
                                 </Link>
                             ) : tournament.state === "" ? (
                                 <Button variant="ghost" size="sm" className="text-red-600">
-                                    View Results
+                                    {t('admin.tournaments.actions.view_results')}
                                     <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             ) : null}

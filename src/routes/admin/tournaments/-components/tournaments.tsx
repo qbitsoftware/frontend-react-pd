@@ -5,6 +5,7 @@ import TournamentCard from './tournament';
 import React, { useState } from 'react';
 import { Tournament } from '@/types/types';
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 interface AdminTournamentProps {
     tournaments: Tournament[]
@@ -14,6 +15,7 @@ const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [status, setStatus] = useState('all');
     const [sortOrder, setSortOrder] = useState('newest');
+    const { t } = useTranslation()
 
     const filteredTournaments = tournaments
         .filter(tournament => {
@@ -34,7 +36,7 @@ const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {
                 <Link href="/admin/tournaments/new">
                     <Button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
                         <PlusCircle className="w-4 h-4 mr-2" />
-                        New Tournament
+                        {t('admin.tournaments.add_new')}
                     </Button>
                 </Link>
             </div>
@@ -45,7 +47,7 @@ const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {
                         <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search tournaments..."
+                            placeholder={t('admin.tournaments.filters.search')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-3 py-2 border rounded-md"
@@ -57,18 +59,18 @@ const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                         >
-                            <option value="all">All Status</option>
-                            <option value="started">Active</option>
-                            <option value="completed">Completed</option>
-                            <option value="draft">Draft</option>
+                            <option value="all">{t('admin.tournaments.filters.status.all')}</option>
+                            <option value="created">{t('admin.tournaments.filters.status.created')}</option>
+                            <option value="started">{t('admin.tournaments.filters.status.ongoing')}</option>
+                            <option value="completed">{t('admin.tournaments.filters.status.finished')}</option>
                         </select>
                         <select
                             className="px-3 py-2 border rounded-md"
                             value={sortOrder}
                             onChange={(e) => setSortOrder(e.target.value)}
                         >
-                            <option value="newest">Newest First</option>
-                            <option value="oldest">Oldest First</option>
+                            <option value="newest">{t('admin.tournaments.filters.status.newest')}</option>
+                            <option value="oldest">{t('admin.tournaments.filters.status.oldest')}</option>
                         </select>
                     </div>
                 </div>

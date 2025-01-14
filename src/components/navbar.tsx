@@ -14,10 +14,10 @@ import { cn } from "@/lib/utils"
 import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
 import { AuthButton } from './ui/auth-button'
+import { SidebarTrigger } from './ui/sidebar'
 
 
 // [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
-
 
 
 export default function Navbar() {
@@ -61,7 +61,7 @@ export default function Navbar() {
                 { name: 'Club Rankings', href: '/klubid/rankings' },
             ]
         },
-        { name: t('navbar.menu.young_sport'), href: '/noortesport' },
+        // { name: t('navbar.menu.young_sport'), href: '/noortesport' },
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },
         { name: t('navbar.menu.contact'), href: '/kontakt' },
@@ -75,12 +75,12 @@ export default function Navbar() {
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/">
-                                <img className="h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
+                                <img className="h-10 lg:h-8 xl:h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
                             </Link>
                         </div>
                     </div>
 
-                    <NavigationMenu className="hidden md:flex">
+                    <NavigationMenu className="hidden lg:flex">
                         <NavigationMenuList className="flex space-x-4">
                             {menuItems.map((item) => (
                                 <NavigationMenuItem key={item.name}>
@@ -131,6 +131,7 @@ export default function Navbar() {
                             <AuthButton />
                         </NavigationMenuList>
                     </NavigationMenu>
+                    <SidebarTrigger className='lg:hidden my-auto text-secondary'/>
                 </div>
             </div>
         </header >

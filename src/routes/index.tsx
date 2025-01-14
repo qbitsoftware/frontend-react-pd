@@ -64,7 +64,7 @@ function Index() {
                     <LatestArticles articles={articledata.data.slice(0, 3)} />
                 </motion.div>
                 
-                <div className="flex justify-center gap-10 w-full mb-8">
+                <div className="flex justify-center sm:flex-row flex-col gap-10 w-full mb-8">
                   <motion.div
                       initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}

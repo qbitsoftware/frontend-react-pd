@@ -3,7 +3,7 @@ import { Score, TableMatch } from '@/types/types'
 import { formatName, getRandomFlag } from '@/lib/utils'
 import { Separator } from './ui/separator'
 import MatchDialog from './match-dialog'
-import { useLocation, useRouter } from '@tanstack/react-router'
+import { useLocation} from '@tanstack/react-router'
 
 interface MatchComponentProps {
     match: TableMatch
@@ -14,11 +14,6 @@ interface MatchComponentProps {
     topCoord: number
     starting_y: number
     starting_x: number
-}
-
-interface SetScores {
-    p1_sets: number;
-    p2_sets: number;
 }
 
 const setScore = (score: Score[]) => {
@@ -49,6 +44,9 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
     useEffect(() => {
         if (location.pathname.includes("admin")) {
             setIsDisabled(false)
+        } 
+        if (match.participant_1.id === "" || match.participant_2.id === "" || match.participant_1.id === "empty" || match.participant_2.id === "empty") {
+            setIsDisabled(true)
         }
     }, [location])
 

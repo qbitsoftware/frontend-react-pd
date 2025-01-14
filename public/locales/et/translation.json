@@ -1,144 +1,224 @@
 {
-    "eltl": {
-        "name": "Eesti lauatenniseliit"
+  "eltl": {
+    "name": "Eesti lauatenniseliit"
+  },
+  "navbar": {
+    "language": {
+      "estonian": "Eesti",
+      "english": "Inglise",
+      "choose": "🇪🇪 "
     },
-    "navbar": {
-        "language": {
-            "estonian": "Eesti",
-            "english": "Inglise",
-            "choose": "🇪🇪 "
-        },
-        "menu": {
-            "news": {
-                "name": "Uudised",
-                "all": "Kõik",
-                "announcements": "Teadaanded",
-                "international": "International",
-                "tournaments": "Võistlused",
-                "youth": "Noored",
-                "newsletter": "Uudiskiri"
-            },
-            "eltl": "ELTL",
-            "competition": "Võistlused",
-            "clubs": "Klubid",
-            "young_sport": "Noortesport",
-            "ratings": "Reiting",
-            "rules": "Reeglid",
-            "contact": "Kontakt"
-        }
+    "menu": {
+      "news": {
+        "name": "Uudised",
+        "all": "Kõik",
+        "announcements": "Teadaanded",
+        "international": "International",
+        "tournaments": "Võistlused",
+        "youth": "Noored",
+        "newsletter": "Uudiskiri"
+      },
+      "eltl": "ELTL",
+      "competition": "Võistlused",
+      "clubs": "Klubid",
+      "young_sport": "Noortesport",
+      "ratings": "Reiting",
+      "rules": "Reeglid",
+      "contact": "Kontakt"
+    }
+  },
+  "footer": {
+    "contact": {
+      "name": "Kontakt",
+      "email": "Email",
+      "phone": "Tel nr"
     },
-    "footer": {
-        "contact": {
-            "name": "Kontakt",
-            "email": "Email",
-            "phone": "Tel nr"
-        },
-        "links": "Menüü"
-    },
-    "homepage": {
-        "title": "Eesti Lauatenniseliit",
-        "title_button": "Uuri võistlusi",
-        "description": "Eesti lauatennise spordi tugevdamine",
-        "upcoming_tournaments": "Tulevased võistlused",
-        "latest_news": "Viimased uudised",
-        "details": "Üksikasjad",
-        "tournaments": {
-            "name": "Nimi",
-            "date": "Kuupäev",
-            "location": "Asukoht"
-        },
-        "news": {
-            "read_more": "Loe lähemalt"
-        },
-        "best_performers": {
-            "title": "Kuu parimad mängijad",
-            "button": "Vaata veel"
-        },
-        "top_players": {
-          "titles": {
-            "men": "Kõrgeima Asetusega Mehed",
-            "women": "Kõrgeima Asetusega Naised"
-          }
-        }
+    "links": "Menüü"
+  },
+  "homepage": {
+    "title": "Eesti Lauatenniseliit",
+    "title_button": "Uuri võistlusi",
+    "description": "Eesti lauatennise spordi tugevdamine",
+    "upcoming_tournaments": "Tulevased võistlused",
+    "latest_news": "Viimased uudised",
+    "details": "Üksikasjad",
+    "tournaments": {
+      "name": "Nimi",
+      "date": "Kuupäev",
+      "location": "Asukoht"
     },
     "news": {
-        "title": "Uudised"
+      "read_more": "Loe lähemalt"
+    },
+    "best_performers": {
+      "title": "Kuu parimad mängijad",
+      "button": "Vaata veel"
+    },
+    "top_players": {
+      "titles": {
+        "men": "Kõrgeima Asetusega Mehed",
+        "women": "Kõrgeima Asetusega Naised"
+      }
+    }
+  },
+  "news": {
+    "title": "Uudised"
+  },
+  "tournaments": {
+    "header": "Turniirid",
+    "inputs": {
+      "search": "Otsi turniiri...",
+      "start_date": "Alguskuupäev",
+      "end_date": "Lõppkuupäev",
+      "reset_dates": "Lähtesta kuupäevad",
+      "type": "Vali turniiri tüüp"
+    },
+    "show": {
+      "more": "Näita kõiki",
+      "less": "Näita vähem"
+    }
+  },
+  "rating": {
+    "header": "Reiting",
+    "header_prefix": {
+      "men": "Meeste",
+      "senior_men": "Seeniorite Meeste",
+      "junior_boys": "Juuniorite Noormeeste",
+      "cadet_boys": "Kadettide Poiste",
+      "women": "Naiste",
+      "senior_women": "Seeniorite Naiste",
+      "junior_girls": "Juuniorite Neiude",
+      "cadet_girls": "Kadettide Tüdrukute",
+      "combined": "Ühine"
+    },
+    "last_updated": "Viimati uuendatud",
+    "filtering": {
+      "buttons": {
+        "men": "Mehed",
+        "women": "Naised",
+        "combined": "Kombineeritud"
+      },
+      "select": {
+        "options": {
+          "all": "Kõik vanuserühmad",
+          "cadets_boys": "Kadetid - Poisid",
+          "juniors_boys": "Juuniorid - Noormehed ",
+          "cadets_girls": "Kadetid - Tüdrukud",
+          "juniors_girls": "Juuniorid - Neiud",
+          "seniors_men": "Seeniorid - Mehed",
+          "seniors_women": "Seeniorid - Naised"
+        }
+      },
+      "search_placeholder": "Otsi mängijat või klubi..."
+    },
+    "table": {
+      "head": {
+        "first_name": "Eesnimi",
+        "last_name": "Perenimi",
+        "birthyear": "SA",
+        "profile": "Profiil",
+        "club": "Klubi"
+      },
+      "body": {
+        "profile_button": "Mängija profiil"
+      }
+    },
+    "player_modal": {
+      "basic_information": {
+        "birthyear": "Sünniaasta",
+        "gender": "Sugu"
+      },
+      "menus": {
+        "latest_matches": {
+          "title": "Hiljutised kohtumised"
+        },
+        "temp_placeholder": {
+          "title": "Temp asendaja"
+        },
+        "rating_change_graph": {
+          "title": "Reitingu muutuse graafik"
+        }
+      }
+    }
+  },
+  "admin": {
+    "layout": {
+      "sidebar": {
+        "dashboard": "Töölaud",
+        "tournaments": "Turniirid",
+        "blogs": "Blogid",
+        "settings": "Sätted"
+      },
+      "title": "Turniirihaldus",
+      "description": "Administreerimine"
     },
     "tournaments": {
-        "header": "Turniirid",
-        "inputs": {
-            "search":"Otsi turniiri...",
-            "start_date":"Alguskuupäev",
-            "end_date":"Lõppkuupäev",
-            "reset_dates": "Lähtesta kuupäevad",
-            "type": "Vali turniiri tüüp"
+      "title": "Turniirid",
+      "description": "Halda enda turniire siit",
+      "add_new": "Lisa Uus",
+      "filters": {
+        "status": {
+          "all": "Kõik",
+          "created": "Loodud",
+          "ongoing": "Käimas",
+          "finished": "Lõpetatud",
+          "newest": "Uusimad ennem",
+          "oldest": "Vanimad ennem"
         },
-        "show": {
-            "more":"Näita kõiki",
-            "less": "Näita vähem"
+        "search": "Otsi turniiri..."
+      },
+      "confirmations": {
+        "delete": {
+          "title": "Kustuta Turniir",
+          "question": "Olete kindel?",
+          "description": "Peale toimingut on turniir kustutatud ja seda ei saa tagasi võtta.",
+          "cancel": "Katkesta",
+          "deleting": "Kustutamine..."
+        },
+        "reset": {
+          "title": "Tee matšid uuesti",
+          "question": "Olete kindel?",
+          "description": "Peale toimingut kustutatakse selle turniiri matšid",
+          "cancel": "Katkesta",
+          "deleting": "Kustutamine..."
+        },
+        "create_tournament": {
+          "title": "Turniiri detailid",
+          "description": "Turniiri eelvaade",
+          "button": "Alusta turniir"
         }
-    },
-    "rating": {
-        "header": "Reiting",
-        "header_prefix": {
-          "men": "Meeste",
-          "senior_men": "Seeniorite Meeste",
-          "junior_boys": "Juuniorite Noormeeste",
-          "cadet_boys": "Kadettide Poiste",
-          "women": "Naiste",
-          "senior_women": "Seeniorite Naiste",
-          "junior_girls": "Juuniorite Neiude",
-          "cadet_girls": "Kadettide Tüdrukute",
-          "combined": "Ühine"
+      },
+      "actions": {
+        "edit": "Muuda",
+        "delete": "Kustuta",
+        "reset_matches": "Tee matšid uuesti",
+        "view_details": "Detailid",
+        "hide_details": "Peida Detailid",
+        "manage_participants": "Halda osalejaid",
+        "start_tournament": "Alusta turniir",
+        "view_brackets": "Vaata turniiri tabelit",
+        "view_results": "Vaata tulemusi"
+      },
+      "info": {
+        "type": "Tüüp",
+        "location": "Asukoht",
+        "participants": "Osalejad",
+        "duration": "Kestus",
+        "registration_period": "Registratsiooni periood",
+        "registration_period_opens": "Avaneb",
+        "registration_period_closes": "Lukustub",
+        "extra_info": "Lisa info"
+      },
+      "errors": {
+        "not_found": {
+          "title": "Turniiri ei leitud",
+          "description": "Hetkel ei ole turniire, mida kuvada. Alustamiseks lisage uus turniir."
         },
-        "last_updated": "Viimati uuendatud",
-        "filtering": {
-          "buttons": {
-            "men": "Mehed",
-            "women": "Naised",
-            "combined": "Kombineeritud"
-          },
-          "select": {
-            "options": {
-              "all": "Kõik vanuserühmad",
-              "cadets_boys": "Kadetid - Poisid",
-              "juniors_boys": "Juuniorid - Noormehed ",
-              "cadets_girls": "Kadetid - Tüdrukud",
-              "juniors_girls": "Juuniorid - Neiud",
-              "seniors_men": "Seeniorid - Mehed",
-              "seniors_women": "Seeniorid - Naised"
-            }
-          },
-          "search_placeholder": "Otsi mängijat või klubi..."
-        },
-        "table": {
-          "head": {
-            "first_name": "Eesnimi",
-            "last_name": "Perenimi",
-            "birthyear": "SA",
-            "profile": "Profiil",
-            "club": "Klubi"
-          },
-          "body": {
-            "profile_button": "Mängija profiil"
-          }
-        },
-        "player_modal": {
-          "basic_information": {
-            "birthyear": "Sünniaasta",
-            "gender": "Sugu"
-          },
-        "menus": {
-            "latest_matches": {
-              "title": "Hiljutised kohtumised"
-            },
-            "temp_placeholder": {
-              "title": "Temp asendaja"
-            },
-            "rating_change_graph": {
-              "title": "Reitingu muutuse graafik"
-            }
-          }
+        "network": {
+          "title": "Serveri viga",
+          "description": "Serveril tekkis probleeme turniiride leidmisega"
         }
+      }
     }
+  }
 }

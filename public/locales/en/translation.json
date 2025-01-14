@@ -1,144 +1,224 @@
 {
-    "eltl": {
-        "name": "Estonian Tabletennis Association"
+  "eltl": {
+    "name": "Estonian Tabletennis Association"
+  },
+  "navbar": {
+    "language": {
+      "estonian": "Estonian",
+      "english": "English",
+      "choose": "🇬🇧 "
     },
-    "navbar": {
-        "language": {
-            "estonian": "Estonian",
-            "english": "English",
-            "choose": "🇬🇧 "
-        },
-        "menu": {
-            "news": {
-                "name": "News",
-                "all": "All",
-                "announcements": "Announcements",
-                "international": "International",
-                "tournaments": "Tournaments",
-                "youth": "Youth",
-                "newsletter": "Newsletter"
-            },
-            "eltl": "ELTL",
-            "competition": "Competitions",
-            "clubs": "Clubs",
-            "young_sport": "Youths",
-            "ratings": "Ratings",
-            "rules": "Rules",
-            "contact": "Contact"
-        }
+    "menu": {
+      "news": {
+        "name": "News",
+        "all": "All",
+        "announcements": "Announcements",
+        "international": "International",
+        "tournaments": "Tournaments",
+        "youth": "Youth",
+        "newsletter": "Newsletter"
+      },
+      "eltl": "ELTL",
+      "competition": "Competitions",
+      "clubs": "Clubs",
+      "young_sport": "Youths",
+      "ratings": "Ratings",
+      "rules": "Rules",
+      "contact": "Contact"
+    }
+  },
+  "footer": {
+    "contact": {
+      "name": "Contacts",
+      "email": "Email",
+      "phone": "Phone"
     },
-    "footer": {
-        "contact": {
-            "name": "Contacts",
-            "email": "Email",
-            "phone": "Phone"
-        },
-        "links": "Quick links"
-    },
-    "homepage": {
-        "title": "Estonian Tabletennis Association",
-        "title_button": "Check tournaments",
-        "description": "Empowering Estonian Tabletennis",
-        "upcoming_tournaments": "Upcoming Tournaments",
-        "latest_news": "Latest News",
-        "details": "Details",
-        "tournaments": {
-            "name": "Name",
-            "date": "Date",
-            "location": "Location"
-        },
-        "news": {
-            "read_more": "Read more"
-        },
-        "best_performers": {
-            "title": "Best Performers of the Month",
-            "button": "Check more"
-        },
-        "top_players": {
-          "titles": {
-            "men": "Top Ranked Men",
-            "women": "Top Ranked Women"
-          }
-        }
+    "links": "Quick links"
+  },
+  "homepage": {
+    "title": "Estonian Tabletennis Association",
+    "title_button": "Check tournaments",
+    "description": "Empowering Estonian Tabletennis",
+    "upcoming_tournaments": "Upcoming Tournaments",
+    "latest_news": "Latest News",
+    "details": "Details",
+    "tournaments": {
+      "name": "Name",
+      "date": "Date",
+      "location": "Location"
     },
     "news": {
-        "title": "News and Updates"
+      "read_more": "Read more"
+    },
+    "best_performers": {
+      "title": "Best Performers of the Month",
+      "button": "Check more"
+    },
+    "top_players": {
+      "titles": {
+        "men": "Top Ranked Men",
+        "women": "Top Ranked Women"
+      }
+    }
+  },
+  "news": {
+    "title": "News and Updates"
+  },
+  "tournaments": {
+    "header": "Tournaments",
+    "inputs": {
+      "search": "Search tournament...",
+      "start_date": "Start date",
+      "end_date": "End date",
+      "reset_dates": "Reset dates",
+      "type": "Choose tournament type"
+    },
+    "show": {
+      "more": "Show more",
+      "less": "Show less"
+    }
+  },
+  "rating": {
+    "header": "National Ranking",
+    "header_prefix": {
+      "men": "Men's",
+      "senior_men": "Senior Men's",
+      "women": "Women's",
+      "senior_women": "Senior Women's",
+      "junior_boys": "Junior Boys",
+      "cadet_boys": "Cadet Boys",
+      "junior_girls": "Junior Girls",
+      "cadet_girls": "Cadet Girls",
+      "combined": "Combined"
+    },
+    "last_updated": "Last updated",
+    "filtering": {
+      "buttons": {
+        "men": "Men",
+        "women": "Women",
+        "combined": "Combined"
+      },
+      "select": {
+        "options": {
+          "all": "All age groups",
+          "cadets_boys": "Cadets - Boys",
+          "juniors_boys": "Juniors - Boys",
+          "cadets_girls": "Cadets - Girls",
+          "juniors_girls": "Juniors - Girls",
+          "seniors_men": "Seniors - Men",
+          "seniors_women": "Seniors - Women"
+        }
+      },
+      "search_placeholder": "Search by player or club..."
+    },
+    "table": {
+      "head": {
+        "first_name": "First Name",
+        "last_name": "Surname",
+        "birthyear": "YOB",
+        "profile": "Profile",
+        "club": "Club"
+      },
+      "body": {
+        "profile_button": "Player profile"
+      }
+    },
+    "player_modal": {
+      "basic_information": {
+        "birthyear": "Birth Year",
+        "gender": "Gender"
+      },
+      "menus": {
+        "latest_matches": {
+          "title": "Latest matches"
+        },
+        "temp_placeholder": {
+          "title": "Temp placeholder"
+        },
+        "rating_change_graph": {
+          "title": "Ranking change graph"
+        }
+      }
+    }
+  },
+  "admin": {
+    "layout": {
+      "sidebar": {
+        "dashboard": "Dashboard",
+        "tournaments": "Tournaments",
+        "blogs": "Blogs",
+        "settings": "Settings"
+      },
+      "title": "Tournament Hub",
+      "description": "Administration"
     },
     "tournaments": {
-        "header": "Tournaments",
-        "inputs": {
-            "search":"Search tournament...",
-            "start_date":"Start date",
-            "end_date":"End date",
-            "reset_dates": "Reset dates",
-            "type": "Choose tournament type"
+      "title": "Tournaments",
+      "description": "Manage and organize tournaments",
+      "add_new": "New Tournament",
+      "filters": {
+        "status": {
+          "all": "All",
+          "created": "Created",
+          "ongoing": "Ongoing",
+          "finished": "Finished",
+          "newest": "Newest First",
+          "oldest": "Oldest First"
         },
-        "show": {
-            "more":"Show more",
-            "less": "Show less"
+        "search": "Search tournaments..."
+      },
+      "confirmations": {
+        "delete": {
+          "title": "Delete Tournament",
+          "question": "Are you sure?",
+          "description": "This action cannot be undone. This will permanently delete the data.",
+          "cancel": "Cancel",
+          "deleting": "Deleting..."
+        },
+        "reset": {
+          "title": "Reset Matches",
+          "question": "Are you sure?",
+          "description": "This action cannot be undone. This will permanently delete the data.",
+          "cancel": "Cancel",
+          "deleting": "Deleting..."
+        },
+        "create_tournament": {
+          "title": "Tournament Details",
+          "description": "Preview of the tournament",
+          "button": "Start Tournament"
         }
-    },
-    "rating": {
-        "header": "National Ranking",
-        "header_prefix": {
-          "men": "Men's",
-          "senior_men": "Senior Men's",
-          "women": "Women's",
-          "senior_women": "Senior Women's",
-          "junior_boys": "Junior Boys",
-          "cadet_boys": "Cadet Boys",
-          "junior_girls": "Junior Girls",
-          "cadet_girls": "Cadet Girls",
-          "combined": "Combined"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "reset_matches": "Reset Matches",
+        "view_details": "View Details",
+        "hide_details": "Hide Details",
+        "manage_participants": "Manage Participants",
+        "start_tournament": "Start Tournament",
+        "view_brackets": "View Brackets",
+        "view_results": "View Results"
+      },
+      "info": {
+        "type": "Type",
+        "location": "Location",
+        "participants": "Participants",
+        "duration": "Duration",
+        "registration_period": "Registration Period",
+        "registration_period_opens": "Opens",
+        "registration_period_closes": "Closes",
+        "extra_info": "Additional information"
+      },
+      "errors": {
+        "not_found": {
+          "title": "No Tournaments Found",
+          "description": "There are currently no tournaments to display. Create a new tournament to get started."
         },
-        "last_updated": "Last updated",
-        "filtering": {
-          "buttons": {
-            "men": "Men",
-            "women": "Women",
-            "combined": "Combined"
-          },
-          "select": {
-            "options": {
-              "all": "All age groups",
-              "cadets_boys": "Cadets - Boys",
-              "juniors_boys": "Juniors - Boys",
-              "cadets_girls": "Cadets - Girls",
-              "juniors_girls": "Juniors - Girls",
-              "seniors_men": "Seniors - Men",
-              "seniors_women": "Seniors - Women"
-            }
-          },
-          "search_placeholder": "Search by player or club..."
-        },
-        "table": {
-          "head": {
-            "first_name": "First Name",
-            "last_name": "Surname",
-            "birthyear": "YOB",
-            "profile": "Profile",
-            "club": "Club"
-          },
-          "body": {
-            "profile_button": "Player profile"
-          }
-        },
-        "player_modal": {
-          "basic_information": {
-            "birthyear": "Birth Year",
-            "gender": "Gender"
-          },
-          "menus": {
-            "latest_matches": {
-              "title": "Latest matches"
-            },
-            "temp_placeholder": {
-              "title": "Temp placeholder"
-            },
-            "rating_change_graph": {
-              "title": "Ranking change graph"
-            }
-          }
+        "network": {
+          "title": "Network error",
+          "description": "An error occurred while fetching tournaments"
         }
+      }
     }
+  }
 }
