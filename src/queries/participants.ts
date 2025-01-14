@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
 import { Participant } from "@/types/types";
 import { ParticipantFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participant-form";
@@ -27,6 +27,20 @@ export function UseGetParticipants(tournament_id: number) {
         }
     })
 }
+
+export function UseGetParticipantsQuery(tournament_id: number) {
+    return useQuery<ParticipantsResponse>({
+        queryKey: ["participants", tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/participants`, {
+                withCredentials: true,
+            })
+            return data;
+        }
+    })
+}
+
+
 
 
 export function UseCreateParticipants(tournament_id: number) {

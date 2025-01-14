@@ -42,6 +42,16 @@ const setScore = (score: Score[]) => {
 }
 
 const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, HORIZONTAL_GAP, topCoord, starting_y, starting_x, WIDTH }) => {
+
+    const location = useLocation()
+    const [isDisabled, setIsDisabled] = useState(true)
+
+    useEffect(() => {
+        if (location.pathname.includes("admin")) {
+            setIsDisabled(false)
+        }
+    }, [location])
+
     const [isOpen, setIsOpen] = useState(false)
 
     const {p1_sets, p2_sets} = setScore(match.match.extra_data.score)
@@ -56,6 +66,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     height: `${HEIGHT}px`,
                 }}
                 onClick={() =>
+                    !isDisabled &&
                     setIsOpen(true)}
                 key={index}
                 className={`absolute flex flex-col border rounded-sm border-black/30 hover:border-blue-600 z-10 text-sm`}>

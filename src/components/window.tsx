@@ -4,6 +4,7 @@ import SingleElimBracket from "./single_elim"
 import DoubleElimBracket from "./double_elim"
 import { CalculateSVGHeight } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useLocation } from "@tanstack/react-router"
 
 interface WindowProps {
     data: Bracket[],

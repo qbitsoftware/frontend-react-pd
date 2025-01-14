@@ -7,7 +7,7 @@ import { Tournament } from '@/types/types';
 import { Link } from '@tanstack/react-router';
 
 interface AdminTournamentProps {
-    tournaments: Tournament[] 
+    tournaments: Tournament[]
 }
 
 const AdminTournament: React.FC<AdminTournamentProps> = ({ tournaments }) => {

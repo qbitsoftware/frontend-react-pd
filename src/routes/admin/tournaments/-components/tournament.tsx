@@ -24,6 +24,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { UseStartTournament } from '@/queries/tournaments'
 import { Dialog, DialogTitle, DialogContent, DialogDescription } from '@/components/ui/dialog'
 import { Window } from '@/components/window'
+import { UseDeleteBrackets } from '@/queries/brackets'
+import { UseGetParticipantsQuery } from '@/queries/participants'
 
 interface TournamentCardProps {
     tournament: Tournament
@@ -31,7 +33,9 @@ interface TournamentCardProps {
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const deleteMutation = UseDeleteTournament(tournament.id)
+    const resetMutation = UseDeleteBrackets(tournament.id)
     const startMutation = UseStartTournament(tournament.id)
+    const { data: participants } = UseGetParticipantsQuery(tournament.id)
     const router = useRouter()
 
     const toast = useToast()
@@ -39,6 +43,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const [exampleDialog, setExampleDialog] = useState(false)
     const [exampleDialogData, setExampleDialogData] = useState<Bracket[]>([])
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [showResetDialog, setShowResetDialog] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
 
     const additionalInfo = tournament.information ?
@@ -62,6 +67,20 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
         }
     };
 
+    const handleReset = async () => {
+        try {
+            await resetMutation.mutateAsync()
+            router.navigate({
+                to: "/admin/tournaments",
+                replace: true,
+            });
+            successToast("Turniiri mängud on edukalt kustutatud")
+        } catch (error) {
+            errorToast("Turniiri mängude kustutamine ebaõnnestus")
+            console.error(error)
+        }
+    }
+
     const ShowExample = async () => {
         try {
             const result = await startMutation.mutateAsync(false)
@@ -80,6 +99,10 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
         try {
             await startMutation.mutateAsync(true)
             setExampleDialog(false)
+            router.navigate({
+                to: "/admin/tournaments",
+                replace: true,
+            });
             successToast("Tournament created successfully")
         } catch (error) {
             errorToast("There are some problems with starting a tournament")
@@ -89,6 +112,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
 
     return (
         <>
+            {/* Delete Dialog */}
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -117,8 +141,35 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-
-
+            {/* Reset Dialog */}
+            <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete the matches
+                            and remove all associated data.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleReset}
+                            className="bg-red-600 text-white hover:bg-red-700"
+                            disabled={resetMutation.isPending}
+                        >
+                            {resetMutation.isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Deleting...
+                                </>
+                            ) : (
+                                "Reset Matches"
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {exampleDialogData &&
                 // <TournamentDialog data={exampleDialogData} isOpen={exampleDialog} setIsOpen={setExampleDialog} />
                 <Dialog open={exampleDialog} onOpenChange={setExampleDialog}>
@@ -166,6 +217,15 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             <Trash className="w-4 h-4 mr-2" />
                             Delete
                         </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 border-red-200 hover:bg-red-50"
+                            onClick={() => setShowResetDialog(true)}
+                        >
+                            <Trash className="w-4 h-4 mr-2" />
+                            Reset Matches
+                        </Button>
                     </div>
                 </CardHeader>
 
@@ -181,7 +241,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             <InfoItem
                                 icon={<Users className="w-4 h-4 text-green-500" />}
                                 label="Participants"
-                                value={`${tournament.min_team_size} / ${tournament.max_players}`}
+                                value={`${participants && participants.data ? participants.data.length : "-"} / ${tournament.max_players}`}
                             />
                             <InfoItem
                                 icon={<MapPin className="w-4 h-4 text-red-500" />}

@@ -33,36 +33,19 @@ const matchFormSchema = z.object({
     mainReferee: z.string().optional(),
     scores: z
         .array(scoreSchema)
-        .min(3, "At least 3 scores are required for best of 3")
         .max(5, "A maximum of 7 scores are allowed for best of 7")
-        .refine(
-            (scores) => {
-                const validScoreDifferences = scores.every(
-                    (game) => Math.abs(game.player1 - game.player2) >= 2 && (game.player1 >= 11 || game.player2 >= 11)
-                );
-                if (!validScoreDifferences) return false;
-
-                const player1Wins = scores.filter((game) => game.player1 > game.player2).length;
-                const player2Wins = scores.filter((game) => game.player2 > game.player1).length;
-
-                return player1Wins >= 2 || player2Wins >= 2;
-            },
-            {
-                message:
-                    "Scores must reflect a best-of-3 match with a 2-point difference in each game.",
-            }
-        ),
 });
 
 type MatchFormValues = z.infer<typeof matchFormSchema>
 
 
 const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
-       const location = useLocation()
-        console.log(location)
-    
-        const router = useRouter()
-    
+
+    const location = useLocation()
+    console.log(location)
+
+    const router = useRouter()
+
     console.log("match", match.match)
     const toast = useToast()
     const { errorToast, successToast } = useToastNotification(toast)
@@ -96,6 +79,8 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
             p2_score: score.player2
         }));
 
+
+
         const sendMatch: Match = {
             id: match.match.id,
             tournament_id: match.match.tournament_id,
@@ -118,6 +103,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
             },
             topCoord: 0,
         }
+
         console.log("data", sendMatch)
         try {
             await usePatchMatch.mutateAsync(sendMatch)
