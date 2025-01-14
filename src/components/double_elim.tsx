@@ -1,12 +1,11 @@
-import { Separator } from '@/components/ui/separator';
-import { CalculateSVGHeight, CalculateSVGWidth, FindContestant, formatName, getRandomFlag } from '@/lib/utils';
+import { CalculateSVGHeight, CalculateSVGWidth } from '@/lib/utils';
 import { Data } from '@/types/types';
+import MatchComponent from './match';
 
 interface BracketProps {
     starting_x: number,
     starting_y: number,
-    data: Data
-    onClick: () => void,
+    data: Data,
 }
 
 const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
@@ -20,7 +19,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
     const SVG_WIDTH = CalculateSVGWidth(data.matches, HORIZONTAL_GAP);
     const SVG_HEIGHT = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGHT);
 
-    const matches_len = data.matches.reduce((max, item) => item.roundIndex > max.roundIndex ? item : max, { roundIndex: -Infinity }).roundIndex
+    const matches_len = data.matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
 
 
     if (data && data.matches) {
@@ -29,128 +28,62 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                 {data.matches.map((match, index) => {
                     let topCoord;
                     const prevMatches = data.matches!.filter(
-                        (m) => m.roundIndex === match.roundIndex - 1
+                        (m) => m.match.round === match.match.round - 1
                     );
 
-                    if (match.roundIndex % 2 === 0 && match.roundIndex != 0) {
-                        const firstMatch = prevMatches[2 * match.order];
-                        const secondMatch = prevMatches[2 * match.order + 1];
+                    if (match.match.round % 2 === 0 && match.match.round != 0) {
+                        const firstMatch = prevMatches[2 * match.match.order];
+                        const secondMatch = prevMatches[2 * match.match.order + 1];
 
                         if (firstMatch && secondMatch) {
-                            topCoord = (firstMatch.topCoord + secondMatch.topCoord) / 2;
+                            topCoord = (firstMatch.match.topCoord + secondMatch.match.topCoord) / 2;
                         } else {
-                            topCoord = match.order * (HEIGHT + VERTICAL_GAP);
+                            topCoord = match.match.order * (HEIGHT + VERTICAL_GAP);
                             console.log("we are never getting her")
                         }
                     } else {
-                        if (match.roundIndex == 0) {
-                            topCoord = match.order * (HEIGHT + VERTICAL_GAP);
+                        if (match.match.round == 0) {
+                            topCoord = match.match.order * (HEIGHT + VERTICAL_GAP);
                         } else {
                             //check if final match
-                            if (match.bracket == "5-6") {
-                                const firstMatch = prevMatches[2 * match.order];
-                                const secondMatch = prevMatches[2 * match.order + 1];
-                                topCoord = (firstMatch.topCoord + secondMatch.topCoord) / 2;
+                            if (match.match.bracket == "5-6") {
+                                const firstMatch = prevMatches[2 * match.match.order];
+                                const secondMatch = prevMatches[2 * match.match.order + 1];
+                                topCoord = (firstMatch.match.topCoord + secondMatch.match.topCoord) / 2;
                             } else {
-                                topCoord = prevMatches[match.order].topCoord
+                                topCoord = prevMatches[match.match.order].match.topCoord
                             }
                         }
                     }
-                    match.topCoord = topCoord;
+                    match.match.topCoord = topCoord;
                     return (
-                        <div
-                            style={{
-                                top: `${topCoord + starting_y + 100}px`,
-                                left: `${(match.roundIndex * HORIZONTAL_GAP) + starting_x}px`,
-                                width: `${WIDTH}px`,
-                                height: `${HEIGHT}px`,
-                            }}
-                            key={index}
-                            className={`absolute flex flex-col border rounded-sm border-black/30 hover:border-blue-600 z-10 text-sm`}>
-                            <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
-                                {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
-                                {(match.sides && match.sides[0].contestantId == "empty") ? (
-                                    <>
-                                        <div className="text-center px-2">{"👋"}</div>
-                                        <div className="w-full">Bye-Bye</div>
-                                        <div className="text-right pr-4">{"-"}</div>
-                                    </>
-                                ) : match.sides && match.sides[0].contestantId === "" ? (
-                                    <div></div>
-                                ) : (
-                                    <>
-                                        <div className="text-center px-2">{getRandomFlag()}</div>
-                                        <div className="w-full">
-                                            {match.sides && match.sides[0].contestantId && (
-                                                <div className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                                                    {formatName(
-                                                        FindContestant(data, match.sides[0].contestantId).players[0].title
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {/* If another player is byebye, don't show score, but only - */}
-                                        <div className="text-right pr-4">{match.sides && match.sides[1].contestantId == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
-                                    </>
-                                )}
-                            </div>
-
-                            <Separator className="bg-gray-300" />
-                            <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
-                                {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
-                                {(match.sides && match.sides[1].contestantId == "empty") ? (
-                                    <>
-                                        <div className="text-center px-2">{"👋"}</div>
-                                        <div className="w-full">Bye-Bye</div>
-                                        <div className="text-right pr-4">{"-"}</div>
-                                    </>
-                                ) : match.sides && match.sides[1].contestantId === "" ? (
-                                    <div></div>
-                                ) : (
-                                    <>
-                                        <div className="text-center px-2">{getRandomFlag()}</div>
-                                        <div className="w-full">
-                                            {match.sides && match.sides[1].contestantId && (
-                                                <div className="overflow-ellipsis overflow-hidden whitespace-nowrap">
-                                                    {formatName(
-                                                        FindContestant(data, match.sides[1].contestantId).players[0].title
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {/* If another player is byebye, don't show score, but only - */}
-                                        <div className="text-right pr-4">{match.sides && match.sides[0].contestantId == "empty" ? "-" : Math.round(Math.random() * 10)}</div>
-                                    </>
-                                )}
-                            </div>
-
-                        </div>
-                    );
+                        <MatchComponent WIDTH={WIDTH} HEIGHT={HEIGHT} match={match} index={index} HORIZONTAL_GAP={HORIZONTAL_GAP} starting_x={starting_x} starting_y={starting_y} topCoord={topCoord} />
+                    )
                 })}
 
                 <svg className="absolute" style={{ top: `${starting_y + 100}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGHT}>
                     {data.matches.map((match) => {
-                        if (match.roundIndex === 0) return null;
+                        if (match.match.round === 0) return null;
 
                         const prevMatches = data.matches!.filter(
-                            (m) => m.roundIndex === match.roundIndex - 1
+                            (m) => m.match.round === match.match.round - 1
                         );
 
-                        if (match.roundIndex % 2 == 0 || match.bracket == "5-6") {
-                            const firstMatch = prevMatches[2 * match.order];
-                            const secondMatch = prevMatches[2 * match.order + 1];
+                        if (match.match.round % 2 == 0 || match.match.bracket == "5-6") {
+                            const firstMatch = prevMatches[2 * match.match.order];
+                            const secondMatch = prevMatches[2 * match.match.order + 1];
 
                             if (!firstMatch || !secondMatch) return null;
 
-                            const startX = match.roundIndex * HORIZONTAL_GAP;
-                            const startY = match.topCoord + HEIGHT / 2 + 1;
+                            const startX = match.match.round * HORIZONTAL_GAP;
+                            const startY = match.match.topCoord + HEIGHT / 2 + 1;
 
-                            const endX = (match.roundIndex - 1) * HORIZONTAL_GAP + WIDTH;
-                            const endY1 = firstMatch.topCoord + HEIGHT / 2 + 1;
-                            const endY2 = secondMatch.topCoord + HEIGHT / 2 + 1;
+                            const endX = (match.match.round - 1) * HORIZONTAL_GAP + WIDTH;
+                            const endY1 = firstMatch.match.topCoord + HEIGHT / 2 + 1;
+                            const endY2 = secondMatch.match.topCoord + HEIGHT / 2 + 1;
 
                             return (
-                                <g key={`line-${match.roundIndex}-${match.order}`}>
+                                <g key={`line-${match.match.round}-${match.match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
                                         className="stroke-black/30"
@@ -168,15 +101,15 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                                 </g>
                             );
                         } else {
-                            const startX = match.roundIndex * HORIZONTAL_GAP
-                            const startY = match.topCoord + HEIGHT / 2 + 1
+                            const startX = match.match.round * HORIZONTAL_GAP
+                            const startY = match.match.topCoord + HEIGHT / 2 + 1
 
-                            const endX = (match.roundIndex - 1) * HORIZONTAL_GAP + WIDTH
-                            const endY1 = prevMatches[match.order].topCoord + HEIGHT / 2 + 1
-                            const endY2 = prevMatches[match.order].topCoord + HEIGHT / 2 + 1
+                            const endX = (match.match.round - 1) * HORIZONTAL_GAP + WIDTH
+                            const endY1 = prevMatches[match.match.order].match.topCoord + HEIGHT / 2 + 1
+                            const endY2 = prevMatches[match.match.order].match.topCoord + HEIGHT / 2 + 1
 
                             return (
-                                <g key={`line-${match.roundIndex}-${match.order}`}>
+                                <g key={`line-${match.match.round}-${match.match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
                                         className="stroke-black/30"

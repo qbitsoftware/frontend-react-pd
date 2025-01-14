@@ -75,7 +75,7 @@ export const UseStartTournament = (tournament_id: number) => {
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournaments', tournament_id] })
+            queryClient.resetQueries({ queryKey: ['tournaments'] })
         }
     })
 }

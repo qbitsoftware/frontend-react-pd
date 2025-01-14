@@ -23,7 +23,7 @@ function RouteComponent() {
     const { tournaments_data, error } = Route.useLoaderData()
     console.log(tournaments_data, error)
 
-    if (tournaments_data && tournaments_data.data) {
+    if (tournaments_data && tournaments_data.data ) {
         return (
             <div className=''>
                 <div className="flex justify-between items-center mb-8">
@@ -36,7 +36,7 @@ function RouteComponent() {
                         </p>
                     </div>
                 </div>
-                <AdminTournament tournaments={tournaments_data.data} />
+                <AdminTournament tournaments={tournaments_data.data}  />
             </div>
         )
 

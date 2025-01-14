@@ -1,4 +1,4 @@
-import { Match, User, Data, Contestant } from "@/types/types"
+import { User, TableMatch } from "@/types/types"
 import { type ClassValue, clsx } from "clsx"
 import { useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
@@ -47,6 +47,18 @@ export function sortBrackets(data: any[]): any[] {
   });
 }
 
+export const replaceSpecialCharacters = (str: string) => {
+  return str.replace(/[äöõü]/gi, (char) => {
+    switch (char.toLowerCase()) {
+      case 'ä': return 'a';
+      case 'ö': return 'o';
+      case 'õ': return 'o';
+      case 'ü': return 'u';
+      default: return char;
+    }
+  })
+}
+
 export function findEnemyName(p1: number, p2: number, current: number, players: User[]): string {
   if (p1 == current) {
     const enemy = players.filter((player) => player.ID == p2)[0]
@@ -92,20 +104,20 @@ export const radians = (angle: number) => {
   return angle * (Math.PI / 180);
 };
 
-export const CalculateSVGWidth = (matches: Match[], vertical_gap: number) => {
-  const matches_len = matches.reduce((max, item) => item.roundIndex > max.roundIndex ? item : max, { roundIndex: -Infinity }).roundIndex
+export const CalculateSVGWidth = (matches: TableMatch[], vertical_gap: number) => {
+  const matches_len = matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
   const SVG_WIDTH = (matches_len) * (vertical_gap)
   return SVG_WIDTH
 }
 
-export const CalculateSVGHeight = (matches: Match[], horisontal_gap: number, height: number) => {
-  const count = matches.filter(item => item.roundIndex === 0).length || 0
+export const CalculateSVGHeight = (matches: TableMatch[], horisontal_gap: number, height: number) => {
+  const count = matches.filter(item => item.match.round === 0).length || 0
   const SVG_HEIGTH = count * (height + horisontal_gap)
   return SVG_HEIGTH
 }
 
-export const CalcCurrentRoundMatches = (matches: Match[], round: number) => {
-  const count = matches.filter(item => item.roundIndex === round).length || 0
+export const CalcCurrentRoundMatches = (matches: TableMatch[], round: number) => {
+  const count = matches.filter(item => item.match.round === round).length || 0
   return count
 }
 
@@ -141,55 +153,20 @@ export const isMaxUInt32 = (num: number) => {
   return num === MAX_UINT32;
 }
 
-export const FindContestant = (data: Data, contestantId: string) => {
-  const emptyContestant: Contestant = {
-    entryStatus: "",
-    players: [
-      {
-        title: "",
-        nationality: "",
-      },
-      {
-        title: "",
-        nationality: "",
-      }
-    ],
-  }
-  if (data.contestants) {
-    if (data.contestants[contestantId]) {
-      return data.contestants[contestantId]
-    }
-    return emptyContestant
-  } else {
-    return emptyContestant
-  }
-}
-
-export const replaceSpecialCharacters = (str: string) => {
-  return str.replace(/[äöõü]/gi, (char) => {
-    switch (char.toLowerCase()) {
-      case 'ä': return 'a';
-      case 'ö': return 'o';
-      case 'õ': return 'o';
-      case 'ü': return 'u';
-      default: return char;
-    }
-  })
-}
-
-
 export function useDebounce(value: string, delay: number) {
-    const [debouncedValue, setDebouncedValue] = useState(value)
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value)
-        }, delay)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
 
-        return () => {
-            clearTimeout(handler)
-        }
-    }, [value, delay])
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
 
-    return debouncedValue
+  return debouncedValue
 }
+
+
