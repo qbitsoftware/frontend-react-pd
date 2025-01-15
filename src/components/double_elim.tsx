@@ -5,10 +5,11 @@ import MatchComponent from './match';
 interface BracketProps {
     starting_x: number,
     starting_y: number,
+    index: number,
     data: Data,
 }
 
-const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
+const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps) => {
     const WIDTH = 180
     const HEIGHT = 60
     const VERTICAL_GAP = 60
@@ -24,7 +25,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
 
     if (data && data.matches) {
         return (
-            <div className="relative pr-10">
+            <div className="relative pr-10" key={index}>
                 {data.matches.map((match, index) => {
                     let topCoord;
                     const prevMatches = data.matches!.filter(
@@ -57,7 +58,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                     }
                     match.match.topCoord = topCoord;
                     return (
-                        <MatchComponent WIDTH={WIDTH} HEIGHT={HEIGHT} match={match} index={index} HORIZONTAL_GAP={HORIZONTAL_GAP} starting_x={starting_x} starting_y={starting_y} topCoord={topCoord} />
+                        <MatchComponent key={index} WIDTH={WIDTH} HEIGHT={HEIGHT} match={match} index={index} HORIZONTAL_GAP={HORIZONTAL_GAP} starting_x={starting_x} starting_y={starting_y} topCoord={topCoord} />
                     )
                 })}
 
@@ -137,7 +138,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                             left: `${starting_x + (WIDTH + VERTICAL_GAP + (matches_len === index ? 5 : 0)) * index}px`,
                             width: `${WIDTH}px`
                         }}
-                        className="absolute text-center border-none bg-black/10 rounded-md py-2"
+                        className="absolute text-center border-[1px] border-black/10 shadow-md rounded-md py-2"
                     >
                         <div className="font-semibold">Round {index + 1}</div>
                     </div>

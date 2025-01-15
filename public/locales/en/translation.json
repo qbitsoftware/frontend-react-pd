@@ -156,6 +156,35 @@
       "title": "Tournaments",
       "description": "Manage and organize tournaments",
       "add_new": "New Tournament",
+      "create_tournament": {
+        "title_create": "Create Tournament",
+        "title_edit": "Edit Tournament",
+        "button_create": "Create",
+        "button_edit": "Update Tournament",
+        "back_button": "Back to Tournaments",
+        "name": "Tournament Name",
+        "name_placeholder": "Enter Tournament Name",
+        "start_date": "Start Date",
+        "location": "Location",
+        "location_placeholder": "Enter Location",
+        "min_team_size": "Minimum Team Size",
+        "additional_information": "Additional Information",
+        "sport": "Sport",
+        "sport_placeholder": "Select a sport",
+        "sport_value": {
+          "basketball": "Basketball",
+          "tabletennis": "Tabletennis"
+        },
+        "end_date": "End Date",
+        "start_date_placeholder": "Pick a date",
+        "type": "Tournament Type",
+        "type_placeholder": "Select Tournament Type",
+        "max_team_size": "Maximum Team Size",
+        "private": "Private Tournament",
+        "private_description": "Make this tournament private (only seen to admins)",
+        "solo": "Solo Tournament (No Teams)",
+        "solo_description": "Enable individual participation"
+      },
       "filters": {
         "status": {
           "all": "All",

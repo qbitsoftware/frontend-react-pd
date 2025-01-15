@@ -41,12 +41,6 @@ type MatchFormValues = z.infer<typeof matchFormSchema>
 
 const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
 
-    const location = useLocation()
-    console.log(location)
-
-    const router = useRouter()
-
-    console.log("match", match.match)
     const toast = useToast()
     const { errorToast, successToast } = useToastNotification(toast)
     const form = useForm<MatchFormValues>({
@@ -104,13 +98,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
             topCoord: 0,
         }
 
-        console.log("data", sendMatch)
         try {
             await usePatchMatch.mutateAsync(sendMatch)
-            router.navigate({
-                to: location.href,
-                replace: true,
-            })
+            // router.navigate({
+            //     to: location.href,
+            //     replace: true,
+            // })
             successToast("Successfully updated match scores")
         } catch (error: any) {
             console.log("error", error)
@@ -118,8 +111,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
         }
         onClose(false)
     }
-
-    console.log(form.formState.errors.scores)
 
     return (
         <Dialog open={open} onOpenChange={onClose}>

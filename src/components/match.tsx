@@ -3,7 +3,8 @@ import { Score, TableMatch } from '@/types/types'
 import { formatName, getRandomFlag } from '@/lib/utils'
 import { Separator } from './ui/separator'
 import MatchDialog from './match-dialog'
-import { useLocation} from '@tanstack/react-router'
+import { useLocation } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
 
 interface MatchComponentProps {
     match: TableMatch
@@ -20,7 +21,6 @@ const setScore = (score: Score[]) => {
     let p1_sets = 0
     let p2_sets = 0
 
-    console.log(score)
     if (score) {
         score.forEach((set) => {
             const player1Points = set.p1_score
@@ -44,19 +44,17 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
     useEffect(() => {
         if (location.pathname.includes("admin")) {
             setIsDisabled(false)
-        } 
-        if (match.participant_1.id === "" || match.participant_2.id === "" || match.participant_1.id === "empty" || match.participant_2.id === "empty") {
-            setIsDisabled(true)
         }
     }, [location])
 
     const [isOpen, setIsOpen] = useState(false)
 
-    const {p1_sets, p2_sets} = setScore(match.match.extra_data.score)
+    const { p1_sets, p2_sets } = setScore(match.match.extra_data.score)
 
     return (
-        <div>
+        <div key={index}>
             <div
+                key={match.match.id}
                 style={{
                     top: `${topCoord + starting_y + 100}px`,
                     left: `${(match.match.round * HORIZONTAL_GAP) + starting_x}px`,
@@ -66,26 +64,28 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                 onClick={() =>
                     !isDisabled &&
                     setIsOpen(true)}
-                key={index}
                 className={`absolute flex flex-col border rounded-sm border-black/30 hover:border-blue-600 z-10 text-sm`}>
                 <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
                     {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
                     {(match.participant_1.id == "empty") ? (
                         <>
                             <div className="text-center px-2">{"👋"}</div>
-                            <div className="w-full">Bye-Bye</div>
-                            <div className="text-right pr-4">{"-"}</div>
+                            <div className="w-full text-gray-500">Bye-Bye</div>
+                            <div className="text-right pr-4">{""}</div>
                         </>
                     ) : match.participant_1.id === "" ? (
                         <div></div>
                     ) : (
                         <>
                             <div className="text-center px-2">{getRandomFlag()}</div>
-                            <div className="overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full">
+                            <div className={cn(
+                                "overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full",
+                                match.match.winner_id == match.participant_1.id || match.participant_2.id == "empty" ? "" : "text-gray-500"
+                            )}>
                                 {formatName(match.participant_1.name)}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
-                            <div className="text-right pr-4">{p1_sets}</div>
+                            <div className={cn("text-right pr-4", p1_sets > p2_sets ? "text-[#52B74C]" : p1_sets < p2_sets ? "text-[#E51919]" : "")}>{match.participant_2.id == "empty" ? "" : p1_sets}</div>
                         </>
                     )}
                 </div>
@@ -96,19 +96,22 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     {(match.participant_2.id == "empty") ? (
                         <>
                             <div className="text-center px-2">{"👋"}</div>
-                            <div className="w-full">Bye-Bye</div>
-                            <div className="text-right pr-4">{"-"}</div>
+                            <div className="w-full text-gray-500">Bye-Bye</div>
+                            <div className="text-right pr-4">{""}</div>
                         </>
                     ) : match.participant_2.id === "" ? (
                         <div></div>
                     ) : (
                         <>
                             <div className="text-center px-2">{getRandomFlag()}</div>
-                            <div className="overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full">
+                            <div className={cn(
+                                "overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full",
+                                match.match.winner_id == match.participant_2.id || match.participant_1.id == "empty" ? "" : "text-gray-500"
+                            )}>
                                 {formatName(match.participant_2.name)}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
-                            <div className="text-right pr-4">{p2_sets}</div>
+                            <div className={cn("text-right pr-4", p1_sets < p2_sets ? "text-[#52B74C]" : p1_sets > p2_sets ? "text-[#E51919]" : "")}>{match.participant_1.id == "empty" ? "" : p2_sets}</div>
                         </>
                     )}
                 </div>

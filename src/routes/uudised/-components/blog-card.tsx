@@ -34,18 +34,18 @@ export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: str
                 <div className="text-sm font-medium text-blue-600 mb-2">{categories.map((category, idx) => {
                                     if (idx === categories.length - 1) {
                                         return (
-                                            <Link href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
-                                                <span key={category}>{category}</span>
+                                            <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
+                                                <span key={idx}>{category}</span>
                                             </Link>
                                     )
                                     } else {
                                         return (
-                                            <>
-                                            <Link href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
+                                            <div key={idx}>
+                                            <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
                                                 <span key={category} className="mr-2">{category}</span>
                                             </Link>
                                                 <span className='mr-2'>/</span>
-                                            </>
+                                            </div>
                                         )
                                     }
                                 })}</div>

@@ -16,7 +16,7 @@ export function UpcomingTournaments() {
             <h2 className="text-3xl font-semibold text-gray-900 mb-6">{t('homepage.upcoming_tournaments')}</h2>
             <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
                 <table className="w-full">
-                    <thead className="bg-[#273db4] text-white">
+                    <thead className="bg-secondary text-white">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">{t('homepage.tournaments.name')}</th>
                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">{t('homepage.tournaments.date')}</th>

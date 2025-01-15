@@ -156,6 +156,35 @@
       "title": "Turniirid",
       "description": "Halda enda turniire siit",
       "add_new": "Lisa Uus",
+      "create_tournament": {
+        "title_create": "Loo uus turniir",
+        "title_edit": "Muuda turniiri",
+        "button_create": "Loo",
+        "button_edit": "Uuenda turniiri andmeid",
+        "back_button": "Tagasi turniiride juurde",
+        "name": "Turniiri nimi",
+        "name_placeholder": "Sisestage turniiri nimi",
+        "start_date": "Alguskuupäev",
+        "location": "Asukoht",
+        "location_placeholder": "Sisestage asukoht",
+        "min_team_size": "Minimaalne tiimi suurus",
+        "additional_information": "Lisa informatisoon",
+        "sport": "Sport",
+        "sport_placeholder": "Vali spordiala",
+        "sport_value": {
+          "basketball": "Korvpall",
+          "tabletennis": "Lauatennis"
+        },
+        "end_date": "Lõppkuupäev",
+        "start_date_placeholder": "Pick a date",
+        "type": "Turniiri tüüp",
+        "type_placeholder": "Vali turniiri tüüp",
+        "max_team_size": "Maksimaalne tiimi suurus",
+        "private": "Privaatne turniir",
+        "private_description": "Muuda turniir ainult adminitele nähtavaks",
+        "solo": "Individuaalne turniir (Ilma meeskondadeta)",
+        "solo_description": "Luba individuaalne turniir"
+      },
       "filters": {
         "status": {
           "all": "Kõik",

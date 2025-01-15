@@ -11,7 +11,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
     const params = Route.useParams()
 
-    const { data: bracketsData, isLoading, error } = UseGetBracketQuery(Number(params.tournamentid))
+    const { data: bracketsData, isLoading, error, refetch } = UseGetBracketQuery(Number(params.tournamentid))
 
     if (isLoading) {
         return <div>Laeb</div>

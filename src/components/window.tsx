@@ -4,7 +4,6 @@ import SingleElimBracket from "./single_elim"
 import DoubleElimBracket from "./double_elim"
 import { CalculateSVGHeight } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useLocation } from "@tanstack/react-router"
 
 interface WindowProps {
     data: Bracket[],
@@ -16,19 +15,19 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
         let previousTop: number = 0
 
         return (
-            <div >
+            <div>
                 {data[bracket].tables.map((table, index) => {
                     if (index !== 0 && index >= 1) {
                         previousTop += CalculateSVGHeight(data[bracket].tables[index - 1].matches, 80, 80);
                     }
+
                     if (table.name === "Miinusring") {
                         return (
-                            <DoubleElimBracket key={index} starting_x={0} starting_y={previousTop} data={table}/>
-
+                            <DoubleElimBracket key={index} starting_x={0} starting_y={previousTop} data={table} index={index}/>
                         );
                     } else {
                         return (
-                            <SingleElimBracket key={index + 1} starting_x={0} starting_y={previousTop} data={table}/>
+                            <SingleElimBracket key={index} starting_x={0} starting_y={previousTop} data={table} />
                         );
                     }
                 })}

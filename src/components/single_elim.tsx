@@ -16,9 +16,6 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
     const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP)
     const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH)
     const matches_len = data.matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
-    console.log("matche len", matches_len)
-    console.log("svg width", SVG_WIDTH)
-    console.log("svg heigth", SVG_HEIGTH)
 
     if (data && data.matches) {
         return (
@@ -27,7 +24,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                 {data.matches.map((match, index) => {
                     let topCoord;
                     if (match.is_bronze_match) {
-                        const finalMatch = data.matches!.filter(
+                        const finalMatch = data.matches.filter(
                             (m) => m.match.round === match.match.round && !m.is_bronze_match
                         )
                         topCoord = finalMatch[0].match.topCoord + HEIGTH + VERTICAL_GAP
@@ -36,7 +33,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
 
                             topCoord = match.match.order * (HEIGTH + VERTICAL_GAP)
                         } else {
-                            const prevMatches = data.matches!.filter(
+                            const prevMatches = data.matches.filter(
                                 (m) => m.match.round === match.match.round - 1
                             )
                             const firstMatch = prevMatches[2 * match.match.order]
@@ -50,7 +47,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                         }
                     match.match.topCoord = topCoord
                     return (
-                        <MatchComponent WIDTH={WIDTH} HEIGHT={HEIGTH} match={match} index={index} HORIZONTAL_GAP={HORISONTAL_GAP} starting_x={starting_x} starting_y={starting_y} topCoord={topCoord} />
+                        <MatchComponent key={index} WIDTH={WIDTH} HEIGHT={HEIGTH} match={match} index={index} HORIZONTAL_GAP={HORISONTAL_GAP} starting_x={starting_x} starting_y={starting_y} topCoord={topCoord} />
                     )
                 })}
                 {/* Bracket lines */}
@@ -75,7 +72,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                         const endY2 = (secondMatch.match.topCoord + HEIGTH / 2 + 1)
 
                         return (
-                            <g key={`line-${match.match.round}-${match.match.order}`}>
+                            <g key={`line-${match.match.id}-${match.match.order}`}>
                                 <path
                                     d={`M${startX} ${startY} H${startX - HEIGTH / 2} V${endY1} H${endX}`}
                                     className="stroke-black/30"
@@ -103,7 +100,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                             left: `${starting_x + (WIDTH + VERTICAL_GAP + (matches_len === index ? -15 : -20)) * index}px`,
                             width: `${WIDTH}px`
                         }}
-                        className="absolute text-center border-none bg-black/10 rounded-md py-2"
+                        className="absolute text-center border-[1px] border-black/10 shadow-md rounded-md py-2"
                     >
                         <div className="font-semibold">Round {index + 1}</div>
                     </div>

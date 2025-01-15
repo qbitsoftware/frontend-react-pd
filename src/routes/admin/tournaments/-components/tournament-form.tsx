@@ -36,6 +36,7 @@ import { Tournament } from "@/types/types"
 import { UsePostTournament, UsePatchTournament } from "@/queries/tournaments"
 import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
+import { useTranslation } from 'react-i18next'
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
@@ -63,6 +64,7 @@ interface CustomField {
 }
 
 export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) => {
+  const { t } = useTranslation()
   const form = useForm<TournamentFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initial_data ? {
@@ -125,14 +127,14 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         <Link href="/admin/tournaments">
           <Button variant="outline" className="flex items-center w-full sm:w-auto">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Tournaments
+            {t('admin.tournaments.create_tournament.back_button')}
           </Button>
         </Link>
       </div>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>{initial_data ? "Edit Tournament" : "Create Tournament"}</CardTitle>
+          <CardTitle>{initial_data ? t('admin.tournaments.create_tournament.title_edit') : t('admin.tournaments.create_tournament.title_create')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -143,9 +145,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tournament Name</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.name')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter tournament name" {...field} />
+                        <Input placeholder={t('admin.tournaments.create_tournament.name_placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -157,16 +159,16 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="sport"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sport</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.sport')}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a sport" />
+                            <SelectValue placeholder={t('admin.tournaments.create_tournament.sport_placeholder')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="tabletennis">Tabletennis</SelectItem>
-                          <SelectItem value="basketball">Basketball</SelectItem>
+                          <SelectItem value="tabletennis">{t('admin.tournaments.create_tournament.sport_value.tabletennis')}</SelectItem>
+                          <SelectItem value="basketball">{t('admin.tournaments.create_tournament.sport_value.basketball')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -179,7 +181,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="start_date"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Start Date</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.start_date')}</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -190,7 +192,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                               {field.value ? (
                                 format(field.value, "PPP")
                               ) : (
-                                <span>Pick a date</span>
+                                <span>{t('admin.tournaments.create_tournament.start_date_placeholder')}</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -215,7 +217,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="end_date"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>End Date</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.end_date')}</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -226,7 +228,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                               {field.value ? (
                                 format(field.value, "PPP")
                               ) : (
-                                <span>Pick a date</span>
+                                <span>{t('admin.tournaments.create_tournament.start_date_placeholder')}</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -251,9 +253,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Location</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.location')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter location" {...field} />
+                        <Input placeholder={t('admin.tournaments.create_tournament.location_placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -265,11 +267,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="type"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tournament Type</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.type')}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select tournament type" />
+                            <SelectValue placeholder={t('admin.tournaments.create_tournament.type_placeholder')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -289,7 +291,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="min_team_size"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Minimum Team Size</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.min_team_size')}</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -307,7 +309,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   name="max_team_size"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Maximum Team Size</FormLabel>
+                      <FormLabel>{t('admin.tournaments.create_tournament.max_team_size')}</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -330,7 +332,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   return (
                     <FormItem>
                       <div className="flex justify-between items-center">
-                        <FormLabel>Additional Information</FormLabel>
+                        <FormLabel>{t('admin.tournaments.create_tournament.additional_information')}</FormLabel>
                         <Button
                           type="button"
                           variant="ghost"
@@ -400,9 +402,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
-                        <FormLabel className="text-base">Private Tournament</FormLabel>
+                        <FormLabel className="text-base">{t('admin.tournaments.create_tournament.private')}</FormLabel>
                         <FormDescription>
-                          Make this tournament invitation-only
+                          {t('admin.tournaments.create_tournament.private_description')}
                         </FormDescription>
                       </div>
                       <FormControl>
@@ -421,9 +423,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
-                        <FormLabel className="text-base">Solo Tournament</FormLabel>
+                        <FormLabel className="text-base">{t('admin.tournaments.create_tournament.solo')}</FormLabel>
                         <FormDescription>
-                          Enable individual participation
+                          {t('admin.tournaments.create_tournament.solo_description')}
                         </FormDescription>
                       </div>
                       <FormControl>
@@ -438,7 +440,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
               </div>
               <div className="flex justify-end">
                 <Button type="submit" className="md:w-[200px] w-full">
-                  {initial_data ? "Update Tournament" : "Create Tournament"}
+                  {initial_data ? t('admin.tournaments.create_tournament.button_edit') : t('admin.tournaments.create_tournament.button_create')}
                 </Button>
 
               </div>

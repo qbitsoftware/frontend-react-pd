@@ -100,43 +100,6 @@ export default function RouteComponent() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={heroControls}
                         >
-                            {/* <Card className="overflow-hidden bg-blue-500 text-white">
-                                <div className="md:flex items-center">
-                                    <div className="md:w-1/3 p-8">
-                                        <CardHeader>
-                                            <div className="uppercase tracking-wide text-sm font-semibold">{paginated_articles[0].category}</div>
-                                            <CardTitle className="mt-2 text-2xl">{paginated_articles[0].title}</CardTitle>
-                                        </CardHeader>
-                                        <CardFooter>
-                                            <Link to={`/uudised/${paginated_articles[0].id}`}>
-                                                <Button variant="secondary" className="mt-4">Read More</Button>
-                                            </Link>
-                                        </CardFooter>
-                                    </div>
-                                    <div className="md:w-2/3 h-32 md:h-full overflow-hidden">
-                                        {paginated_articles[0].thumbnail ? (
-                                            <img
-                                                src={paginated_articles[0].thumbnail}
-                                                alt={paginated_articles[0].title}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-blue-400 flex items-center justify-center">
-                                                {paginated_articles[0].thumbnail ? (
-                                                    <img
-                                                        src={paginated_articles[0].thumbnail}
-                                                        alt={paginated_articles[0].title}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <img src="/racket.svg" alt={paginated_articles[0].title} className="w-full h-full object-fill" />
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </Card> */}
-
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
