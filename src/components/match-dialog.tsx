@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
 import { Plus, Minus } from 'lucide-react'
@@ -40,24 +40,34 @@ type MatchFormValues = z.infer<typeof matchFormSchema>
 
 
 const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
+    console.log("SEE ON MATCH",match)
 
     const toast = useToast()
     const { errorToast, successToast } = useToastNotification(toast)
     const form = useForm<MatchFormValues>({
         resolver: zodResolver(matchFormSchema),
-        defaultValues: match.match.extra_data ? {
-            tableReferee: match.match.extra_data.table_referee || "",
-            mainReferee: match.match.extra_data.head_referee || "",
-            scores: (match.match.extra_data.score || []).map((s: any) => ({
-                player1: s.p1_score,
-                player2: s.p2_score
-            })) || [{ player1: 0, player2: 0 }],
-        } : {
+        defaultValues: {
             tableReferee: "",
             mainReferee: "",
             scores: [{ player1: 0, player2: 0 }],
         },
     })
+
+    const { reset } = form
+
+    useEffect(() => {
+        if (match) {
+            reset({
+                tableReferee: match.match.extra_data?.table_referee || "",
+                mainReferee: match.match.extra_data?.head_referee || "",
+                scores: (match.match.extra_data?.score || []).map((s: any) => ({
+                    player1: s.p1_score,
+                    player2: s.p2_score
+                })) || [{ player1: 0, player2: 0 }],
+            })
+        }
+    }, [match, reset])
+
 
     const usePatchMatch = UsePatchMatch(match.match.tournament_id, match.match.id)
 

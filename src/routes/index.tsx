@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
@@ -40,7 +40,9 @@ function Index() {
                     >
                         <h1 className="text-5xl font-bold mb-4">{t('homepage.title')}</h1>
                         <p className="text-xl mb-8">{t('homepage.description')}</p>
-                        <Button size="lg" className="bg-secondary hover:bg-blue-700 text-white">{t('homepage.title_button')}</Button>
+                        <Link to="/voistlused">
+                            <Button size="lg" className="bg-secondary hover:bg-blue-700 text-white">{t('homepage.title_button')}</Button>
+                        </Link>
                     </motion.div>
                 </div>
             </div>

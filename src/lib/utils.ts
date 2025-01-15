@@ -23,6 +23,13 @@ export function parseTournamentType(s: string): string {
   return res.trim()
 }
 
+export const formatTournamentType = (type: string) => {
+  return type
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 export function parsePlaces(s: string): number | null {
   const parts = s.split(" ")
   if (parts.length != 2) {

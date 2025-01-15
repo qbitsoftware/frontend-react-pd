@@ -1,6 +1,6 @@
 {
   "eltl": {
-    "name": "Estonian Tabletennis Association"
+    "name": "Estonian Table Tennis Association"
   },
   "navbar": {
     "language": {
@@ -22,10 +22,13 @@
       "competition": "Competitions",
       "clubs": "Clubs",
       "young_sport": "Youths",
-      "ratings": "Ratings",
+      "ratings": "Ranking",
       "rules": "Rules",
-      "contact": "Contact"
-    }
+      "contact": "Contact",
+      "admin": "Admin Panel"
+    },
+    "login": "Log in",
+    "logout": "Log out"
   },
   "footer": {
     "contact": {
@@ -33,12 +36,18 @@
       "email": "Email",
       "phone": "Phone"
     },
+    "menu": {
+      "news": "News",
+      "tournaments": "Tournaments",
+      "clubs": "Clubs",
+      "contact": "Contact"
+    },
     "links": "Quick links"
   },
   "homepage": {
-    "title": "Estonian Tabletennis Association",
+    "title": "Estonian Table Tennis Association",
     "title_button": "Check tournaments",
-    "description": "Empowering Estonian Tabletennis",
+    "description": "Empowering Estonian Table Tennis",
     "upcoming_tournaments": "Upcoming Tournaments",
     "latest_news": "Latest News",
     "details": "Details",

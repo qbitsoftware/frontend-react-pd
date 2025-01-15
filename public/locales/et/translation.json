@@ -24,14 +24,23 @@
       "young_sport": "Noortesport",
       "ratings": "Reiting",
       "rules": "Reeglid",
-      "contact": "Kontakt"
-    }
+      "contact": "Kontakt",
+      "admin": "Admin Paneel"
+    },
+    "login": "Logi sisse",
+    "logout": "Logi välja"
   },
   "footer": {
     "contact": {
       "name": "Kontakt",
       "email": "Email",
       "phone": "Tel nr"
+    },
+    "menu": {
+      "news": "Uudised",
+      "tournaments": "Võistlused",
+      "clubs": "Klubid",
+      "contact":"Kontakt"
     },
     "links": "Menüü"
   },
@@ -154,7 +163,7 @@
     },
     "tournaments": {
       "title": "Turniirid",
-      "description": "Halda enda turniire siit",
+      "description": "Halda turniire siit",
       "add_new": "Lisa Uus",
       "create_tournament": {
         "title_create": "Loo uus turniir",

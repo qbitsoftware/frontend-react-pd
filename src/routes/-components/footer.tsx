@@ -22,9 +22,9 @@ export default function Footer() {
                             <h3 className="text-lg font-semibold mb-4 ">{t('footer.links')}</h3>
                             <ul className="space-y-2">
                                 <li><Link href="/uudised" className="text-sm  hover:text-gray-300">{t('navbar.menu.news.name')}</Link></li>
-                                <li><Link href="/voistlused" className="text-sm  hover:text-gray-300">Tournaments</Link></li>
-                                <li><Link href="/klubid" className="text-sm  hover:text-gray-300">Clubs</Link></li>
-                                <li><Link href="/kontakt" className="text-sm  hover:text-gray-300">Contact</Link></li>
+                                <li><Link href="/voistlused" className="text-sm  hover:text-gray-300">{t('footer.menu.tournaments')}</Link></li>
+                                <li><Link href="/klubid" className="text-sm  hover:text-gray-300">{t('footer.menu.clubs')}</Link></li>
+                                <li><Link href="/kontakt" className="text-sm  hover:text-gray-300">{t('footer.menu.contact')}</Link></li>
                             </ul>
                         </div>
                         <div className="text-center md:text-right">

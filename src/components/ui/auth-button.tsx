@@ -2,12 +2,14 @@ import { useGetLogin, useLogout } from "@/queries/users"
 import { Button } from "./button"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 interface AuthButtonProps {
     className?: string
 }
 
-export const AuthButton:React.FC<AuthButtonProps> = ({className}) => {
+export const AuthButton: React.FC<AuthButtonProps> = ({ className }) => {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const logout = useLogout()
     const { data: userData } = useGetLogin()
@@ -15,18 +17,19 @@ export const AuthButton:React.FC<AuthButtonProps> = ({className}) => {
     const handleLogout = async () => {
         try {
             await logout.mutateAsync()
-            navigate({to: "/"})
+            navigate({ to: "/" })
         } catch (error) {
             console.error(error)
         }
     }
 
     if (userData?.data) {
-        return <Button variant="secondary" className="text-white rounded-xl px-6  hover:bg-secondary" onClick={handleLogout}>Logi välja</Button>
+        return <Button variant="secondary" className="text-white rounded-xl px-6  hover:bg-secondary" onClick={handleLogout}>{t('navbar.logout')}</Button>
     } else {
         return (
-            <Link to="/login">
-                <Button variant="secondary" className={cn("text-white rounded-xl px-6  hover:bg-secondary", className)}>Logi sisse</Button>
+            <Link to="/admin">
+                <Button variant="secondary" className={cn("text-white rounded-xl px-3  hover:bg-secondary py-1", className)}>{t('navbar.logout')}</Button>
+                {/* <LogIn className="text-gray-600 w-5 h-5" /> */}
             </Link>
         )
     }

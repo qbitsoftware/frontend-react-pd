@@ -53,7 +53,10 @@ export default function TournamentList({ tournaments }: TournamentProps) {
       if (!acc[type]) {
         acc[type] = []
       }
-      acc[type].push(tournament)
+
+      if (tournament.state === "started") {
+        acc[type].push(tournament)
+      }
       return acc
     }, {} as Record<string, Tournament[]>)
   }, [filteredTournaments])
@@ -165,7 +168,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
         {Object.entries(groupedTournaments).map(([type, typeTournaments]) => (
           <div key={type} className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl md:text-4xl font-semibold text-black/70 capitalize">{type.replace('_', ' ')}</h2>
+              <h2 className="text-2xl md:text-4xl font-semibold text-black/70 capitalize">{type === "double_elimination_full_placement" ? "Haapsalu Karikasari" : "Viljandi Cup"}</h2>
               <Button
                 onClick={() => setExpandedType(expandedType === type ? null : type)}
                 className="flex items-center transition-colors duration-200 border-secondary hover:bg-transparent"
@@ -191,7 +194,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
                           <span className="text-lg md:text-2xl">{tournament.name}</span>
                           {getIcon(tournament.type)}
                         </CardTitle>
-                        <p className="text-sm text-gray-900 mb-2">Formaat: {capitalize(tournament.type.replace('_', ' '))}</p>
+                        Formaat: {capitalize(tournament.type.replace(/_/g, ' '))}
                         <div className="">
                           <p className="text-xs md:text-base text-gray-600">
                             Algus: {format(new Date(tournament.start_date), "MMMM d, yyyy")}

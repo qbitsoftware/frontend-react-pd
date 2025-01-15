@@ -47,7 +47,7 @@ export default function Navbar() {
             name: t('navbar.menu.competition'),
             href: '/voistlused',
             dropdownItems: [
-                { name: 'Kõik võistlused', href: '/voistlused' },
+                { name: 'Competitions', href: '/voistlused' },
                 { name: 'Results', href: '/voistlused/results' },
                 { name: 'Calendar', href: '/voistlused/calendar' },
             ]
@@ -65,6 +65,7 @@ export default function Navbar() {
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },
         { name: t('navbar.menu.contact'), href: '/kontakt' },
+        { name: t('navbar.menu.admin'), href: '/admin/dashboard' },
 
     ]
 
@@ -131,7 +132,7 @@ export default function Navbar() {
                             <AuthButton />
                         </NavigationMenuList>
                     </NavigationMenu>
-                    <SidebarTrigger className='lg:hidden my-auto text-secondary'/>
+                    <SidebarTrigger className='lg:hidden my-auto text-secondary' />
                 </div>
             </div>
         </header >

@@ -7,13 +7,26 @@ interface TopFiveProps {
 
 export function TopFive({ gender }: TopFiveProps) {
     const { t } = useTranslation();
-    const bestPerformers = [
-        { nr: 1, id: "EE001", pp: 2500, rp: 2450, firstName: "Andres", lastName: "Kask", birthYear: 1995, club: "Tallinn TTC", rankChange: 2 },
-        { nr: 2, id: "EE002", pp: 2450, rp: 2500, firstName: "Maria", lastName: "Tamm", birthYear: 1997, club: "Tartu PP", rankChange: -1 },
-        { nr: 3, id: "EE003", pp: 2400, rp: 2400, firstName: "Jaan", lastName: "Lepp", birthYear: 1993, club: "Pärnu Paddlers", rankChange: 1 },
-        { nr: 4, id: "EE004", pp: 2350, rp: 2350, firstName: "Liis", lastName: "Kuusk", birthYear: 1999, club: "Narva Net Smashers", rankChange: -1 },
-        { nr: 5, id: "EE005", pp: 2300, rp: 2300, firstName: "Mart", lastName: "Mägi", birthYear: 1996, club: "Viljandi Victory", rankChange: 0 },
+    const bestPerformersMale = [
+        { nr: 1, id: "EE001", pp: 2500, rp: 2450, firstName: "Madis", lastName: "Moos", birthYear: 2004, club: "TTÜ Spordiklubi", rankChange: 2 },
+        { nr: 2, id: "EE002", pp: 2450, rp: 2500, firstName: "Aleksandr", lastName: "Smirnov", birthYear: 1985, club: "LTK Kalev", rankChange: -1 },
+        { nr: 3, id: "EE003", pp: 2400, rp: 2400, firstName: "Toomas", lastName: "Libene", birthYear: 1994, club: "Viimsi PINX", rankChange: 1 },
+        { nr: 4, id: "EE004", pp: 2350, rp: 2350, firstName: "Osqar", lastName: "Pukk", birthYear: 2002, club: "Tartu SS Kalev", rankChange: -1 },
+        { nr: 5, id: "EE005", pp: 2300, rp: 2300, firstName: "Pert Marten", lastName: "Lehtlaan", birthYear: 2007, club: "Viimsi Lauatenniseklubi", rankChange: 0 },
     ]
+    const bestPerformersFemale = [
+        { nr: 1, id: "EE001", pp: 2500, rp: 2450, firstName: "Airi", lastName: "Avameri", birthYear: 1998, club: "TTÜ Spordiklubi", rankChange: 2 },
+        { nr: 2, id: "EE002", pp: 2450, rp: 2500, firstName: "Reelica", lastName: "Hanson", birthYear: 1999, club: "TTÜ Spordiklubi", rankChange: -1 },
+        { nr: 3, id: "EE003", pp: 2400, rp: 2400, firstName: "Arina", lastName: "Litvinova", birthYear: 2006, club: "Narva Paemurru Spordikool", rankChange: 1 },
+        { nr: 4, id: "EE004", pp: 2350, rp: 2350, firstName: "Kätlin", lastName: "Põldveer", birthYear: 1985, club: "LTK Kalev", rankChange: -1 },
+        { nr: 5, id: "EE005", pp: 2300, rp: 2300, firstName: "Vitalia", lastName: "Reinol", birthYear: 2003, club: "TTÜ SPordiklubi", rankChange: 0 },
+    ]
+     let bestPerformers
+     if (gender === "men") {
+       bestPerformers = bestPerformersMale
+     }else if (gender === "women") {
+       bestPerformers = bestPerformersFemale 
+     }
     return (
       <div className="w-full max-w-6xl mx-auto py-4">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
