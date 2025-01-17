@@ -28,8 +28,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({ className }) => {
     } else {
         return (
             <Link to="/admin">
-                <Button variant="secondary" className={cn("text-white rounded-xl px-3  hover:bg-secondary py-1", className)}>{t('navbar.logout')}</Button>
-                {/* <LogIn className="text-gray-600 w-5 h-5" /> */}
+                <Button variant="secondary" className={cn("text-white rounded-xl px-3  hover:bg-secondary py-1", className)}>{t('navbar.login')}</Button>
             </Link>
         )
     }

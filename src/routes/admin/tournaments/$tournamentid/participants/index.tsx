@@ -3,19 +3,22 @@ import { ArrowLeft, Eye, MoreHorizontal, Pencil, Trash, UserPlus, Users } from '
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useState } from 'react'
-import { ErrorResponse, Participant } from '@/types/types'
-import { UseDeleteParticipant, UseGetParticipants } from '@/queries/participants'
+import { useState, useEffect } from 'react'
+import { ErrorResponse, Participant, UserNew } from '@/types/types'
+import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant } from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
 import { Tournament } from '@/types/types'
-import AddTeamDialog from '../-components/participant-form'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
-import { capitalize } from '@/lib/utils'
-
+import { capitalize, useDebounce } from '@/lib/utils'
+import { Input } from "@/components/ui/input"
+import { UseGetUsersDebounce, fetchUserByName } from '@/queries/users'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/participants/',
@@ -50,18 +53,61 @@ export const Route = createFileRoute(
     },
 })
 
+const participantSchema = z.object({
+    name: z.string().min(1, 'Participant name is required'),
+    tournament_id: z.number().min(1),
+    sport_type: z.string().default('tabletennis'),
+    players: z.array(z.object({
+        id: z.string().optional(),
+        user_id: z.number().optional(),
+        first_name: z.string().optional(),
+        last_name: z.string().optional(),
+        name: z.string().min(1, 'Player name is required'),
+        sport_type: z.string().default('tabletennis'),
+        sex: z.string().optional(),
+        number: z.number().optional(),
+    })).min(1, "Participant must have at least one player"),
+})
+
+type ParticipantFormValues = z.infer<typeof participantSchema>
+
 function RouteComponent() {
     const { tournamentid } = Route.useParams()
     const { participants, tournamentData } = Route.useLoaderData()
+    if (!tournamentData || !tournamentData.data) {
+        return
+    }
 
     const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false)
-
     const [editParticipantData, setEditParticipantData] = useState<Participant | undefined>()
     const deleteMutation = UseDeleteParticipant(Number(tournamentid))
+    const createParticipant = UseCreateParticipants(Number(tournamentid))
+    const updateParticipant = UseUpdateParticipant(Number(tournamentid), editParticipantData?.id!)
 
     const toast = useToast()
     const router = useRouter()
     const { successToast, errorToast } = useToastNotification(toast)
+
+    const [searchTerm, setSearchTerm] = useState('')
+    const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+    const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
+    const [focusedField, setFocusedField] = useState<string | null>(null)
+
+    const form = useForm<ParticipantFormValues>({
+        resolver: zodResolver(participantSchema),
+        defaultValues: {
+            name: '',
+            tournament_id: Number(tournamentid),
+            players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0 }],
+        }
+    })
+
+    useEffect(() => {
+        if (debouncedSearchTerm) {
+            refetch()
+        }
+    }, [debouncedSearchTerm, refetch])
 
     const handleDeleteParticipant = async (participantId: string) => {
         try {
@@ -73,41 +119,77 @@ function RouteComponent() {
         } catch (error) {
             errorToast("Osaleja kustutamisel tekkis viga")
         }
-        console.log(`Delete participant with ID: ${participantId}`)
     }
-
 
     const handleEditParticipant = (participant: Participant) => {
         setEditParticipantData(participant)
+        form.reset({
+            name: participant.name,
+            tournament_id: Number(tournamentid),
+            sport_type: participant.sport_type || 'tabletennis',
+            players: participant.players.map(player => ({
+                id: player.id,
+                user_id: player.user_id,
+                first_name: player.first_name,
+                last_name: player.last_name,
+                name: `${player.first_name} ${player.last_name}`,
+                sport_type: player.sport_type || 'tabletennis',
+                sex: player.sex,
+                number: player.number,
+            }))
+        })
         setIsAddParticipantOpen(true)
     }
 
+    const handleAddParticipant = async (values: ParticipantFormValues) => {
+        try {
+            for (const player of values.players) {
+                if (player.user_id === 0 || !player.user_id) {
+                    const user = await fetchUserByName(player.name)
+                    if (user) {
+                        player.first_name = user.first_name
+                        player.last_name = user.last_name
+                        player.user_id = user.id
+                    } else {
+                        const names = player.name.split(" ")
+                        player.first_name = names.slice(0, -1).join(" ")
+                        player.last_name = names[names.length - 1]
+                    }
+                }
+            }
 
-    const handleViewParticipant = (participantId: string) => {
-        // Implement view functionality here
-        console.log(`View participant with ID: ${participantId}`)
+            if (editParticipantData) {
+                await updateParticipant.mutateAsync(values)
+                successToast("Participant updated successfully")
+            } else {
+                await createParticipant.mutateAsync(values)
+                successToast("Participant added successfully")
+            }
+
+            router.navigate({
+                to: `/admin/tournaments/${tournamentid}/participants`
+            })
+            setIsAddParticipantOpen(false)
+            form.reset()
+        } catch (error) {
+            errorToast(`Error ${editParticipantData ? 'updating' : 'adding'} participant: ${error}`)
+        }
     }
 
-    const handleAddNewTeam = () => {
-        setEditParticipantData(undefined)
-        setIsAddParticipantOpen(true)
+    const setFormValues = (user: UserNew) => {
+        form.setValue('players.0.name', `${user.first_name} ${user.last_name}`)
+        form.setValue('players.0.first_name', user.first_name)
+        form.setValue('players.0.last_name', user.last_name)
+        form.setValue('players.0.user_id', user.id)
+        if (tournamentData.data?.solo) {
+            form.setValue('name', `${user.first_name} ${user.last_name}`)
+        }
     }
 
-    if (participants && participants.data && tournamentData && tournamentData.data) {
+    if (tournamentData && tournamentData.data) {
         return (
             <div className="container py-6 space-y-6">
-                <ParticipantHeader
-                    tournamentData={tournamentData.data}
-                    setIsAddParticipantOpen={handleAddNewTeam}
-                />
                 <Tabs defaultValue="participants">
-                    <TabsList>
-                        <TabsTrigger value="participants">
-                            <Users className="w-4 h-4 mr-2" />
-                            Participants
-                        </TabsTrigger>
-                    </TabsList>
-
                     <TabsContent value="participants">
                         <Card>
                             <CardHeader>
@@ -119,9 +201,14 @@ function RouteComponent() {
                                         <TableRow>
                                             {tournamentData.data && tournamentData.data.solo ? (
                                                 <>
-                                                    <TableHead>First Name</TableHead>
-                                                    <TableHead>Last Name</TableHead>
+                                                    <TableHead>JKNR.</TableHead>
+                                                    <TableHead>Nimi</TableHead>
                                                     <TableHead>Rank</TableHead>
+                                                    <TableHead>Sugu</TableHead>
+                                                    <TableHead>Klubi</TableHead>
+                                                    <TableHead>ID</TableHead>
+                                                    <TableHead>Koht Reitingus</TableHead>
+                                                    <TableHead>Klass</TableHead>
                                                     <TableHead>Actions</TableHead>
                                                 </>
                                             ) : (
@@ -135,13 +222,18 @@ function RouteComponent() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {participants.data.map((participant) => (
-                                            <TableRow key={participant.id}>
+                                        {participants && participants.data && participants.data.map((participant, idx) => (
+                                            <TableRow key={participant.id} className='py-0'>
                                                 {tournamentData.data && tournamentData.data.solo ? (
                                                     <>
-                                                        <TableCell className="font-medium">{capitalize(participant.players[0].first_name)}</TableCell>
-                                                        <TableCell className="font-medium">{capitalize(participant.players[0].last_name)}</TableCell>
+                                                        <TableCell>{idx + 1}</TableCell>
+                                                        <TableCell className="font-medium">{capitalize(participant.name)}</TableCell>
                                                         <TableCell>{participant.rank}</TableCell>
+                                                        <TableCell>{"Mees"}</TableCell>
+                                                        <TableCell>{"Forus"}</TableCell>
+                                                        <TableCell>{"1"}</TableCell>
+                                                        <TableCell>{"1"}</TableCell>
+                                                        <TableCell>{"Vanus 20-24"}</TableCell>
                                                     </>
                                                 ) : (
                                                     <>
@@ -166,79 +258,148 @@ function RouteComponent() {
                                                                 <Trash className="w-4 h-4 mr-2" />
                                                                 Delete
                                                             </DropdownMenuItem>
-                                                            {/* <DropdownMenuItem onClick={() => handleViewParticipant(participant.id)}>
-                                                                <Eye className="w-4 h-4 mr-2" />
-                                                                View
-                                                            </DropdownMenuItem> */}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
+                                        <TableRow>
+                                            {tournamentData.data && tournamentData.data.solo ? (
+                                                <>
+                                                    <TableCell>{(participants && participants.data ? participants.data.length : 0) + 1}</TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            {...form.register('players.0.name')}
+                                                            onChange={(e) => {
+                                                                form.setValue('players.0.name', e.target.value)
+                                                                setSearchTerm(e.target.value)
+                                                                if (tournamentData.data?.solo) {
+                                                                    form.setValue('name', e.target.value)
+                                                                }
+                                                            }}
+                                                            onFocus={() => setFocusedField('name')}
+                                                            onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            placeholder="New participant name"
+                                                        />
+                                                        {focusedField === 'name' && playerSuggestions && playerSuggestions.data && playerSuggestions.data.length > 0 && (
+                                                            <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                                {playerSuggestions.data.map((user, i) => (
+                                                                    <div
+                                                                        key={i}
+                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                        onClick={() => setFormValues(user)}
+                                                                    >
+                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            {...form.register('players.0.rank')}
+                                                            placeholder="Rank"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Sugu"
+                                                            disabled
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Klubi"
+                                                            disabled
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="ID"
+                                                            disabled
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Koht Reitingus"
+                                                            disabled
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Klass"
+                                                            disabled
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Button onClick={form.handleSubmit(handleAddParticipant)}>Add Participant</Button>
+                                                    </TableCell>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <TableCell className="relative">
+                                                        <Input
+                                                            type="text"
+                                                            {...form.register('name')}
+                                                            onChange={(e) => {
+                                                                form.setValue('name', e.target.value)
+                                                                setSearchTerm(e.target.value)
+                                                            }}
+                                                            onFocus={() => setFocusedField('name')}
+                                                            onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            placeholder="New team name"
+                                                        />
+                                                        {focusedField === 'name' && playerSuggestions && playerSuggestions.data && playerSuggestions.data.length > 0 && (
+                                                            <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                                {playerSuggestions.data.map((user, i) => (
+                                                                    <div
+                                                                        key={i}
+                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                        onClick={() => setFormValues(user)}
+                                                                    >
+                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="number"
+                                                            {...form.register('players.0.number')}
+                                                            placeholder="Number of participants"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            type="text"
+                                                            {...form.register('sport_type')}
+                                                            placeholder="Sport type"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Button onClick={form.handleSubmit(handleAddParticipant)}>Add Team</Button>
+                                                    </TableCell>
+                                                </>
+                                            )}
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </CardContent>
                         </Card>
                     </TabsContent>
                 </Tabs>
-
-                <AddTeamDialog
-                    open={isAddParticipantOpen}
-                    onOpenChange={setIsAddParticipantOpen}
-                    tournament={tournamentData.data}
-                    initialData={editParticipantData}
-                />
             </div>
         )
     } else {
-        if (tournamentData && tournamentData.data) {
-            return (
-                <div className="container py-6 space-y-6">
-                    <ParticipantHeader
-                        tournamentData={tournamentData.data}
-                        setIsAddParticipantOpen={handleAddNewTeam}
-                    />
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center py-12">
-                            <Users className="w-12 h-12 text-gray-400 mb-4" />
-                            <h2 className="text-xl font-semibold text-gray-600 mb-2">No Participants Yet</h2>
-                            <p className="text-gray-500 text-center mb-4">No participants have registered for this tournament yet.</p>
-                        </CardContent>
-                    </Card>
-
-                    <AddTeamDialog
-                        initialData={editParticipantData}
-                        open={isAddParticipantOpen}
-                        onOpenChange={setIsAddParticipantOpen}
-                        tournament={tournamentData.data}
-                    />
-                </div>
-            )
-        } else {
-            return <ErrorPage error={new Error("Tournament not found")} reset={() => { }} />
-        }
+        return <ErrorPage error={new Error("Tournament not found")} reset={() => { }} />
     }
-
 }
 
-function ParticipantHeader({ tournamentData, setIsAddParticipantOpen }: { tournamentData: Tournament, setIsAddParticipantOpen: (open: boolean) => void }) {
-    const navigate = useNavigate()
-    return (
-        <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => navigate({ to: '/admin/tournaments' })}>
-                    <ArrowLeft className="h-4 w-4" />
-                </Button>
-                <div>
-                    <h1 className="text-2xl font-bold">Manage Participants</h1>
-                    <p className="text-sm text-gray-500">{tournamentData.name}</p>
-                </div>
-            </div>
-            <Button onClick={
-                () => { setIsAddParticipantOpen(true) }}>
-                <UserPlus className="w-4 h-4 mr-2" />
-                Add Participant
-            </Button>
-        </div>
-    )
-}
