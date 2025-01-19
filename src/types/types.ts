@@ -28,6 +28,15 @@ export type UserNew = {
     first_name: string
     last_name: string
     created_at: string
+    eltl_id: number
+    sex: string
+    foreigner: number
+    club_name: string
+    rate_order: number
+    rate_pl_points: number
+    rate_points: number
+    rate_weigth: number
+    oragnization_id: number
 }
 
 export interface User {
@@ -90,9 +99,14 @@ export type PlayerNew = {
     number: number;
     rank: number;
     sex: string;
+    club: string;
+    rate_points: number;
+    rate_order: number;
+    eltl_id: number;
     created_at: string;
     deleted_at: string | null;
     updated_at: string;
+    // user: UserNew;
 }
 
 export type Tournament = {

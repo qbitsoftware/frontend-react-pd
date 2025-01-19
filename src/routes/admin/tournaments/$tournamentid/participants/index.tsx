@@ -1,14 +1,13 @@
-import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, Eye, MoreHorizontal, Pencil, Trash, UserPlus, Users } from 'lucide-react'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
 import { ErrorResponse, Participant, UserNew } from '@/types/types'
 import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant } from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
-import { Tournament } from '@/types/types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/hooks/use-toast'
@@ -64,6 +63,12 @@ const participantSchema = z.object({
         last_name: z.string().optional(),
         name: z.string().min(1, 'Player name is required'),
         sport_type: z.string().default('tabletennis'),
+        extra_data: z.object({
+            rate_order: z.number().min(0, 'Rating number is required'),
+            club: z.string().optional(),
+            rate_points: z.number().min(1, 'placement is required'),
+            eltl_id: z.number().min(0, 'eltl id is required'),
+        }),
         sex: z.string().optional(),
         number: z.number().optional(),
     })).min(1, "Participant must have at least one player"),
@@ -177,10 +182,15 @@ function RouteComponent() {
     }
 
     const setFormValues = (user: UserNew) => {
-        form.setValue('players.0.name', `${user.first_name} ${user.last_name}`)
+        form.setValue('players.0.name', `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
         form.setValue('players.0.first_name', user.first_name)
         form.setValue('players.0.last_name', user.last_name)
         form.setValue('players.0.user_id', user.id)
+        form.setValue('players.0.extra_data.rate_order', user.rate_order)
+        form.setValue('players.0.sex', user.sex)
+        form.setValue('players.0.extra_data.club', user.club_name)
+        form.setValue('players.0.extra_data.eltl_id', user.eltl_id)
+        form.setValue('players.0.extra_data.rate_points', user.rate_points)
         if (tournamentData.data?.solo) {
             form.setValue('name', `${user.first_name} ${user.last_name}`)
         }
@@ -206,7 +216,7 @@ function RouteComponent() {
                                                     <TableHead>Rank</TableHead>
                                                     <TableHead>Sugu</TableHead>
                                                     <TableHead>Klubi</TableHead>
-                                                    <TableHead>ID</TableHead>
+                                                    <TableHead>ELTL ID</TableHead>
                                                     <TableHead>Koht Reitingus</TableHead>
                                                     <TableHead>Klass</TableHead>
                                                     <TableHead>Actions</TableHead>
@@ -228,11 +238,11 @@ function RouteComponent() {
                                                     <>
                                                         <TableCell>{idx + 1}</TableCell>
                                                         <TableCell className="font-medium">{capitalize(participant.name)}</TableCell>
-                                                        <TableCell>{participant.rank}</TableCell>
-                                                        <TableCell>{"Mees"}</TableCell>
-                                                        <TableCell>{"Forus"}</TableCell>
-                                                        <TableCell>{"1"}</TableCell>
-                                                        <TableCell>{"1"}</TableCell>
+                                                        <TableCell>{participant.players[0].rate_points}</TableCell>
+                                                        <TableCell>{participant.players[0].sex}</TableCell>
+                                                        <TableCell>{participant.players[0].club}</TableCell>
+                                                        <TableCell>{participant.players[0].eltl_id}</TableCell>
+                                                        <TableCell>{participant.players[0].rate_order}</TableCell>
                                                         <TableCell>{"Vanus 20-24"}</TableCell>
                                                     </>
                                                 ) : (
@@ -278,6 +288,7 @@ function RouteComponent() {
                                                                     form.setValue('name', e.target.value)
                                                                 }
                                                             }}
+                                                            autoComplete='off'
                                                             onFocus={() => setFocusedField('name')}
                                                             onBlur={() => setTimeout(() => setFocusedField(null), 200)}
                                                             placeholder="New participant name"
@@ -299,13 +310,14 @@ function RouteComponent() {
                                                     <TableCell>
                                                         <Input
                                                             type="text"
-                                                            {...form.register('players.0.rank')}
+                                                            {...form.register('players.0.extra_data.rate_points')}
                                                             placeholder="Rank"
                                                         />
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
                                                             type="text"
+                                                            {...form.register('players.0.sex')}
                                                             placeholder="Sugu"
                                                             disabled
                                                         />
@@ -313,6 +325,7 @@ function RouteComponent() {
                                                     <TableCell>
                                                         <Input
                                                             type="text"
+                                                            {...form.register('players.0.extra_data.club')}
                                                             placeholder="Klubi"
                                                             disabled
                                                         />
@@ -320,6 +333,7 @@ function RouteComponent() {
                                                     <TableCell>
                                                         <Input
                                                             type="text"
+                                                            {...form.register('players.0.extra_data.eltl_id')}
                                                             placeholder="ID"
                                                             disabled
                                                         />
@@ -327,6 +341,7 @@ function RouteComponent() {
                                                     <TableCell>
                                                         <Input
                                                             type="text"
+                                                            {...form.register('players.0.extra_data.rate_order')}
                                                             placeholder="Koht Reitingus"
                                                             disabled
                                                         />
