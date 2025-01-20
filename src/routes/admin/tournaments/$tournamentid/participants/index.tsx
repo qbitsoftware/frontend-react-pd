@@ -68,6 +68,7 @@ const participantSchema = z.object({
             club: z.string().optional(),
             rate_points: z.number().min(1, 'placement is required'),
             eltl_id: z.number().min(0, 'eltl id is required'),
+            class: z.string().optional(),
         }),
         sex: z.string().optional(),
         number: z.number().optional(),
@@ -83,7 +84,6 @@ function RouteComponent() {
         return
     }
 
-    const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false)
     const [editParticipantData, setEditParticipantData] = useState<Participant | undefined>()
     const deleteMutation = UseDeleteParticipant(Number(tournamentid))
     const createParticipant = UseCreateParticipants(Number(tournamentid))
@@ -143,7 +143,6 @@ function RouteComponent() {
                 number: player.number,
             }))
         })
-        setIsAddParticipantOpen(true)
     }
 
     const handleAddParticipant = async (values: ParticipantFormValues) => {
@@ -171,15 +170,22 @@ function RouteComponent() {
                 successToast("Participant added successfully")
             }
 
+            form.reset({
+                name: '',
+                tournament_id: Number(tournamentid),
+                players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0, extra_data: { rate_order: 0, club: '', rate_points: 0, eltl_id: 0, class: "" } }],
+            })
+
+            setEditParticipantData(undefined)
             router.navigate({
                 to: `/admin/tournaments/${tournamentid}/participants`
             })
-            setIsAddParticipantOpen(false)
-            form.reset()
         } catch (error) {
             errorToast(`Error ${editParticipantData ? 'updating' : 'adding'} participant: ${error}`)
         }
     }
+    console.log(form.getValues())
+    console.log(editParticipantData)
 
     const setFormValues = (user: UserNew) => {
         form.setValue('players.0.name', `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
@@ -243,7 +249,7 @@ function RouteComponent() {
                                                         <TableCell>{participant.players[0].club}</TableCell>
                                                         <TableCell>{participant.players[0].eltl_id}</TableCell>
                                                         <TableCell>{participant.players[0].rate_order}</TableCell>
-                                                        <TableCell>{"Vanus 20-24"}</TableCell>
+                                                        <TableCell>{participant.players[0].class}</TableCell>
                                                     </>
                                                 ) : (
                                                     <>
@@ -308,18 +314,22 @@ function RouteComponent() {
                                                         )}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Input
-                                                            type="text"
-                                                            {...form.register('players.0.extra_data.rate_points')}
-                                                            placeholder="Rank"
-                                                        />
+                                                        {form.getValues("players.0.extra_data.rate_points") ?
+                                                            <Input
+                                                                type="text"
+                                                                {...form.register('players.0.extra_data.rate_points')}
+                                                                placeholder="Rank"
+                                                                className='border-none'
+                                                            />
+                                                            : ""
+                                                        }
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
                                                             type="text"
                                                             {...form.register('players.0.sex')}
                                                             placeholder="Sugu"
-                                                            disabled
+                                                            disabled={form.getValues("players.0.extra_data.eltl_id") ? true : false}
                                                         />
                                                     </TableCell>
                                                     <TableCell>
@@ -327,30 +337,34 @@ function RouteComponent() {
                                                             type="text"
                                                             {...form.register('players.0.extra_data.club')}
                                                             placeholder="Klubi"
-                                                            disabled
+                                                            disabled={form.getValues("players.0.extra_data.eltl_id") ? true : false}
                                                         />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {form.getValues("players.0.extra_data.eltl_id") ?
+                                                            <Input
+                                                                type="text"
+                                                                {...form.register('players.0.extra_data.eltl_id')}
+                                                                placeholder="ID"
+                                                                disabled
+                                                            /> : ""
+                                                        }
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {form.getValues("players.0.extra_data.rate_order") ?
+                                                            <Input
+                                                                type="text"
+                                                                {...form.register('players.0.extra_data.rate_order')}
+                                                                placeholder="Koht Reitingus"
+                                                                disabled
+                                                            /> : ""
+                                                        }
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
                                                             type="text"
-                                                            {...form.register('players.0.extra_data.eltl_id')}
-                                                            placeholder="ID"
-                                                            disabled
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Input
-                                                            type="text"
-                                                            {...form.register('players.0.extra_data.rate_order')}
-                                                            placeholder="Koht Reitingus"
-                                                            disabled
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Input
-                                                            type="text"
+                                                            {...form.register('players.0.extra_data.class')}
                                                             placeholder="Klass"
-                                                            disabled
                                                         />
                                                     </TableCell>
                                                     <TableCell>

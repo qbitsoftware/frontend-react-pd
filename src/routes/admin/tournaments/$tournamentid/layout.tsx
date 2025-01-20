@@ -1,8 +1,9 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect, useLocation } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
 import { ErrorResponse } from '@/types/types'
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
   component: RouteComponent,
@@ -26,7 +27,10 @@ export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
   },
 })
 
+
 function RouteComponent() {
+  const location = useLocation()
+  console.log(location)
   const { tournament_data } = Route.useLoaderData()
   const { tournamentid } = Route.useParams()
 
@@ -35,21 +39,21 @@ function RouteComponent() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{tournament_data.data?.name}</h1>
         <div className="space-x-4">
+          <Link to={`/admin/tournaments/${tournamentid}`}>
+            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}` && "bg-secondary text-white")} variant="outline">Info</Button>
+          </Link>
           <Link to={`/admin/tournaments/${tournamentid}/matches`}>
-            <Button variant="outline">Matches</Button>
+            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/matches` && "bg-secondary text-white")} variant="outline">Matches</Button>
           </Link>
           <Link to={`/admin/tournaments/${tournamentid}/participants`}>
-            <Button variant="outline">Participants</Button>
+            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/participants` && "bg-secondary text-white")} variant="outline">Participants</Button>
           </Link>
           <Link to={`/admin/tournaments/${tournamentid}/brackets`}>
-            <Button variant="outline">Brackets</Button>
-          </Link>
-          <Link to={`/admin/tournaments/${tournamentid}/edit`}>
-            <Button variant="outline">Brackets</Button>
+            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/brackets` && "bg-secondary text-white")} variant="outline">Brackets</Button>
           </Link>
         </div>
       </div>
-      <Outlet/>
+      <Outlet />
     </div>
   )
 }

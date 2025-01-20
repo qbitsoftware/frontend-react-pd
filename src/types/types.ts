@@ -103,6 +103,7 @@ export type PlayerNew = {
     rate_points: number;
     rate_order: number;
     eltl_id: number;
+    class: string;
     created_at: string;
     deleted_at: string | null;
     updated_at: string;

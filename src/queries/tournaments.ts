@@ -1,5 +1,5 @@
 
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
 import { Bracket, Tournament } from "@/types/types";
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
@@ -27,6 +27,18 @@ export function UseGetTournaments() {
             return data;
         },
     });
+}
+
+export function UseGetTournamentTypes(org_id: string) {
+    return useQuery<TournamentsResponse>({
+        queryKey: ["tournament_types"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/organizations/${org_id}/tournament_types`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
 }
 
 

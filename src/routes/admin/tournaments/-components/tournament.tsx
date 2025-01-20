@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, Trash } from 'lucide-react'
-import { Edit } from 'lucide-react'
 import { Bracket, Tournament } from '@/types/types'
 import React, { useState } from 'react'
 import { formatDateString, parseTournamentType } from '@/lib/utils'
@@ -17,7 +16,6 @@ import {
 } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { UseDeleteTournament } from '@/queries/tournaments'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
@@ -33,7 +31,6 @@ interface TournamentCardProps {
 }
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
-    const deleteMutation = UseDeleteTournament(tournament.id)
     const resetMutation = UseDeleteBrackets(tournament.id)
     const startMutation = UseStartTournament(tournament.id)
     const { data: participants } = UseGetParticipantsQuery(tournament.id)
@@ -44,7 +41,6 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
     const { successToast, errorToast } = useToastNotification(toast)
     const [exampleDialog, setExampleDialog] = useState(false)
     const [exampleDialogData, setExampleDialogData] = useState<Bracket[]>([])
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [showResetDialog, setShowResetDialog] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
 
@@ -54,21 +50,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
             : tournament.information)
         : { fields: [] }
 
-    const handleDelete = async () => {
-        try {
-            await deleteMutation.mutateAsync()
-            router.navigate({
-                to: "/admin/tournaments",
-                replace: true,
-            });
-            successToast("Turniir on edukalt kustutatud")
-            setShowDeleteDialog(false)
-        } catch (error) {
-            errorToast("Turniiri kustutamine ebaõnnestus")
-            console.error(error)
-        }
-    };
-
+  
     const handleReset = async () => {
         try {
             await resetMutation.mutateAsync()
@@ -90,7 +72,6 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                 setExampleDialog(true)
                 setExampleDialogData(result.data)
             }
-            setShowDeleteDialog(false)
         } catch (error) {
             errorToast("There are some problems with starting a tournament")
             console.error(error)
@@ -112,36 +93,9 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
         }
     }
 
+    console.log(tournament.id)
     return (
-        <>
-            {/* Delete Dialog */}
-            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>{t('admin.tournaments.confirmations.delete.question')}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {t('admin.tournaments.confirmations.delete.description')}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{t('admin.tournaments.confirmations.delete.cancel')}</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleDelete}
-                            className="bg-red-600 text-white hover:bg-red-700"
-                            disabled={deleteMutation.isPending}
-                        >
-                            {deleteMutation.isPending ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    {t('admin.tournaments.confirmations.delete.deleting')}
-                                </>
-                            ) : (
-                                t('admin.tournaments.confirmations.delete.title')
-                            )}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+        <> 
             {/* Reset Dialog */}
             <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
                 <AlertDialogContent>
@@ -201,21 +155,6 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                         </CardDescription>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                        <Link href={`/admin/tournaments/${tournament.id}`}>
-                            <Button variant="outline" size="sm">
-                                <Edit className="w-4 h-4 mr-2" />
-                                {t('admin.tournaments.actions.edit')}
-                            </Button>
-                        </Link>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-red-600 border-red-200 hover:bg-red-50"
-                            onClick={() => setShowDeleteDialog(true)}
-                        >
-                            <Trash className="w-4 h-4 mr-2" />
-                            {t('admin.tournaments.actions.delete')}
-                        </Button>
                         <Button
                             variant="outline"
                             size="sm"
@@ -308,12 +247,6 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                     <Info className="w-4 h-4 mr-2" />
                                     {showDetails ? t('admin.tournaments.actions.hide_details') : t('admin.tournaments.actions.view_details')}
                                 </Button>
-                                <Link href={`/admin/tournaments/${tournament.id}/participants`}>
-                                    <Button variant="outline" size="sm">
-                                        <Users className="w-4 h-4 mr-2" />
-                                        {t('admin.tournaments.actions.manage_participants')}
-                                    </Button>
-                                </Link>
                             </div>
                             {tournament.state === "created" ? (
                                 <Button variant="ghost" size="sm" className="text-blue-600" onClick={() => ShowExample()}>

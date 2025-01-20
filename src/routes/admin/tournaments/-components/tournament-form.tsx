@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, ArrowLeft, Plus, Minus } from "lucide-react"
+import { CalendarIcon, ArrowLeft, Plus, Minus, Loader2 } from "lucide-react"
 import { Link, useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
@@ -33,10 +33,12 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tournament } from "@/types/types"
-import { UsePostTournament, UsePatchTournament } from "@/queries/tournaments"
+import { UsePostTournament, UsePatchTournament, UseDeleteTournament } from "@/queries/tournaments"
 import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
 import { useTranslation } from 'react-i18next'
+import { useState } from "react"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
@@ -91,6 +93,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
     },
   })
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const deleteMutation = UseDeleteTournament(initial_data?.id!)
+
 
   const toast = useToast()
   const { successToast, errorToast } = useToastNotification(toast)
@@ -121,8 +126,50 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
     }
   }
 
+  const handleDelete = async () => {
+    try {
+      await deleteMutation.mutateAsync()
+      router.navigate({
+        to: "/admin/tournaments",
+        replace: true,
+      });
+      successToast("Turniir on edukalt kustutatud")
+      setShowDeleteDialog(false)
+    } catch (error) {
+      errorToast("Turniiri kustutamine ebaõnnestus")
+      console.error(error)
+    }
+  };
+
   return (
     <div className="space-y-6">
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('admin.tournaments.confirmations.delete.question')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('admin.tournaments.confirmations.delete.description')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('admin.tournaments.confirmations.delete.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 text-white hover:bg-red-700"
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('admin.tournaments.confirmations.delete.deleting')}
+                </>
+              ) : (
+                t('admin.tournaments.confirmations.delete.title')
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <Link href="/admin/tournaments">
           <Button variant="outline" className="flex items-center w-full sm:w-auto">
@@ -438,11 +485,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-4">
                 <Button type="submit" className="md:w-[200px] w-full">
                   {initial_data ? t('admin.tournaments.create_tournament.button_edit') : t('admin.tournaments.create_tournament.button_create')}
                 </Button>
-
+                {initial_data && <Button type="button" onClick={() => setShowDeleteDialog(true)} variant={"destructive"}>Kustuta turniir</Button>}
               </div>
             </form>
           </Form>
