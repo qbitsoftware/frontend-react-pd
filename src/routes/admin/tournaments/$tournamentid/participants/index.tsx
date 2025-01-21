@@ -5,7 +5,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
 import { ErrorResponse, Participant, UserNew } from '@/types/types'
-import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant } from '@/queries/participants'
+import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant, UsePostOrder, Order } from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -18,6 +18,7 @@ import { UseGetUsersDebounce, fetchUserByName } from '@/queries/users'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/participants/',
@@ -54,6 +55,7 @@ export const Route = createFileRoute(
 
 const participantSchema = z.object({
     name: z.string().min(1, 'Participant name is required'),
+    position: z.number(),
     tournament_id: z.number().min(1),
     sport_type: z.string().default('tabletennis'),
     players: z.array(z.object({
@@ -78,6 +80,8 @@ const participantSchema = z.object({
 type ParticipantFormValues = z.infer<typeof participantSchema>
 
 function RouteComponent() {
+    const [selectedOrderValue, setSelectedOrderValue] = useState("")
+
     const { tournamentid } = Route.useParams()
     const { participants, tournamentData } = Route.useLoaderData()
     if (!tournamentData || !tournamentData.data) {
@@ -88,6 +92,7 @@ function RouteComponent() {
     const deleteMutation = UseDeleteParticipant(Number(tournamentid))
     const createParticipant = UseCreateParticipants(Number(tournamentid))
     const updateParticipant = UseUpdateParticipant(Number(tournamentid), editParticipantData?.id!)
+    const updateOrdering = UsePostOrder(tournamentid)
 
     const toast = useToast()
     const router = useRouter()
@@ -107,6 +112,16 @@ function RouteComponent() {
             players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0 }],
         }
     })
+
+    const handleOrder = async (order: string) => {
+        try {
+           const res = await updateOrdering.mutateAsync({ order })
+            successToast(res.message)
+        } catch(error) {
+            console.log(error)
+            // todo
+        }
+    }
 
     useEffect(() => {
         if (debouncedSearchTerm) {
@@ -130,6 +145,7 @@ function RouteComponent() {
         setEditParticipantData(participant)
         form.reset({
             name: participant.name,
+            position: participant.position,
             tournament_id: Number(tournamentid),
             sport_type: participant.sport_type || 'tabletennis',
             players: participant.players.map(player => ({
@@ -205,6 +221,18 @@ function RouteComponent() {
     if (tournamentData && tournamentData.data) {
         return (
             <div className="py-6 space-y-6">
+                <div className='flex w-[200px] gap-4'>
+                    <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Järjestus" />
+                            </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="random">Suvaline</SelectItem>
+                            <SelectItem value="rating">Reitingu alusel</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Button onClick={() => handleOrder(selectedOrderValue)}>Jäjesta</Button>
+                </div>
                 <Tabs defaultValue="participants">
                     <TabsContent value="participants">
                         <Card>
@@ -218,6 +246,7 @@ function RouteComponent() {
                                             {tournamentData.data && tournamentData.data.solo ? (
                                                 <>
                                                     <TableHead>JKNR.</TableHead>
+                                                    <TableHead>Positsioon</TableHead>
                                                     <TableHead>Nimi</TableHead>
                                                     <TableHead>Rank</TableHead>
                                                     <TableHead>Sugu</TableHead>
@@ -243,6 +272,7 @@ function RouteComponent() {
                                                 {tournamentData.data && tournamentData.data.solo ? (
                                                     <>
                                                         <TableCell>{idx + 1}</TableCell>
+                                                        <TableCell>{participant.position}</TableCell>
                                                         <TableCell className="font-medium">{capitalize(participant.name)}</TableCell>
                                                         <TableCell>{participant.players[0].rate_points}</TableCell>
                                                         <TableCell>{participant.players[0].sex}</TableCell>
@@ -285,6 +315,14 @@ function RouteComponent() {
                                                     <TableCell>{(participants && participants.data ? participants.data.length : 0) + 1}</TableCell>
                                                     <TableCell>
                                                         <Input
+                                                            className='min-w-[100px]'
+                                                            type="text"
+                                                            {...form.register('players.0.sex')}
+                                                            placeholder="Positsioon"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
                                                             type="text"
                                                             {...form.register('players.0.name')}
                                                             onChange={(e) => {
@@ -294,10 +332,11 @@ function RouteComponent() {
                                                                     form.setValue('name', e.target.value)
                                                                 }
                                                             }}
+                                                            className='min-w-[100px] text-sm md:text-base'
                                                             autoComplete='off'
                                                             onFocus={() => setFocusedField('name')}
                                                             onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                            placeholder="New participant name"
+                                                            placeholder="Nimi"
                                                         />
                                                         {focusedField === 'name' && playerSuggestions && playerSuggestions.data && playerSuggestions.data.length > 0 && (
                                                             <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
@@ -326,6 +365,7 @@ function RouteComponent() {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
+                                                            className='min-w-[100px]'
                                                             type="text"
                                                             {...form.register('players.0.sex')}
                                                             placeholder="Sugu"
@@ -334,6 +374,7 @@ function RouteComponent() {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
+                                                            className='min-w-[100px]'
                                                             type="text"
                                                             {...form.register('players.0.extra_data.club')}
                                                             placeholder="Klubi"
@@ -362,6 +403,7 @@ function RouteComponent() {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Input
+                                                            className='min-w-[100px]'
                                                             type="text"
                                                             {...form.register('players.0.extra_data.class')}
                                                             placeholder="Klass"

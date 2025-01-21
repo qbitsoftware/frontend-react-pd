@@ -87,3 +87,22 @@ export function UseDeleteParticipant(tournament_id: number) {
         }
     })
 }
+
+export type Order = {
+    order: string
+}
+
+export function UsePostOrder(tournament_id: string) {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (order: Order) => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/participants/order`, order, {
+                withCredentials: true,
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
+        },
+    })
+}

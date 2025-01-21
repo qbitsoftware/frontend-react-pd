@@ -81,6 +81,7 @@ export type Round = {
 export type Participant = {
     id: string;
     name: string;
+    position: number;
     rank: number;
     sport_type: string;
     tournament_id: number;
