@@ -337,18 +337,18 @@ interface AdminTournamentsTournamentidLayoutRouteChildren {
 }
 
 const AdminTournamentsTournamentidLayoutRouteChildren: AdminTournamentsTournamentidLayoutRouteChildren =
-  {
-    AdminTournamentsTournamentidIndexRoute:
-      AdminTournamentsTournamentidIndexRoute,
-    AdminTournamentsTournamentidBracketsIndexRoute:
-      AdminTournamentsTournamentidBracketsIndexRoute,
-    AdminTournamentsTournamentidEditIndexRoute:
-      AdminTournamentsTournamentidEditIndexRoute,
-    AdminTournamentsTournamentidMatchesIndexRoute:
-      AdminTournamentsTournamentidMatchesIndexRoute,
-    AdminTournamentsTournamentidParticipantsIndexRoute:
-      AdminTournamentsTournamentidParticipantsIndexRoute,
-  }
+{
+  AdminTournamentsTournamentidIndexRoute:
+    AdminTournamentsTournamentidIndexRoute,
+  AdminTournamentsTournamentidBracketsIndexRoute:
+    AdminTournamentsTournamentidBracketsIndexRoute,
+  AdminTournamentsTournamentidEditIndexRoute:
+    AdminTournamentsTournamentidEditIndexRoute,
+  AdminTournamentsTournamentidMatchesIndexRoute:
+    AdminTournamentsTournamentidMatchesIndexRoute,
+  AdminTournamentsTournamentidParticipantsIndexRoute:
+    AdminTournamentsTournamentidParticipantsIndexRoute,
+}
 
 const AdminTournamentsTournamentidLayoutRouteWithChildren =
   AdminTournamentsTournamentidLayoutRoute._addFileChildren(
@@ -449,72 +449,72 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/admin'
-    | '/about'
-    | '/uudised/$blogid'
-    | '/voistlused/$tournamentid'
-    | '/kontakt'
-    | '/login'
-    | '/reeglid'
-    | '/reiting'
-    | '/tere'
-    | '/uudised'
-    | '/voistlused'
-    | '/admin/tournaments/$tournamentid'
-    | '/admin/dashboard'
-    | '/admin/tournaments'
-    | '/admin/tournaments/$tournamentid/'
-    | '/admin/tournaments/new'
-    | '/admin/tournaments/$tournamentid/brackets'
-    | '/admin/tournaments/$tournamentid/edit'
-    | '/admin/tournaments/$tournamentid/matches'
-    | '/admin/tournaments/$tournamentid/participants'
+  | '/'
+  | '/admin'
+  | '/about'
+  | '/uudised/$blogid'
+  | '/voistlused/$tournamentid'
+  | '/kontakt'
+  | '/login'
+  | '/reeglid'
+  | '/reiting'
+  | '/tere'
+  | '/uudised'
+  | '/voistlused'
+  | '/admin/tournaments/$tournamentid'
+  | '/admin/dashboard'
+  | '/admin/tournaments'
+  | '/admin/tournaments/$tournamentid/'
+  | '/admin/tournaments/new'
+  | '/admin/tournaments/$tournamentid/brackets'
+  | '/admin/tournaments/$tournamentid/edit'
+  | '/admin/tournaments/$tournamentid/matches'
+  | '/admin/tournaments/$tournamentid/participants'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/admin'
-    | '/about'
-    | '/uudised/$blogid'
-    | '/voistlused/$tournamentid'
-    | '/kontakt'
-    | '/login'
-    | '/reeglid'
-    | '/reiting'
-    | '/tere'
-    | '/uudised'
-    | '/voistlused'
-    | '/admin/dashboard'
-    | '/admin/tournaments'
-    | '/admin/tournaments/$tournamentid'
-    | '/admin/tournaments/new'
-    | '/admin/tournaments/$tournamentid/brackets'
-    | '/admin/tournaments/$tournamentid/edit'
-    | '/admin/tournaments/$tournamentid/matches'
-    | '/admin/tournaments/$tournamentid/participants'
+  | '/'
+  | '/admin'
+  | '/about'
+  | '/uudised/$blogid'
+  | '/voistlused/$tournamentid'
+  | '/kontakt'
+  | '/login'
+  | '/reeglid'
+  | '/reiting'
+  | '/tere'
+  | '/uudised'
+  | '/voistlused'
+  | '/admin/dashboard'
+  | '/admin/tournaments'
+  | '/admin/tournaments/$tournamentid'
+  | '/admin/tournaments/new'
+  | '/admin/tournaments/$tournamentid/brackets'
+  | '/admin/tournaments/$tournamentid/edit'
+  | '/admin/tournaments/$tournamentid/matches'
+  | '/admin/tournaments/$tournamentid/participants'
   id:
-    | '__root__'
-    | '/'
-    | '/admin'
-    | '/about'
-    | '/uudised/$blogid'
-    | '/voistlused/$tournamentid'
-    | '/kontakt/'
-    | '/login/'
-    | '/reeglid/'
-    | '/reiting/'
-    | '/tere/'
-    | '/uudised/'
-    | '/voistlused/'
-    | '/admin/tournaments/$tournamentid'
-    | '/admin/dashboard/'
-    | '/admin/tournaments/'
-    | '/admin/tournaments/$tournamentid/'
-    | '/admin/tournaments/new/'
-    | '/admin/tournaments/$tournamentid/brackets/'
-    | '/admin/tournaments/$tournamentid/edit/'
-    | '/admin/tournaments/$tournamentid/matches/'
-    | '/admin/tournaments/$tournamentid/participants/'
+  | '__root__'
+  | '/'
+  | '/admin'
+  | '/about'
+  | '/uudised/$blogid'
+  | '/voistlused/$tournamentid'
+  | '/kontakt/'
+  | '/login/'
+  | '/reeglid/'
+  | '/reiting/'
+  | '/tere/'
+  | '/uudised/'
+  | '/voistlused/'
+  | '/admin/tournaments/$tournamentid'
+  | '/admin/dashboard/'
+  | '/admin/tournaments/'
+  | '/admin/tournaments/$tournamentid/'
+  | '/admin/tournaments/new/'
+  | '/admin/tournaments/$tournamentid/brackets/'
+  | '/admin/tournaments/$tournamentid/edit/'
+  | '/admin/tournaments/$tournamentid/matches/'
+  | '/admin/tournaments/$tournamentid/participants/'
   fileRoutesById: FileRoutesById
 }
 

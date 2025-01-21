@@ -328,7 +328,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                         <SelectContent>
                           {isLoadingTypes && <SelectItem className="flex justify-center items-center" value="loading"><Loader /></SelectItem>}
                           {tournament_types?.data?.map((type) => (
-                            <SelectItem key={type.id} value={String(type.id)}>{type.name}</SelectItem>
+                            <SelectItem key={type.id} value={type.name}>{type.name}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -343,7 +343,10 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{"Turniiri suurus"}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
+                    <Select
+                      onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                      defaultValue={String(field.value)}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={"Vali turniiri suurus"} />
