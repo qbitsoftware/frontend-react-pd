@@ -33,18 +33,20 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tournament } from "@/types/types"
-import { UsePostTournament, UsePatchTournament, UseDeleteTournament } from "@/queries/tournaments"
+import { UsePostTournament, UsePatchTournament, UseDeleteTournament, UseGetTournamentSizes, UseGetTournamentTypes } from "@/queries/tournaments"
 import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
 import { useTranslation } from 'react-i18next'
 import { useState } from "react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import Loader from "@/components/loader"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
   start_date: z.date(),
   end_date: z.date(),
   type: z.string(),
+  tournament_size: z.number(),
   sport: z.string(),
   location: z.string().min(1, { message: "Location is required" }),
   information: z.any(),
@@ -83,6 +85,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       start_date: new Date(),
       end_date: new Date(),
       type: "",
+      tournament_size: 0,
       sport: "",
       location: "",
       information: { fields: [] },
@@ -95,7 +98,8 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const deleteMutation = UseDeleteTournament(initial_data?.id!)
-
+  const { data: tournament_sizes, isLoading } = UseGetTournamentSizes()
+  const { data: tournament_types, isLoading: isLoadingTypes } = UseGetTournamentTypes()
 
   const toast = useToast()
   const { successToast, errorToast } = useToastNotification(toast)
@@ -322,8 +326,10 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="single_elimination">Single Elimination</SelectItem>
-                          <SelectItem value="double_elimination_full_placement">Double Elimination Full Placement</SelectItem>
+                          {isLoadingTypes && <SelectItem className="flex justify-center items-center" value="loading"><Loader /></SelectItem>}
+                          {tournament_types?.data?.map((type) => (
+                            <SelectItem key={type.id} value={String(type.id)}>{type.name}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -331,7 +337,29 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
-
+              <FormField
+                control={form.control}
+                name="tournament_size"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{"Turniiri suurus"}</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={"Vali turniiri suurus"} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoading && <SelectItem className="flex justify-center items-center" value="loading"><Loader /></SelectItem>}
+                        {tournament_sizes?.data?.map((size) => (
+                          <SelectItem key={size.id} value={String(size.size)}>{size.size}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}

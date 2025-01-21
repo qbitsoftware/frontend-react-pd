@@ -1,7 +1,7 @@
 
 import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
-import { Bracket, Tournament } from "@/types/types";
+import { Bracket, Tournament, TournamentSize, TournamentType } from "@/types/types";
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
 
 export type TournamentsResponse = {
@@ -29,11 +29,35 @@ export function UseGetTournaments() {
     });
 }
 
-export function UseGetTournamentTypes(org_id: string) {
-    return useQuery<TournamentsResponse>({
+export type TournamentTypesResposne = {
+    data: TournamentType[] | null
+    message: string;
+    error: string | null;
+}
+
+export type TournamentSizeResposne = {
+    data: TournamentSize[] | null
+    message: string;
+    error: string | null;
+}
+
+export function UseGetTournamentTypes() {
+    return useQuery<TournamentTypesResposne>({
         queryKey: ["tournament_types"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/organizations/${org_id}/tournament_types`, {
+            const { data } = await axiosInstance.get(`/api/v1/types`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
+export function UseGetTournamentSizes() {
+    return useQuery<TournamentSizeResposne>({
+        queryKey: ["tournament_sizes"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/sizes`, {
                 withCredentials: true
             })
             return data

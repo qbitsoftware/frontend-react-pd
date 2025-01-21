@@ -179,7 +179,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             <InfoItem
                                 icon={<Users className="w-4 h-4 text-green-500" />}
                                 label={t('admin.tournaments.info.participants')}
-                                value={`${participants && participants.data ? participants.data.length : "-"} / ${tournament.max_players}`}
+                                value={`${participants && participants.data ? participants.data.length : "-"} / ${tournament.tournament_size}`}
                             />
                             <InfoItem
                                 icon={<MapPin className="w-4 h-4 text-red-500" />}

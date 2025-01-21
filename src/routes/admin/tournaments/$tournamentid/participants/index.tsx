@@ -204,7 +204,7 @@ function RouteComponent() {
 
     if (tournamentData && tournamentData.data) {
         return (
-            <div className="container py-6 space-y-6">
+            <div className="py-6 space-y-6">
                 <Tabs defaultValue="participants">
                     <TabsContent value="participants">
                         <Card>

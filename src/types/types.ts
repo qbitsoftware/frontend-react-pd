@@ -127,9 +127,23 @@ export type Tournament = {
     solo: boolean;
     min_team_size: number;
     max_team_size: number;
-    max_players: number;
+    tournament_size: number;
     information: string;
 };
+
+export type TournamentType = {
+    id: number
+    created_at: string;
+    deleted_at: string | null;
+    name: string;
+}
+
+export type TournamentSize = {
+    id: number
+    created_at: string;
+    deleted_at: string | null;
+    size: number;
+}
 
 
 export type Match = {

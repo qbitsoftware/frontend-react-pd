@@ -22,7 +22,8 @@ export function UseGetBracketQuery(tournament_id: number) {
                 withCredentials: true
             });
             return data
-        }
+        },
+        // enabled: false
     })
 }
 
