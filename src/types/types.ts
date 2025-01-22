@@ -81,7 +81,7 @@ export type Round = {
 export type Participant = {
     id: string;
     name: string;
-    position: number;
+    order: number;
     rank: number;
     sport_type: string;
     tournament_id: number;
@@ -162,6 +162,8 @@ export type Match = {
     forfeit: boolean
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
+    p1: Participant
+    p2: Participant
 }
 
 export type TableTennisExtraData = {

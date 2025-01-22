@@ -92,7 +92,7 @@ export type Order = {
     order: string
 }
 
-export function UsePostOrder(tournament_id: string) {
+export function UsePostOrder(tournament_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (order: Order) => {

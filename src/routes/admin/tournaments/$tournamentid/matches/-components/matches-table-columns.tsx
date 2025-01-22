@@ -6,17 +6,24 @@ export const columns: ColumnDef<Match>[] = [
   {
     accessorKey: "",
     header: "JKNR.",
+    cell: ({ row }) => {
+      return row.index + 1
+    }
   },
   {
-    accessorKey: "round",
+    accessorKey: "match.round",
     header: "Round",
   },
   {
-    accessorKey: "table",
+    accessorKey: "extra_data.table",
     header: "Table",
+    cell: ({ row }) => {
+      const match = row.original
+      return <TableNumberForm matchId={match.id} initialTableNumber={match.extra_data ? match.extra_data.table : 0} />
+    },
   },
   {
-    accessorKey: "p1_id",
+    accessorKey: "p1.name",
     header: "Player 1",
   },
   {
@@ -28,28 +35,25 @@ export const columns: ColumnDef<Match>[] = [
     header: "Player 2 Score",
   },
   {
-    accessorKey: "p2_id",
+    accessorKey: "p2.name",
     header: "Player 2",
   },
   {
-    accessorKey: "winner",
+    accessorKey: "match.next_winner_match_id",
     header: "Winner Placement",
   },
   {
-    accessorKey: "loser",
+    accessorKey: "match.next_loser_match_id",
     header: "Loser Placement",
   },
   {
     accessorKey: "winner_id",
     header: "Winner",
-  },
-  {
-    accessorKey: "extra_data.table",
-    header: "Table",
     cell: ({ row }) => {
       const match = row.original
-      return <TableNumberForm matchId={match.id} initialTableNumber={match.extra_data.table} />
-    },
+      const winner_name = match.winner_id == match.p1_id ? match.p1.name : match.p2.name
+      return match.winner_id ? winner_name : "Mängimata"
+    }
   },
 ]
 

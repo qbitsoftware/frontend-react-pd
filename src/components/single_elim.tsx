@@ -27,7 +27,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                         const finalMatch = data.matches.filter(
                             (m) => m.match.round === match.match.round && !m.is_bronze_match
                         )
-                        topCoord = finalMatch[0].match.topCoord + HEIGTH + VERTICAL_GAP
+                        topCoord = finalMatch[0].match.topCoord + HEIGTH + VERTICAL_GAP 
                     } else
                         if (match.match.round === 0) {
 
@@ -96,7 +96,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                     <div
                         key={index}
                         style={{
-                            top: `${starting_y}px`,
+                            top: `${starting_y }px`,
                             left: `${starting_x + (WIDTH + VERTICAL_GAP + (matches_len === index ? -15 : -20)) * index}px`,
                             width: `${WIDTH}px`
                         }}

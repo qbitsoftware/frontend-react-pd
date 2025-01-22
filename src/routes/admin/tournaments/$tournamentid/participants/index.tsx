@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
@@ -55,7 +55,7 @@ export const Route = createFileRoute(
 
 const participantSchema = z.object({
     name: z.string().min(1, 'Participant name is required'),
-    position: z.number(),
+    order: z.number().optional(),
     tournament_id: z.number().min(1),
     sport_type: z.string().default('tabletennis'),
     players: z.array(z.object({
@@ -81,6 +81,7 @@ type ParticipantFormValues = z.infer<typeof participantSchema>
 
 function RouteComponent() {
     const [selectedOrderValue, setSelectedOrderValue] = useState("")
+    const navigate = useNavigate()
 
     const { tournamentid } = Route.useParams()
     const { participants, tournamentData } = Route.useLoaderData()
@@ -92,7 +93,7 @@ function RouteComponent() {
     const deleteMutation = UseDeleteParticipant(Number(tournamentid))
     const createParticipant = UseCreateParticipants(Number(tournamentid))
     const updateParticipant = UseUpdateParticipant(Number(tournamentid), editParticipantData?.id!)
-    const updateOrdering = UsePostOrder(tournamentid)
+    const updateOrdering = UsePostOrder(Number(tournamentid))
 
     const toast = useToast()
     const router = useRouter()
@@ -115,9 +116,13 @@ function RouteComponent() {
 
     const handleOrder = async (order: string) => {
         try {
-           const res = await updateOrdering.mutateAsync({ order })
+            const res = await updateOrdering.mutateAsync({ order })
+            navigate({
+                to: `/admin/tournaments/${tournamentid}/participants`,
+                replace: true
+            })
             successToast(res.message)
-        } catch(error) {
+        } catch (error) {
             console.log(error)
             // todo
         }
@@ -145,7 +150,7 @@ function RouteComponent() {
         setEditParticipantData(participant)
         form.reset({
             name: participant.name,
-            position: participant.position,
+            order: participant.order,
             tournament_id: Number(tournamentid),
             sport_type: participant.sport_type || 'tabletennis',
             players: participant.players.map(player => ({
@@ -223,15 +228,15 @@ function RouteComponent() {
             <div className="py-6 space-y-6">
                 <div className='flex w-[200px] gap-4'>
                     <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Järjestus" />
-                            </SelectTrigger>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Järjestus" />
+                        </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="random">Suvaline</SelectItem>
                             <SelectItem value="rating">Reitingu alusel</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button onClick={() => handleOrder(selectedOrderValue)}>Jäjesta</Button>
+                    <Button onClick={() => handleOrder(selectedOrderValue)}>Järjesta</Button>
                 </div>
                 <Tabs defaultValue="participants">
                     <TabsContent value="participants">
@@ -272,7 +277,7 @@ function RouteComponent() {
                                                 {tournamentData.data && tournamentData.data.solo ? (
                                                     <>
                                                         <TableCell>{idx + 1}</TableCell>
-                                                        <TableCell>{participant.position}</TableCell>
+                                                        <TableCell>{participant.order}</TableCell>
                                                         <TableCell className="font-medium">{capitalize(participant.name)}</TableCell>
                                                         <TableCell>{participant.players[0].rate_points}</TableCell>
                                                         <TableCell>{participant.players[0].sex}</TableCell>
