@@ -29,7 +29,7 @@ function Index() {
     const [tournamentsControls, tournamentsRef] = useFadeIn(0.2)
 
     return (
-        <div className="bg-gradient-to-b from-white to-gray-200 ">
+        <div className="bg-gradient-to-b from-white to-gray-200 overflow-scroll-y">
             <div className="relative h-[60vh] bg-cover bg-center" style={{ backgroundImage: "url('/test/table_tennis_background.png?height=1080&width=1920')" }}>
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <motion.div
@@ -65,24 +65,24 @@ function Index() {
                 >
                     <LatestArticles articles={articledata.data.slice(0, 3)} />
                 </motion.div>
-                
+
                 <div className="flex justify-center sm:flex-row flex-col gap-10 w-full mb-8">
-                  <motion.div
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                      className="flex-1"
-                  >
-                      <TopFive gender="men" />
-                  </motion.div>
-                  <motion.div
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: 1 }}
-                      className="flex-1"
-                  >
-                      <TopFive gender="women"/>
-                  </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 1 }}
+                        className="flex-1"
+                    >
+                        <TopFive gender="men" />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 1 }}
+                        className="flex-1"
+                    >
+                        <TopFive gender="women" />
+                    </motion.div>
                 </div>
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}

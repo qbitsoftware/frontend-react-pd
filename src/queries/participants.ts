@@ -103,6 +103,8 @@ export function UsePostOrder(tournament_id: number) {
         },
         onSuccess: () => {
             queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["bracket", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["matches", tournament_id] })
         },
     })
 }

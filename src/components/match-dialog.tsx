@@ -12,15 +12,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "./ui/input"
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card"
 import { Separator } from "./ui/separator"
-import { TableMatch, Score, Match } from '@/types/types'
+import { Score, Match, MatchWrapper } from '@/types/types'
 import { UsePatchMatch } from '@/queries/match'
-import { useRouter } from '@tanstack/react-router'
-import { useLocation } from '@tanstack/react-router'
+import { useLocation, useRouter } from '@tanstack/react-router'
+
 
 interface MatchDialogProps {
     open: boolean
     onClose: (open: boolean) => void
-    match: TableMatch
+    match: MatchWrapper
 }
 
 const scoreSchema = z.object({
@@ -33,17 +33,17 @@ const matchFormSchema = z.object({
     mainReferee: z.string().optional(),
     scores: z
         .array(scoreSchema)
-        .max(5, "A maximum of 7 scores are allowed for best of 7")
+        .max(7, "A maximum of 7 scores are allowed for best of 7")
 });
 
 type MatchFormValues = z.infer<typeof matchFormSchema>
 
 
 const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
-    console.log("SEE ON MATCH",match)
-
     const toast = useToast()
     const { errorToast, successToast } = useToastNotification(toast)
+    const location = useLocation()
+    const router = useRouter()
     const form = useForm<MatchFormValues>({
         resolver: zodResolver(matchFormSchema),
         defaultValues: {
@@ -102,7 +102,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                 head_referee: data.mainReferee,
                 table_referee: data.tableReferee,
                 score: scores,
-                table: 0,
+                table: match.match.extra_data.table,
                 parent_match_id: "",
             },
             topCoord: 0,
@@ -110,13 +110,13 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
 
         try {
             await usePatchMatch.mutateAsync(sendMatch)
-            // router.navigate({
-            //     to: location.href,
-            //     replace: true,
-            // })
+            router.navigate({
+                to: location.pathname,
+                replace: true,
+            })
+
             successToast("Successfully updated match scores")
         } catch (error: any) {
-            console.log("error", error)
             errorToast("Something went wrong")
         }
         onClose(false)
@@ -143,12 +143,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                         <Separator className="my-2" />
                                         <div className='flex justify-between items-center'>
                                             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Mängija 1</span>
-                                            <span className="font-medium text-gray-900 dark:text-white">{match.participant_1.name}</span>
+                                            <span className="font-medium text-gray-900 dark:text-white">{match.p1.name}</span>
                                         </div>
                                         <Separator className="my-2" />
                                         <div className='flex justify-between items-center'>
                                             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Mängija 2</span>
-                                            <span className="font-medium text-gray-900 dark:text-white">{match.participant_2.name}</span>
+                                            <span className="font-medium text-gray-900 dark:text-white">{match.p2.name}</span>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -158,8 +158,8 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                     </CardHeader>
                                     <CardContent className="space-y-4 pt-4">
                                         <div className="grid grid-cols-2 gap-4 mb-2">
-                                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{match.participant_1.name}</div>
-                                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{match.participant_2.name}</div>
+                                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{match.p1.name}</div>
+                                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{match.p2.name}</div>
                                         </div>
                                         {fields.map((field, index) => (
                                             <div key={field.id} className="flex items-start space-x-2">
@@ -171,7 +171,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                                             <FormControl>
                                                                 <Input
                                                                     type="number"
-                                                                    placeholder={`Set ${index + 1}`}
+                                                                    defaultValue={0}
                                                                     {...field}
                                                                     onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                                     className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
@@ -189,7 +189,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                                             <FormControl>
                                                                 <Input
                                                                     type="number"
-                                                                    placeholder={`Set ${index + 1}`}
+                                                                    defaultValue={0}
                                                                     {...field}
                                                                     onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                                     className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"

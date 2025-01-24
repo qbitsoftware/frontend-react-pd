@@ -1,7 +1,6 @@
 import { Window } from '@/components/window'
 import { BracketReponse } from '@/queries/tournaments'
-import { Bracket } from '@/types/types'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 interface BracketComponentProps {
   bracket: BracketReponse

@@ -7,19 +7,26 @@ import Navbar from "@/components/navbar"
 import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { useLocation } from "@tanstack/react-router"
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
 }>()({
     component: () => {
+        const location = useLocation();
+
+        const isAdminPage = location.pathname.startsWith('/admin');
         return (
             <>
                 <SidebarProvider defaultOpen={false}>
-                    <div className="w-full">
-                        <Navbar />
-                        <div className="min-h-screen">
+                    <div className="flex flex-col h-screen w-full">
+                        <div className="flex-shrink-0">
+                            <Navbar />
+                        </div>
+                        <div className={`flex-1 ${isAdminPage ? 'overflow-hidden' : ''}`}>
                             <Outlet />
                         </div>
+
                         <Footer />
                         <Toaster />
                         <Suspense>
@@ -27,7 +34,7 @@ export const Route = createRootRouteWithContext<{
                             <TanStackQueryDevtools />
                         </Suspense>
                     </div>
-                    <AppSidebar/>
+                    <AppSidebar />
                 </SidebarProvider>
             </>
         )

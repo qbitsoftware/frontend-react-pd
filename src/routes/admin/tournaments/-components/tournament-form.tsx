@@ -48,6 +48,7 @@ const formSchema = z.object({
   type: z.string(),
   tournament_size: z.number(),
   sport: z.string(),
+  total_tables: z.number().min(1),
   location: z.string().min(1, { message: "Location is required" }),
   information: z.any(),
   private: z.boolean(),
@@ -85,6 +86,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       start_date: new Date(),
       end_date: new Date(),
       type: "",
+      total_tables: 0,
       tournament_size: 0,
       sport: "",
       location: "",
@@ -337,32 +339,51 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="tournament_size"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{"Turniiri suurus"}</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                      defaultValue={String(field.value)}
-                    >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="tournament_size"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{"Turniiri suurus"}</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                        defaultValue={String(field.value)}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={"Vali turniiri suurus"} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {isLoading && <SelectItem className="flex justify-center items-center" value="loading"><Loader /></SelectItem>}
+                          {tournament_sizes?.data?.map((size) => (
+                            <SelectItem key={size.id} value={String(size.size)}>{size.size}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="total_tables"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{"Laudade arv"}</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={"Vali turniiri suurus"} />
-                        </SelectTrigger>
+                        <Input
+                          type="number"
+                          {...field}
+                          onChange={e => field.onChange(parseInt(e.target.value))}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {isLoading && <SelectItem className="flex justify-center items-center" value="loading"><Loader /></SelectItem>}
-                        {tournament_sizes?.data?.map((size) => (
-                          <SelectItem key={size.id} value={String(size.size)}>{size.size}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}

@@ -79,6 +79,19 @@ export const UseGetTournament = (id: number) => {
     })
 }
 
+export const UseGetTournamentQuery = (id: number) => {
+    return useQuery<TournamentResponse>({
+        queryKey: ["tournament", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}`, {
+                withCredentials: true
+            })
+            return data;
+        }
+
+    })
+}
+
 export const UsePostTournament = () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -128,6 +141,9 @@ export const UsePatchTournament = (id: number) => {
 
         onSuccess: () => {
             queryClient.resetQueries({ queryKey: ['tournaments'] })
+            queryClient.resetQueries({ queryKey: ['tournament', id] })
+            queryClient.resetQueries({ queryKey: ['bracket', id] })
+            queryClient.resetQueries({ queryKey: ['matches', id] })
         }
     })
 }

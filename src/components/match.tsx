@@ -116,7 +116,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     )}
                 </div>
             </div>
-            <MatchDialog match={match} open={isOpen} onClose={() => setIsOpen(false)} />
+            <MatchDialog match={{match: match.match, p1: match.participant_1, p2: match.participant_2}} open={isOpen} onClose={() => setIsOpen(false)} />
         </div>
     )
 }

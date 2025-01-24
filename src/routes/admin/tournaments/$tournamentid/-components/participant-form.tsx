@@ -74,7 +74,6 @@ const TeamForm: React.FC<AddTeamDialogProps> = ({ open, onOpenChange, tournament
     useEffect(() => {
         if (open) {
             if (initialData) {
-                console.log(initialData)
                 form.reset({
                     name: initialData.name,
                     tournament_id: tournament.id,

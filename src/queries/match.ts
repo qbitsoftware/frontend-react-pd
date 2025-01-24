@@ -1,10 +1,9 @@
-import { useQueryClient, useMutation, queryOptions } from "@tanstack/react-query"
+import { useQueryClient, useMutation, queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Match } from "@/types/types"
-import { queryObjects } from "v8"
+import { Match, MatchWrapper } from "@/types/types"
 
 export interface MatchesResponse {
-    data: Match[] | null
+    data: MatchWrapper[] | null
     message: string
     error: string | null
 }
@@ -18,10 +17,11 @@ export const UsePatchMatch = (id: number, match_id: string) => {
             })
             return data;
         },
-
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['bracket', id] })
-            queryClient.refetchQueries({ queryKey: ['bracker', id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', id] })
+            queryClient.resetQueries({ queryKey: ['matches', id]})
         }
     })
 }
@@ -37,3 +37,16 @@ export const UseGetMatches = (tournament_id: number) => {
         }
     })
 }
+
+export const UseGetMatchesQuery = (tournament_id: number) => {
+    return useQuery<MatchesResponse>({
+        queryKey: ['matches', tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
+                withCredentials: true
+            })
+            return data;
+        }
+    })
+}
+

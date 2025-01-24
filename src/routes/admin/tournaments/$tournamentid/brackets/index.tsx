@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import BracketComponent from './-components/bracket'
 import { UseGetBracketQuery } from '@/queries/brackets'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -19,12 +18,10 @@ function RouteComponent() {
 
     const { data: bracketsData, error, refetch, isLoading } = UseGetBracketQuery(Number(params.tournamentid))
 
-    console.log(bracketsData)
-
     if (isLoading) {
         return (
             <div className='h-[50vh] flex items-center justify-center'>
-                <Loader/>
+                <Loader />
             </div>
         )
     } else if (!bracketsData || error) {
@@ -53,7 +50,7 @@ function RouteComponent() {
         )
     } else {
         return (
-            <div className='w-screen h-screen'>
+            <div className='w-screen h-[75vh]'>
                 <BracketComponent bracket={bracketsData} />
             </div>
         )

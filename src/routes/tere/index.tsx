@@ -16,7 +16,6 @@ function RouteComponent() {
     const fetch = async () => {
       const data = await tournamentMutation.mutateAsync(false)
       if (data.data) {
-        console.log(data.data)
         setData(data.data)
       }
     }

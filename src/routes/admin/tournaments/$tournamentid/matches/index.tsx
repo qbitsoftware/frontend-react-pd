@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { MatchesResponse, UseGetMatches } from '@/queries/match'
 import { MatchesTable } from './-components/matches-table'

@@ -126,6 +126,7 @@ export type Tournament = {
     state: string;
     private: boolean;
     solo: boolean;
+    total_tables: number;
     min_team_size: number;
     max_team_size: number;
     tournament_size: number;
@@ -162,8 +163,12 @@ export type Match = {
     forfeit: boolean
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
+}
+
+export type MatchWrapper = {
+    match: Match
     p1: Participant
-    p2: Participant
+    p2: Participant 
 }
 
 export type TableTennisExtraData = {

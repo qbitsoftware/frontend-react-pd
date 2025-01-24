@@ -5,7 +5,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
 import { ErrorResponse, Participant, UserNew } from '@/types/types'
-import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant, UsePostOrder, Order } from '@/queries/participants'
+import { UseDeleteParticipant, UseGetParticipants, UseCreateParticipants, UseUpdateParticipant, UsePostOrder} from '@/queries/participants'
 import { UseGetTournament } from '@/queries/tournaments'
 import ErrorPage from '@/components/error'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -34,7 +34,6 @@ export const Route = createFileRoute(
         } catch (error) {
             const err = error as ErrorResponse
             if (err.response.status !== 404) {
-                console.log("JOu meil on error")
                 throw error
             }
         }
@@ -45,7 +44,6 @@ export const Route = createFileRoute(
         } catch (error) {
             const err = error as ErrorResponse
             if (err.response.status !== 404) {
-                console.log("JOu meil on error")
                 throw error
             }
         }
@@ -80,7 +78,7 @@ const participantSchema = z.object({
 type ParticipantFormValues = z.infer<typeof participantSchema>
 
 function RouteComponent() {
-    const [selectedOrderValue, setSelectedOrderValue] = useState("")
+    const [selectedOrderValue, setSelectedOrderValue] = useState<string | undefined>()
     const navigate = useNavigate()
 
     const { tournamentid } = Route.useParams()
@@ -114,7 +112,10 @@ function RouteComponent() {
         }
     })
 
-    const handleOrder = async (order: string) => {
+    const handleOrder = async (order: string | undefined) => {
+        if (!order) {
+            return
+        }
         try {
             const res = await updateOrdering.mutateAsync({ order })
             navigate({
@@ -226,9 +227,9 @@ function RouteComponent() {
     if (tournamentData && tournamentData.data) {
         return (
             <div className="py-6 space-y-6">
-                <div className='flex w-[200px] gap-4'>
+                <div className='flex w-[250px] gap-4'>
                     <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
-                        <SelectTrigger>
+                        <SelectTrigger className=''>
                             <SelectValue placeholder="Järjestus" />
                         </SelectTrigger>
                         <SelectContent>
@@ -236,7 +237,7 @@ function RouteComponent() {
                             <SelectItem value="rating">Reitingu alusel</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button onClick={() => handleOrder(selectedOrderValue)}>Järjesta</Button>
+                    <Button disabled={!selectedOrderValue} onClick={() => handleOrder(selectedOrderValue)}>Järjesta</Button>
                 </div>
                 <Tabs defaultValue="participants">
                     <TabsContent value="participants">
@@ -344,7 +345,7 @@ function RouteComponent() {
                                                             placeholder="Nimi"
                                                         />
                                                         {focusedField === 'name' && playerSuggestions && playerSuggestions.data && playerSuggestions.data.length > 0 && (
-                                                            <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                            <div className="absolute w-[200px] max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
                                                                 {playerSuggestions.data.map((user, i) => (
                                                                     <div
                                                                         key={i}
@@ -433,7 +434,7 @@ function RouteComponent() {
                                                             placeholder="New team name"
                                                         />
                                                         {focusedField === 'name' && playerSuggestions && playerSuggestions.data && playerSuggestions.data.length > 0 && (
-                                                            <div className="absolute w-full mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                            <div className="absolute w-[100px] mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
                                                                 {playerSuggestions.data.map((user, i) => (
                                                                     <div
                                                                         key={i}
