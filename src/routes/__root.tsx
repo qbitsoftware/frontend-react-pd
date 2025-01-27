@@ -23,11 +23,11 @@ export const Route = createRootRouteWithContext<{
                         <div className="flex-shrink-0">
                             <Navbar />
                         </div>
-                        <div className={`flex-1 ${isAdminPage ? 'overflow-hidden' : ''}`}>
+                        <div className={`flex-1 ${isAdminPage ? 'overflow-hidden' : 'overflow-y-auto'}`}>
                             <Outlet />
+                            <Footer />
                         </div>
 
-                        <Footer />
                         <Toaster />
                         <Suspense>
                             <TanStackRouterDevtools />

@@ -9,7 +9,7 @@ export const Route = createFileRoute(
     let matches: MatchesResponse | undefined = undefined
     try {
       matches = await queryClient.ensureQueryData(UseGetMatches(Number(params.tournamentid)))
-    } catch(error) {
+    } catch (error) {
       console.error(error)
     }
     return { matches }
@@ -20,8 +20,8 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { matches } = Route.useLoaderData()
   return (
-    <div>
-      <MatchesTable data={matches?.data || []}/>
+    <div className='pb-12'>
+      <MatchesTable data={matches?.data || []} />
     </div>
   )
 }

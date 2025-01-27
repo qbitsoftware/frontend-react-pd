@@ -130,8 +130,12 @@ export type Tournament = {
     min_team_size: number;
     max_team_size: number;
     tournament_size: number;
-    information: string;
+    information: TournamentInformation
 };
+
+export type TournamentInformation = {
+    fields: [{ title: string, information: string }]
+}
 
 export type TournamentType = {
     id: number
@@ -168,7 +172,7 @@ export type Match = {
 export type MatchWrapper = {
     match: Match
     p1: Participant
-    p2: Participant 
+    p2: Participant
 }
 
 export type TableTennisExtraData = {

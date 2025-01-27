@@ -88,7 +88,7 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pt-4 ">
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pt-4">
         <Outlet />
       </div>
     </div>

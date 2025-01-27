@@ -35,25 +35,27 @@ function RouteComponent() {
   const { tournamentid } = Route.useParams()
 
   return (
-    <div className="w-full md:p-6 space-y-6">
+    <div className="w-full md:p-6 space-y-6 max-h-screen ">
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 justify-between items-center w-full">
         <h1 className="text-3xl font-bold">{tournament_data.data?.name}</h1>
         <div className="flex flex-wrap justify-evenly w-full gap-2 lg:max-w-[800px]">
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}`}>
-            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Info</Button>
+            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Info</Button>
           </Link>
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/matches`}>
-            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/matches` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Matches</Button>
+            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/matches` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Matches</Button>
           </Link>
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/participants`}>
-            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/participants` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Participants</Button>
+            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/participants` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Participants</Button>
           </Link>
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/brackets`}>
-            <Button className={cn(location.href ==`/admin/tournaments/${tournamentid}/brackets` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Brackets</Button>
+            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/brackets` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Brackets</Button>
           </Link>
         </div>
       </div>
-      <Outlet />
+      <div className='max-h-[73vh]'>
+        <Outlet />
+      </div>
     </div>
   )
 }

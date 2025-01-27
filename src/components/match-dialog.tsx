@@ -56,7 +56,8 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
     const { reset } = form
 
     useEffect(() => {
-        if (match) {
+        console.log("Match",match)
+        if (match && open) {
             reset({
                 tableReferee: match.match.extra_data?.table_referee || "",
                 mainReferee: match.match.extra_data?.head_referee || "",
@@ -66,7 +67,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                 })) || [{ player1: 0, player2: 0 }],
             })
         }
-    }, [match, reset])
+    }, [match, reset, open])
 
 
     const usePatchMatch = UsePatchMatch(match.match.tournament_id, match.match.id)
@@ -122,6 +123,8 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
         onClose(false)
     }
 
+    console.log(form.getValues())
+
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[800px] max-h-[90vh] p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
@@ -171,8 +174,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                                             <FormControl>
                                                                 <Input
                                                                     type="number"
-                                                                    defaultValue={0}
-                                                                    {...field}
+                                                                    value={field.value}
                                                                     onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                                     className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                                                 />
@@ -189,8 +191,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
                                                             <FormControl>
                                                                 <Input
                                                                     type="number"
-                                                                    defaultValue={0}
-                                                                    {...field}
+                                                                    value={field.value}
                                                                     onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                                     className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                                                 />

@@ -168,7 +168,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
         {Object.entries(groupedTournaments).map(([type, typeTournaments]) => (
           <div key={type} className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl md:text-4xl font-semibold text-black/70 capitalize">{type === "double_elimination_full_placement" ? "Haapsalu Karikasari" : "Viljandi Cup"}</h2>
+              <h2 className="text-2xl md:text-4xl font-semibold text-black/70 capitalize">{}</h2>
               <Button
                 onClick={() => setExpandedType(expandedType === type ? null : type)}
                 className="flex items-center transition-colors duration-200 border-secondary hover:bg-transparent"

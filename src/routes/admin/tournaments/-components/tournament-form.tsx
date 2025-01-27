@@ -148,7 +148,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   };
 
   return (
-    <div className="space-y-6">
+    <div>
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -176,7 +176,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="flex flex-col sm:flex-row justify-between gap-4">
+      <div className="flex flex-col sm:flex-row justify-between mb-4">
         <Link href="/admin/tournaments">
           <Button variant="outline" className="flex items-center w-full sm:w-auto">
             <ArrowLeft className="w-4 h-4 mr-2" />
