@@ -150,6 +150,12 @@
       }
     }
   },
+  "clubs": {
+    "header": "Aktiivsed Eesti Klubid",
+    "club_card": {
+      "button": "Klubi profiil"
+    }
+  },
   "admin": {
     "layout": {
       "sidebar": {

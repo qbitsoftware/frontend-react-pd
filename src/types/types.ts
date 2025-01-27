@@ -30,6 +30,12 @@ export type UserNew = {
     created_at: string
 }
 
+export type Club = {
+    id: number
+    name: string
+    logoPath: string
+}
+
 export interface User {
     ID: number;
     CreatedAt: Date;
