@@ -22,7 +22,7 @@ function RouteComponent() {
     return (
       <TournamentProvider tournamentData={tournamentData.data}>
         <Navbar />
-        <div className='h-screen'>
+        <div className='h-[75vh] overflow-y-auto'>
           <Outlet />
         </div>
       </TournamentProvider>

@@ -21,13 +21,13 @@ export const UsePatchMatch = (id: number, match_id: string) => {
             queryClient.invalidateQueries({ queryKey: ['bracket', id] })
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
             queryClient.invalidateQueries({ queryKey: ['matches', id] })
-            queryClient.resetQueries({ queryKey: ['matches', id]})
+            queryClient.resetQueries({ queryKey: ['matches', id] })
         }
     })
 }
 
 export const UseGetMatches = (tournament_id: number) => {
-    return queryOptions({
+    return queryOptions<MatchesResponse>({
         queryKey: ['matches', tournament_id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
