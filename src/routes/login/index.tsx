@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { useGetUser } from '@/queries/users'
+import { useGetCurrentUser } from '@/queries/users'
 import { useToastNotification } from '@/components/toast-notification'
 import { useToast } from '@/hooks/use-toast'
 import { useLogin } from '@/queries/users'
@@ -13,6 +13,8 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
 import { useState } from 'react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { ErrorResponse } from '@/types/types'
+import { redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/login/')({
     component: RouteComponent,
@@ -22,21 +24,22 @@ export const Route = createFileRoute('/login/')({
     },
     loader: async ({ context: { queryClient } }) => {
         try {
-            const user = await queryClient.ensureQueryData(useGetUser())
-            return { user }
-        } catch (error: any) {
-
-            if (error.message.includes('401')) {
-                return { user: { data: null } }
+            await queryClient.ensureQueryData(useGetCurrentUser(),)
+        } catch (error) {
+            const err = error as ErrorResponse
+            if (err.response.status !== 401) {
+                throw redirect({
+                    to: '/',
+                })
             }
-            throw error
+            // throw error
         }
     },
 })
 
 const loginSchema = z.object({
     login: z.string().email('Vigane e-posti aadress'),
-    password: z.string().min(8, 'Parool peab olema vähemalt 8 tähemärki pikk'),
+    password: z.string().min(5, 'Parool peab olema vähemalt 5 tähemärki pikk'),
 })
 
 export type LoginFormData = z.infer<typeof loginSchema>
@@ -44,11 +47,6 @@ export type LoginFormData = z.infer<typeof loginSchema>
 function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { user } = Route.useLoaderData()
-
-    if (user.data) {
-        navigate({ to: '/' })
-    }
 
     const { mutate: loginMutation, isPending } = useLogin()
     const toast = useToast()
@@ -65,10 +63,7 @@ function RouteComponent() {
     const onSubmit = (data: LoginFormData) => {
         setServerError(null)
         loginMutation(data, {
-            onSuccess: (response) => {
-                successToast("Edukalt sisse logitud")
-                // authStore.setUser(response.data)
-                
+            onSuccess: () => {
                 successToast('Edukalt sisse logitud')
                 navigate({ to: '/' })
             },

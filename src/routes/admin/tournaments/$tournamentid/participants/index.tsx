@@ -73,6 +73,7 @@ const participantSchema = z.object({
         sex: z.string().optional(),
         number: z.number().optional(),
     })).min(1, "Participant must have at least one player"),
+    class: z.string().optional(),
 })
 
 type ParticipantFormValues = z.infer<typeof participantSchema>
@@ -106,6 +107,7 @@ function RouteComponent() {
     const form = useForm<ParticipantFormValues>({
         resolver: zodResolver(participantSchema),
         defaultValues: {
+            class: '',
             name: '',
             tournament_id: Number(tournamentid),
             players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0 }],
@@ -153,6 +155,7 @@ function RouteComponent() {
             name: participant.name,
             order: participant.order,
             tournament_id: Number(tournamentid),
+            class: participant.extra_data.class,
             sport_type: participant.sport_type || 'tabletennis',
             players: participant.players.map(player => ({
                 id: player.id,
@@ -194,6 +197,7 @@ function RouteComponent() {
 
             form.reset({
                 name: '',
+                class: '',
                 tournament_id: Number(tournamentid),
                 players: [{ name: '', first_name: '', last_name: '', user_id: 0, sport_type: 'tabletennis', sex: '', number: 0, extra_data: { rate_order: 0, club: '', rate_points: 0, eltl_id: 0, class: "" } }],
             })
@@ -285,7 +289,7 @@ function RouteComponent() {
                                                         <TableCell>{participant.players[0].club}</TableCell>
                                                         <TableCell>{participant.players[0].eltl_id}</TableCell>
                                                         <TableCell>{participant.players[0].rate_order}</TableCell>
-                                                        <TableCell>{participant.players[0].class}</TableCell>
+                                                        <TableCell>{participant.extra_data.class}</TableCell>
                                                     </>
                                                 ) : (
                                                     <>

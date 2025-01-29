@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ErrorPage from '../../../components/error'
-import { Card,CardContent } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { useTournament } from './-components/tournament-provider'
@@ -16,11 +16,11 @@ function RouteComponent() {
   const tournament = useTournament()
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 max-w-[1440px] h-full mx-auto pb-[60px]">
-      <div className='w-full h-full mt-[60px] shadow-md '>
+    <div className="max-w-[1440px] mx-auto h-[80%] overflow-y-auto flex flex-col">
+      <div className='w-full h-full mt-[20px] lg:mt-[60px] shadow-md'>
         <Card className='w-full bg-gradient-to-br bg-secondary/40 shadow-lg'>
           <CardContent className="p-6 flex flex-col lg:flex-row gap-8">
-            <img src='/test/turna-pilt.jpg' className='rounded-lg' />
+            <img src='/test/turna-pilt.jpg' className='rounded-lg lg:max-w-[70%]' />
             <div className="flex flex-col gap-4">
               <div className="space-y-6">
                 <div className="flex items-center gap-3 group">
@@ -58,17 +58,23 @@ function RouteComponent() {
             </div>
           </CardContent>
         </Card>
-        <div className="space-y-8 py-8 px-6">
-          {tournament.information.fields.map((field, index) => (
+        <div className="py-8 px-6 flex-1">
+          {tournament.information.fields.length > 0 ? tournament.information.fields.map((field, index) => (
             <div key={index} className="space-y-4">
               <h3 className="text-2xl font-semibold">{field.title}</h3>
               <p className="whitespace-pre-line leading-relaxed">
                 {field.information}
               </p>
             </div>
-          ))}
+          ))
+            : <Card className="w-full">
+              <CardContent className="p-6">
+                <p className="text-center">Täpsem info puutub</p>
+              </CardContent>
+            </Card>
+          }
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }

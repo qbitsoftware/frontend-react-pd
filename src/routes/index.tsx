@@ -30,7 +30,7 @@ function Index() {
 
     return (
         <div className="bg-gradient-to-b from-white to-gray-200">
-            <div className="relative h-[60vh] bg-cover bg-center" style={{ backgroundImage: "url('/test/table_tennis_background.png?height=1080&width=1920')" }}>
+            <div className="relative h-[30vh] bg-cover bg-center" style={{ backgroundImage: "url('/test/table_tennis_background.png?height=1080&width=1920')" }}>
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <motion.div
                         className="text-center text-white"

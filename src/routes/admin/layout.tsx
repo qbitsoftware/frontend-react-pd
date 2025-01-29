@@ -2,17 +2,32 @@ import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-rout
 import {
   LayoutDashboard,
   Trophy,
-  Users,
   FileText,
   Settings,
 } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { redirect } from '@tanstack/react-router'
+import { ErrorResponse } from '@/types/types'
+import { useGetCurrentUser } from '@/queries/users'
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
+  loader: async ({ context: { queryClient } }) => {
+    try {
+      await queryClient.ensureQueryData(useGetCurrentUser(),)
+    } catch (error) {
+      const err = error as ErrorResponse
+      if (err.response.status === 401) {
+        throw redirect({
+          to: '/',
+        })
+      }
+      throw error
+    }
+  },
 })
 
 function RouteComponent() {
@@ -20,6 +35,11 @@ function RouteComponent() {
   const router = useRouter()
   const location = useLocation()
   const { t } = useTranslation()
+  // const { user } = useUser()
+  // if (!user) {
+  //   router.navigate({ to: "/" })
+  // }
+  // const d = useRouteContext()
 
   useEffect(() => {
     if (location.pathname === '/admin' || location.pathname === "/admin/") {
@@ -59,7 +79,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50 pb-14">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">

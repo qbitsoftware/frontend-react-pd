@@ -37,6 +37,7 @@ export type UserNew = {
     rate_points: number
     rate_weigth: number
     oragnization_id: number
+    role: number
 }
 
 export interface User {
@@ -89,6 +90,7 @@ export type Participant = {
     updated_at: string;
     deleted_at: string;
     players: PlayerNew[];
+    extra_data: PartipantExtraData;
 }
 
 export type PlayerNew = {
@@ -109,6 +111,11 @@ export type PlayerNew = {
     deleted_at: string | null;
     updated_at: string;
     // user: UserNew;
+}
+
+export type PartipantExtraData = {
+    image_url: string;
+    class: string
 }
 
 export type Tournament = {
@@ -165,6 +172,7 @@ export type Match = {
     location: string
     bracket: string
     forfeit: boolean
+    start_time: Date
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
 }

@@ -5,6 +5,7 @@ import { routeTree } from './routeTree.gen'
 import './index.css';
 import './i18n';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UserProvider } from "./providers/userProvider";
 
 const queryClient = new QueryClient()
 
@@ -12,7 +13,7 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
-  context: { queryClient }
+  context: { queryClient },
 })
 
 declare module '@tanstack/react-router' {
@@ -21,6 +22,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+const App = () => {
+  return (
+    <UserProvider>
+      <RouterProvider
+        router={router}
+        context={{ queryClient }}
+      />
+    </UserProvider>
+  );
+};
+
+
 
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
@@ -28,7 +41,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient} >
-        <RouterProvider router={router} />
+        <App />
       </QueryClientProvider>
     </StrictMode>
   )

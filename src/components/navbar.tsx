@@ -15,14 +15,16 @@ import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
 import { AuthButton } from './ui/auth-button'
 import { SidebarTrigger } from './ui/sidebar'
+import { useUser } from '@/providers/userProvider'
 
 
-// [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
 
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
     const { t } = useTranslation();
+    const { user} = useUser() 
+
     const menuItems = [
         {
             name: t('navbar.menu.news.name'),
@@ -61,11 +63,9 @@ export default function Navbar() {
                 { name: 'Club Rankings', href: '/klubid/rankings' },
             ]
         },
-        // { name: t('navbar.menu.young_sport'), href: '/noortesport' },
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },
         { name: t('navbar.menu.contact'), href: '/kontakt' },
-        { name: t('navbar.menu.admin'), href: '/admin/dashboard' },
 
     ]
 
@@ -128,6 +128,15 @@ export default function Navbar() {
                                     )}
                                 </NavigationMenuItem>
                             ))}
+                            {user && user.role == 1 &&
+                                < NavigationMenuLink
+                                    href={"/admin/dashboard"}
+                                    className={
+                                        "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
+                                >
+                                    Admin
+                                </NavigationMenuLink>
+                            }
                             <LanguageDropdown />
                             <AuthButton />
                         </NavigationMenuList>

@@ -3,6 +3,7 @@ import { UseGetBracket } from '@/queries/brackets'
 import { Window } from '@/components/window'
 import { BracketReponse } from '@/queries/tournaments'
 import { useTournament } from '../-components/tournament-provider'
+import { Card, CardContent } from '@/components/ui/card'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/tulemused/')({
   component: RouteComponent,
@@ -23,12 +24,18 @@ function RouteComponent() {
   }
 
   return (
-    <div className='w-full h-full'>
-      {matches_data.data ? (
-        <Window data={matches_data.data} />
-      ) : (
-        <div></div>
-      )}
+    <div className='w-full h-[75vh]'>
+      <div className='h-full w-full mt-[20px] lg:mt-[60px]'>
+        {matches_data.data ? (
+          <Window data={matches_data.data} />
+        ) : (
+          <Card className="w-full">
+              <CardContent className="p-6">
+                <p className="text-center text-xl font-semibold">Tabelid Hetkel puuduvad</p>
+              </CardContent>
+            </Card>
+        )}
+      </div>
     </div>
   )
 }
