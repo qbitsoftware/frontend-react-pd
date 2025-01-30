@@ -37,9 +37,9 @@ const SoloTable: React.FC<SoloTableParticipants> = ({ participants }) => {
                   <TableCell>{participant.name}</TableCell>
                   <TableCell>{participant.rank}</TableCell>
                   <TableCell>{participant.extra_data.class}</TableCell>
-                  <TableCell>{participant.players[0].club}</TableCell>
+                  <TableCell>{participant.players[0].extra_data.club}</TableCell>
                   <TableCell>{participant.players[0].sex}</TableCell>
-                  <TableHead>{participant.players[0].eltl_id}</TableHead>
+                  <TableHead>{participant.players[0].extra_data.eltl_id}</TableHead>
                 </TableRow>
               ))}
             </TableBody>

@@ -35,8 +35,8 @@ function RouteComponent() {
   const { tournamentid } = Route.useParams()
 
   return (
-    <div className="w-full md:p-6 space-y-6 max-h-screen ">
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 justify-between items-center w-full">
+    <div className="w-full md:p-6 space-y-6 max-h-screen">
+      <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full ">
         <h1 className="text-3xl font-bold">{tournament_data.data?.name}</h1>
         <div className="flex flex-wrap justify-evenly w-full gap-2 lg:max-w-[800px]">
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}`}>
@@ -53,7 +53,7 @@ function RouteComponent() {
           </Link>
         </div>
       </div>
-      <div className='max-h-[73vh]'>
+      <div className=''>
         <Outlet />
       </div>
     </div>

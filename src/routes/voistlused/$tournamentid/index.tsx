@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { useTournament } from './-components/tournament-provider'
+import { Separator } from '@radix-ui/react-dropdown-menu'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/')({
   errorComponent: ({ error, reset }) => {
@@ -60,7 +61,7 @@ function RouteComponent() {
         </Card>
         <div className="py-8 px-6 flex-1">
           {tournament.information.fields.length > 0 ? tournament.information.fields.map((field, index) => (
-            <div key={index} className="space-y-4">
+            <div key={index} className="space-y-4 py-4">
               <h3 className="text-2xl font-semibold">{field.title}</h3>
               <p className="whitespace-pre-line leading-relaxed">
                 {field.information}

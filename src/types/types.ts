@@ -102,15 +102,20 @@ export type PlayerNew = {
     number: number;
     rank: number;
     sex: string;
+    extra_data: PlayerExtraData;
+    created_at: string;
+    deleted_at: string | null;
+    updated_at: string;
+    // user: UserNew;
+}
+
+export type PlayerExtraData = {
+    image_url: string;
     club: string;
     rate_points: number;
     rate_order: number;
     eltl_id: number;
     class: string;
-    created_at: string;
-    deleted_at: string | null;
-    updated_at: string;
-    // user: UserNew;
 }
 
 export type PartipantExtraData = {

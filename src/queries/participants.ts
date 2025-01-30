@@ -58,21 +58,28 @@ export function UseCreateParticipants(tournament_id: number) {
     })
 }
 
-export function UseUpdateParticipant(tournament_id: number, participant_id: string) {
+type UpdateParticipantArgs = {
+    formData: ParticipantFormValues;
+    participantId: string;
+}
+
+export function UseUpdateParticipant(tournament_id: number) {
     const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: async (formData: ParticipantFormValues) => {
-            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/participants/${participant_id}`, formData, {
-                withCredentials: true,
-            })
-            return data;
+    
+    return useMutation<any, Error, UpdateParticipantArgs>({
+        mutationFn: async ({ formData, participantId }) => {
+            const { data } = await axiosInstance.patch(
+                `/api/v1/tournaments/${tournament_id}/participants/${participantId}`, 
+                formData, 
+                { withCredentials: true }
+            )
+            return data
         },
         onSuccess: () => {
             queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
         }
     })
 }
-
 export function UseDeleteParticipant(tournament_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
