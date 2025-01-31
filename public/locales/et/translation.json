@@ -191,8 +191,8 @@
         "max_team_size": "Maksimaalne tiimi suurus",
         "private": "Privaatne turniir",
         "private_description": "Muuda turniir ainult adminitele nähtavaks",
-        "solo": "Individuaalne turniir (Ilma meeskondadeta)",
-        "solo_description": "Luba individuaalne turniir"
+        "team": "Meeskondadega turniir",
+        "team_description": "Luba meeskondadega turniir"
       },
       "filters": {
         "status": {

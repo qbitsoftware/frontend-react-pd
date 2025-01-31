@@ -62,7 +62,7 @@ const participantSchema = z.object({
         user_id: z.number().optional(),
         first_name: z.string().optional(),
         last_name: z.string().optional(),
-        name: z.string().min(1, "Player name is required"),
+        name: z.string(),
         sport_type: z.string().default("tabletennis"),
         extra_data: z.object({
           rate_order: z.number().min(0, "Rating number is required").optional(),
@@ -74,8 +74,8 @@ const participantSchema = z.object({
         sex: z.string().optional(),
         number: z.number().optional(),
       }),
-    )
-    .min(1, "Participant must have at least one player"),
+    ),
+    // .min(1, "Participant must have at least one player"),
   class: z.string().optional(),
 })
 
@@ -106,6 +106,7 @@ function RouteComponent() {
     defaultValues: {
       name: "",
       tournament_id: Number(tournamentid),
+      sport_type: "tabletennis",
       players: [
         {
           name: "",
@@ -143,6 +144,7 @@ function RouteComponent() {
     }
   }
 
+
   useEffect(() => {
     if (debouncedSearchTerm) {
       refetch()
@@ -160,6 +162,8 @@ function RouteComponent() {
       errorToast("Osaleja kustutamisel tekkis viga")
     }
   }
+
+
 
   const handleEditParticipant = (participant: Participant) => {
     setEditingParticipant(participant)
@@ -233,6 +237,7 @@ function RouteComponent() {
     }
   }
 
+
   const setFormValues = (user: UserNew) => {
     form.setValue("players.0.name", `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
     form.setValue("players.0.first_name", user.first_name)
@@ -247,6 +252,9 @@ function RouteComponent() {
       form.setValue("name", `${user.first_name} ${user.last_name}`)
     }
   }
+
+  console.log(form.formState.errors)
+  console.log(form.getValues)
 
   if (tournamentData && tournamentData.data) {
     return (
@@ -288,9 +296,9 @@ function RouteComponent() {
                     </>
                   ) : (
                     <>
+                      <TableHead>JKNR.</TableHead>
+                      <TableHead>Positsioon</TableHead>
                       <TableHead>Name</TableHead>
-                      <TableHead>Participants</TableHead>
-                      <TableHead>Sport</TableHead>
                       <TableHead>Actions</TableHead>
                     </>
                   )}
@@ -345,7 +353,7 @@ function RouteComponent() {
                           <TableCell>
                             {editingParticipant?.id === participant.id ? (
                               <Input
-                                {...editForm.register("players.0.extra_data.eltl_id", {valueAsNumber: true})}
+                                {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
                                 defaultValue={participant.players[0].extra_data.eltl_id}
                               />
                             ) : (
@@ -405,19 +413,13 @@ function RouteComponent() {
                         </>
                       ) : (
                         <>
+                          <TableCell>{idx + 1}</TableCell>
+                          <TableCell>{participant.order}</TableCell>
                           <TableCell className="font-medium">
                             {editingParticipant?.id === participant.id ? (
                               <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
                             ) : (
                               capitalize(participant.name)
-                            )}
-                          </TableCell>
-                          <TableCell>{participant.players.length}</TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input {...editForm.register("sport_type")} defaultValue={participant.sport_type} />
-                            ) : (
-                              participant.sport_type
                             )}
                           </TableCell>
                           <TableCell>
@@ -555,21 +557,23 @@ function RouteComponent() {
                     </>
                   ) : (
                     <>
+                      <TableCell>{(participants && participants.data ? participants.data.length : 0) + 1}</TableCell>
                       <TableCell>
-                        <Input type="text" {...form.register("name")} placeholder="New team name" />
+                        <Input disabled className="min-w-[100px] border-none" type="text" />
                       </TableCell>
                       <TableCell>
                         <Input
-                          type="number"
-                          {...form.register("players.0.number", { valueAsNumber: true })}
-                          placeholder="Number of participants"
+                          type="text"
+                          {...form.register("name", {
+                            onChange: (e) => {
+                              form.setValue("name", e.target.value);
+                            }
+                          })}
+                          placeholder="Team name"
                         />
                       </TableCell>
                       <TableCell>
-                        <Input type="text" {...form.register("sport_type")} placeholder="Sport type" />
-                      </TableCell>
-                      <TableCell>
-                        <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
+                        <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))} >
                           Add Team
                         </Button>
                       </TableCell>
@@ -583,7 +587,7 @@ function RouteComponent() {
       </div>
     )
   } else {
-    return <ErrorPage error={new Error("Tournament not found")} reset={() => {}} />
+    return <ErrorPage error={new Error("Tournament not found")} reset={() => { }} />
   }
 }
 

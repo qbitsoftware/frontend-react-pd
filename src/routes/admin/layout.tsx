@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { redirect } from '@tanstack/react-router'
 import { ErrorResponse } from '@/types/types'
 import { useGetCurrentUser } from '@/queries/users'
+import { useUser } from '@/providers/userProvider'
 
 
 export const Route = createFileRoute('/admin')({
@@ -35,11 +36,10 @@ function RouteComponent() {
   const router = useRouter()
   const location = useLocation()
   const { t } = useTranslation()
-  // const { user } = useUser()
-  // if (!user) {
-  //   router.navigate({ to: "/" })
-  // }
-  // const d = useRouteContext()
+  const { user } = useUser()
+  if (!user || user.role != 1) {
+    router.navigate({ to: "/" })
+  }
 
   useEffect(() => {
     if (location.pathname === '/admin' || location.pathname === "/admin/") {
@@ -108,8 +108,8 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="py-10 pt-4 w-[calc(100%-4rem)] md:w-[calc(100%-16rem)]  px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto">
+      <div className="py-10 pt-4 w-[calc(100%-4rem)] md:w-[calc(100%-16rem)] px-4 sm:px-6 lg:px-8 ">
+        <div className="mx-auto container">
           <Outlet />
         </div>
       </div>

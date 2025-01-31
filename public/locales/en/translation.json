@@ -191,8 +191,8 @@
         "max_team_size": "Maximum Team Size",
         "private": "Private Tournament",
         "private_description": "Make this tournament private (only seen to admins)",
-        "solo": "Solo Tournament (No Teams)",
-        "solo_description": "Enable individual participation"
+        "team": "Tournament with teams",
+        "team_description": "Enable tournament with teams"
       },
       "filters": {
         "status": {
