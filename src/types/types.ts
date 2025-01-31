@@ -132,6 +132,7 @@ export type Tournament = {
     start_date: string;
     end_date: string;
     location: string;
+    category: string;
     image: string;
     type: string;
     sport: string;
@@ -142,8 +143,16 @@ export type Tournament = {
     min_team_size: number;
     max_team_size: number;
     tournament_size: number;
-    information: TournamentInformation
+    information: string; 
 };
+
+export type Category = {
+    created_at: string;
+    deleted_at: string | null;
+    updated_at: string;
+    id: number;
+    category: string;
+}
 
 export type TournamentInformation = {
     fields: [{ title: string, information: string }]

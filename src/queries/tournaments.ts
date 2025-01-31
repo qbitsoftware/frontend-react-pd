@@ -1,7 +1,7 @@
 
 import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
-import { Bracket, Tournament, TournamentSize, TournamentType } from "@/types/types";
+import { Bracket, Category, Tournament, TournamentSize, TournamentType } from "@/types/types";
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
 
 export type TournamentsResponse = {
@@ -35,6 +35,13 @@ export type TournamentTypesResposne = {
     error: string | null;
 }
 
+export type TournamentCategoriesResponse = {
+    data: Category[] | null
+    message: string;
+    error: string | null;
+}
+
+
 export type TournamentSizeResposne = {
     data: TournamentSize[] | null
     message: string;
@@ -52,6 +59,19 @@ export function UseGetTournamentTypes() {
         },
     })
 }
+
+export function UseGetTournamentCategories() {
+    return useQuery<TournamentCategoriesResponse>({
+        queryKey: ["tournament_categories"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/categories`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
 
 export function UseGetTournamentSizes() {
     return useQuery<TournamentSizeResposne>({

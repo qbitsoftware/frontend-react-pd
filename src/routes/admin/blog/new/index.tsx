@@ -2,12 +2,21 @@ import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft, Save } from 'lucide-react'
 import Editor from '../../-components/yooptaeditor'
+import { Button } from '@/components/ui/button'
+import { useMemo, useState } from 'react'
+import { createYooptaEditor, YooptaContentValue } from '@yoopta/editor'
 
 export const Route = createFileRoute('/admin/blog/new/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const [value, setValue] = useState<YooptaContentValue>();
+
+  const handleClick = async () => {
+    console.log(value)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
@@ -22,18 +31,19 @@ function RouteComponent() {
               </button>
             </div>
             <div>
-              <button
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              <Button
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={handleClick}
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvesta
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       </header>
       <div className='flex items-center justify-center'>
-        <Editor />
+        <Editor value={value} setValue={setValue} readOnly={false} />
       </div>
     </div>
   )
