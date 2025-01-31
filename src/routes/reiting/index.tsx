@@ -15,8 +15,8 @@ function RouteComponent() {
   }, []);
   return (
     <div className="w-full h-full flex flex-col mb-20">
-      <header className="w-full py-6 bg-blue-500 text-white text-center">
-        <h1 className="text-3xl font-bold">Eri-teadaanne: Hannes Mets astus pinksi! 🏓</h1>
+      <header className="w-full py-4 bg-blue-500 text-white text-center">
+        <h1 className="text-2xl font-bold">Demo Account</h1>
       </header>
 
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 ">

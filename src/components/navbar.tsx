@@ -76,7 +76,7 @@ export default function Navbar() {
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/">
-                                <img className="h-10 lg:h-8 xl:h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
+                                <img className="h-10 lg:h-8 xl:h-8 w-auto" src="/tournament10_lightblue.png" alt="ELTA Logo" />
                             </Link>
                         </div>
                     </div>

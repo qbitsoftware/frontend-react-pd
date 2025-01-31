@@ -65,7 +65,7 @@ export function AppSidebar() {
             <SidebarHeader className="p-4 border-b border-gray-200">
                 <div className="flex justify-between items-center">
                     <Link href="/">
-                        <img className="h-8 w-auto" src="/RLogo.png" alt="ELTA Logo" />
+                        <img className="h-8 w-auto" src="/tournament10_lightblue.png" alt="ELTA Logo" />
                     </Link>
                     <LanguageDropdown />
                 </div>

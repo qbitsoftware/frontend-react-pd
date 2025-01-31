@@ -78,7 +78,7 @@ function RouteComponent() {
             <div className="max-w-md w-full space-y-8 bg-white p-6 sm:p-8 rounded-lg shadow-md">
                 <div>
                     <div className="mx-auto flex items-center justify-center mb-10">
-                        <img src="/RLogo.png" alt="logo" className='h-10 w-auto' />
+                        <img src="/tournament10_lightblue.png" alt="logo" className='h-10 w-auto' />
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
                         Tere tulemast tagasi
