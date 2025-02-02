@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router"
-import { MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState, useEffect } from "react"
@@ -75,7 +75,6 @@ const participantSchema = z.object({
         number: z.number().optional(),
       }),
     ),
-    // .min(1, "Participant must have at least one player"),
   class: z.string().optional(),
 })
 
@@ -107,17 +106,17 @@ function RouteComponent() {
       name: "",
       tournament_id: Number(tournamentid),
       sport_type: "tabletennis",
-      players: [
-        {
-          name: "",
-          first_name: "",
-          last_name: "",
-          user_id: 0,
-          sport_type: "tabletennis",
-          sex: "",
-          number: 0,
-          extra_data: { rate_order: 0, club: "", rate_points: 0, eltl_id: 0, class: "" },
-        },
+      players:  [
+        // {
+        //   name: "",
+        //   first_name: "",
+        //   last_name: "",
+        //   user_id: 0,
+        //   sport_type: "tabletennis",
+        //   sex: "",
+        //   number: 0,
+        //   extra_data: { rate_order: 0, club: "", rate_points: 0, eltl_id: 0, class: "" },
+        // },
       ],
     },
   })
@@ -253,8 +252,25 @@ function RouteComponent() {
     }
   }
 
-  console.log(form.formState.errors)
-  console.log(form.getValues)
+  const [activeTeamForPlayer, setActiveTeamForPlayer] = useState<string | null>(null);
+
+
+  // const handleRemovePlayer = async (teamId: string, playerIndex: number) => {
+  //   const team = participants?.data?.find(p => p.id === teamId);
+  //   if (!team) return;
+
+  //   const updatedTeam  = {
+  //     ...team,
+  //     players: team.players.filter((_, idx) => idx !== playerIndex)
+  //   };
+
+  //   await handleAddOrUpdateParticipant(updatedTeam, teamId);
+  // };
+
+  // console.log(form.formState.errors)
+
+  console.log(form.getValues())
+  console.log(activeTeamForPlayer)
 
   if (tournamentData && tournamentData.data) {
     return (
@@ -298,164 +314,227 @@ function RouteComponent() {
                     <>
                       <TableHead>JKNR.</TableHead>
                       <TableHead>Positsioon</TableHead>
-                      <TableHead>Name</TableHead>
+                      <TableHead>Meeskond</TableHead>
+                      <TableHead>Nimi</TableHead>
+                      <TableHead>Rank</TableHead>
+                      <TableHead>Sugu</TableHead>
+                      <TableHead>Klubi</TableHead>
+                      <TableHead>ELTL ID</TableHead>
+                      <TableHead>Koht Reitingus</TableHead>
                       <TableHead>Actions</TableHead>
                     </>
                   )}
                 </TableRow>
               </TableHeader>
               <TableBody className="">
-                {participants &&
-                  participants.data &&
-                  participants.data.map((participant, idx) => (
-                    <TableRow key={participant.id} className="py-0">
-                      {tournamentData.data && tournamentData.data.solo ? (
-                        <>
-                          <TableCell>{idx + 1}</TableCell>
-                          <TableCell>{participant.order}</TableCell>
-                          <TableCell className="font-medium">
+                {participants?.data?.map((participant, idx) =>
+                  tournamentData.data?.solo ? (
+                    <TableRow key={participant.id}>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{participant.order}</TableCell>
+                      <TableCell className="font-medium">
+                        {editingParticipant?.id === participant.id ? (
+                          <Input {...editForm.register("name")} defaultValue={participant.name} />
+                        ) : (
+                          participant.name
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {editingParticipant?.id === participant.id ? (
+                          <Input
+                            {...editForm.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
+                            defaultValue={participant.players[0].extra_data.rate_points}
+                          />
+                        ) : (
+                          participant.players[0].extra_data.rate_points
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {editingParticipant?.id === participant.id ? (
+                          <Input
+                            {...editForm.register("players.0.sex")}
+                            defaultValue={participant.players[0].sex}
+                          />
+                        ) : (
+                          participant.players[0].sex
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {editingParticipant?.id === participant.id ? (
+                          <Input
+                            {...editForm.register("players.0.extra_data.club")}
+                            defaultValue={participant.players[0].extra_data.club}
+                          />
+                        ) : (
+                          participant.players[0].extra_data.club
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {editingParticipant?.id === participant.id ? (
+                          <Input
+                            {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
+                            defaultValue={participant.players[0].extra_data.eltl_id}
+                          />
+                        ) : (
+                          participant.players[0].extra_data.eltl_id
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {editingParticipant?.id === participant.id ? (
+                          <Input
+                            {...editForm.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
+                            defaultValue={participant.players[0].extra_data.rate_order}
+                          />
+                        ) : (
+                          participant.players[0].extra_data.rate_order
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
                             {editingParticipant?.id === participant.id ? (
-                              <Input {...editForm.register("name")} defaultValue={participant.name} />
+                              <DropdownMenuItem onClick={() => handleAddOrUpdateParticipant(editForm.getValues(), participant.id)}>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Save
+                              </DropdownMenuItem>
                             ) : (
-                              participant.name
+                              <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Edit
+                              </DropdownMenuItem>
                             )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.rate_points}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.rate_points
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.sex")}
-                                defaultValue={participant.players[0].sex}
-                              />
-                            ) : (
-                              participant.players[0].sex
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.club")}
-                                defaultValue={participant.players[0].extra_data.club}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.club
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.eltl_id}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.eltl_id
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.rate_order}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.rate_order
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.class")}
-                                defaultValue={participant.extra_data.class}
-                              />
-                            ) : (
-                              participant.extra_data.class
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent>
-                                {editingParticipant?.id === participant.id ? (
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      handleAddOrUpdateParticipant(editForm.getValues(), participant.id)
-                                    }}
-                                  >
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    Save
-                                  </DropdownMenuItem>
-                                ) : (
-                                  <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    Edit
-                                  </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
-                                  <Trash className="w-4 h-4 mr-2" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </>
-                      ) : (
-                        <>
-                          <TableCell>{idx + 1}</TableCell>
-                          <TableCell>{participant.order}</TableCell>
-                          <TableCell className="font-medium">
-                            {editingParticipant?.id === participant.id ? (
-                              <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
-                            ) : (
-                              capitalize(participant.name)
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent>
-                                {editingParticipant?.id === participant.id ? (
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      handleAddOrUpdateParticipant(editForm.getValues(), participant.id)
-                                    }}
-                                  >
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    Save
-                                  </DropdownMenuItem>
-                                ) : (
-                                  <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    Edit
-                                  </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
-                                  <Trash className="w-4 h-4 mr-2" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </>
-                      )}
+                            <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
+                              <Trash className="w-4 h-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    <>
+                      <TableRow key={participant.id}>
+                        <TableCell>{idx + 1}</TableCell>
+                        <TableCell>{participant.order}</TableCell>
+                        <TableCell className="font-medium">
+                          {editingParticipant?.id === participant.id ? (
+                            <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
+                          ) : (
+                            capitalize(participant.name)
+                          )}
+                        </TableCell>
+                        <TableCell colSpan={6}></TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <MoreHorizontal className="w-4 h-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                              <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Edit Team
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
+                                <Trash className="w-4 h-4 mr-2" />
+                                Delete Team
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+
+                      {participant.players && participant.players.length > 0 && participant.players.map((player, playerIdx) => (
+                        <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell className="pl-8">
+                            {player.first_name} {player.last_name}
+                          </TableCell>
+                          <TableCell>{player.extra_data.rate_points}</TableCell>
+                          <TableCell>{player.sex}</TableCell>
+                          <TableCell>{player.extra_data.club}</TableCell>
+                          <TableCell>{player.extra_data.eltl_id}</TableCell>
+                          <TableCell>{player.extra_data.rate_order}</TableCell>
+                          <TableCell>
+                            <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}>
+                              <Trash className="w-4 h-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                        <TableRow className="bg-muted/30">
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell className="pl-8">
+                            <div className="relative">
+                              <Input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="min-w-[200px]"
+                                placeholder="Lisa mängija"
+                                autoComplete="off"
+                                onFocus={() => setFocusedField("name")}
+                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                              />
+                              {focusedField === "name" && playerSuggestions?.data?.length > 0 && (
+                                <div className="absolute z-10 w-full mt-1 bg-background border rounded-md shadow-lg">
+                                  {playerSuggestions.data.map((user, i) => (
+                                    <div
+                                      key={i}
+                                      className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                      onClick={() => {
+                                        const team = participants?.data?.find(p => p.id === participant.id);
+                                        if (!team) return;
+                                        console.log("Yeaaam", team)
+                                        const players = team.players || [];
+                                        form.setValue("players", [
+                                          ...players as any,
+                                          {
+                                            name: `${user.first_name} ${user.last_name}`,
+                                            sport_type: "tabletennis",
+                                            first_name: user.first_name,
+                                            last_name: user.last_name,
+                                            user_id: user.id,
+                                            number: 0,
+                                            sex: user.sex || undefined,
+                                            extra_data: {
+                                              rate_points: user.rate_points || 0,
+                                              rate_order: user.rate_order,
+                                              club: user.club_name,
+                                              eltl_id: user.eltl_id,
+                                              class: undefined
+                                            }
+                                          }
+                                        ]);
+                                        console.log(form.getValues())
+                                        handleAddOrUpdateParticipant(form.getValues(), participant.id);
+                                        setActiveTeamForPlayer(null);
+                                        setSearchTerm("");
+                                      }}
+                                    >
+                                      {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell></TableCell> 
+                          <TableCell colSpan={6}></TableCell>
+                        </TableRow>
+                    </>
+                  )
+                )}
                 <TableRow>
                   {tournamentData.data && tournamentData.data.solo ? (
                     <>
@@ -584,7 +663,7 @@ function RouteComponent() {
             </Table>
           </CardContent>
         </Card>
-      </div>
+      </div >
     )
   } else {
     return <ErrorPage error={new Error("Tournament not found")} reset={() => { }} />
