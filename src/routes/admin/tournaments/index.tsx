@@ -52,7 +52,7 @@ function RouteComponent() {
                         {t('admin.tournaments.errors.not_found.description')}
                     </p>
                     <Link href='/admin/tournaments/new'>
-                        <Button>
+                        <Button className='mt-2 px-6'>
                             {t('admin.tournaments.add_new')}
                         </Button>
                     </Link>

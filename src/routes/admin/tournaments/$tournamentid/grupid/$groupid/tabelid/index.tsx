@@ -1,22 +1,28 @@
+import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import BracketComponent from './-components/bracket'
+import { UseGetParticipants } from '@/queries/participants'
+import { ErrorResponse } from '@/types/types'
+import { UseGetTournament } from '@/queries/tournaments'
+import { UseGetTournamentTable } from '@/queries/tables'
 import { UseGetBracketQuery } from '@/queries/brackets'
-import { AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { AlertCircle, Loader } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Loader from '@/components/loader'
+import BracketComponent from '@/routes/admin/tournaments/-components/bracket'
 
 
 export const Route = createFileRoute(
-    '/admin/tournaments/$tournamentid/brackets/',
+    '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/',
 )({
     component: RouteComponent,
+
+    
 })
 
 function RouteComponent() {
     const params = Route.useParams()
 
-    const { data: bracketsData, error, refetch, isLoading } = UseGetBracketQuery(Number(params.tournamentid))
+    const { data: bracketsData, error, refetch, isLoading } = UseGetBracketQuery(Number(params.tournamentid), Number(params.groupid))
 
     if (isLoading) {
         return (

@@ -4,6 +4,7 @@ import { ErrorResponse } from '@/types/types'
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
+import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
   component: RouteComponent,
@@ -37,22 +38,17 @@ function RouteComponent() {
   return (
     <div className="w-full md:p-6 space-y-6 max-h-screen">
       <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full ">
-        <h1 className="text-3xl font-bold">{tournament_data.data?.name}</h1>
+        <h1 className="text-4xl font-bold text-secondary">{tournament_data.data?.name}</h1>
         <div className="flex flex-wrap justify-evenly w-full gap-2 lg:max-w-[800px]">
           <Link className='flex-1' to={`/admin/tournaments/${tournamentid}`}>
             <Button className={cn(location.href == `/admin/tournaments/${tournamentid}` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Info</Button>
           </Link>
-          <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/matches`}>
-            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/matches` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Matches</Button>
-          </Link>
-          <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/participants`}>
-            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/participants` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Participants</Button>
-          </Link>
-          <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/brackets`}>
-            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/brackets` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Brackets</Button>
+          <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/grupid`}>
+            <Button className={cn(location.href == `/admin/tournaments/${tournamentid}/grupid` && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Grupid</Button>
           </Link>
         </div>
       </div>
+      <Separator/>
       <div className=''>
         <Outlet />
       </div>

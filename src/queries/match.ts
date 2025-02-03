@@ -26,11 +26,11 @@ export const UsePatchMatch = (id: number, match_id: string) => {
     })
 }
 
-export const UseGetMatches = (tournament_id: number) => {
+export const UseGetMatches = (tournament_id: number, group_id: number) => {
     return queryOptions<MatchesResponse>({
-        queryKey: ['matches', tournament_id],
+        queryKey: ['matches', group_id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches`, {
                 withCredentials: true
             })
             return data;

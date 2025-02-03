@@ -47,13 +47,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
 
                 <CardContent>
                     <div className="space-y-6">
-                        {/* Main Info Grid */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <InfoItem
-                                icon={<Trophy className="w-4 h-4 text-blue-500" />}
-                                label={t('admin.tournaments.info.type')}
-                                value={parseTournamentType(tournament.type)}
-                            />
                             <InfoItem
                                 icon={<Users className="w-4 h-4 text-green-500" />}
                                 label={t('admin.tournaments.info.participants')}

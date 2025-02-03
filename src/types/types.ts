@@ -126,7 +126,7 @@ export type PartipantExtraData = {
 export type Tournament = {
     created_at: string;
     deleted_at: string | null;
-    id: number;
+    id: number; 
     updated_at: string;
     name: string;
     start_date: string;
@@ -134,17 +134,26 @@ export type Tournament = {
     location: string;
     category: string;
     image: string;
-    type: string;
     sport: string;
     state: string;
     private: boolean;
-    solo: boolean;
     total_tables: number;
-    min_team_size: number;
-    max_team_size: number;
-    tournament_size: number;
     information: string; 
 };
+
+export type TournamentTable = {
+    created_at: string;
+    deleted_at: string | null;
+    id: number;
+    updated_at: string;
+    tournament_id: number;
+    class: string;
+    type: string;
+    solo: boolean;
+    min_team_size: number;
+    max_team_size: number;
+    size: number;
+}
 
 export type Category = {
     created_at: string;
