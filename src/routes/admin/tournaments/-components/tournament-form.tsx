@@ -167,14 +167,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="flex flex-col sm:flex-row justify-between mb-4">
-        <Link href="/admin/tournaments">
-          <Button variant="outline" className="flex items-center w-full sm:w-auto">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("admin.tournaments.create_tournament.back_button")}
-          </Button>
-        </Link>
-      </div>
+
 
       <Card className="w-full">
         <CardHeader>

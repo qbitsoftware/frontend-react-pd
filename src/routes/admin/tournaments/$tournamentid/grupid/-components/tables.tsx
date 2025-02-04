@@ -2,28 +2,29 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MoreHorizontal, Pencil, Trash, Plus } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import type { TournamentTable } from "@/types/types"
+import { Plus } from "lucide-react"
+import type { Tournament, TournamentTable } from "@/types/types"
 import { Link, useNavigate, useParams } from "@tanstack/react-router"
-import { capitalize } from "@/lib/utils"
-import { strict } from "assert"
+import { parseTableType } from "@/lib/utils"
+
 
 interface TournamentTablesProps {
-  tables: TournamentTable[] | null
+  tables: TournamentTable[] | null | undefined
+  tournament: Tournament
 }
 
-export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) => {
+
+export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables, tournament }) => {
   const { tournamentid } = useParams({ strict: false })
   const navigate = useNavigate()
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Tournament Tables</CardTitle>
-        <Link to={`/admin/tournaments/${tournamentid}/tabelid/new`}>
+        <Link to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
           <Button>
             <Plus className="w-4 h-4 mr-2" />
-            Add Table
+            Lisa Grupp
           </Button>
         </Link>
       </CardHeader>
@@ -31,48 +32,21 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Class</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Format</TableHead>
-              <TableHead>Size</TableHead>
-              <TableHead>Team Size</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>Grupp</TableHead>
+              <TableHead>Osalejate arv/Tabeli suurus</TableHead>
+              <TableHead>Tabeli tüüp</TableHead>
+              <TableHead>Formaat</TableHead>
+            
             </TableRow>
           </TableHeader>
           <TableBody>
             {tables ? tables.map((table) => (
-              <TableRow key={table.id} onClick={() => (navigate({to: `${table.id}`}))} className="cursor-pointer">
+              <TableRow key={table.id} onClick={() => (navigate({ to: `${table.id}` }))} className="cursor-pointer">
                 <TableCell className="font-medium">{table.class}</TableCell>
-                <TableCell>{capitalize(table.type)}</TableCell>
-                <TableCell>{table.solo ? 'Individual' : 'Team'}</TableCell>
-                <TableCell>{table.size}</TableCell>
-                <TableCell>
-                  {table.solo ? 'N/A' : `${table.min_team_size}-${table.max_team_size}`}
-                </TableCell>
-                <TableCell>{new Date(table.created_at).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {/* <DropdownMenuItem onClick={() => onEdit(table)}>
-                        <Pencil className="w-4 h-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => onDelete(table.id)}
-                        className="text-red-600"
-                      >
-                        <Trash className="w-4 h-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem> */}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+                <TableCell><span className="font-semibold">{table.participants.length}</span>/{table.size}</TableCell>
+                <TableCell>{parseTableType(table.type)}</TableCell>
+                <TableCell>{table.solo ? 'Üksik' : 'Meeskondadega'}</TableCell>
+                
               </TableRow>
             ))
               :

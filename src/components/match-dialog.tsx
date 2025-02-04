@@ -56,7 +56,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
     const { reset } = form
 
     useEffect(() => {
-        console.log("Match",match)
         if (match && open) {
             reset({
                 tableReferee: match.match.extra_data?.table_referee || "",
@@ -122,8 +121,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
         }
         onClose(false)
     }
-
-    console.log(form.getValues())
 
     return (
         <Dialog open={open} onOpenChange={onClose}>

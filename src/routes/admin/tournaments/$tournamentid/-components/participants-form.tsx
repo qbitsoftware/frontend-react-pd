@@ -17,9 +17,9 @@ import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
 import { capitalize, useDebounce } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
-import { UseGetUsersDebounce, fetchUserByName } from "@/queries/users"
+import { UseGetUsersDebounce } from "@/queries/users"
 import { z } from "zod"
-import { useForm } from "react-hook-form"
+import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -60,7 +60,6 @@ const participantSchema = z.object({
 export type ParticipantFormValues = z.infer<typeof participantSchema>
 
 export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, tournament_data, table_data }) => {
-    console.log(participants)
     const [selectedOrderValue, setSelectedOrderValue] = useState<string | undefined>()
     const navigate = useNavigate()
     const router = useRouter()
@@ -100,7 +99,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         try {
             const res = await updateOrdering.mutateAsync({ order })
             navigate({
-                to: `/admin/tournaments/${tournament_data.id}/tabelid/${table_data.id}`,
+                to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
                 replace: true,
             })
             successToast(res.message)
@@ -120,15 +119,13 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         try {
             const res = await deleteMutation.mutateAsync(participantId)
             router.navigate({
-                to: `/admin/tournaments/${tournament_data.id}/tabelid/${table_data.id}`,
+                to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
             })
             successToast(res.message)
         } catch (error) {
             errorToast("Osaleja kustutamisel tekkis viga")
         }
     }
-
-
 
     const handleEditParticipant = (participant: Participant) => {
         setEditingParticipant(participant)
@@ -169,8 +166,18 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                 successToast("Participant added successfully")
             }
 
-            form.reset()
-            editForm.reset()
+            form.resetField("players")
+
+            form.reset({
+                name: "",
+                tournament_id: Number(tournament_data.id),
+                class: "",
+                sport_type: "tabletennis",
+                players: [{ name: "", user_id: 0, first_name: "", last_name: "", sport_type: "tabletennis", sex: "", extra_data: { rate_order: 0, club: "", rate_points: 0, eltl_id: 0, class: "" } }],
+            }, { keepValues: false })
+
+            console.log(form.getValues())
+
             router.navigate({
                 to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
             })
@@ -179,31 +186,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         }
     }
 
-    const handleAddParticipant = async (values: ParticipantFormValues) => {
-        try {
-            for (const player of values.players) {
-                if (player.user_id === 0 || !player.user_id) {
-                    const user = await fetchUserByName(player.name)
-                    if (user) {
-                        player.first_name = user.first_name
-                        player.last_name = user.last_name
-                        player.user_id = user.id
-                    } else {
-                        const names = player.name.split(" ")
-                        player.first_name = names.slice(0, -1).join(" ")
-                        player.last_name = names[names.length - 1]
-                    }
-                }
-            }
 
-            await handleAddOrUpdateParticipant(values)
-        } catch (error) {
-            errorToast(`Error adding participant: ${error}`)
-        }
-    }
-
-
-    const setFormValues = (user: UserNew) => {
+    const setFormValues = (user: UserNew, form: UseFormReturn<ParticipantFormValues>) => {
         form.setValue("players.0.name", `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
         form.setValue("players.0.first_name", user.first_name)
         form.setValue("players.0.last_name", user.last_name)
@@ -221,22 +205,40 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const [activeTeamForPlayer, setActiveTeamForPlayer] = useState<string | null>(null);
 
 
-    // const handleRemovePlayer = async (teamId: string, playerIndex: number) => {
-    //   const team = participants?.data?.find(p => p.id === teamId);
-    //   if (!team) return;
-
-    //   const updatedTeam  = {
-    //     ...team,
-    //     players: team.players.filter((_, idx) => idx !== playerIndex)
-    //   };
-
-    //   await handleAddOrUpdateParticipant(updatedTeam, teamId);
-    // };
+    const handleRemovePlayer = async (teamId: string, playerIndex: number) => {
+        const team = participants?.find(p => p.id === teamId);
+        if (!team) return;
+    
+        const updatedTeam: ParticipantFormValues = {
+            name: team.name,
+            tournament_id: team.tournament_id,
+            sport_type: team.sport_type || "tabletennis",
+            class: team.extra_data?.class,
+            players: team.players.map((player) => ({
+                name: `${player.first_name} ${player.last_name}`,
+                sport_type: player.sport_type || "tabletennis",
+                first_name: player.first_name,
+                last_name: player.last_name,
+                user_id: player.user_id,
+                sex: player.sex,
+                extra_data: {
+                    rate_order: player.extra_data.rate_order,
+                    club: player.extra_data.club,
+                    rate_points: player.extra_data.rate_points,
+                    eltl_id: player.extra_data.eltl_id,
+                    class: player.extra_data.class
+                }
+            })).filter((_, index) => index !== playerIndex)
+        };
+    
+        await handleAddOrUpdateParticipant(updatedTeam, teamId);
+    };
 
     // console.log(form.formState.errors)
 
-    console.log(form.getValues())
-    console.log(activeTeamForPlayer)
+    // console.log("Form", form.getValues())
+    // console.log("EditForm", editForm.getValues())
+    console.log("FAWF", activeTeamForPlayer)
 
     if (tournament_data) {
         return (
@@ -258,8 +260,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                             </Button>
                         </div>
                     </CardHeader>
-                    <CardContent>
-                        <Table>
+                    <CardContent className="overflow-y-scroll">
+                        <Table className="overflow-y-scroll">
                             <TableHeader>
                                 <TableRow>
                                     {table_data && table_data.solo ? (
@@ -297,12 +299,43 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                         <TableRow key={participant.id}>
                                             <TableCell>{idx + 1}</TableCell>
                                             <TableCell>{participant.order}</TableCell>
-                                            <TableCell className="font-medium">
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input {...editForm.register("name")} defaultValue={participant.name} />
-                                                ) : (
-                                                    participant.name
-                                                )}
+                                            <TableCell>
+                                                {editingParticipant?.id === participant.id ? <div className="">
+                                                    <Input
+                                                        type="text"
+                                                        {...editForm.register("players.0.name")}
+                                                        onChange={(e) => {
+                                                            editForm.setValue("players.0.name", e.target.value)
+                                                            setSearchTerm(e.target.value)
+                                                            if (table_data.solo) {
+                                                                editForm.setValue("name", e.target.value)
+                                                            }
+                                                        }}
+                                                        className="min-w-[100px] text-sm md:text-base"
+                                                        autoComplete="off"
+                                                        onFocus={() => setFocusedField("name")}
+                                                        onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                        placeholder="Nimi"
+                                                    />
+                                                    {focusedField === "name" &&
+                                                        playerSuggestions &&
+                                                        playerSuggestions.data &&
+                                                        playerSuggestions.data.length > 0 && (
+                                                            <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                                {playerSuggestions.data.map((user, i) => (
+                                                                    <div
+                                                                        key={i}
+                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                        onClick={() => setFormValues(user, editForm)}
+                                                                    >
+                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                </div>
+                                                    : capitalize(participant.name)
+                                                }
                                             </TableCell>
                                             <TableCell>
                                                 {editingParticipant?.id === participant.id ? (
@@ -352,6 +385,16 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     />
                                                 ) : (
                                                     participant.players[0].extra_data.rate_order
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {editingParticipant?.id === participant.id ? (
+                                                    <Input
+                                                        {...editForm.register("players.0.extra_data.class", { valueAsNumber: false })}
+                                                        defaultValue={participant.players[0].extra_data.class}
+                                                    />
+                                                ) : (
+                                                    participant.players[0].extra_data.class
                                                 )}
                                             </TableCell>
                                             <TableCell>
@@ -429,9 +472,9 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     <TableCell>{player.extra_data.eltl_id}</TableCell>
                                                     <TableCell>{player.extra_data.rate_order}</TableCell>
                                                     <TableCell>
-                                                        {/* <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}> */}
-                                                            <Trash className="w-4 h-4" />
-                                                        {/* </Button> */}
+                                                        <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}>
+                                                            <Trash className="w-4 h-4 cursor-pointer" />
+                                                        </Button>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -443,15 +486,15 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     <div className="relative">
                                                         <Input
                                                             type="text"
-                                                            value={searchTerm}
+                                                            value={activeTeamForPlayer == participant.id ? searchTerm : ""}
                                                             onChange={(e) => setSearchTerm(e.target.value)}
                                                             className="min-w-[200px]"
                                                             placeholder="Lisa mängija"
                                                             autoComplete="off"
-                                                            onFocus={() => setFocusedField("name")}
+                                                            onFocus={() => { setFocusedField("name"); setActiveTeamForPlayer(participant.id) }}
                                                             onBlur={() => setTimeout(() => setFocusedField(null), 200)}
                                                         />
-                                                        {focusedField === "name" && playerSuggestions && playerSuggestions.data.length > 0 && (
+                                                        {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
                                                             <div className="absolute z-10 w-full mt-1 bg-background border rounded-md shadow-lg">
                                                                 {playerSuggestions.data.map((user, i) => (
                                                                     <div
@@ -525,6 +568,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     />
                                                     {focusedField === "name" &&
                                                         playerSuggestions &&
+                                                        !editingParticipant &&
                                                         playerSuggestions.data &&
                                                         playerSuggestions.data.length > 0 && (
                                                             <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
@@ -532,7 +576,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                     <div
                                                                         key={i}
                                                                         className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                        onClick={() => setFormValues(user)}
+                                                                        onClick={() => setFormValues(user, form)}
                                                                     >
                                                                         {capitalize(user.first_name)} {capitalize(user.last_name)}
                                                                     </div>
@@ -614,6 +658,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     placeholder="Team name"
                                                 />
                                             </TableCell>
+                                            <TableCell colSpan={6}></TableCell>
                                             <TableCell>
                                                 <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))} >
                                                     Add Team

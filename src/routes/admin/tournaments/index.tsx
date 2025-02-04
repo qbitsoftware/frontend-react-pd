@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { UseGetTournaments } from '@/queries/tournaments'
-import AdminTournament from './-components/tournaments'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle } from 'lucide-react'
 import { ErrorResponse } from '@/types/types'
 import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
+import { TournamentTable } from './-components/tournaments'
 
 export const Route = createFileRoute('/admin/tournaments/')({
     loader: async ({ context: { queryClient } }) => {
@@ -37,7 +37,7 @@ function RouteComponent() {
                         </p>
                     </div>
                 </div>
-                <AdminTournament tournaments={tournaments_data.data} />
+                <TournamentTable tournaments={tournaments_data.data} />
             </div>
         )
 

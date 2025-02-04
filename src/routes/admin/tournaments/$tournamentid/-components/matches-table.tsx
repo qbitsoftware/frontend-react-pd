@@ -40,7 +40,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
     getCoreRowModel: getCoreRowModel(),
   })
 
-  console.log(filteredData)
 
   const handleRowClick = (match: MatchWrapper) => {
     setSelectedMatch(match)
@@ -61,7 +60,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
           <SelectItem value="not_started">Eesolevad mängud</SelectItem>
         </SelectContent>
       </Select>
-      <div className="rounded-md border">
+      <div className="rounded-md border my-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

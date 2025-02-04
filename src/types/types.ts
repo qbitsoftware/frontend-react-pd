@@ -153,6 +153,7 @@ export type TournamentTable = {
     min_team_size: number;
     max_team_size: number;
     size: number;
+    participants: Participant[];
 }
 
 export type Category = {
@@ -201,9 +202,10 @@ export type Match = {
 }
 
 export type MatchWrapper = {
-    match: Match
-    p1: Participant
-    p2: Participant
+    match: Match;
+    p1: Participant;
+    p2: Participant;
+    class: string;
 }
 
 export type TableTennisExtraData = {

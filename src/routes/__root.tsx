@@ -15,11 +15,11 @@ export const Route = createRootRouteWithContext<{
         return (
             <>
                 <SidebarProvider defaultOpen={false}>
-                    <div className="flex flex-col w-full">
+                    <div className="flex flex-col w-full h-screen">
                         <Navbar />
-                        <div className="min-h-screen">
-                            <Outlet />
-                        </div>
+                        
+                        <Outlet />
+                        
                         <Footer />
                         <Toaster />
                         <Suspense>

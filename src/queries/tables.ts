@@ -1,7 +1,7 @@
 import { TournamentTable } from "@/types/types";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
-import TournamentTableForm from "@/routes/admin/tournaments/$tournamentid/tabelid/-components/table-form";
+import TournamentTableForm from "@/routes/admin/tournaments/$tournamentid/grupid/-components/table-form";
 
 interface TournamentTableResponse {
     data: TournamentTable | null

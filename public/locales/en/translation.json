@@ -256,6 +256,15 @@
           "title": "Network error",
           "description": "An error occurred while fetching tournaments"
         }
+      },
+      "table": {
+        "name": "Name",
+        "category": "Category",
+        "status": "Status",
+        "dates": "Dates",
+        "location": "Location",
+        "duratiion": "Duration",
+        "tables": "Total tables"
       }
     }
   }

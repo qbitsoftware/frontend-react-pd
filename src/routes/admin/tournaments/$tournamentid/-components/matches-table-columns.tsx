@@ -1,8 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { MatchWrapper } from "@/types/types"
-import { TableNumberForm } from "./table-number-form"
-
-
 
 export const columns: ColumnDef<MatchWrapper>[] = [
   {
@@ -15,6 +12,10 @@ export const columns: ColumnDef<MatchWrapper>[] = [
   {
     accessorKey: "match.round",
     header: "Round",
+  },
+  {
+    accessorKey: "class",
+    header: "Grupp",
   },
   {
     accessorKey: "match.extra_data.table",

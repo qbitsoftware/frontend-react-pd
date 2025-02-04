@@ -18,7 +18,7 @@ export type ParticipantsResponse = {
 
 export function UseGetParticipants(tournament_id: number, table_id: number) {
     return queryOptions<ParticipantsResponse>({
-        queryKey: ["participants", tournament_id],
+        queryKey: ["participants", table_id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants`, {
                 withCredentials: true,
@@ -30,7 +30,7 @@ export function UseGetParticipants(tournament_id: number, table_id: number) {
 
 export function UseGetParticipantsQuery(tournament_id: number, table_id: number) {
     return useQuery<ParticipantsResponse>({
-        queryKey: ["participants", tournament_id],
+        queryKey: ["participants", table_id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants`, {
                 withCredentials: true,
@@ -53,7 +53,7 @@ export function UseCreateParticipants(tournament_id: number, table_id: number) {
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
         }
     })
 }
@@ -76,7 +76,7 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             return data
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
         }
     })
 }
@@ -90,7 +90,7 @@ export function UseDeleteParticipant(tournament_id: number, table_id: number) {
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
         }
     })
 }
@@ -109,9 +109,9 @@ export function UsePostOrder(tournament_id: number, table_id: number) {
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", tournament_id] })
-            queryClient.resetQueries({ queryKey: ["bracket", tournament_id] })
-            queryClient.resetQueries({ queryKey: ["matches", tournament_id] })
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+            queryClient.resetQueries({ queryKey: ["bracket", table_id] })
+            queryClient.resetQueries({ queryKey: ["matches", table_id] })
         },
     })
 }

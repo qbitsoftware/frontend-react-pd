@@ -38,9 +38,23 @@ export const UseGetMatches = (tournament_id: number, group_id: number) => {
     })
 }
 
-export const UseGetMatchesQuery = (tournament_id: number) => {
-    return useQuery<MatchesResponse>({
+export const UseGetTournamentMatches = (tournament_id: number
+) => {
+    return queryOptions<MatchesResponse>({
         queryKey: ['matches', tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
+                withCredentials: true
+            })
+            return data;
+        }
+    })
+}
+
+
+export const UseGetMatchesQuery = (tournament_id: number, group_id: string) => {
+    return useQuery<MatchesResponse>({
+        queryKey: ['matches', group_id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
                 withCredentials: true

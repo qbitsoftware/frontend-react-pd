@@ -12,13 +12,14 @@ import { redirect } from '@tanstack/react-router'
 import { ErrorResponse } from '@/types/types'
 import { useGetCurrentUser } from '@/queries/users'
 import { useUser } from '@/providers/userProvider'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
     try {
-      await queryClient.ensureQueryData(useGetCurrentUser(),)
+      await queryClient.ensureQueryData(useGetCurrentUser())
     } catch (error) {
       const err = error as ErrorResponse
       if (err.response.status === 401) {
@@ -79,7 +80,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen w-screen bg-gray-50 ">
+    <div className="flex w-screen bg-gray-50 h-[calc(100vh-5rem)]">
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">
@@ -108,10 +109,8 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="py-10 pt-4 w-[calc(100%-4rem)] md:w-[calc(100%-16rem)] px-4 sm:px-6 lg:px-8 ">
-        <div className="mx-auto container">
-          <Outlet />
-        </div>
+      <div className="flex-1 px-4 sm:px-6 lg:px-8 overflow-hidden pt-8">
+        <Outlet />
       </div>
     </div>
   )

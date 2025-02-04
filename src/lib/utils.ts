@@ -176,4 +176,18 @@ export function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
+export function parseTableType(s: string): string {
+  const parts = s.split("_")
+
+  if (parts.length == 1) {
+    return capitalize(s)
+  }
+
+  let res = ""
+  parts.forEach(part => {
+    res += capitalize(part) + " "
+  })
+
+  return res.trim()
+}
 

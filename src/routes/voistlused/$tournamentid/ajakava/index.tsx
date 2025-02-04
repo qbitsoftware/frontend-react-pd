@@ -26,7 +26,6 @@ function RouteComponent() {
   const tournament = useTournament()
   const [activeDay, setActiveDay] = useState<string>('')
 
-  console.log(matchesData)
 
   const filteredMatches = matchesData.data?.filter((match) => (match.match.p1_id !== "empty" && match.match.p2_id !== "empty"))
 

@@ -15,7 +15,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (user_data) {
-      console.log("Setting user data", user_data.data);
       setUser(user_data.data);
     } else {
       setUser(null);

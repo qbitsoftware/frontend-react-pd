@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import TournamentTableForm from '../-components/table-form'
 import { UseGetTournamentTable } from '@/queries/tables'
