@@ -37,7 +37,7 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
     return (
         <div className="flex flex-col items-center w-full h-full border-[1px] rounded shadow-md m-4 mx-auto">
             <div className="flex gap-5 md:py-4 w-full">
-                <Tabs defaultValue={data[0].tables[0].name} className="max-w-[1440px] w-full md:px-4">
+                {/* <Tabs defaultValue={data[0].tables[0].name} className="max-w-[1440px] w-full md:px-4">
                     <TabsList className="flex flex-wrap w-full justify-start gap-2 mb-4 text-black bg-transparent">
                         {data.map((item, index) => (
                             <TabsTrigger
@@ -50,7 +50,7 @@ export const Window: React.FC<WindowProps> = ({ data }) => {
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                </Tabs>
+                </Tabs> */}
             </div>
             <div className="w-full h-full rounded-lg shadow-lg p-4 overflow-auto">
                 {renderBracket()}

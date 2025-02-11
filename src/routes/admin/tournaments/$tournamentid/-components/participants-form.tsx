@@ -208,7 +208,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const handleRemovePlayer = async (teamId: string, playerIndex: number) => {
         const team = participants?.find(p => p.id === teamId);
         if (!team) return;
-    
+
         const updatedTeam: ParticipantFormValues = {
             name: team.name,
             tournament_id: team.tournament_id,
@@ -230,7 +230,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                 }
             })).filter((_, index) => index !== playerIndex)
         };
-    
+
         await handleAddOrUpdateParticipant(updatedTeam, teamId);
     };
 
@@ -238,7 +238,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
 
     // console.log("Form", form.getValues())
     // console.log("EditForm", editForm.getValues())
-    console.log("FAWF", activeTeamForPlayer)
+    // console.log("FAWF", activeTeamForPlayer)
 
     if (tournament_data) {
         return (
@@ -253,6 +253,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                 <SelectContent>
                                     <SelectItem value="random">Suvaline</SelectItem>
                                     <SelectItem value="rating">Reitingu alusel</SelectItem>
+                                    <SelectItem value="regular">Lihtsalt Orderi Jargi</SelectItem>
                                 </SelectContent>
                             </Select>
                             <Button disabled={!selectedOrderValue} onClick={() => handleOrder(selectedOrderValue)}>
@@ -334,7 +335,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                             </div>
                                                         )}
                                                 </div>
-                                                    : capitalize(participant.name)
+                                                    : (participant.name)
                                                 }
                                             </TableCell>
                                             <TableCell>
@@ -433,7 +434,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     {editingParticipant?.id === participant.id ? (
                                                         <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
                                                     ) : (
-                                                        capitalize(participant.name)
+                                                        (participant.name)
                                                     )}
                                                 </TableCell>
                                                 <TableCell colSpan={6}></TableCell>

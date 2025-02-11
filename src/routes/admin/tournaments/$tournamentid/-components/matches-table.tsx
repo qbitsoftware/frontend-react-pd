@@ -8,6 +8,7 @@ import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { TableTennisProtocolModal } from "./tt-modal"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
@@ -57,7 +58,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
           <SelectItem value="all">Kõik mängud</SelectItem>
           <SelectItem value="winner_declared">Lõppenud mängud</SelectItem>
           <SelectItem value="ongoing">Käimasolevad mängud</SelectItem>
-          <SelectItem value="not_started">Eesolevad mängud</SelectItem>
+          <SelectItem value="not_started">Upcoming matches</SelectItem>
         </SelectContent>
       </Select>
       <div className="rounded-md border my-2">
@@ -100,7 +101,9 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
             )}
           </TableBody>
         </Table>
-        {selectedMatch && <MatchDialog match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />}
+        {/* {selectedMatch && <MatchDialog match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />} */}
+
+        {selectedMatch && <TableTennisProtocolModal match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />}
       </div>
     </div>
   )

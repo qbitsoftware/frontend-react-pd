@@ -15,7 +15,7 @@ export const Route = createRootRouteWithContext<{
         return (
             <>
                 <SidebarProvider defaultOpen={false}>
-                    <div className="flex flex-col w-full h-screen">
+                    <div className="flex flex-col w-full">
                         <Navbar />
                         
                         <Outlet />
@@ -23,8 +23,8 @@ export const Route = createRootRouteWithContext<{
                         <Footer />
                         <Toaster />
                         <Suspense>
-                            <TanStackRouterDevtools />
-                            <TanStackQueryDevtools />
+                            {/* <TanStackRouterDevtools />
+                            <TanStackQueryDevtools /> */}
                         </Suspense>
                     </div>
                     <AppSidebar />

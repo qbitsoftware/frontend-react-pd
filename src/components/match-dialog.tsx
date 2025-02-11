@@ -96,6 +96,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
             order: match.match.order,
             sport_type: match.match.sport_type,
             location: match.match.location,
+            start_time: new Date(),
             bracket: match.match.bracket,
             forfeit: match.match.forfeit,
             extra_data: {

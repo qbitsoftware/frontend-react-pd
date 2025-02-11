@@ -31,8 +31,8 @@ export default function TournamentList({ tournaments }: TournamentProps) {
   const filteredTournaments = useMemo(() => {
     return tournaments.filter((tournament) => {
       const nameMatch = tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
-      const typeMatch = tournament.type.toLowerCase().includes(searchTerm.toLowerCase())
-      const selectedTypeMatch = !selectedType || tournament.type.toLowerCase() === selectedType.toLowerCase()
+      const categoryMatch = tournament.category.toLowerCase().includes(searchTerm.toLowerCase())
+      const selectedCategoryMatch = !selectedType || tournament.category.toLowerCase() === selectedType.toLowerCase()
 
       let dateMatch = true
       if (startDate && endDate) {
@@ -43,7 +43,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
           (tournamentStart <= startDate && tournamentEnd >= endDate)
       }
 
-      return (nameMatch || typeMatch) && selectedTypeMatch && dateMatch
+      return (nameMatch || categoryMatch) && dateMatch || selectedCategoryMatch
     })
   }, [tournaments, searchTerm, selectedType, startDate, endDate])
 
@@ -62,7 +62,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
   }, [filteredTournaments])
 
   const tournamentTypes = useMemo(() => {
-    return Array.from(new Set(tournaments.map(t => t.type)))
+    return Array.from(new Set(tournaments.map(t => t.category)))
   }, [tournaments])
 
   const getIcon = (type: string) => {
@@ -192,9 +192,9 @@ export default function TournamentList({ tournaments }: TournamentProps) {
                       <div className="p-2 md:p-6">
                         <CardTitle className="flex items-center justify-between  md:mb-4">
                           <span className="text-lg md:text-2xl">{tournament.name}</span>
-                          {getIcon(tournament.type)}
+                          {getIcon(tournament.category)}
                         </CardTitle>
-                        Formaat: {capitalize(tournament.type.replace(/_/g, ' '))}
+                        Formaat: {capitalize(tournament.category.replace(/_/g, ' '))}
                         <div className="">
                           <p className="text-xs md:text-base text-gray-600">
                             Algus: {format(new Date(tournament.start_date), "MMMM d, yyyy")}

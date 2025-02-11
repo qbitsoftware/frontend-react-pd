@@ -19,7 +19,7 @@ export const Route = createFileRoute('/admin/tournaments/$tournamentid/')({
 function RouteComponent() {
     const { tournament } = Route.useLoaderData()
     return (
-        <div className='pb-12'>
+        <div className='mb-12'>
             <TournamentForm initial_data={tournament.data} />
         </div>
     )

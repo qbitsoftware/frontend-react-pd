@@ -129,6 +129,7 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                             ))}
                             {user && user.role == 1 &&
+                            <NavigationMenuItem>
                                 < NavigationMenuLink
                                     href={"/admin/dashboard"}
                                     className={
@@ -136,6 +137,7 @@ export default function Navbar() {
                                 >
                                     Admin
                                 </NavigationMenuLink>
+                                </NavigationMenuItem>
                             }
                             <LanguageDropdown />
                             <AuthButton />

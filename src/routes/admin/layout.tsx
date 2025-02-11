@@ -80,7 +80,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex w-screen bg-gray-50 h-[calc(100vh-5rem)]">
+    <div className="flex w-screen bg-gray-50 h-[calc(100vh-4rem-1px)]"> {/* height = 100vh - headerHeight - headerBorder */}
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">
@@ -109,7 +109,7 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 px-4 sm:px-6 lg:px-8 overflow-hidden pt-8">
+      <div className="flex-1 sm:px-6 lg:px-8 overflow-hidden p-4">
         <Outlet />
       </div>
     </div>

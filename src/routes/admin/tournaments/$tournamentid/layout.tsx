@@ -40,41 +40,40 @@ function RouteComponent() {
   const { t } = useTranslation()
 
   return (
-    <ScrollArea className="h-full">
-      <div className="mx-auto container">
+      <div className="mx-auto container h-full">
         <div className="w-full md:px-6">
-        <div className="flex flex-col sm:flex-row justify-between mb-6">
-                <Link href="/admin/tournaments">
-                  <Button variant="outline" className="flex items-center w-full sm:w-auto">
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    {t("admin.tournaments.create_tournament.back_button")}
-                  </Button>
-                </Link>
-              </div>
-          <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full sticky top-0 bg-gray-50 py-4">
-            <div className='flex flex-col gap-2'>
-              <h1 className="text-4xl font-bold text-secondary">{tournament_data.data?.name}</h1>
-            </div>
+          {/*
+          <div className="flex flex-col sm:flex-row justify-between mb-6">
+            <Link href="/admin/tournaments">
+              <Button variant="outline" className="flex items-center w-full sm:w-auto">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                  {t("admin.tournaments.create_tournament.back_button")}
+              </Button>
+            </Link>
+          </div>
+          */}
+          <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gray-50 lg:my-4 lg:h-16">
+            <h1 className="text-3xl font-bold text-secondary">{tournament_data.data?.name}</h1>
             <div className="flex flex-wrap justify-evenly w-full gap-2 lg:max-w-[500px]">
               <Link className='flex-1' to={`/admin/tournaments/${tournamentid}`}>
                 <Button className={cn(location.pathname == (`/admin/tournaments/${tournamentid}`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Info</Button>
               </Link>
               <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/grupid`}>
-                <Button className={cn(location.href.includes(`/admin/tournaments/${tournamentid}/grupid`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Grupid</Button>
+                <Button className={cn(location.href.includes(`/admin/tournaments/${tournamentid}/grupid`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Groups</Button>
               </Link>
               <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/mangud`}>
-                <Button className={cn(location.pathname == (`/admin/tournaments/${tournamentid}/mangud`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Kõik mängud</Button>
+                <Button className={cn(location.pathname == (`/admin/tournaments/${tournamentid}/mangud`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">All matches</Button>
               </Link>
             </div>
           </div>
-          <Separator />
+          <Separator className='opacity-0 lg:opacity-100' />
           
-          <div className='py-4'>
-            <Outlet />
+          <div className='pt-4'>
+            <ScrollArea className='h-[calc(100vh-13rem)] pr-4'>
+              <Outlet />
+            </ScrollArea>
           </div>
         </div>
       </div>
-    </ScrollArea>
-
   )
 }
