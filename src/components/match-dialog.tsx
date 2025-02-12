@@ -21,6 +21,7 @@ interface MatchDialogProps {
     open: boolean
     onClose: (open: boolean) => void
     match: MatchWrapper
+    tournament_id: number
 }
 
 const scoreSchema = z.object({
@@ -39,7 +40,7 @@ const matchFormSchema = z.object({
 type MatchFormValues = z.infer<typeof matchFormSchema>
 
 
-const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
+const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournament_id }) => {
     const toast = useToast()
     const { errorToast, successToast } = useToastNotification(toast)
     const location = useLocation()
@@ -69,7 +70,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
     }, [match, reset, open])
 
 
-    const usePatchMatch = UsePatchMatch(match.match.tournament_id, match.match.id)
+    const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
     const { fields, append, remove } = useFieldArray({
         name: "scores",
@@ -87,7 +88,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match }) => {
 
         const sendMatch: Match = {
             id: match.match.id,
-            tournament_id: match.match.tournament_id,
+            tournament_table_id: match.match.tournament_table_id,
             type: match.match.type,
             round: match.match.round,
             p1_id: match.match.p1_id,

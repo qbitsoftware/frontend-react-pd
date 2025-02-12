@@ -8,11 +8,11 @@ export interface MatchesResponse {
     error: string | null
 }
 
-export const UsePatchMatch = (id: number, match_id: string) => {
+export const UsePatchMatch = (id: number, group_id: number, match_id: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (formData: Match) => {
-            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}/match/${match_id}`, formData, {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}/tables/${group_id}/match/${match_id}`, formData, {
                 withCredentials: true
             })
             return data;
@@ -20,8 +20,8 @@ export const UsePatchMatch = (id: number, match_id: string) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['bracket', id] })
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
-            queryClient.invalidateQueries({ queryKey: ['matches', id] })
-            queryClient.resetQueries({ queryKey: ['matches', id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })
 }

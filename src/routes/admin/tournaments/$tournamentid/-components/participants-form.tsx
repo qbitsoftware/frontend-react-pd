@@ -156,6 +156,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     }
 
     const handleAddOrUpdateParticipant = async (values: ParticipantFormValues, participantId?: string) => {
+        console.log("Values", values)
         try {
             if (participantId) {
                 await updateParticipant.mutateAsync({ formData: values, participantId })
@@ -215,6 +216,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
             sport_type: team.sport_type || "tabletennis",
             class: team.extra_data?.class,
             players: team.players.map((player) => ({
+                id: player.id,
                 name: `${player.first_name} ${player.last_name}`,
                 sport_type: player.sport_type || "tabletennis",
                 first_name: player.first_name,
@@ -506,13 +508,13 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                             if (!team) return;
                                                                             const players = team.players || [];
                                                                             form.setValue("players", [
-                                                                                ...players as any,
+                                                                                ...players,
                                                                                 {
                                                                                     name: `${user.first_name} ${user.last_name}`,
                                                                                     sport_type: "tabletennis",
                                                                                     first_name: user.first_name,
                                                                                     last_name: user.last_name,
-                                                                                    user_id: user.id,
+                                                                                    user_id: user.id || 0,
                                                                                     number: 0,
                                                                                     sex: user.sex || undefined,
                                                                                     extra_data: {

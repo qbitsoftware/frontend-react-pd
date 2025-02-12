@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
-import type { MatchWrapper } from "@/types/types"
+import type { MatchWrapper, TournamentTable } from "@/types/types"
 import { columns } from "./matches-table-columns"
 import MatchDialog from "@/components/match-dialog"
 import { useMemo, useState } from "react"
@@ -12,11 +12,13 @@ import { TableTennisProtocolModal } from "./tt-modal"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
+  table_data: TournamentTable
+  tournament_id: number
 }
 
 type FilterOption = "all" | "winner_declared" | "ongoing" | "not_started"
 
-export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTableProps) => {
+export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id, table_data }: MatchesTableProps) => {
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -101,9 +103,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
             )}
           </TableBody>
         </Table>
-        {/* {selectedMatch && <MatchDialog match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />} */}
 
-        {selectedMatch && <TableTennisProtocolModal match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />}
+        {selectedMatch && table_data.type == "champions_league" &&
+          <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        }
+        {selectedMatch && table_data.type != "champions_league" &&
+          <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
+        }
       </div>
     </div>
   )

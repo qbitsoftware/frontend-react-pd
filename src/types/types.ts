@@ -96,6 +96,7 @@ export type Participant = {
 export type PlayerNew = {
     id: string;
     user_id: number
+    name: string;
     first_name: string;
     last_name: string;
     sport_type: string;

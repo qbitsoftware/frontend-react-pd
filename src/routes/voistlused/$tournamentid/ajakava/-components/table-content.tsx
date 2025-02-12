@@ -41,6 +41,7 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
             {match.match.start_time == null
                 ? <TableCell className='text-gray-500'>Määramata</TableCell>
                 : <TableCell className='font-medium'>{String(match.match.start_time)}</TableCell>}
+            <TableCell>{match.class}</TableCell>
         </TableRow>
     )
 }

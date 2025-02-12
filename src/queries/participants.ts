@@ -65,18 +65,19 @@ type UpdateParticipantArgs = {
 
 export function UseUpdateParticipant(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
-    
+
     return useMutation<any, Error, UpdateParticipantArgs>({
         mutationFn: async ({ formData, participantId }) => {
             const { data } = await axiosInstance.patch(
-                `/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/${participantId}`, 
-                formData, 
+                `/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/${participantId}`,
+                formData,
                 { withCredentials: true }
             )
             return data
         },
         onSuccess: () => {
             queryClient.resetQueries({ queryKey: ["participants", table_id] })
+            queryClient.resetQueries({ queryKey: ["matches", table_id] })
         }
     })
 }

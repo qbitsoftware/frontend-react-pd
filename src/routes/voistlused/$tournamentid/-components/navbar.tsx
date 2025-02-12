@@ -18,9 +18,9 @@ const Navbar = () => {
 
     return (
         <div className="">
-            <div className="pt-8 pb-4 text-white  bg-gradient-to-r from-blue-500 to-blue-700">
+            <div className="pt-12 pb-4 text-[#363636]  bg-[#FBFCFD]">
                 <div className="container mx-auto px-4">
-                    <h1 className="text-4xl text-center font-bold mb-4">Eesti Lauatennise Meistrivõistlused 2025</h1>
+                    <h1 className="text-4xl text-center font-semibold mb-4">Eesti Lauatennise Meistrivõistlused 2025</h1>
                     <p className="text-xl text-center">27. - 29. Jaanuar 2025 • Tallinna Spordihoone</p>
                 </div>
             </div>

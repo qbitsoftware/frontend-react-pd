@@ -1,28 +1,53 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { MatchesResponse } from '@/queries/match'
 import { UseGetMatches } from '@/queries/match'
 import { MatchesTable } from '../../../-components/matches-table'
+import { UseGetTournamentTable } from '@/queries/tables'
+import { ErrorResponse } from '@/types/types'
 
 export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/',
 )({
   loader: async ({ context: { queryClient }, params }) => {
     let matches: MatchesResponse | undefined = undefined
+    let table_data;
     try {
       matches = await queryClient.ensureQueryData(UseGetMatches(Number(params.tournamentid), Number(params.groupid)))
     } catch (error) {
-      console.error(error)
+      const err = error as ErrorResponse
+      if (err.response.status !== 404) {
+        throw error
+      }
     }
-    return { matches }
+    try {
+      table_data = await queryClient.ensureQueryData(
+        UseGetTournamentTable(
+          Number(params.tournamentid),
+          Number(params.groupid),
+        ),
+      )
+    } catch (error) {
+      const err = error as ErrorResponse
+      if (err.response.status !== 404) {
+        throw error
+      }
+    }
+    return { matches, params, table_data }
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { matches } = Route.useLoaderData()
-  return (
-    <div className='pb-12'>
-      <MatchesTable data={matches?.data || []} />
-    </div>
-  )
+  const { matches, params, table_data } = Route.useLoaderData()
+  if (matches && matches.data && table_data && table_data.data) {
+    return (
+      <div className='pb-12'>
+        <MatchesTable table_data={table_data.data} tournament_id={Number(params.tournamentid)} data={matches.data || []} />
+      </div>
+    )
+  } else {
+    return (
+      <div>Ero hereee</div>
+    )
+  }
 }

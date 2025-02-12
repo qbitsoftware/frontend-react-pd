@@ -63,7 +63,11 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
-  		}
+  		},
+		  boxShadow: {
+			'scheduleCard': 'rgba(149, 157, 165, .2) -4px 9px 25px -6px',
+			
+		  }
   	}
   },
   plugins: [require("tailwindcss-animate")],
