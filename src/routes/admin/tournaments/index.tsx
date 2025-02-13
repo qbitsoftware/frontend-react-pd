@@ -36,6 +36,11 @@ function RouteComponent() {
                             {t('admin.tournaments.description')}
                         </p>
                     </div>
+                    <Link href='/admin/tournaments/new'>
+                        <Button className='mt-2 px-6'>
+                            {t('admin.tournaments.add_new')}
+                        </Button>
+                    </Link>
                 </div>
                 <TournamentTable tournaments={tournaments_data.data} />
             </div>

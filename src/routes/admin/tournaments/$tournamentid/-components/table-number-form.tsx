@@ -19,8 +19,8 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
 
   const params = useParams({ strict: false })
   const { data: tournament_data, isLoading: isTournamentLoading } = UseGetTournamentQuery(Number(params.tournamentid))
-  const { data: match_data, isLoading: isMatchLoading } = UseGetMatchesQuery(Number(params.tournamentid))
-  const matchMutation = UsePatchMatch(Number(params.tournamentid), match.id)
+  const { data: match_data, isLoading: isMatchLoading } = UseGetMatchesQuery(Number(params.tournamentid), match.tournament_table_id)
+  const matchMutation = UsePatchMatch(Number(params.tournamentid), match.tournament_table_id, match.id)
 
   const handleChange = async (value: string) => {
     const newTableNumber = Number(value)

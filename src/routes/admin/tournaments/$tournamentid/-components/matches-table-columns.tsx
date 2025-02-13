@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { MatchWrapper } from "@/types/types"
+import { TableNumberForm } from "./table-number-form"
 
 export const columns: ColumnDef<MatchWrapper>[] = [
   {

@@ -5,14 +5,15 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { UsePatchMatch } from "@/queries/match"
+import { UseGetChildMatchesQuery, UsePatchMatch, UseStartMatch } from "@/queries/match"
 import { Match, MatchWrapper, PlayerNew, TableTennisExtraData } from "@/types/types"
 import { useRouter } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { MatchSets } from "./match-sets"
 
 interface ProtocolModalProps {
     isOpen: boolean
@@ -25,6 +26,9 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const router = useRouter()
+
+    const {data: childMathes, isLoading} = UseGetChildMatchesQuery(tournament_id, match.match.tournament_table_id ,match.match.id)
+    const useStartMatchMutation = UseStartMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
     const [notes, setNotes] = useState<string>('')
     const [table_referee, setTableReferee] = useState<string>("")
@@ -196,6 +200,15 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             topCoord: 0,
         }
         await handleSubmit(sendMatch)
+    }
+
+    const handleMatchStart = async () => {
+        try {
+            await useStartMatchMutation.mutateAsync()
+            successToast("Match started")
+        } catch (error: any) {
+            errorToast("Something went wrong")
+        }
     }
 
 
@@ -389,10 +402,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                             value={notes}
                             className="w-full min-h-[140px] p-2 border-[1px] border-gray/20 rounded-md mb-4" />
                     </div>
-                    {/* <div className="mb-4 flex justify-between">
-                        <Button onClick={startTournament}>{teamMatch ? "Muuda" : "Alusta"}</Button>
-                        {teamMatch?.data && <Button onClick={deleteTeamMatch} variant={'destructive'}>{"Reseti Mäng"}</Button>}
-                    </div> */}
+                    <div className="mb-4 flex justify-between">
+                        <Button onClick={handleMatchStart}>Alusta</Button>
+                        {/* {teamMatch?.data && <Button onClick={deleteTeamMatch} variant={'destructive'}>{"Reseti Mäng"}</Button>} */}
+                    </div>
                     <ScrollArea >
                         <div className='w-[300px] md:w-[660px] lg:w-[850px] xl:w-[1100px]'>
                             <Table>
@@ -410,20 +423,19 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    SIIA TULEB MIDAGI
-                                    {/* {teamMatches && teamMatches.data.map((player_match: Match2, index: number) => (
-                                        <TableRow key={player_match.ID}>
-                                            <TableCell>{player_match.identifier == 0 ? "A-Y" : player_match.identifier == 1 ? "B-X" : player_match.identifier == 2 ? "C-Z" : player_match.identifier == 3 ? "DE-VW" : player_match.identifier == 4 ? "A-X" : player_match.identifier == 5 ? "C-Y" : "B-Z"}</TableCell>
-                                            <MatchSets key={player_match.ID} match={player_match} team_match_id={teamMatch?.data.ID!} />
+                                    {!isLoading && childMathes && childMathes.data && childMathes.data.map((player_match: MatchWrapper, index: number) => (
+                                        <TableRow key={player_match.match.id}>
+                                            <TableCell>{player_match.match.order == 0 ? "A-Y" : player_match.match.order == 1 ? "B-X" : player_match.match.order == 2 ? "C-Z" : player_match.match.order == 3 ? "DE-VW" : player_match.match.order == 4 ? "A-X" : player_match.match.order == 5 ? "C-Y" : "B-Z"}</TableCell>
+                                            <MatchSets key={player_match.match.id} match={player_match}  />
                                             <TableCell className='text-center'>
-                                                {setScoreData?.data.match_score && index < setScoreData.data.match_score.length
-                                                    ? setScoreData.data.match_score[index]?.team_1_score
+                                                {match.match.extra_data.score && index < match.match.extra_data.score.length
+                                                    ? match.match.extra_data.score[index]?.p1_score
                                                     : 0}
                                             </TableCell>
-                                            <TableCell className='text-center'>{setScoreData?.data.match_score && index < setScoreData.data.match_score.length ? setScoreData?.data.match_score[index].team_2_score : 0}</TableCell>
-                                            <TableCell><Button onClick={() => handleForfeit(player_match)} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
+                                            <TableCell className='text-center'>{match.match.extra_data.score && index < match.match.extra_data.score.length ? match.match.extra_data.score[index].p2_score : 0}</TableCell>
+                                            <TableCell><Button onClick={() => {}} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
                                         </TableRow>
-                                    ))} */}
+                                    ))} 
                                 </TableBody>
                             </Table>
                             <ScrollBar />

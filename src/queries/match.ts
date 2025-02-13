@@ -38,8 +38,7 @@ export const UseGetMatches = (tournament_id: number, group_id: number) => {
     })
 }
 
-export const UseGetTournamentMatches = (tournament_id: number
-) => {
+export const UseGetTournamentMatches = (tournament_id: number) => {
     return queryOptions<MatchesResponse>({
         queryKey: ['matches', tournament_id],
         queryFn: async () => {
@@ -52,7 +51,7 @@ export const UseGetTournamentMatches = (tournament_id: number
 }
 
 
-export const UseGetMatchesQuery = (tournament_id: number, group_id: string) => {
+export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
     return useQuery<MatchesResponse>({
         queryKey: ['matches', group_id],
         queryFn: async () => {
@@ -60,6 +59,36 @@ export const UseGetMatchesQuery = (tournament_id: number, group_id: string) => {
                 withCredentials: true
             })
             return data;
+        }
+    })
+}
+
+export const UseGetChildMatchesQuery = (tournament_id: number, group_id: number, match_id: string) => {
+    return useQuery<MatchesResponse>({
+        queryKey: ['matches', group_id, match_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/match/${match_id}`, {
+                withCredentials: true
+            })
+            return data;
+        }
+    })
+}
+
+export const UseStartMatch = (tournament_id: number, group_id: number, match_id: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches/${match_id}/start`, {}, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })
 }

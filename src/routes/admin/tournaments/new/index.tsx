@@ -6,6 +6,7 @@ export const Route = createFileRoute('/admin/tournaments/new/')({
   component: RouteComponent,
 })
 
+
 function RouteComponent() {
   return (
     <div className="w-full">

@@ -6,15 +6,6 @@ import {Match, MatchWrapper} from '@/types/types';
 import { Badge } from "@/components/ui/badge";
 import {formatDateString} from '@/lib/utils'
 
-
-interface ScheduleProps {
-  matches: MatchWrapper[];
-  days: number;
-  activeDay: number;
-  setActiveDay: (day: number) => void;
-  startDate: string
-}
-
 interface ScheduleLayoutProps {
     children: React.ReactNode;
     days: number;
@@ -112,8 +103,8 @@ interface FiltersProps {
 export const Filters = ({days, activeDay, setActiveDay}: FiltersProps) => {
 
     return (
-        <div className="flex justify-between gap-8 mb-4">
-            <div className="flex space-x-2 bg-[#F1F5F9] py-3 px-2 rounded-sm">
+        <div className="flex flex-col md:flex-row lg:justify-between gap-8 mb-4">
+            <div className="flex flex-wrap md:flex-nowrap md:space-x-2 bg-[#F1F5F9] py-3 px-2 rounded-sm">
             {days > 1 && [...Array(days)].map((_, index) => (
                 <Button 
                 variant={activeDay === index ? "outline" : "ghost"}
@@ -151,6 +142,14 @@ export const Filters = ({days, activeDay, setActiveDay}: FiltersProps) => {
         </div>
     );
 };
+
+interface ScheduleProps {
+  matches: MatchWrapper[];
+  days: number;
+  activeDay: number;
+  setActiveDay: (day: number) => void;
+  startDate: string
+}
 
 export const Schedule: React.FC<ScheduleProps> = ({ matches, activeDay, setActiveDay, days, startDate }) => {
 
