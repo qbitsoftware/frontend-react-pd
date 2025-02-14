@@ -20,14 +20,20 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
     const toast = useToast()
     const { tournamentid } = useParams({ strict: false })
     const { successToast, errorToast } = useToastNotification(toast)
-    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.match.tournament_table_id, match.match.id)
+    console.log("MAtch", match)
+    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id ,match.match.id)
 
     useEffect(() => {
-        if (match && match.match.extra_data.score) {
-            const sortedSets = match.match.extra_data.score.sort((a: Score, b: Score) => a.number - b.number)
-            setSetScores(sortedSets)
+        const backendScores = match.match.extra_data.score
+            ? match.match.extra_data.score.sort((a: Score, b: Score) => a.number - b.number)
+            : [];
+        const fixedScores: Score[] = [];
+        for (let i = 1; i <= 5; i++) {
+            const score = backendScores.find((s: Score) => s.number === i);
+            fixedScores.push(score || { number: i, p1_score: 0, p2_score: 0 });
         }
-    }, [match, match.match.extra_data.score])
+        setSetScores(fixedScores);
+    }, [match, match.match.extra_data.score]);
 
     const handleScoreChange = async (
         number: number,
@@ -49,6 +55,7 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                     score: newScores,
                 },
             }
+            console.log("UPDATED MATCH",updatedMatch)
             try {
                 const result = await updateMatchMutation.mutateAsync(updatedMatch)
                 successToast(result.message)
@@ -57,6 +64,8 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
             }
         }
     }
+
+    console.log("MATCH",match)
 
     return (
         <>

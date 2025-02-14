@@ -23,7 +23,7 @@ function RouteComponent() {
   const { matches } = Route.useLoaderData()
   return (
     <div className="pb-12">
-      <MatchesTable data={matches?.data || []} />
+      <MatchesTable  data={matches?.data || []} />
     </div>
   )
 }

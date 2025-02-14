@@ -42,7 +42,7 @@ function RouteComponent() {
 
   return (
     <div className='px-2'>
-      <div className="flex flex-col py-2 lg:flex-row justify-between items-center gap-2 sticky top-0 z-30 bg-gray-50 lg:h-16">
+      <div className="flex flex-col py-2 lg:flex-row justify-between items-center gap-2 bg-gray-50 lg:h-16 ">
           <div>
             <h3 className="text-2xl font-semibold">{table_data.data.class}</h3>
           </div>

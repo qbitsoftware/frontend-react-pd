@@ -23,7 +23,7 @@ import { useUser } from '@/providers/userProvider'
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
     const { t } = useTranslation();
-    const { user} = useUser() 
+    const { user } = useUser()
 
     const menuItems = [
         {
@@ -81,13 +81,13 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    <NavigationMenu className="hidden lg:flex">
+                    <NavigationMenu className="hidden lg:flex ">
                         <NavigationMenuList className="flex space-x-4">
                             {menuItems.map((item) => (
                                 <NavigationMenuItem key={item.name}>
                                     {item.dropdownItems ? (
                                         <NavigationMenuTrigger className={cn(
-                                            "text-sm font-medium transition-colors hover:text-primary",
+                                            " text-sm font-medium transition-colors hover:text-primary",
                                             activeItem === item.name
                                                 ? "text-blue-600"
                                                 : "text-gray-700 hover:text-blue-600"
@@ -98,7 +98,7 @@ export default function Navbar() {
                                         <NavigationMenuLink
                                             href={item.href}
                                             className={cn(
-                                                "text-sm font-medium px-2 transition-colors hover:text-primary",
+                                                " text-sm font-medium px-2 transition-colors hover:text-primary",
                                                 activeItem === item.name
                                                     ? "text-blue-600"
                                                     : "text-gray-700 hover:text-blue-600"
@@ -109,7 +109,7 @@ export default function Navbar() {
                                         </NavigationMenuLink>
                                     )}
                                     {item.dropdownItems && (
-                                        <NavigationMenuContent>
+                                        <NavigationMenuContent className=''>
                                             <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] md:grid-cols-1 lg:w-[400px]">
                                                 {item.dropdownItems.map((dropdownItem) => (
                                                     <li key={dropdownItem.name}>
@@ -129,14 +129,14 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                             ))}
                             {user && user.role == 1 &&
-                            <NavigationMenuItem>
-                                < NavigationMenuLink
-                                    href={"/admin/dashboard"}
-                                    className={
-                                        "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
-                                >
-                                    Admin
-                                </NavigationMenuLink>
+                                <NavigationMenuItem>
+                                    < NavigationMenuLink
+                                        href={"/admin/dashboard"}
+                                        className={
+                                            "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
+                                    >
+                                        Admin
+                                    </NavigationMenuLink>
                                 </NavigationMenuItem>
                             }
                             <LanguageDropdown />

@@ -96,6 +96,19 @@ export const formatDateTime = (dateTime: string) => {
   return `${date} ${time}`;
 };
 
+export const formatDateTimeNew = (dateTime: string) => {
+  const date = new Date(dateTime);
+  
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
 export const formatDate = (time: string) => {
   const date = new Date(time);
 

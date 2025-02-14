@@ -16,6 +16,19 @@ export type ParticipantsResponse = {
 }
 
 
+export function UseGetTournamentParticipants(tournament_id: number) {
+    return queryOptions<ParticipantsResponse>({
+        queryKey: ["participants", tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/participants`, {
+                withCredentials: true,
+            })
+            return data;
+        }
+    })
+}
+
+
 export function UseGetParticipants(tournament_id: number, table_id: number) {
     return queryOptions<ParticipantsResponse>({
         queryKey: ["participants", table_id],

@@ -5,18 +5,18 @@ import { AvatarImage } from '@radix-ui/react-avatar'
 import React from 'react'
 
 interface SoloTableParticipants {
-  participants: Participant[] |  null
+  participants: Participant[] | null
 }
 
 const SoloTable: React.FC<SoloTableParticipants> = ({ participants }) => {
   return (
-    <div>
+    <div className='overflow-y-scroll h-full'>
       {participants && participants.length > 0 ? (
         <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-              <TableHead>Pilt</TableHead>
+          <Table className='bg-white'>
+            <TableHeader >
+              <TableRow className='bg-[#F9F9FB]'>
+                <TableHead>Pilt</TableHead>
                 <TableHead>Nimi</TableHead>
                 <TableHead>Asetus Reitingus</TableHead>
                 <TableHead>Klass</TableHead>

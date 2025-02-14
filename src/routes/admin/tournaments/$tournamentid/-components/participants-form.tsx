@@ -248,7 +248,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                 <Card className="overflow-x-auto container">
                     <CardHeader className="">
                         <div className="flex w-[250px] gap-4">
-                            <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
+                            <Select  onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
                                 <SelectTrigger className="">
                                     <SelectValue placeholder="Järjestus" />
                                 </SelectTrigger>

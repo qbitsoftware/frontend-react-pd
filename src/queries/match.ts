@@ -21,7 +21,7 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
             queryClient.invalidateQueries({ queryKey: ['bracket', id] })
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
-            queryClient.resetQueries({ queryKey: ['matches', group_id] })
+            // queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })
 }
@@ -55,7 +55,7 @@ export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
     return useQuery<MatchesResponse>({
         queryKey: ['matches', group_id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/matches`, {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches`, {
                 withCredentials: true
             })
             return data;
@@ -67,7 +67,7 @@ export const UseGetChildMatchesQuery = (tournament_id: number, group_id: number,
     return useQuery<MatchesResponse>({
         queryKey: ['matches', group_id, match_id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/match/${match_id}`, {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches/${match_id}`, {
                 withCredentials: true
             })
             return data;

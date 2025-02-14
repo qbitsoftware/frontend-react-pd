@@ -27,7 +27,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     const { successToast, errorToast } = useToastNotification(toast)
     const router = useRouter()
 
-    const {data: childMathes, isLoading} = UseGetChildMatchesQuery(tournament_id, match.match.tournament_table_id ,match.match.id)
+    const { data: childMathes, isLoading } = UseGetChildMatchesQuery(tournament_id, match.match.tournament_table_id, match.match.id)
     const useStartMatchMutation = UseStartMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
     const [notes, setNotes] = useState<string>('')
@@ -130,11 +130,13 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             }
 
             const playerId = extraData[playerField];
+            console.log("playerID", playerId)
+            console.log("playeField", playerField)
 
             const selectedPlayer = playerId
                 ? (team_number === 1 ? match.p1.players : match.p2.players).find(player => player.id === playerId)
                 : null;
-
+            console.log("selectedPlayer", selectedPlayer)
             return selectedPlayer || {
                 ...EMPTY_PLAYER,
                 last_name: team_number === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index),
@@ -216,70 +218,61 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
         const selectedPlayer = (team === 1 ? match.p1.players : match.p2.players).find(player => player.id === playerId);
         if (!selectedPlayer) return;
 
-        let newSelectedPlayers: PlayerNew[];
         let extra_data: TableTennisExtraData = { ...match.match.extra_data }
 
-        if (team === 1) {
-            newSelectedPlayers = [...team1SelectedPlayers];
+        let newTeam1SelectedPlayers = [...team1SelectedPlayers]
+        let newTeam2SelectedPlayers = [...team2SelectedPlayers]
 
+        if (team == 1) {
             if (index <= 2) {
-                const oldIndex = newSelectedPlayers.findIndex(player => player.id === playerId);
+                const oldIndex = newTeam1SelectedPlayers.findIndex(player => player.id === playerId);
                 if (oldIndex !== -1) {
                     const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(65 + oldIndex) };
-                    newSelectedPlayers[oldIndex] = resetPlayer;
+                    newTeam1SelectedPlayers[oldIndex] = resetPlayer;
                 }
             } else {
-                const oldIndex = newSelectedPlayers.slice(3).findIndex(player => player.id === playerId);
+                const oldIndex = newTeam1SelectedPlayers.slice(3).findIndex(player => player.id === playerId);
                 if (oldIndex !== -1) {
                     const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(65 + oldIndex + 3) };
-                    newSelectedPlayers[oldIndex + 3] = resetPlayer;
+                    newTeam1SelectedPlayers[oldIndex + 3] = resetPlayer;
                 }
             }
-
-            newSelectedPlayers[index] = selectedPlayer;
-            newSelectedPlayers = newSelectedPlayers.map((p) => p ? p : { ...EMPTY_PLAYER });
-            extra_data = {
-                ...extra_data,
-                table: match.match.extra_data.table,
-                parent_match_id: "",
-                player_a_id: newSelectedPlayers[0].id || match.match.extra_data.player_a_id,
-                player_b_id: newSelectedPlayers[1].id || match.match.extra_data.player_b_id,
-                player_c_id: newSelectedPlayers[2].id || match.match.extra_data.player_c_id,
-                player_d_id: newSelectedPlayers[3].id || match.match.extra_data.player_d_id,
-                player_e_id: newSelectedPlayers[4].id || match.match.extra_data.player_e_id,
-            }
-            setTeam1SelectedPlayers(newSelectedPlayers);
-
-        } else {
-            newSelectedPlayers = [...team2SelectedPlayers];
-
+            newTeam1SelectedPlayers[index] = selectedPlayer;
+            setTeam1SelectedPlayers(newTeam1SelectedPlayers);
+        } else if (team == 2) {
             if (index <= 2) {
-                const oldIndex = newSelectedPlayers.findIndex(player => player.id === playerId);
+                const oldIndex = newTeam2SelectedPlayers.findIndex(player => player.id === playerId);
                 if (oldIndex !== -1) {
-                    const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(88 + oldIndex) };
-                    newSelectedPlayers[oldIndex] = resetPlayer;
+                    const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(83 + oldIndex) };
+                    newTeam2SelectedPlayers[oldIndex] = resetPlayer;
                 }
             } else {
-                const oldIndex = newSelectedPlayers.slice(3).findIndex(player => player.id === playerId);
+                const oldIndex = newTeam2SelectedPlayers.slice(3).findIndex(player => player.id === playerId);
                 if (oldIndex !== -1) {
-                    const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(88 + oldIndex + 3) };
-                    newSelectedPlayers[oldIndex + 3] = resetPlayer;
+                    const resetPlayer = { ...EMPTY_PLAYER, last_name: String.fromCharCode(83 + oldIndex + 3) };
+                    newTeam2SelectedPlayers[oldIndex + 3] = resetPlayer;
                 }
             }
-
-            newSelectedPlayers[index] = selectedPlayer;
-            extra_data = {
-                ...extra_data,
-                table: match.match.extra_data.table,
-                parent_match_id: "",
-                player_x_id: newSelectedPlayers[0].id || match.match.extra_data.player_x_id,
-                player_y_id: newSelectedPlayers[1].id || match.match.extra_data.player_y_id,
-                player_z_id: newSelectedPlayers[2].id || match.match.extra_data.player_z_id,
-                player_v_id: newSelectedPlayers[3].id || match.match.extra_data.player_v_id,
-                player_w_id: newSelectedPlayers[4].id || match.match.extra_data.player_w_id,
-            }
-            setTeam2SelectedPlayers(newSelectedPlayers);
+            newTeam2SelectedPlayers[index] = selectedPlayer;
+            setTeam2SelectedPlayers(newTeam2SelectedPlayers);
         }
+
+        extra_data = {
+            ...extra_data,
+            table: match.match.extra_data.table,
+            parent_match_id: "",
+            player_a_id: newTeam1SelectedPlayers[0].id,
+            player_b_id: newTeam1SelectedPlayers[1].id,
+            player_c_id: newTeam1SelectedPlayers[2].id,
+            player_d_id: newTeam1SelectedPlayers[3].id,
+            player_e_id: newTeam1SelectedPlayers[4].id,
+            player_x_id: newTeam2SelectedPlayers[0].id,
+            player_y_id: newTeam2SelectedPlayers[1].id,
+            player_z_id: newTeam2SelectedPlayers[2].id,
+            player_v_id: newTeam2SelectedPlayers[3].id,
+            player_w_id: newTeam2SelectedPlayers[4].id,
+        }
+
 
         const sendMatch: Match = {
             id: match.match.id,
@@ -425,17 +418,17 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                                 <TableBody>
                                     {!isLoading && childMathes && childMathes.data && childMathes.data.map((player_match: MatchWrapper, index: number) => (
                                         <TableRow key={player_match.match.id}>
-                                            <TableCell>{player_match.match.order == 0 ? "A-Y" : player_match.match.order == 1 ? "B-X" : player_match.match.order == 2 ? "C-Z" : player_match.match.order == 3 ? "DE-VW" : player_match.match.order == 4 ? "A-X" : player_match.match.order == 5 ? "C-Y" : "B-Z"}</TableCell>
-                                            <MatchSets key={player_match.match.id} match={player_match}  />
+                                            <TableCell>{player_match.match.order == 1 ? "A-Y" : player_match.match.order == 2 ? "B-X" : player_match.match.order == 3 ? "C-Z" : player_match.match.order == 4 ? "DE-VW" : player_match.match.order == 5 ? "A-X" : player_match.match.order == 6 ? "C-Y" : "B-Z"}</TableCell>
+                                            <MatchSets key={player_match.match.id} match={player_match} />
                                             <TableCell className='text-center'>
                                                 {match.match.extra_data.score && index < match.match.extra_data.score.length
                                                     ? match.match.extra_data.score[index]?.p1_score
                                                     : 0}
                                             </TableCell>
                                             <TableCell className='text-center'>{match.match.extra_data.score && index < match.match.extra_data.score.length ? match.match.extra_data.score[index].p2_score : 0}</TableCell>
-                                            <TableCell><Button onClick={() => {}} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
+                                            <TableCell><Button onClick={() => { }} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
                                         </TableRow>
-                                    ))} 
+                                    ))}
                                 </TableBody>
                             </Table>
                             <ScrollBar />

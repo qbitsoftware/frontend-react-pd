@@ -52,7 +52,7 @@ function RouteComponent() {
             </Link>
           </div>
           */}
-          <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gray-50 lg:my-4 lg:h-16">
+          <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gray-50 lg:my-1 lg:h-16">
             <h1 className="text-3xl font-bold text-secondary">{tournament_data.data?.name}</h1>
             <div className="flex flex-wrap justify-evenly w-full gap-2 lg:max-w-[500px]">
               <Link className='flex-1' to={`/admin/tournaments/${tournamentid}`}>
@@ -66,10 +66,10 @@ function RouteComponent() {
               </Link>
             </div>
           </div>
-          <Separator className='opacity-0 lg:opacity-100' />
+          
           
           <div className='pt-4'>
-            <ScrollArea className='h-[calc(100vh-13rem)] pr-4'>
+            <ScrollArea className='h-[calc(100vh-12rem)] pr-4'>
               <Outlet />
             </ScrollArea>
           </div>
