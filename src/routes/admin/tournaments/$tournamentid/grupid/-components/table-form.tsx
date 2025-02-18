@@ -48,7 +48,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
 
   const { data: tournament_sizes, isLoading } = UseGetTournamentSizes()
   const { data: tournament_types, isLoading: isLoadingTypes } = UseGetTournamentTypes()
-  const deleteMutation = UseDeleteTournamentTable(Number(tournamentid), initial_data?.id!)
+  const deleteMutation = UseDeleteTournamentTable(Number(tournamentid), initial_data?.id)
   const router = useRouter()
 
   const form = useForm({

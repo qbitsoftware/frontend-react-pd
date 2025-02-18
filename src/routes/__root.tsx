@@ -23,8 +23,8 @@ export const Route = createRootRouteWithContext<{
                         <Footer />
                         <Toaster />
                         <Suspense>
-                            {/* <TanStackRouterDevtools />
-                            <TanStackQueryDevtools /> */}
+                            <TanStackRouterDevtools />
+                            <TanStackQueryDevtools />
                         </Suspense>
                     </div>
                     <AppSidebar />

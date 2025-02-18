@@ -35,7 +35,7 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
             {match.p1.id !== "" ? <TableCell className='font-medium'>{match.p1.name}</TableCell> : <TableCell className='text-gray-500'>Selgumisel</TableCell>}
             {match.p2.id !== "" ? <TableCell className='font-medium'>{match.p2.name}</TableCell> : <TableCell className='text-gray-500'>Selgumisel</TableCell>}
             <TableCell className='font-medium'>
-                {match.match.extra_data.score?.length > 0 ? <p><span className={cn(p1_score > p2_score ? "text-green-500" : "text-red-500")}>{p1_score}</span> - <span className={cn(p1_score > p2_score ? "text-red-500" : "text-green-500")}>{p2_score}</span> </p> : '-'}
+                {match.match.extra_data.score && match.match.extra_data.score?.length > 0 ? <p><span className={cn(p1_score > p2_score ? "text-green-500" : "text-red-500")}>{p1_score}</span> - <span className={cn(p1_score > p2_score ? "text-red-500" : "text-green-500")}>{p2_score}</span> </p> : '-'}
             </TableCell>
             <TableCell className='font-medium'>{match.match.extra_data.table}</TableCell>
             {match.match.start_time == null

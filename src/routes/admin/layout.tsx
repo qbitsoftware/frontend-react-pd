@@ -10,16 +10,15 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { redirect } from '@tanstack/react-router'
 import { ErrorResponse } from '@/types/types'
-import { useGetCurrentUser } from '@/queries/users'
 import { useUser } from '@/providers/userProvider'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { UseGetCurrentUser } from '@/queries/users'
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
     try {
-      await queryClient.ensureQueryData(useGetCurrentUser())
+      await queryClient.ensureQueryData(UseGetCurrentUser())
     } catch (error) {
       const err = error as ErrorResponse
       if (err.response.status === 401) {
@@ -48,7 +47,7 @@ function RouteComponent() {
         to: '/admin/dashboard',
       })
     }
-  }, [location.pathname])
+  }, [location.pathname, router])
 
 
 
@@ -80,7 +79,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex w-screen bg-gray-50 h-[calc(100vh-4rem-1px)]"> {/* height = 100vh - headerHeight - headerBorder */}
+    <div className="flex w-screen bg-gray-50 h-[calc(100vh-4rem-1px)]"> 
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">

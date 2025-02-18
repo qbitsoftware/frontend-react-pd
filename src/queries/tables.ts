@@ -75,7 +75,7 @@ export const UsePostTournamentTable = (tournament_id: number) => {
     })
 }
 
-export const UseDeleteTournamentTable = (tournament_id: number, tournament_table_id: number) => {
+export const UseDeleteTournamentTable = (tournament_id: number, tournament_table_id: number | undefined) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async () => {

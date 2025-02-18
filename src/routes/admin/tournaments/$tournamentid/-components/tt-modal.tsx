@@ -14,6 +14,7 @@ import { useRouter } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { MatchSets } from "./match-sets"
+import Forfeit from "./forfeit"
 
 interface ProtocolModalProps {
     isOpen: boolean
@@ -36,6 +37,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     const [captainTeam1, setCaptainTeam1] = useState<string>("")
     const [captainTeam2, setCaptainTeam2] = useState<string>("")
     const [table, setTableNumber] = useState<number>(0)
+    const [isForfeitOpen, setIsForfeitOpen] = useState(false)
+    const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null)
 
     const prevValuesRef = useRef({
         captainTeam1: match.match.extra_data.captain_a || "",
@@ -68,7 +71,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                     ...match.match.extra_data,
                     ...Object.fromEntries(
                         Object.entries(hasChanges)
-                            .filter(([_, value]) => value !== undefined)
+                            .filter(([, value]) => value !== undefined)
                     ),
                 };
 
@@ -82,11 +85,11 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                     notes,
                     table,
                 };
-            }, 2000);
+            }, 500);
 
             return () => clearTimeout(handler);
         }
-    }, [captainTeam1, captainTeam2, table_referee, head_referee, notes, table]);
+    }, [captainTeam1, captainTeam2, table_referee, head_referee, notes, table, match.match.extra_data]);
 
 
 
@@ -130,13 +133,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             }
 
             const playerId = extraData[playerField];
-            console.log("playerID", playerId)
-            console.log("playeField", playerField)
 
             const selectedPlayer = playerId
                 ? (team_number === 1 ? match.p1.players : match.p2.players).find(player => player.id === playerId)
                 : null;
-            console.log("selectedPlayer", selectedPlayer)
             return selectedPlayer || {
                 ...EMPTY_PLAYER,
                 last_name: team_number === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index),
@@ -165,7 +165,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             setNotes(me.notes || "")
             setTableNumber(me.table || 0)
         }
-    }, [isOpen])
+
+    }, [isOpen, match.match.extra_data])
 
     const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
@@ -177,7 +178,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                 to: location.pathname,
                 replace: true,
             })
-        } catch (error: any) {
+        } catch (error) {
+            void error
             errorToast("Something went wrong")
         }
     }
@@ -200,6 +202,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             forfeit: match.match.forfeit,
             extra_data,
             topCoord: 0,
+            table_type: match.match.table_type,
         }
         await handleSubmit(sendMatch)
     }
@@ -208,7 +211,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
         try {
             await useStartMatchMutation.mutateAsync()
             successToast("Match started")
-        } catch (error: any) {
+        } catch (error) {
+            void error
             errorToast("Something went wrong")
         }
     }
@@ -220,8 +224,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
 
         let extra_data: TableTennisExtraData = { ...match.match.extra_data }
 
-        let newTeam1SelectedPlayers = [...team1SelectedPlayers]
-        let newTeam2SelectedPlayers = [...team2SelectedPlayers]
+        const newTeam1SelectedPlayers = [...team1SelectedPlayers]
+        const newTeam2SelectedPlayers = [...team2SelectedPlayers]
 
         if (team == 1) {
             if (index <= 2) {
@@ -290,10 +294,42 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             forfeit: match.match.forfeit,
             extra_data,
             topCoord: 0,
+            table_type: match.match.table_type,
         }
 
         await handleSubmit(sendMatch)
     };
+
+    const handleForfeitMatch = (match: MatchWrapper) => {
+        setForfeitMatch(match)
+        setIsForfeitOpen(true)
+    }
+
+    const handleForfeitMatchClose = () => {
+        setIsForfeitOpen(false)
+        setForfeitMatch(null)
+    }
+
+    const handleFinish = async () => {
+        try {
+            await usePatchMatch.mutateAsync({
+                ...match.match,
+                winner_id: "finished",
+                extra_data: {
+                    ...match.match.extra_data,
+                    table_referee: table_referee,
+                    head_referee: head_referee,
+                    captain_a: captainTeam1,
+                    captain_b: captainTeam2,
+                    notes,
+                    table,
+                },
+            })
+        } catch (error) {
+            void error
+            errorToast("Something went wrong")
+        }
+    }
 
 
     return (
@@ -416,17 +452,17 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {!isLoading && childMathes && childMathes.data && childMathes.data.map((player_match: MatchWrapper, index: number) => (
+                                    {!isLoading && childMathes && childMathes.data && childMathes.data.map((player_match: MatchWrapper) => (
                                         <TableRow key={player_match.match.id}>
                                             <TableCell>{player_match.match.order == 1 ? "A-Y" : player_match.match.order == 2 ? "B-X" : player_match.match.order == 3 ? "C-Z" : player_match.match.order == 4 ? "DE-VW" : player_match.match.order == 5 ? "A-X" : player_match.match.order == 6 ? "C-Y" : "B-Z"}</TableCell>
                                             <MatchSets key={player_match.match.id} match={player_match} />
                                             <TableCell className='text-center'>
-                                                {match.match.extra_data.score && index < match.match.extra_data.score.length
-                                                    ? match.match.extra_data.score[index]?.p1_score
-                                                    : 0}
+                                                {player_match.match.extra_data.team_1_total}
                                             </TableCell>
-                                            <TableCell className='text-center'>{match.match.extra_data.score && index < match.match.extra_data.score.length ? match.match.extra_data.score[index].p2_score : 0}</TableCell>
-                                            <TableCell><Button onClick={() => { }} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
+                                            <TableCell className='text-center'>
+                                                {player_match.match.extra_data.team_2_total}
+                                            </TableCell>
+                                            <TableCell><Button onClick={() => { handleForfeitMatch(player_match) }} className='text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white'>Loobumisvõit</Button></TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -461,25 +497,14 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                             onChange={(e) => setMainReferee(e.target.value)}
                         />
                     </div>
-                    <Button disabled={match.match.winner_id !== ""} onClick={() => console.log("tournament finished")}>
+                    <Button disabled={match.match.winner_id !== ""} onClick={() => handleFinish()}>
                         Lõpeta Mängud
                     </Button>
                 </div>
-                {/* {
-                    playerMatch && teamMatch &&
-                    <div className='px-4'>
-                        <Forfeit
-                            team_1_players={team1Players}
-                            team_2_players={team2Players}
-                            playerMatch={playerMatch}
-                            isOpen={isForfeitOpen}
-                            onClose={() => handleForfeitClose()}
-                            team_match_id={teamMatch.data.ID!}
-                            match_id={match.id}
-                        />
-                    </div>
 
-                } */}
+                {forfeitMatch &&
+                    <Forfeit match={forfeitMatch} isOpen={isForfeitOpen} onClose={() => handleForfeitMatchClose()} tournament_id={tournament_id} />
+                }
 
             </DialogContent>
         </Dialog>

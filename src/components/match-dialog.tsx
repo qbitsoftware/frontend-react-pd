@@ -61,7 +61,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournam
             reset({
                 tableReferee: match.match.extra_data?.table_referee || "",
                 mainReferee: match.match.extra_data?.head_referee || "",
-                scores: (match.match.extra_data?.score || []).map((s: any) => ({
+                scores: (match.match.extra_data?.score || []).map((s: Score) => ({
                     player1: s.p1_score,
                     player2: s.p2_score
                 })) || [{ player1: 0, player2: 0 }],
@@ -69,6 +69,10 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournam
         }
     }, [match, reset, open])
 
+    const handleClose = () => {
+        form.reset({scores: []})
+        onClose(false)
+    }
 
     const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
@@ -108,6 +112,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournam
                 parent_match_id: "",
             },
             topCoord: 0,
+            table_type: match.match.table_type,
         }
 
         try {
@@ -118,14 +123,17 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournam
             })
 
             successToast("Successfully updated match scores")
-        } catch (error: any) {
+        } catch (error) {
+            void error
             errorToast("Something went wrong")
         }
-        onClose(false)
+        handleClose()
     }
 
+    console.log(form.getValues())
+
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[800px] max-h-[90vh] p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
                 <DialogHeader className="py-10 pb-2 rounded-t-lg text-2xl font-bold text-center mx-auto">
                     Match Details

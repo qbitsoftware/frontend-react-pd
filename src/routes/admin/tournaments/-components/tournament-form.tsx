@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, ArrowLeft, Loader2 } from "lucide-react"
-import { Link, useRouter } from "@tanstack/react-router"
+import { CalendarIcon, Loader2 } from "lucide-react"
+import { useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -19,8 +19,6 @@ import {
   UsePostTournament,
   UsePatchTournament,
   UseDeleteTournament,
-  UseGetTournamentSizes,
-  UseGetTournamentTypes,
   UseGetTournamentCategories,
 } from "@/queries/tournaments"
 import { useToast } from "@/hooks/use-toast"
@@ -60,7 +58,10 @@ interface TournamentFormProps {
 
 export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) => {
   const { t } = useTranslation()
-  const [value, setValue] = useState<YooptaContentValue>(initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined);
+  const [value, setValue] = useState<YooptaContentValue | undefined>(
+    initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined
+  );
+
   const form = useForm<TournamentFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initial_data
@@ -82,7 +83,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   })
 
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
-  const deleteMutation = UseDeleteTournament(initial_data?.id!)
+  const deleteMutation = UseDeleteTournament(initial_data?.id)
   const { data: tournament_categories } = UseGetTournamentCategories()
 
 
@@ -115,6 +116,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         to: `/admin/tournaments/${res.data.id}`,
       })
     } catch (error) {
+      void error
       if (initial_data) {
         errorToast("Turniiri uuendamisel tekkis viga")
       } else {
@@ -296,62 +298,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 <FormField
                   control={form.control}
                   name="category"
-                  render={({ field }) => {
-                    const [inputValue, setInputValue] = useState(field.value || "")
-                    const [showSuggestions, setShowSuggestions] = useState(false)
-                    const inputRef = useRef<HTMLInputElement>(null)
-
-                    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                      const value = e.target.value
-                      setInputValue(value)
-                      field.onChange(value)
-                      setShowSuggestions(true)
-                    }
-
-                    const handleSuggestionClick = (category: string) => {
-                      setInputValue(category)
-                      field.onChange(category)
-                      setShowSuggestions(false)
-                      inputRef.current?.focus()
-                    }
-
-                    const filteredCategories = (tournament_categories?.data || []).filter((category) =>
-                      category.category.toLowerCase().startsWith(inputValue.toLowerCase()),
-                    )
-
-                    return (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Category</FormLabel>
-                        <div className="relative">
-                          <FormControl>
-                            <Input
-                              ref={inputRef}
-                              placeholder="Type a category"
-                              value={inputValue}
-                              onChange={handleInputChange}
-                              onFocus={() => setShowSuggestions(true)}
-                              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                            />
-                          </FormControl>
-                          {showSuggestions && filteredCategories.length > 0 && (
-                            <ul className="absolute z-10 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-auto rounded-md shadow-lg">
-                              {filteredCategories.map((category) => (
-                                <li
-                                  key={category.category}
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onMouseDown={(e) => e.preventDefault()}
-                                  onClick={() => handleSuggestionClick(category.category)}
-                                >
-                                  {category.category}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )
-                  }}
+                  render={({ field }) => (
+                    <CategoryInput field={field} categories={tournament_categories?.data || []} />
+                  )}
                 />
               </div>
                 <FormField
@@ -415,3 +364,65 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   )
 }
 
+function CategoryInput({
+  field,
+  categories,
+}: {
+  field: { value: string; onChange: (v: string) => void }
+  categories: { category: string }[]
+}) {
+  const [inputValue, setInputValue] = useState(field.value || "")
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+    field.onChange(value)
+    setShowSuggestions(true)
+  }
+
+  const handleSuggestionClick = (category: string) => {
+    setInputValue(category)
+    field.onChange(category)
+    setShowSuggestions(false)
+    inputRef.current?.focus()
+  }
+
+  const filteredCategories = categories.filter((cat) =>
+    cat.category.toLowerCase().startsWith(inputValue.toLowerCase()),
+  )
+
+  return (
+    <FormItem className="flex flex-col">
+      <FormLabel>Category</FormLabel>
+      <div className="relative">
+        <FormControl>
+          <Input
+            ref={inputRef}
+            placeholder="Type a category"
+            value={inputValue}
+            onChange={handleInputChange}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+          />
+        </FormControl>
+        {showSuggestions && filteredCategories.length > 0 && (
+          <ul className="absolute z-10 w-full bg-white border mt-1 max-h-60 overflow-auto rounded-md shadow-lg">
+            {filteredCategories.map((cat) => (
+              <li
+                key={cat.category}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSuggestionClick(cat.category)}
+              >
+                {cat.category}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <FormMessage />
+    </FormItem>
+  )
+}

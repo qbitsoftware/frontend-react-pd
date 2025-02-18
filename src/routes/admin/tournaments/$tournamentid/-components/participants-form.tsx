@@ -104,7 +104,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
             })
             successToast(res.message)
         } catch (error) {
-            console.log(error)
+            void error
         }
     }
 
@@ -123,6 +123,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
             })
             successToast(res.message)
         } catch (error) {
+            void error
             errorToast("Osaleja kustutamisel tekkis viga")
         }
     }

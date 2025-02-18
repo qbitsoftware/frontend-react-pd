@@ -3,7 +3,6 @@ import { ErrorResponse } from '@/types/types'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import {ScrollArea} from '@/components/ui/scroll-area'
 
 export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/$groupid',

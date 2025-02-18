@@ -41,18 +41,18 @@ export function parsePlaces(s: string): number | null {
   return Number(startingPlace)
 }
 
-export function sortBrackets(data: any[]): any[] {
-  return data.sort((a, b) => {
-    const placeA = parsePlaces(a.tables[0].name);
-    const placeB = parsePlaces(b.tables[0].name);
+// export function sortBrackets(data: any[]): any[] {
+//   return data.sort((a, b) => {
+//     const placeA = parsePlaces(a.tables[0].name);
+//     const placeB = parsePlaces(b.tables[0].name);
 
-    if (placeA === null || placeB === null) {
-      return 0;
-    }
+//     if (placeA === null || placeB === null) {
+//       return 0;
+//     }
 
-    return placeA - placeB;
-  });
-}
+//     return placeA - placeB;
+//   });
+// }
 
 export const replaceSpecialCharacters = (str: string) => {
   return str.replace(/[äöõü]/gi, (char) => {

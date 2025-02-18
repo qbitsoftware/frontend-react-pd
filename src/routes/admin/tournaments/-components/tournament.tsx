@@ -3,11 +3,8 @@ import { Tournament } from '@/types/types'
 import { formatDateString } from '@/lib/utils'
 
 import {
-    Users,
-    Trophy,
     Calendar,
     MapPin,
-    Table2,
     Table,
 } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"

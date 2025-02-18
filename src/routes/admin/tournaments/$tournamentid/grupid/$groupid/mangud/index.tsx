@@ -8,7 +8,7 @@ export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/',
 )({
   loader: async ({ context: { queryClient }, params }) => {
-    let matches: MatchesResponse | undefined = undefined
+    const matches: MatchesResponse | undefined = undefined
     let table_data;
     try {
       table_data = await queryClient.ensureQueryData(
@@ -38,7 +38,7 @@ function RouteComponent() {
   if (matches && matches.data && table_data && table_data.data) {
     return (
       <div className='pb-12'>
-        <MatchesTable table_data={table_data.data} tournament_id={Number(tournamentid)} data={matches.data || []} />
+        <MatchesTable tournament_id={Number(tournamentid)} data={matches.data || []} />
       </div>
     )
   } else {

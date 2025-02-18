@@ -30,6 +30,7 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
       const res = await matchMutation.mutateAsync(data)
       successToast(res.message)
     } catch (error) {
+      void error
       errorToast("Lauanumbri muutmine ebaõnnestus")
     }
   }

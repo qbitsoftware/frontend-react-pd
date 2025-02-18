@@ -201,6 +201,7 @@ export type Match = {
     start_time: Date
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
+    table_type: string
 }
 
 export type MatchWrapper = {
@@ -229,6 +230,8 @@ export type TableTennisExtraData = {
     player_z_id?: string;
     player_v_id?: string;
     player_w_id?: string;
+    team_1_total?: number;
+    team_2_total?: number;
 }
 
 export type Score = {

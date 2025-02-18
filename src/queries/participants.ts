@@ -54,8 +54,6 @@ export function UseGetParticipantsQuery(tournament_id: number, table_id: number)
 }
 
 
-
-
 export function UseCreateParticipants(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
@@ -79,7 +77,7 @@ type UpdateParticipantArgs = {
 export function UseUpdateParticipant(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
 
-    return useMutation<any, Error, UpdateParticipantArgs>({
+    return useMutation<ParticipantResponse, Error, UpdateParticipantArgs>({
         mutationFn: async ({ formData, participantId }) => {
             const { data } = await axiosInstance.patch(
                 `/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/${participantId}`,

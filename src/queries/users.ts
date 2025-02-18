@@ -60,7 +60,7 @@ export const useGetCurrentUserQuery = () => {
     })
 }
 
-export const useGetCurrentUser = () => {
+export const UseGetCurrentUser = () => {
     return queryOptions<LoginResponse>({
         queryKey: ["auth"],
         queryFn: async () => {
@@ -85,8 +85,8 @@ export const useLogout = () => {
         },
         onSuccess: () => {
             queryClient.setQueryData(["user"], { data: null, message: "", error: null })
-            queryClient.invalidateQueries({ queryKey: ["user"] }),
-                queryClient.refetchQueries({ queryKey: ["user"] })
+            queryClient.invalidateQueries({ queryKey: ["user"]})
+            queryClient.refetchQueries({ queryKey: ["user"] })
         }
     })
 }

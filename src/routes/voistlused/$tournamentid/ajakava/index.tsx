@@ -1,11 +1,8 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { UseGetMatches, UseGetTournamentMatches } from '@/queries/match'
+import { UseGetTournamentMatches } from '@/queries/match'
 import { createFileRoute } from '@tanstack/react-router'
 import { useTournament } from '../-components/tournament-provider'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useState } from 'react'
 import { Schedule } from './-components/schedule-layout'
-import { MatchWrapper, Match } from '@/types/types'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
   loader: async ({ context: { queryClient }, params }) => {
@@ -45,33 +42,33 @@ function RouteComponent() {
     )}
   
 
-const LoadingSkeleton = () => (
-  <Card className="w-full">
-    <CardHeader>
-      <Skeleton className="h-8 w-3/4" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton className="h-10 w-full mb-4" />
-      <Skeleton className="h-64 w-full" />
-    </CardContent>
-  </Card>
-)
+// const LoadingSkeleton = () => (
+//   <Card className="w-full">
+//     <CardHeader>
+//       <Skeleton className="h-8 w-3/4" />
+//     </CardHeader>
+//     <CardContent>
+//       <Skeleton className="h-10 w-full mb-4" />
+//       <Skeleton className="h-64 w-full" />
+//     </CardContent>
+//   </Card>
+// )
 
-const ErrorMessage = ({ message }: { message: string }) => (
-  <Card className="w-full">
-    <CardContent className="p-6">
-      <p className="text-red-500 text-center">Error: {message}</p>
-    </CardContent>
-  </Card>
-)
+// const ErrorMessage = ({ message }: { message: string }) => (
+//   <Card className="w-full">
+//     <CardContent className="p-6">
+//       <p className="text-red-500 text-center">Error: {message}</p>
+//     </CardContent>
+//   </Card>
+// )
 
-const NoMatches = () => (
-  <Card className="w-full">
-    <CardContent className="p-6">
-      <p className="text-center">Mängud pole ajakavas</p>
-    </CardContent>
-  </Card>
-)
+// const NoMatches = () => (
+//   <Card className="w-full">
+//     <CardContent className="p-6">
+//       <p className="text-center">Mängud pole ajakavas</p>
+//     </CardContent>
+//   </Card>
+// )
 
 
 }

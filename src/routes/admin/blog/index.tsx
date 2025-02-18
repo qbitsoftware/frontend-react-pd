@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Editor from '../-components/yooptaeditor'
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import { PlusCircle } from 'lucide-react'

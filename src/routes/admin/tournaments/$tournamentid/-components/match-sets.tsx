@@ -59,8 +59,9 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
             try {
                 const result = await updateMatchMutation.mutateAsync(updatedMatch)
                 successToast(result.message)
-            } catch (error: any) {
-                errorToast(error?.response?.data.message)
+            } catch (error) {
+                void error
+                errorToast("Something went wrong")
             }
         }
     }

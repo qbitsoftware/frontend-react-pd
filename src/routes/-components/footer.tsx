@@ -1,5 +1,4 @@
 import { Link, useLocation } from "@tanstack/react-router"
-import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function Footer() {

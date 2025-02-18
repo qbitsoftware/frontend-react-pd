@@ -21,9 +21,10 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { matches } = Route.useLoaderData()
+  const {tournamentid} = Route.useParams()
   return (
     <div className="pb-12">
-      <MatchesTable  data={matches?.data || []} />
+      <MatchesTable  tournament_id={Number(tournamentid)} data={matches?.data || []} />
     </div>
   )
 }

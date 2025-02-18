@@ -14,7 +14,7 @@ interface TournamentTablesProps {
 }
 
 
-export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables, tournament }) => {
+export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) => {
   const { tournamentid } = useParams({ strict: false })
   const navigate = useNavigate()
   return (

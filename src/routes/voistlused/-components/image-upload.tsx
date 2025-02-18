@@ -19,7 +19,7 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     const { successToast, errorToast } = useToastNotification(toast)
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const [isUploading, setIsUploading] = useState<boolean>(false)
+    // const [isUploading, setIsUploading] = useState<boolean>(false)
 
     const postImageMutation = usePostImages(tournament_id, gameDay)
 
@@ -50,13 +50,14 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             formData.append("images", file)
         })
         try {
-            setIsUploading(true)
+            // setIsUploading(true)
             successToast("Piltide üleslaadimine võib võtta mõne hetke", "Palun ärge sulgege veebilehte")
-            const result = await postImageMutation.mutateAsync(formData)
-            setIsUploading(false)
+            await postImageMutation.mutateAsync(formData)
+            // setIsUploading(false)
             successToast("Piltide üleslaadimine oli edukas")
             setImages([])
         } catch (error) {
+            void error
             errorToast("Piltide üleslaadimisel tekkis viga")
         }
     }

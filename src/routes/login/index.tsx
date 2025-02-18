@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { useGetCurrentUser } from '@/queries/users'
+import { UseGetCurrentUser } from '@/queries/users'
 import { useToastNotification } from '@/components/toast-notification'
 import { useToast } from '@/hooks/use-toast'
 import { useLogin } from '@/queries/users'
@@ -24,7 +24,7 @@ export const Route = createFileRoute('/login/')({
     },
     loader: async ({ context: { queryClient } }) => {
         try {
-            await queryClient.ensureQueryData(useGetCurrentUser(),)
+            await queryClient.ensureQueryData(UseGetCurrentUser())
         } catch (error) {
             const err = error as ErrorResponse
             if (err.response.status !== 401) {

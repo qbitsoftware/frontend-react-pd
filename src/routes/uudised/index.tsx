@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
@@ -36,7 +36,9 @@ export default function RouteComponent() {
 
     const [heroControls, heroRef] = useFadeIn()
     
-    const blogCategories = [...new Set(articles_data.data.map(blog => blog.category.split('/').map(category => category.trim())).flat())];
+    const blogCategories = useMemo(() => {
+        return [...new Set(articles_data.data.map(blog => blog.category.split('/').map(category => category.trim())).flat())];
+      }, [articles_data]);
     const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
     useEffect(() => {
@@ -56,7 +58,7 @@ export default function RouteComponent() {
         if (searchParams['category'] && blogCategories.includes(searchParams['category'])) {
             setActiveCategory(searchParams['category'])
         }
-    }, [searchParams])
+    }, [searchParams, blogCategories])
 
     const filtered_articles = activeCategory === 'All'
         ? articles_data.data

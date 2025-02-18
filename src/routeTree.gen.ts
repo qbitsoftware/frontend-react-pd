@@ -17,7 +17,6 @@ import { Route as AdminLayoutImport } from './routes/admin/layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
-import { Route as TereIndexImport } from './routes/tere/index'
 import { Route as ReitingIndexImport } from './routes/reiting/index'
 import { Route as ReeglidIndexImport } from './routes/reeglid/index'
 import { Route as LoginIndexImport } from './routes/login/index'
@@ -82,12 +81,6 @@ const VoistlusedIndexRoute = VoistlusedIndexImport.update({
 const UudisedIndexRoute = UudisedIndexImport.update({
   id: '/uudised/',
   path: '/uudised/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TereIndexRoute = TereIndexImport.update({
-  id: '/tere/',
-  path: '/tere/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -356,13 +349,6 @@ declare module '@tanstack/react-router' {
       path: '/reiting'
       fullPath: '/reiting'
       preLoaderRoute: typeof ReitingIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/tere/': {
-      id: '/tere/'
-      path: '/tere'
-      fullPath: '/tere'
-      preLoaderRoute: typeof TereIndexImport
       parentRoute: typeof rootRoute
     }
     '/uudised/': {
@@ -674,7 +660,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
@@ -712,7 +697,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
   '/admin/blog': typeof AdminBlogIndexRoute
@@ -750,7 +734,6 @@ export interface FileRoutesById {
   '/login/': typeof LoginIndexRoute
   '/reeglid/': typeof ReeglidIndexRoute
   '/reiting/': typeof ReitingIndexRoute
-  '/tere/': typeof TereIndexRoute
   '/uudised/': typeof UudisedIndexRoute
   '/voistlused/': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
@@ -791,7 +774,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/reeglid'
     | '/reiting'
-    | '/tere'
     | '/uudised'
     | '/voistlused'
     | '/admin/tournaments/$tournamentid'
@@ -828,7 +810,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/reeglid'
     | '/reiting'
-    | '/tere'
     | '/uudised'
     | '/voistlused'
     | '/admin/blog'
@@ -864,7 +845,6 @@ export interface FileRouteTypes {
     | '/login/'
     | '/reeglid/'
     | '/reiting/'
-    | '/tere/'
     | '/uudised/'
     | '/voistlused/'
     | '/admin/tournaments/$tournamentid'
@@ -904,7 +884,6 @@ export interface RootRouteChildren {
   LoginIndexRoute: typeof LoginIndexRoute
   ReeglidIndexRoute: typeof ReeglidIndexRoute
   ReitingIndexRoute: typeof ReitingIndexRoute
-  TereIndexRoute: typeof TereIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
 }
@@ -920,7 +899,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginIndexRoute: LoginIndexRoute,
   ReeglidIndexRoute: ReeglidIndexRoute,
   ReitingIndexRoute: ReitingIndexRoute,
-  TereIndexRoute: TereIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
 }
@@ -944,7 +922,6 @@ export const routeTree = rootRoute
         "/login/",
         "/reeglid/",
         "/reiting/",
-        "/tere/",
         "/uudised/",
         "/voistlused/"
       ]
@@ -994,9 +971,6 @@ export const routeTree = rootRoute
     },
     "/reiting/": {
       "filePath": "reiting/index.tsx"
-    },
-    "/tere/": {
-      "filePath": "tere/index.tsx"
     },
     "/uudised/": {
       "filePath": "uudised/index.tsx"

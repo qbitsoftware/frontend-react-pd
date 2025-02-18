@@ -1,10 +1,9 @@
-import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft, Save } from 'lucide-react'
 import Editor from '../../-components/yooptaeditor'
 import { Button } from '@/components/ui/button'
-import { useMemo, useState } from 'react'
-import { createYooptaEditor, YooptaContentValue } from '@yoopta/editor'
+import { useState } from 'react'
+import { YooptaContentValue } from '@yoopta/editor'
 import { Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/blog/new/')({

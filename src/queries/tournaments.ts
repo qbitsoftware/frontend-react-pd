@@ -168,7 +168,7 @@ export const UsePatchTournament = (id: number) => {
     })
 }
 
-export const UseDeleteTournament = (id: number) => {
+export const UseDeleteTournament = (id: number | undefined) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async () => {

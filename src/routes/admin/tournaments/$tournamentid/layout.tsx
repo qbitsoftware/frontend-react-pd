@@ -4,10 +4,7 @@ import { ErrorResponse } from '@/types/types'
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
-import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ArrowLeft } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
   component: RouteComponent,
@@ -37,7 +34,7 @@ function RouteComponent() {
   const { tournament_data } = Route.useLoaderData()
   const { tournamentid } = Route.useParams()
 
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
 
   return (
       <div className="mx-auto container h-full">
