@@ -1,12 +1,12 @@
 import { CalculateSVGHeight, CalculateSVGWidth } from '@/lib/utils';
-import { Data } from '@/types/types';
+import { EliminationBracket } from '@/types/types';
 import MatchComponent from './match';
 
 interface BracketProps {
     starting_x: number,
     starting_y: number,
     index: number,
-    data: Data,
+    data: EliminationBracket,
 }
 
 const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps) => {

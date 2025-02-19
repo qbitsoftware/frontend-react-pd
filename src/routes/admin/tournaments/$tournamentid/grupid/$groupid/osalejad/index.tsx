@@ -4,6 +4,7 @@ import { UseGetParticipants } from '@/queries/participants'
 import { ErrorResponse } from '@/types/types'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipanForm } from '../../../-components/participants-form'
+import Loader from '@/components/loader'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -68,8 +69,8 @@ function RouteComponent() {
         )
     } else {
         return (
-            <div>
-                Some osrt oferror SIIIIIIIIIN HILJEM OTSI ULESSE MIND
+            <div className='flex justify-center items-center h-[50vh]'>
+                <Loader />
             </div>
         )
     }

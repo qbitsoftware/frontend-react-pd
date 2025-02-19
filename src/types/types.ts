@@ -1,9 +1,3 @@
-export type Data = {
-    rounds: Round[],
-    matches: TableMatch[],
-    name: string;
-}
-
 export type TableMatch = {
     match: Match
     participant_1: Participant
@@ -12,8 +6,31 @@ export type TableMatch = {
 }
 
 export type Bracket = {
-    tables: Data[]
+    eliminations: Eliminations[]
+    round_robins: RoundRobins[]
 }
+
+export type EliminationBracket = {
+    rounds: Round[],
+    matches: TableMatch[],
+    name: string;
+}
+
+export type Eliminations = {
+    elimination: EliminationBracket[]
+}
+
+export type RoundRobinBracket = {
+    participant: Participant
+    matches: MatchWrapper[]
+    total_points: number
+}
+
+export type RoundRobins = {
+    round_robin: RoundRobinBracket[]
+}
+
+
 
 export type ErrorResponse = {
     response: {
@@ -89,12 +106,12 @@ export type Participant = {
     created_at: string;
     updated_at: string;
     deleted_at: string;
-    players: PlayerNew[];
+    players: Player[];
     tournament_table_id: number;
     extra_data: PartipantExtraData;
 }
 
-export type PlayerNew = {
+export type Player = {
     id: string;
     user_id: number
     name: string;

@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { UseGetChildMatchesQuery, UsePatchMatch, UseStartMatch } from "@/queries/match"
-import { Match, MatchWrapper, PlayerNew, TableTennisExtraData } from "@/types/types"
+import { Match, MatchWrapper, Player, TableTennisExtraData } from "@/types/types"
 import { useRouter } from "@tanstack/react-router"
 import { X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -93,7 +93,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
 
 
 
-    const EMPTY_PLAYER: PlayerNew = {
+    const EMPTY_PLAYER: Player = {
         id: '',
         name: '',
         user_id: 0,
@@ -144,8 +144,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
         });
     };
 
-    const [team1SelectedPlayers, setTeam1SelectedPlayers] = useState<PlayerNew[]>([])
-    const [team2SelectedPlayers, setTeam2SelectedPlayers] = useState<PlayerNew[]>([])
+    const [team1SelectedPlayers, setTeam1SelectedPlayers] = useState<Player[]>([])
+    const [team2SelectedPlayers, setTeam2SelectedPlayers] = useState<Player[]>([])
 
     useEffect(() => {
         const me = match.match.extra_data

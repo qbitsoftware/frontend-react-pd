@@ -129,7 +129,7 @@ export const UsePostTournament = () => {
 }
 
 export interface BracketReponse {
-    data: Bracket[] | null
+    data: Bracket | null
     message: string;
     error: string | null;
 }

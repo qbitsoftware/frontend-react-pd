@@ -1,6 +1,7 @@
 import { TournamentTable } from "@/types/types"
 import { Expand, UserRound } from "lucide-react"
 import SoloTable from "./solo-table"
+import TeamTable from "./team-table"
 
 interface GroupProps {
     group: TournamentTable
@@ -20,7 +21,7 @@ const Group: React.FC<GroupProps> = ({ group }) => {
                 <Expand />
             </div>
             <div className="h-[500px] mt-4">
-                {group.solo ? <SoloTable participants={group.participants} /> : <div>Tere</div>}
+                {group.solo ? <SoloTable participants={group.participants} /> : <TeamTable participants={group.participants}/>}
             </div>
         </div>
     )

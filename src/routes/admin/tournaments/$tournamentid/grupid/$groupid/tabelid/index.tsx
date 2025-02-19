@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetBracketQuery } from '@/queries/brackets'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { AlertCircle, Loader } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import BracketComponent from '@/routes/admin/tournaments/-components/bracket'
+import Loader from '@/components/loader'
 
 
 export const Route = createFileRoute(

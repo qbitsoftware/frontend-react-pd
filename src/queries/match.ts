@@ -93,3 +93,20 @@ export const UseStartMatch = (tournament_id: number, group_id: number, match_id:
     })
 }
 
+export const UseRegroupMatches = (tournament_id: number, group_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches/regroup`, {}, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches', group_id] })
+        }
+    })
+}

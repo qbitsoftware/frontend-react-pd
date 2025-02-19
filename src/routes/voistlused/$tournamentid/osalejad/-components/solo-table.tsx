@@ -4,11 +4,11 @@ import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import React from 'react'
 
-interface SoloTableParticipants {
+interface SoloTableProps {
   participants: Participant[] | null
 }
 
-const SoloTable: React.FC<SoloTableParticipants> = ({ participants }) => {
+const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
   return (
     <div className='overflow-y-scroll h-full'>
       {participants && participants.length > 0 ? (
@@ -46,8 +46,8 @@ const SoloTable: React.FC<SoloTableParticipants> = ({ participants }) => {
           </Table>
         </div>
       ) : (
-        <div className="bg-white shadow-lg rounded-lg p-8 text-center">
-          <p className="text-gray-500 text-lg">No participants found. Try adjusting your search.</p>
+        <div className="bg-white shadow-lg rounded-lg p-8 text-center h-full flex items-center justify-center">
+          <p className="text-gray-500 text-lg">No participants found</p>
         </div>
       )}
     </div>

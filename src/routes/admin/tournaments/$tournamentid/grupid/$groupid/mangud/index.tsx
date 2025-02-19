@@ -3,6 +3,7 @@ import { MatchesResponse, UseGetMatchesQuery } from '@/queries/match'
 import { MatchesTable } from '../../../-components/matches-table'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ErrorResponse } from '@/types/types'
+import Loader from '@/components/loader'
 
 export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/',
@@ -43,7 +44,9 @@ function RouteComponent() {
     )
   } else {
     return (
-      <div>Ero hereee</div>
+      <div className='flex justify-center items-center h-[50vh]'>
+        <Loader/>
+      </div>
     )
   }
 }

@@ -58,9 +58,9 @@ function RouteComponent() {
               <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/grupid`}>
                 <Button className={cn(location.href.includes(`/admin/tournaments/${tournamentid}/grupid`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">Groups</Button>
               </Link>
-              <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/mangud`}>
+              {/* <Link className='flex-1' to={`/admin/tournaments/${tournamentid}/mangud`}>
                 <Button className={cn(location.pathname == (`/admin/tournaments/${tournamentid}/mangud`) && "bg-secondary text-white", "w-full hover:bg-secondary hover:text-white")} variant="outline">All matches</Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
           
