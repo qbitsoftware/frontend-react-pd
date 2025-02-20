@@ -21,19 +21,17 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
 
     const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
 
-    const findMatches = (participant_1_id: string, participant_2_id: string, matches: MatchWrapper[]) => {
-        const upperMatch = matches.find(m => m.p1.id === participant_1_id && m.p2.id == participant_2_id);
-        const lowerMatch = matches.find(m => m.p2.id === participant_1_id && m.p1.id == participant_2_id);
+    const findMatches = (participant_1_id: string, participant_2_id: string) => {
 
-        if (!upperMatch && !lowerMatch) return [];
-        if (!upperMatch && lowerMatch) return [lowerMatch]
-        if (upperMatch && !lowerMatch) return [upperMatch]
+        const team1 = displayTeams.find(t => t.participant.id === participant_1_id);
+        const team2 = displayTeams.find(t => t.participant.id === participant_2_id);
 
-        // return team1.matches.filter(m =>
-        //     (m.match.p1_id === team1Id && m.match.p2_id === team2Id) ||
-        //     (m.match.p1_id === team2Id && m.match.p2_id === team1Id)
-        // ).sort((a, b) => a.regrouped ? 1 : -1);
-        return [upperMatch, lowerMatch]
+        if (!team1 || !team2 || !team1.matches) return [];
+
+        return team1.matches.filter(m =>
+            (m.match.p1_id === participant_1_id && m.match.p2_id === participant_2_id) ||
+            (m.match.p1_id === participant_2_id && m.match.p2_id === participant_1_id)
+        ).sort((a) => a.match.round >= 8 ? 1 : -1);
     };
 
     useEffect(() => {
@@ -52,8 +50,8 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
     //     }
     // }
 
-    const renderMatchCell = (p1_id: string, p2_id: string, matches: MatchWrapper[]) => {
-        const find_matches = findMatches(p1_id, p2_id, matches);
+    const renderMatchCell = (p1_id: string, p2_id: string) => {
+        const find_matches = findMatches(p1_id, p2_id);
         console.log("FINNDD", find_matches)
 
         return (
@@ -95,7 +93,7 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
     }
 
     return (
-        <div className="container mx-auto p-0 md:p-4">
+        <div className="container mx-auto">
             <div className="md:hidden mb-4">
                 <Select onValueChange={(value) => setSelectedTeam(value)}>
                     <SelectTrigger className="w-full">
@@ -147,7 +145,7 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
                                             {rowIndex === colIndex ? (
                                                 <div className="w-full h-full bg-gray-300"></div>
                                             ) : (
-                                                renderMatchCell(displayTeams[rowIndex].participant.id, displayTeams[colIndex].participant.id, displayTeams[rowIndex].matches)
+                                                renderMatchCell(displayTeams[rowIndex].participant.id, displayTeams[colIndex].participant.id)
                                             )}
                                         </TableCell>
                                     ))}

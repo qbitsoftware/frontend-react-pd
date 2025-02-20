@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation, queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Match, MatchWrapper } from "@/types/types"
+import { Match, MatchWrapper, Participant } from "@/types/types"
 
 export interface MatchesResponse {
     data: MatchWrapper[] | null
@@ -88,16 +88,17 @@ export const UseStartMatch = (tournament_id: number, group_id: number, match_id:
             queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
-            queryClient.resetQueries({ queryKey: ['matches', group_id] })
+            // queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })
 }
 
+
 export const UseRegroupMatches = (tournament_id: number, group_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async () => {
-            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/matches/regroup`, {}, {
+        mutationFn: async (participants: Participant[]) => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/regroup`, {participants}, {
                 withCredentials: true
             })
             return data;

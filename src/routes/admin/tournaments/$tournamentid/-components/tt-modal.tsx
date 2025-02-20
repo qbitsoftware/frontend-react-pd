@@ -49,50 +49,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
         table: match.match.extra_data.table || 0,
     });
 
-
-    useEffect(() => {
-        const hasChanges = {
-            captain_a: captainTeam1 !== prevValuesRef.current.captainTeam1 ? captainTeam1 : undefined,
-            captain_b: captainTeam2 !== prevValuesRef.current.captainTeam2 ? captainTeam2 : undefined,
-            table_referee: table_referee !== prevValuesRef.current.table_referee ? table_referee : undefined,
-            head_referee: head_referee !== prevValuesRef.current.head_referee ? head_referee : undefined,
-            notes: notes !== prevValuesRef.current.notes ? notes : undefined,
-            table: table !== prevValuesRef.current.table ? table : undefined,
-        };
-
-        const sendData = async (extra_data: TableTennisExtraData) => {
-            await sendExtraData(extra_data)
-        }
-
-        if (Object.values(hasChanges).some(value => value !== undefined)) {
-            const handler = setTimeout(() => {
-
-                const updatedExtraData: TableTennisExtraData = {
-                    ...match.match.extra_data,
-                    ...Object.fromEntries(
-                        Object.entries(hasChanges)
-                            .filter(([, value]) => value !== undefined)
-                    ),
-                };
-
-                sendData(updatedExtraData)
-
-                prevValuesRef.current = {
-                    captainTeam1,
-                    captainTeam2,
-                    table_referee,
-                    head_referee,
-                    notes,
-                    table,
-                };
-            }, 500);
-
-            return () => clearTimeout(handler);
-        }
-    }, [captainTeam1, captainTeam2, table_referee, head_referee, notes, table, match.match.extra_data]);
-
-
-
     const EMPTY_PLAYER: Player = {
         id: '',
         name: '',
@@ -167,6 +123,63 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
         }
 
     }, [isOpen, match.match.extra_data])
+
+    useEffect(() => {
+        const hasChanges = {
+            captain_a: captainTeam1 !== prevValuesRef.current.captainTeam1 ? captainTeam1 : undefined,
+            captain_b: captainTeam2 !== prevValuesRef.current.captainTeam2 ? captainTeam2 : undefined,
+            table_referee: table_referee !== prevValuesRef.current.table_referee ? table_referee : undefined,
+            head_referee: head_referee !== prevValuesRef.current.head_referee ? head_referee : undefined,
+            notes: notes !== prevValuesRef.current.notes ? notes : undefined,
+            table: table !== prevValuesRef.current.table ? table : undefined,
+        };
+
+        const sendData = async (extra_data: TableTennisExtraData) => {
+            await sendExtraData(extra_data)
+        }
+
+        if (Object.values(hasChanges).some(value => value !== undefined)) {
+            const handler = setTimeout(() => {
+
+                const updatedExtraData: TableTennisExtraData = {
+                    notes: notes,
+                    captain_a: captainTeam1,
+                    captain_b: captainTeam2,
+                    table_referee,
+                    head_referee,
+                    table,
+                    parent_match_id: "",
+                    player_a_id: team1SelectedPlayers[0].id,
+                    player_b_id: team1SelectedPlayers[1].id,
+                    player_c_id: team1SelectedPlayers[2].id,
+                    player_d_id: team1SelectedPlayers[3].id,
+                    player_e_id: team1SelectedPlayers[4].id,
+                    player_x_id: team2SelectedPlayers[0].id,
+                    player_y_id: team2SelectedPlayers[1].id,
+                    player_z_id: team2SelectedPlayers[2].id,
+                    player_v_id: team2SelectedPlayers[3].id,
+                    player_w_id: team2SelectedPlayers[4].id,
+                    ...Object.fromEntries(
+                        Object.entries(hasChanges)
+                            .filter(([, value]) => value !== undefined)
+                    ),
+                };
+
+                sendData(updatedExtraData)
+
+                prevValuesRef.current = {
+                    captainTeam1,
+                    captainTeam2,
+                    table_referee,
+                    head_referee,
+                    notes,
+                    table,
+                };
+            }, 500);
+
+            return () => clearTimeout(handler);
+        }
+    }, [captainTeam1, captainTeam2, table_referee, head_referee, notes, table, match.match.extra_data]);
 
     const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
@@ -317,6 +330,16 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                 winner_id: "finished",
                 extra_data: {
                     ...match.match.extra_data,
+                    player_a_id: team1SelectedPlayers[0].id,
+                    player_b_id: team1SelectedPlayers[1].id,
+                    player_c_id: team1SelectedPlayers[2].id,
+                    player_d_id: team1SelectedPlayers[3].id,
+                    player_e_id: team1SelectedPlayers[4].id,
+                    player_x_id: team2SelectedPlayers[0].id,
+                    player_y_id: team2SelectedPlayers[1].id,
+                    player_z_id: team2SelectedPlayers[2].id,
+                    player_v_id: team2SelectedPlayers[3].id,
+                    player_w_id: team2SelectedPlayers[4].id,
                     table_referee: table_referee,
                     head_referee: head_referee,
                     captain_a: captainTeam1,
@@ -325,6 +348,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                     table,
                 },
             })
+            onClose()
+            successToast("Mäng edukalt lõpetatud")
         } catch (error) {
             void error
             errorToast("Something went wrong")
@@ -486,14 +511,14 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                     <div className="flex flex-col md:flex-row gap-4">
                         <Input
                             className='flex-grow'
-                            value={match.match.extra_data.table_referee ? match.match.extra_data.table_referee : table_referee}
-                            placeholder={match.match.extra_data.table_referee ? match.match.extra_data.table_referee : 'Lauakohtunik'}
+                            value={table_referee}
+                            placeholder={'Lauakohtunik'}
                             onChange={(e) => setTableReferee(e.target.value)}
                         />
                         <Input
                             className='flex-grow'
-                            value={match.match.extra_data.head_referee ? match.match.extra_data.head_referee : head_referee}
-                            placeholder={match.match.extra_data.head_referee ? match.match.extra_data.head_referee : 'Peakohtunik'}
+                            value={head_referee}
+                            placeholder={'Peakohtunik'}
                             onChange={(e) => setMainReferee(e.target.value)}
                         />
                     </div>

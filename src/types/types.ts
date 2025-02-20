@@ -140,6 +140,8 @@ export type PlayerExtraData = {
 export type PartipantExtraData = {
     image_url: string;
     class: string
+    is_parent: boolean
+    total_points: number;
 }
 
 export type Tournament = {

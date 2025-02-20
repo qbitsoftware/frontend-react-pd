@@ -9,10 +9,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TableTennisProtocolModal } from "./tt-modal"
-import { UseRegroupMatches } from "@/queries/match"
-import { useParams } from "@tanstack/react-router"
-import { useToastNotification } from "@/components/toast-notification"
-import { useToast } from "@/hooks/use-toast"
+import ReGrouping from "./regrouping"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
@@ -22,14 +19,9 @@ interface MatchesTableProps {
 type FilterOption = "all" | "winner_declared" | "ongoing" | "not_started"
 
 export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id }: MatchesTableProps) => {
+  const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const params = useParams({ strict: false })
-  const regroupMutation = UseRegroupMatches(tournament_id, Number(params.groupid))
-
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
-
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
 
   const filteredData = useMemo(() => {
@@ -57,15 +49,15 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
     setIsOpen(true)
   }
 
-  const handleRegrouping = async () => {
-    try {
-      await regroupMutation.mutateAsync()
-      successToast("Mängud on edukalt regrupeeritud")
-    } catch (error) {
-      void error
-      errorToast("Mängude regrupeerimine ebaõnnestus")
-    }
-  }
+  // const handleRegrouping = async () => {
+  //   try {
+  //     await regroupMutation.mutateAsync()
+  //     successToast("Mängud on edukalt regrupeeritud")
+  //   } catch (error) {
+  //     void error
+  //     errorToast("Mängude regrupeerimine ebaõnnestus")
+  //   }
+  // }
 
 
   return (
@@ -82,7 +74,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
             <SelectItem value="not_started">Upcoming matches</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="text-white bg-secondary"  onClick={() => handleRegrouping()}>Regrupeeri</Button>
+        <Button className="text-white bg-secondary"  onClick={() => setIsRegroupingModalOpen(true)}>Regrupeeri</Button>
       </div>
       <div className="rounded-md border my-2">
         <Table>
@@ -132,6 +124,12 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
           <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
         }
       </div>
+      <ReGrouping
+        tournament_id={tournament_id}
+        isOpen={isRegroupingModalOpen}
+        onClose={() => setIsRegroupingModalOpen(false)}
+        setIsOpen={() => setIsRegroupingModalOpen(true)}
+      />
     </div>
   )
 }

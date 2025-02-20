@@ -41,11 +41,11 @@ export function UseGetParticipants(tournament_id: number, table_id: number) {
     })
 }
 
-export function UseGetParticipantsQuery(tournament_id: number, table_id: number) {
+export function UseGetParticipantsQuery(tournament_id: number, table_id: number, regrouped: boolean = false) {
     return useQuery<ParticipantsResponse>({
         queryKey: ["participants", table_id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants`, {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants?regrouped=${regrouped}`, {
                 withCredentials: true,
             })
             return data;
