@@ -94,11 +94,11 @@ export const UseStartMatch = (tournament_id: number, group_id: number, match_id:
 }
 
 
-export const UseRegroupMatches = (tournament_id: number, group_id: number) => {
+export const UseRegroupMatches = (tournament_id: number, group_id: number, regroup: boolean = false, final: boolean = false) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (participants: Participant[]) => {
-            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/regroup`, {participants}, {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/assign?regroup=${regroup}&final=${final}`, { participants }, {
                 withCredentials: true
             })
             return data;

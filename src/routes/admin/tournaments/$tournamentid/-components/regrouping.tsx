@@ -17,16 +17,17 @@ import { UseRegroupMatches } from '@/queries/match'
 
 interface ReGroupingProps {
     isOpen: boolean
-    setIsOpen: () => void
     onClose: () => void
     tournament_id: number
+    state: string
 }
 
-const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, setIsOpen, onClose, tournament_id }) => {
+const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id, state }) => {
     const params = useParams({ strict: false })
     const { data } = UseGetParticipantsQuery(tournament_id, Number(params.groupid), true)
     const [participants, setParticipants] = useState<Participant[]>([])
-    const useRegroupMutation = UseRegroupMatches(tournament_id, Number(params.groupid))
+    const useRegroupMutation = UseRegroupMatches(tournament_id, Number(params.groupid), true)
+    const useFinalsMutation = UseRegroupMatches(tournament_id, Number(params.groupid), false, true)
 
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
@@ -66,20 +67,31 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, setIsOpen, onClose, tou
     const onSubmit = async () => {
         console.log("Submitting")
         try {
-            const data = await useRegroupMutation.mutateAsync(participants)
+            if (state == "finals") {
+                const data = await useFinalsMutation.mutateAsync(participants)
+                successToast(data?.message)
+            } else if (state == "regrouping") {
+                const data = await useRegroupMutation.mutateAsync(participants)
+                successToast(data?.message)
+            }
             onClose()
-            successToast(data?.message)
         } catch (error) {
             void error
             errorToast("Something went wrong")
         }
     }
 
+
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose} >
             <DialogContent className="max-w-4xl max-h-[80vh] md:max-h-[90vh] overflow-y-auto px-0 sm:px-2 md:px-4">
                 <DialogHeader>
-                    <DialogTitle>Mängu regroupeering</DialogTitle>
+                    {state == "regrouping" ?
+                        <DialogTitle>Mängu regrupeering</DialogTitle>
+                        : state == "finals" ?
+                            <DialogTitle>Mängu finaalid</DialogTitle> : ""
+                    }
                     <DialogDescription>
                         Kuvasime juhuslikult tiimid. Tiimide liigutamiseks lohistage nupust.
                     </DialogDescription>
@@ -104,7 +116,7 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, setIsOpen, onClose, tou
                     </DndContext>
                 </div>
                 <Button onClick={onSubmit}>
-                    Regrupeeri
+                    {state == "regrouping" ? "Regrupeeri" : state == "finals" ? "Finaalid" : ""}
                 </Button>
             </DialogContent>
         </Dialog>

@@ -175,7 +175,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
                     notes,
                     table,
                 };
-            }, 500);
+            }, 250);
 
             return () => clearTimeout(handler);
         }

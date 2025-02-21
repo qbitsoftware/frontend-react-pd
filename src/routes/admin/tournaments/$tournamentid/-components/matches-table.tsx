@@ -23,6 +23,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
+  const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
+
 
   const filteredData = useMemo(() => {
     switch (filterValue) {
@@ -49,17 +51,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
     setIsOpen(true)
   }
 
-  // const handleRegrouping = async () => {
-  //   try {
-  //     await regroupMutation.mutateAsync()
-  //     successToast("Mängud on edukalt regrupeeritud")
-  //   } catch (error) {
-  //     void error
-  //     errorToast("Mängude regrupeerimine ebaõnnestus")
-  //   }
-  // }
-
-
   return (
     <div className="py-4">
       <div className="flex gap-4">
@@ -74,7 +65,12 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
             <SelectItem value="not_started">Upcoming matches</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="text-white bg-secondary"  onClick={() => setIsRegroupingModalOpen(true)}>Regrupeeri</Button>
+        <Button className="text-white bg-secondary" onClick={() => {
+          setInitialTab("regrouping")
+          setIsRegroupingModalOpen(true)
+        }}
+        >Regrupeeri</Button>
+        <Button className="text-white bg-secondary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
       </div>
       <div className="rounded-md border my-2">
         <Table>
@@ -128,7 +124,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
         tournament_id={tournament_id}
         isOpen={isRegroupingModalOpen}
         onClose={() => setIsRegroupingModalOpen(false)}
-        setIsOpen={() => setIsRegroupingModalOpen(true)}
+        state={initialTab}
       />
     </div>
   )
