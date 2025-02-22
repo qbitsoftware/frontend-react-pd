@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RoundRobins, RoundRobinBracket, MatchWrapper } from '@/types/types'
+import { RoundRobins, RoundRobinBracket } from '@/types/types'
 
 interface GroupBracketProps {
     brackets: RoundRobins
@@ -16,7 +16,7 @@ interface GroupBracketProps {
 export default function GroupBracket({ brackets }: GroupBracketProps) {
 
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isOpen] = useState<boolean>(false)
     // const [selectedProtocol, setSelectedProtocol] = useState<MatchWithTeamAndSets | null>(null)
 
     const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });

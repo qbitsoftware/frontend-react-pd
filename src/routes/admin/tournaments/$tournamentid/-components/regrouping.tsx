@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import React, { useEffect, useState } from 'react'
 import { DndContext, DragEndEvent, KeyboardSensor, PointerSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core'
-import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 // import { TeamData, useGetRegroupTeams, usePostRegroup } from '@/app/api/teams'
 import { Button } from '@/components/ui/button'
@@ -39,9 +39,9 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
         }
     }, [isOpen, data?.data])
 
-    if (!participants) {
+    // if (!participants) {
 
-    }
+    // }
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
