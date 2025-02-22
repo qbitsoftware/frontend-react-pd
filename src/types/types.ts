@@ -1,9 +1,3 @@
-export type Data = {
-    rounds: Round[],
-    matches: TableMatch[],
-    name: string;
-}
-
 export type TableMatch = {
     match: Match
     participant_1: Participant
@@ -12,8 +6,31 @@ export type TableMatch = {
 }
 
 export type Bracket = {
-    tables: Data[]
+    eliminations: Eliminations[]
+    round_robins: RoundRobins[]
 }
+
+export type EliminationBracket = {
+    rounds: Round[],
+    matches: TableMatch[],
+    name: string;
+}
+
+export type Eliminations = {
+    elimination: EliminationBracket[]
+}
+
+export type RoundRobinBracket = {
+    participant: Participant
+    matches: MatchWrapper[]
+    total_points: number
+}
+
+export type RoundRobins = {
+    round_robin: RoundRobinBracket[]
+}
+
+
 
 export type ErrorResponse = {
     response: {
@@ -89,13 +106,15 @@ export type Participant = {
     created_at: string;
     updated_at: string;
     deleted_at: string;
-    players: PlayerNew[];
+    players: Player[];
+    tournament_table_id: number;
     extra_data: PartipantExtraData;
 }
 
-export type PlayerNew = {
+export type Player = {
     id: string;
     user_id: number
+    name: string;
     first_name: string;
     last_name: string;
     sport_type: string;
@@ -121,6 +140,8 @@ export type PlayerExtraData = {
 export type PartipantExtraData = {
     image_url: string;
     class: string
+    is_parent: boolean
+    total_points: number;
 }
 
 export type Tournament = {
@@ -134,17 +155,27 @@ export type Tournament = {
     location: string;
     category: string;
     image: string;
-    type: string;
     sport: string;
     state: string;
     private: boolean;
-    solo: boolean;
     total_tables: number;
+    information: string;
+};
+
+export type TournamentTable = {
+    created_at: string;
+    deleted_at: string | null;
+    id: number;
+    updated_at: string;
+    tournament_id: number;
+    class: string;
+    type: string;
+    solo: boolean;
     min_team_size: number;
     max_team_size: number;
-    tournament_size: number;
-    information: string; 
-};
+    size: number;
+    participants: Participant[];
+}
 
 export type Category = {
     created_at: string;
@@ -175,7 +206,7 @@ export type TournamentSize = {
 
 export type Match = {
     id: string
-    tournament_id: number
+    tournament_table_id: number
     type: string
     round: number
     p1_id: string
@@ -189,21 +220,38 @@ export type Match = {
     start_time: Date
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
+    table_type: string
 }
 
 export type MatchWrapper = {
-    match: Match
-    p1: Participant
-    p2: Participant
+    match: Match;
+    p1: Participant;
+    p2: Participant;
+    class: string;
 }
 
 export type TableTennisExtraData = {
     table: number;
-    head_referee?: string;
+    score?: Score[];
     table_referee?: string;
+    head_referee?: string;
     parent_match_id: string;
-    score: Score[];
-};
+    notes?: string;
+    captain_a?: string;
+    player_a_id?: string;
+    player_b_id?: string;
+    player_c_id?: string;
+    player_d_id?: string;
+    player_e_id?: string;
+    captain_b?: string;
+    player_x_id?: string;
+    player_y_id?: string;
+    player_z_id?: string;
+    player_v_id?: string;
+    player_w_id?: string;
+    team_1_total?: number;
+    team_2_total?: number;
+}
 
 export type Score = {
     number: number;

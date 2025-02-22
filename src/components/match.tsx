@@ -17,7 +17,7 @@ interface MatchComponentProps {
     starting_x: number
 }
 
-const setScore = (score: Score[]) => {
+const setScore = (score: Score[] | undefined) => {
     let p1_sets = 0
     let p2_sets = 0
 
@@ -116,7 +116,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     )}
                 </div>
             </div>
-            <MatchDialog match={{match: match.match, p1: match.participant_1, p2: match.participant_2}} open={isOpen} onClose={() => setIsOpen(false)} />
+            <MatchDialog match={{match: match.match, p1: match.participant_1, p2: match.participant_2, class: ""}} tournament_id={match.participant_1.tournament_id} open={isOpen} onClose={() => setIsOpen(false)} />
         </div>
     )
 }

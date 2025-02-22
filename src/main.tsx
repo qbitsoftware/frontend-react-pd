@@ -21,8 +21,8 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
-
-const App = () => {
+ 
+export const App = () => {
   return (
     <UserProvider>
       <RouterProvider

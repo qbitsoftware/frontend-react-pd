@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, ArrowLeft, Loader2 } from "lucide-react"
-import { Link, useRouter } from "@tanstack/react-router"
+import { CalendarIcon, Loader2 } from "lucide-react"
+import { useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -19,8 +19,6 @@ import {
   UsePostTournament,
   UsePatchTournament,
   UseDeleteTournament,
-  UseGetTournamentSizes,
-  UseGetTournamentTypes,
   UseGetTournamentCategories,
 } from "@/queries/tournaments"
 import { useToast } from "@/hooks/use-toast"
@@ -37,8 +35,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import Loader from "@/components/loader"
-import { cn } from "@/lib/utils"
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
 
@@ -46,17 +42,12 @@ const formSchema = z.object({
   name: z.string().min(4).max(40),
   start_date: z.date(),
   end_date: z.date(),
-  type: z.string(),
-  tournament_size: z.number(),
   sport: z.string(),
   total_tables: z.number().min(1),
   category: z.string(),
   location: z.string().min(1, { message: "Location is required" }),
   information: z.any(),
   private: z.boolean(),
-  solo: z.boolean(),
-  min_team_size: z.number().min(1),
-  max_team_size: z.number().min(1),
 })
 
 export type TournamentFormValues = z.infer<typeof formSchema>
@@ -67,7 +58,10 @@ interface TournamentFormProps {
 
 export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) => {
   const { t } = useTranslation()
-  const [value, setValue] = useState<YooptaContentValue>(initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined);
+  const [value, setValue] = useState<YooptaContentValue | undefined>(
+    initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined
+  );
+
   const form = useForm<TournamentFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initial_data
@@ -80,26 +74,17 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         name: "",
         start_date: new Date(),
         end_date: new Date(),
-        type: "",
-        total_tables: 0,
-        tournament_size: 0,
         sport: "",
         location: "",
         category: "",
         information: "",
         private: false,
-        solo: true,
-        min_team_size: 1,
-        max_team_size: 1,
       },
   })
 
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
-  const deleteMutation = UseDeleteTournament(initial_data?.id!)
-  const { data: tournament_sizes, isLoading } = UseGetTournamentSizes()
-  const { data: tournament_types, isLoading: isLoadingTypes } = UseGetTournamentTypes()
-  const { data: tournament_categories, isLoading: isLoadingCategories } = UseGetTournamentCategories()
-
+  const deleteMutation = UseDeleteTournament(initial_data?.id)
+  const { data: tournament_categories } = UseGetTournamentCategories()
 
 
   const toast = useToast()
@@ -121,16 +106,17 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const onSubmit = async (values: TournamentFormValues) => {
     try {
       values.information = JSON.stringify(value)
-      await postMutation.mutateAsync(values)
+      const res = await postMutation.mutateAsync(values)
       if (initial_data) {
         successToast("Turniir edukalt uuendatud")
       } else {
         successToast("Turniir edukalt lisatud")
       }
       router.navigate({
-        to: "/admin/tournaments",
+        to: `/admin/tournaments/${res.data.id}`,
       })
     } catch (error) {
+      void error
       if (initial_data) {
         errorToast("Turniiri uuendamisel tekkis viga")
       } else {
@@ -143,7 +129,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
     try {
       await deleteMutation.mutateAsync()
       router.navigate({
-        to: "/admin/tournaments",
+        to: `/admin/tournaments`,
         replace: true,
       })
       successToast("Turniir on edukalt kustutatud")
@@ -183,14 +169,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="flex flex-col sm:flex-row justify-between mb-4">
-        <Link href="/admin/tournaments">
-          <Button variant="outline" className="flex items-center w-full sm:w-auto">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t("admin.tournaments.create_tournament.back_button")}
-          </Button>
-        </Link>
-      </div>
+
 
       <Card className="w-full">
         <CardHeader>
@@ -233,9 +212,6 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                         <SelectContent>
                           <SelectItem value="tabletennis">
                             {t("admin.tournaments.create_tournament.sport_value.tabletennis")}
-                          </SelectItem>
-                          <SelectItem value="basketball">
-                            {t("admin.tournaments.create_tournament.sport_value.basketball")}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -310,7 +286,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   control={form.control}
                   name="location"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col">
                       <FormLabel>{t("admin.tournaments.create_tournament.location")}</FormLabel>
                       <FormControl>
                         <Input placeholder={t("admin.tournaments.create_tournament.location_placeholder")} {...field} />
@@ -321,132 +297,17 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 />
                 <FormField
                   control={form.control}
-                  name="type"
+                  name="category"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.create_tournament.type")}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t("admin.tournaments.create_tournament.type_placeholder")} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {isLoadingTypes && (
-                            <SelectItem className="flex justify-center items-center" value="loading">
-                              <Loader />
-                            </SelectItem>
-                          )}
-                          {tournament_types?.data?.map((type) => (
-                            <SelectItem key={type.id} value={type.name}>
-                              {type.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
+                    <CategoryInput field={field} categories={tournament_categories?.data || []} />
                   )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => {
-                  const [inputValue, setInputValue] = useState(field.value || "")
-                  const [showSuggestions, setShowSuggestions] = useState(false)
-                  const inputRef = useRef<HTMLInputElement>(null)
-
-                  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value
-                    setInputValue(value)
-                    field.onChange(value)
-                    setShowSuggestions(true)
-                  }
-
-                  const handleSuggestionClick = (category: string) => {
-                    setInputValue(category)
-                    field.onChange(category)
-                    setShowSuggestions(false)
-                    inputRef.current?.focus()
-                  }
-
-                  const filteredCategories = (tournament_categories?.data || []).filter((category) =>
-                    category.category.toLowerCase().startsWith(inputValue.toLowerCase()),
-                  )
-
-                  return (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Category</FormLabel>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            ref={inputRef}
-                            placeholder="Type a category"
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            onFocus={() => setShowSuggestions(true)}
-                            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                          />
-                        </FormControl>
-                        {showSuggestions && filteredCategories.length > 0 && (
-                          <ul className="absolute z-10 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-auto rounded-md shadow-lg">
-                            {filteredCategories.map((category) => (
-                              <li
-                                key={category.category}
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={() => handleSuggestionClick(category.category)}
-                              >
-                                {category.category}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
-              />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="tournament_size"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{"Turniiri suurus"}</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number.parseInt(value, 10))}
-                        defaultValue={String(field.value)}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={"Vali turniiri suurus"} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {isLoading && (
-                            <SelectItem className="flex justify-center items-center" value="loading">
-                              <Loader />
-                            </SelectItem>
-                          )}
-                          {tournament_sizes?.data?.map((size) => (
-                            <SelectItem key={size.id} value={String(size.size)}>
-                              {size.size}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="total_tables"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full">
                       <FormLabel>{"Laudade arv"}</FormLabel>
                       <FormControl>
                         <Input
@@ -459,84 +320,29 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-              </div>
+              <FormField
+                control={form.control}
+                name="private"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">{t("admin.tournaments.create_tournament.private")}</FormLabel>
+                      <FormDescription>
+                        {t("admin.tournaments.create_tournament.private_description")}
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
               {/* Pane siiia */}
               <div className="w-full flex flex-col gap-4 ">
                 <p className="text-sm">Additional information </p>
-                
+
                 <Editor value={value} setValue={setValue} readOnly={false} />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="private"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">{t("admin.tournaments.create_tournament.private")}</FormLabel>
-                        <FormDescription>
-                          {t("admin.tournaments.create_tournament.private_description")}
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="solo"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">{t("admin.tournaments.create_tournament.team")}</FormLabel>
-                        <FormDescription>{t("admin.tournaments.create_tournament.team_description")}</FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch checked={!field.value} onCheckedChange={(checked) => field.onChange(!checked)} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-6", form.getValues().solo ? "hidden" : "")}>
-                <FormField
-                  control={form.control}
-                  name="min_team_size"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.create_tournament.min_team_size")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          {...field}
-                          onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="max_team_size"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.create_tournament.max_team_size")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          {...field}
-                          onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
               <div className="flex justify-end gap-4">
                 <Button type="submit" className="md:w-[200px] w-full">
@@ -558,3 +364,65 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   )
 }
 
+function CategoryInput({
+  field,
+  categories,
+}: {
+  field: { value: string; onChange: (v: string) => void }
+  categories: { category: string }[]
+}) {
+  const [inputValue, setInputValue] = useState(field.value || "")
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+    field.onChange(value)
+    setShowSuggestions(true)
+  }
+
+  const handleSuggestionClick = (category: string) => {
+    setInputValue(category)
+    field.onChange(category)
+    setShowSuggestions(false)
+    inputRef.current?.focus()
+  }
+
+  const filteredCategories = categories.filter((cat) =>
+    cat.category.toLowerCase().startsWith(inputValue.toLowerCase()),
+  )
+
+  return (
+    <FormItem className="flex flex-col">
+      <FormLabel>Category</FormLabel>
+      <div className="relative">
+        <FormControl>
+          <Input
+            ref={inputRef}
+            placeholder="Type a category"
+            value={inputValue}
+            onChange={handleInputChange}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+          />
+        </FormControl>
+        {showSuggestions && filteredCategories.length > 0 && (
+          <ul className="absolute z-10 w-full bg-white border mt-1 max-h-60 overflow-auto rounded-md shadow-lg">
+            {filteredCategories.map((cat) => (
+              <li
+                key={cat.category}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSuggestionClick(cat.category)}
+              >
+                {cat.category}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <FormMessage />
+    </FormItem>
+  )
+}

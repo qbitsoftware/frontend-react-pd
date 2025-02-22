@@ -1,5 +1,5 @@
 import YooptaEditor, { createYooptaEditor } from '@yoopta/editor';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { YooptaContentValue } from '@yoopta/editor';
 import Paragraph from '@yoopta/paragraph';
 import Blockquote from '@yoopta/blockquote';
@@ -59,7 +59,7 @@ const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 interface Props {
   value: YooptaContentValue | undefined
-  setValue: Dispatch<SetStateAction<YooptaContentValue>> | undefined
+  setValue: Dispatch<SetStateAction<YooptaContentValue | undefined>> | undefined;
   readOnly: boolean
 }
 
@@ -77,7 +77,7 @@ export default function Editor({ value, setValue, readOnly }: Props) {
         <YooptaEditor
           // placeholder='Start typing here...'
           editor={editor}
-          //@ts-ignore
+          //@ts-expect-error yoopta
           plugins={plugins}
 
           className='w-full border-gray-200 rounded-lg border py-2 px-12'
@@ -97,9 +97,8 @@ export default function Editor({ value, setValue, readOnly }: Props) {
         <YooptaEditor
           // placeholder='Start typing here...'
           editor={editor}
-          //@ts-ignore
+           //@ts-expect-error yoopta
           plugins={plugins}
-
           className='w-full'
           autoFocus={true}
           readOnly={readOnly}

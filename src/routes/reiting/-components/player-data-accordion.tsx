@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 // TODO: playeri andmete kuvamine Useri põhjal, info, eelmised pelad ja graafik lõpuni
 export function PlayerProfileData(player: User) {
+  void player
   const { t } = useTranslation();
   return (
     <Accordion type="single" collapsible className="w-full bg-white rounded-lg ">

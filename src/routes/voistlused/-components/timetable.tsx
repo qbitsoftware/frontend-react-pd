@@ -1,12 +1,11 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { formatDate } from '@/lib/utils'
+// import { formatDate } from '@/lib/utils'
 import { MatchWrapper, Tournament } from '@/types/types'
 
 interface TimeTableProps {
@@ -43,7 +42,7 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
   //   setActiveDay(Object.keys(matchesByDay)[0])
   // }
 
-  const handleRowClick = (match: MatchWrapper) => {
+  // const handleRowClick = (match: MatchWrapper) => {
     //todooooo
     // if (loginData?.data) {
     //   setSelectedMatch(match)
@@ -57,7 +56,7 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
     //     }
     //   }
     // }
-  }
+  // }
 
 
   const renderTableContent = (match: MatchWrapper) => {
@@ -150,25 +149,25 @@ return (
   )
 }
 
-const LoadingSkeleton = () => (
-  <Card className="w-full">
-    <CardHeader>
-      <Skeleton className="h-8 w-3/4" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton className="h-10 w-full mb-4" />
-      <Skeleton className="h-64 w-full" />
-    </CardContent>
-  </Card>
-)
+// const LoadingSkeleton = () => (
+//   <Card className="w-full">
+//     <CardHeader>
+//       <Skeleton className="h-8 w-3/4" />
+//     </CardHeader>
+//     <CardContent>
+//       <Skeleton className="h-10 w-full mb-4" />
+//       <Skeleton className="h-64 w-full" />
+//     </CardContent>
+//   </Card>
+// )
 
-const ErrorMessage = ({ message }: { message: string }) => (
-  <Card className="w-full">
-    <CardContent className="p-6">
-      <p className="text-red-500 text-center">Error: {message}</p>
-    </CardContent>
-  </Card>
-)
+// const ErrorMessage = ({ message }: { message: string }) => (
+//   <Card className="w-full">
+//     <CardContent className="p-6">
+//       <p className="text-red-500 text-center">Error: {message}</p>
+//     </CardContent>
+//   </Card>
+// )
 
 const NoMatches = () => (
   <Card className="w-full">
@@ -178,12 +177,12 @@ const NoMatches = () => (
   </Card>
 )
 
-const PlaceholderContent = () => (
-  <TableRow>
-    <TableCell colSpan={5} className="text-center py-8">
-      <p className="text-gray-500 mb-2">Selle päeva mängud luuakse varasemate tulemuste põhjal.</p>
-      <Skeleton className="h-4 w-3/4 mx-auto mb-2" />
-      <Skeleton className="h-4 w-1/2 mx-auto" />
-    </TableCell>
-  </TableRow>
-)
+// const PlaceholderContent = () => (
+//   <TableRow>
+//     <TableCell colSpan={5} className="text-center py-8">
+//       <p className="text-gray-500 mb-2">Selle päeva mängud luuakse varasemate tulemuste põhjal.</p>
+//       <Skeleton className="h-4 w-3/4 mx-auto mb-2" />
+//       <Skeleton className="h-4 w-1/2 mx-auto" />
+//     </TableCell>
+//   </TableRow>
+// )

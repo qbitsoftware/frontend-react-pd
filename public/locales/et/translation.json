@@ -256,6 +256,15 @@
           "title": "Serveri viga",
           "description": "Serveril tekkis probleeme turniiride leidmisega"
         }
+      },
+      "table": {
+        "name": "Nimi",
+        "category": "Kategooria",
+        "status": "Staatus",
+        "dates": "Kuupäevad",
+        "location": "Asukoht",
+        "duration": "Kestus",
+        "tables": "Laudu kokku"
       }
     }
   }

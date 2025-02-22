@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Camera, X } from 'lucide-react'
+import { Camera } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Loader2 } from 'lucide-react'
@@ -18,9 +18,8 @@ interface GameDayImagesProps {
 }
 
 export const Images: React.FC<GameDayImagesProps> = ({ tournament_id, gameDay, user }) => {
-    const { data, isLoading, error } = useGetGamedayImages(tournament_id, gameDay);
+    const { data, isLoading } = useGetGamedayImages(tournament_id, gameDay);
     const [selectedImage, setSelectedImage] = useState<string | null>(null)
-    const [imgLoading, setIsImageLoading] = useState<boolean>(false)
     const imgRef = useRef<HTMLImageElement>(null)
     const useImageMutation = useDeleteImage(tournament_id, gameDay)
     const toast = useToast()
@@ -30,7 +29,6 @@ export const Images: React.FC<GameDayImagesProps> = ({ tournament_id, gameDay, u
         if (!user) {
             const fullsize = src.replace("thumbnails", "fullsize")
             setSelectedImage(fullsize)
-            setIsImageLoading(true)
         }
     }
 
@@ -43,6 +41,7 @@ export const Images: React.FC<GameDayImagesProps> = ({ tournament_id, gameDay, u
             await useImageMutation.mutateAsync(img_url.split(".com/")[1])
             successToast("Pilt on edukalt eemaldatud")
         } catch (error) {
+            console.log(error)
             errorToast("Pildi eemaldamisel tekkis viga")
         }
     }
@@ -68,7 +67,7 @@ export const Images: React.FC<GameDayImagesProps> = ({ tournament_id, gameDay, u
         <div>
             {data && data.data != null && data?.data.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {data.data.map((src:string, index:number) => (
+                    {data.data.map((src: string, index: number) => (
                         <Card key={index} className={`overflow-hidden transition-all duration-300 hover:shadow-lg ${user ? "" : "cursor-pointer"} `}
                             onClick={() => openImage(src)}>
                             <CardContent className="p-0 relative">

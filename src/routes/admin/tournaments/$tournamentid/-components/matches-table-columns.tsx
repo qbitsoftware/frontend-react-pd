@@ -1,8 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { MatchWrapper } from "@/types/types"
-import { TableNumberForm } from "./table-number-form"
-
-
 
 export const columns: ColumnDef<MatchWrapper>[] = [
   {
@@ -15,6 +12,10 @@ export const columns: ColumnDef<MatchWrapper>[] = [
   {
     accessorKey: "match.round",
     header: "Round",
+  },
+  {
+    accessorKey: "class",
+    header: "Grupp",
   },
   {
     accessorKey: "match.extra_data.table",
@@ -41,34 +42,42 @@ export const columns: ColumnDef<MatchWrapper>[] = [
     accessorKey: "p1_score",
     header: "Player 1 Score",
     cell: ({ row }) => {
-      let p1_score = 0
-      const scores = row.original.match.extra_data.score
-      if (!scores) {
-        return <>{0}</>
-      }
-      for (let i = 0; i < scores.length; i++) {
-        if (scores[i].p1_score >= 11 && scores[i].p1_score - scores[i].p2_score >= 2) {
-          p1_score++
+      if (row.original.match.table_type == "champions_league") {
+        return <>{row.original.match.extra_data.team_1_total}</>
+      } else {
+        let p1_score = 0
+        const scores = row.original.match.extra_data.score
+        if (!scores) {
+          return <>{0}</>
         }
+        for (let i = 0; i < scores.length; i++) {
+          if (scores[i].p1_score >= 11 && scores[i].p1_score - scores[i].p2_score >= 2) {
+            p1_score++
+          }
+        }
+        return <>{p1_score}</>
       }
-      return <>{p1_score}</>
     }
   },
   {
     accessorKey: "p2_score",
     header: "Player 2 Score",
     cell: ({ row }) => {
-      let p2_score = 0
-      const scores = row.original.match.extra_data.score
-      if (!scores) {
-        return <>{0}</>
-      }
-      for (let i = 0; i < scores.length; i++) {
-        if (scores[i].p2_score >= 11 && scores[i].p2_score - scores[i].p1_score >= 2) {
-          p2_score++
+      if (row.original.match.table_type == "champions_league") {
+        return <>{row.original.match.extra_data.team_2_total}</>
+      } else {
+        let p2_score = 0
+        const scores = row.original.match.extra_data.score
+        if (!scores) {
+          return <>{0}</>
         }
+        for (let i = 0; i < scores.length; i++) {
+          if (scores[i].p2_score >= 11 && scores[i].p2_score - scores[i].p1_score >= 2) {
+            p2_score++
+          }
+        }
+        return <>{p2_score}</>
       }
-      return <>{p2_score}</>
     }
   },
   {

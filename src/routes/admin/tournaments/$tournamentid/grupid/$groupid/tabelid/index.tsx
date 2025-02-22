@@ -1,22 +1,24 @@
 import { createFileRoute } from '@tanstack/react-router'
-import BracketComponent from './-components/bracket'
 import { UseGetBracketQuery } from '@/queries/brackets'
-import { AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import BracketComponent from '@/routes/admin/tournaments/-components/bracket'
 import Loader from '@/components/loader'
 
 
 export const Route = createFileRoute(
-    '/admin/tournaments/$tournamentid/brackets/',
+    '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/',
 )({
     component: RouteComponent,
+
+    
 })
 
 function RouteComponent() {
     const params = Route.useParams()
 
-    const { data: bracketsData, error, refetch, isLoading } = UseGetBracketQuery(Number(params.tournamentid))
+    const { data: bracketsData, error, refetch, isLoading } = UseGetBracketQuery(Number(params.tournamentid), Number(params.groupid))
 
     if (isLoading) {
         return (

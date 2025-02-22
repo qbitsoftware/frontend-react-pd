@@ -9,6 +9,7 @@ interface TournamentContextProps {
 const TournamentContext = createContext<Tournament | undefined>(undefined)
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTournament = () => {
   const context = useContext(TournamentContext)
   if (!context) {

@@ -1,6 +1,8 @@
 import useScreenSize from '@/hooks/use-screen-size';
 import { ReactNode, useEffect, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { useRef } from 'react';
+import { ReactZoomPanPinchContentRef } from 'react-zoom-pan-pinch';
 
 interface BoardProps {
     children: ReactNode;
@@ -28,6 +30,14 @@ const Board: React.FC<BoardProps> = ({ children }) => {
         }
     }, [width])
 
+    const transformRef = useRef<ReactZoomPanPinchContentRef | null>(null)
+
+    useEffect(() => {
+        if (transformRef.current) {
+            transformRef.current.resetTransform()
+        }
+    }, [initialScale])
+
     if (initialScale > 0) {
         return (
             <TransformWrapper
@@ -38,27 +48,18 @@ const Board: React.FC<BoardProps> = ({ children }) => {
                 minScale={0.1}
                 maxScale={2}
                 wheel={{ step: 0.05 }}
+                ref={transformRef}
             >
-                {({ resetTransform }) => {
-                    useEffect(() => {
-                        resetTransform()
-                    }, [children])
-
-                    return (
-                        <>
-                            <TransformComponent wrapperClass="w-full h-full">
-                                <div className="w-[90%] h-[90%] relative">
-                                    {children}
-                                </div>
-                            </TransformComponent>
-                        </>
-                    )
-                }}
+                <TransformComponent wrapperClass="w-full h-full">
+                    <div className="w-[90%] h-[90%] relative">
+                        {children}
+                    </div>
+                </TransformComponent>
             </TransformWrapper>
         )
 
     } else {
-        "Laadimine"
+        return (<div>"Laadimine"</div>)
     }
 }
 

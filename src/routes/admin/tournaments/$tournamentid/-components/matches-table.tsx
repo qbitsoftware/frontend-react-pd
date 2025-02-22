@@ -8,18 +8,23 @@ import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { TableTennisProtocolModal } from "./tt-modal"
+import ReGrouping from "./regrouping"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
+  tournament_id: number
 }
 
 type FilterOption = "all" | "winner_declared" | "ongoing" | "not_started"
 
-export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTableProps) => {
+export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id }: MatchesTableProps) => {
+  const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
-
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
+  const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
+
 
   const filteredData = useMemo(() => {
     switch (filterValue) {
@@ -40,28 +45,34 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
     getCoreRowModel: getCoreRowModel(),
   })
 
-  console.log(filteredData)
 
   const handleRowClick = (match: MatchWrapper) => {
     setSelectedMatch(match)
     setIsOpen(true)
   }
 
-
   return (
     <div className="py-4">
-      <Select value={filterValue} onValueChange={(value: FilterOption) => setFilterValue(value)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Filter matches" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Kõik mängud</SelectItem>
-          <SelectItem value="winner_declared">Lõppenud mängud</SelectItem>
-          <SelectItem value="ongoing">Käimasolevad mängud</SelectItem>
-          <SelectItem value="not_started">Eesolevad mängud</SelectItem>
-        </SelectContent>
-      </Select>
-      <div className="rounded-md border">
+      <div className="flex gap-4">
+        <Select value={filterValue} onValueChange={(value: FilterOption) => setFilterValue(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter matches" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Kõik mängud</SelectItem>
+            <SelectItem value="winner_declared">Lõppenud mängud</SelectItem>
+            <SelectItem value="ongoing">Käimasolevad mängud</SelectItem>
+            <SelectItem value="not_started">Upcoming matches</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button className="text-white bg-secondary" onClick={() => {
+          setInitialTab("regrouping")
+          setIsRegroupingModalOpen(true)
+        }}
+        >Regrupeeri</Button>
+        <Button className="text-white bg-secondary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
+      </div>
+      <div className="rounded-md border my-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -101,8 +112,20 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data }: MatchesTable
             )}
           </TableBody>
         </Table>
-        {selectedMatch && <MatchDialog match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />}
+
+        {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
+          <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        }
+        {selectedMatch && selectedMatch.match.table_type != "champions_league" &&
+          <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
+        }
       </div>
+      <ReGrouping
+        tournament_id={tournament_id}
+        isOpen={isRegroupingModalOpen}
+        onClose={() => setIsRegroupingModalOpen(false)}
+        state={initialTab}
+      />
     </div>
   )
 }

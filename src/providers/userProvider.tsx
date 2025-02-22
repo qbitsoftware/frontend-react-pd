@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useGetCurrentUserQuery } from '@/queries/users';
 import { UserNew } from '@/types/types';
+import { useGetCurrentUserQuery } from '@/queries/users';
 
 interface UserContextType {
   user: UserNew | null;
@@ -10,12 +10,11 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { data: user_data, isLoading } = useGetCurrentUserQuery();
+  const { data: user_data } = useGetCurrentUserQuery();
   const [user, setUser] = useState<UserNew | null>(null);
 
   useEffect(() => {
     if (user_data) {
-      console.log("Setting user data", user_data.data);
       setUser(user_data.data);
     } else {
       setUser(null);
@@ -29,6 +28,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {

@@ -1,15 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tournament } from '@/types/types'
-import { formatDateString, parseTournamentType } from '@/lib/utils'
+import { formatDateString } from '@/lib/utils'
 
 import {
-    Users,
-    Trophy,
     Calendar,
     MapPin,
+    Table,
 } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
-import { UseGetParticipantsQuery } from '@/queries/participants'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -18,18 +16,17 @@ interface TournamentCardProps {
 }
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
-    const { data: participants } = UseGetParticipantsQuery(tournament.id)
     const { t } = useTranslation()
     const navigate = useNavigate()
 
     const handleClick = (tournament_id: number) => {
-        navigate({to: `/admin/tournaments/${tournament_id}`})
+        navigate({ to: `/admin/tournaments/${tournament_id}` })
     }
 
     return (
-        <> 
+        <>
             <Card onClick={() => handleClick(tournament.id)} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 hover:bg-gray-100 hover:cursor-pointer">
-                <CardHeader className="flex flex-col space-y-4">
+                <CardHeader className="flex flex-row justify-center gap-8">
                     <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                             <CardTitle className="text-xl font-bold text-gray-900">
@@ -40,25 +37,18 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                             </Badge>
                         </div>
                         <CardDescription className="text-gray-500 mt-1">
+                            {tournament.category}
+                        </CardDescription>
+                    </div>
+                    <div>
+                        <CardDescription className="text-gray-500 h-full">
                             {formatDateString(tournament.start_date) + ' - ' + formatDateString(tournament.end_date)}
                         </CardDescription>
                     </div>
                 </CardHeader>
-
                 <CardContent>
-                    <div className="space-y-6">
-                        {/* Main Info Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <InfoItem
-                                icon={<Trophy className="w-4 h-4 text-blue-500" />}
-                                label={t('admin.tournaments.info.type')}
-                                value={parseTournamentType(tournament.type)}
-                            />
-                            <InfoItem
-                                icon={<Users className="w-4 h-4 text-green-500" />}
-                                label={t('admin.tournaments.info.participants')}
-                                value={`${participants && participants.data ? participants.data.length : "-"} / ${tournament.tournament_size}`}
-                            />
+                    <div className="space-y-6 ">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                             <InfoItem
                                 icon={<MapPin className="w-4 h-4 text-red-500" />}
                                 label={t('admin.tournaments.info.location')}
@@ -68,6 +58,16 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                 icon={<Calendar className="w-4 h-4 text-purple-500" />}
                                 label={t('admin.tournaments.info.duration')}
                                 value={`${getDurationDays(tournament.start_date, tournament.end_date) + 1} days`}
+                            />
+                             <InfoItem
+                                icon={<Table className="w-4 h-4 text-purple-500" />}
+                                label={"Laudade arv"}
+                                value={`${tournament.total_tables}`}
+                            />
+                             <InfoItem
+                                icon={<Calendar className="w-4 h-4 text-purple-500" />}
+                                label={"Loodud"}
+                                value={`${formatDateString(tournament.created_at)}`}
                             />
                         </div>
                     </div>
@@ -86,7 +86,7 @@ interface InfoItemProps {
 const InfoItem: React.FC<InfoItemProps> = ({ icon, label, value }) => (
     <div className="flex items-start gap-2">
         {icon}
-        <div>
+        <div className=''>
             <p className="text-sm font-medium text-gray-500">{label}</p>
             <p className="text-sm font-medium text-gray-900">{value}</p>
         </div>

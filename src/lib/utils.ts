@@ -41,18 +41,18 @@ export function parsePlaces(s: string): number | null {
   return Number(startingPlace)
 }
 
-export function sortBrackets(data: any[]): any[] {
-  return data.sort((a, b) => {
-    const placeA = parsePlaces(a.tables[0].name);
-    const placeB = parsePlaces(b.tables[0].name);
+// export function sortBrackets(data: any[]): any[] {
+//   return data.sort((a, b) => {
+//     const placeA = parsePlaces(a.tables[0].name);
+//     const placeB = parsePlaces(b.tables[0].name);
 
-    if (placeA === null || placeB === null) {
-      return 0;
-    }
+//     if (placeA === null || placeB === null) {
+//       return 0;
+//     }
 
-    return placeA - placeB;
-  });
-}
+//     return placeA - placeB;
+//   });
+// }
 
 export const replaceSpecialCharacters = (str: string) => {
   return str.replace(/[äöõü]/gi, (char) => {
@@ -94,6 +94,19 @@ export const capitalizeName = (name: string) => {
 export const formatDateTime = (dateTime: string) => {
   const [date, time] = dateTime.split('T');
   return `${date} ${time}`;
+};
+
+export const formatDateTimeNew = (dateTime: string) => {
+  const date = new Date(dateTime);
+  
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 };
 
 export const formatDate = (time: string) => {
@@ -176,4 +189,18 @@ export function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
+export function parseTableType(s: string): string {
+  const parts = s.split("_")
+
+  if (parts.length == 1) {
+    return capitalize(s)
+  }
+
+  let res = ""
+  parts.forEach(part => {
+    res += capitalize(part) + " "
+  })
+
+  return res.trim()
+}
 

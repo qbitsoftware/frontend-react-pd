@@ -4,7 +4,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { useTournament } from './-components/tournament-provider'
-import { Separator } from '@radix-ui/react-dropdown-menu'
 import Editor from '@/routes/admin/-components/yooptaeditor'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/')({

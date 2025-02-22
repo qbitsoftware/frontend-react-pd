@@ -129,7 +129,7 @@ export const UsePostTournament = () => {
 }
 
 export interface BracketReponse {
-    data: Bracket[] | null
+    data: Bracket | null
     message: string;
     error: string | null;
 }
@@ -168,7 +168,7 @@ export const UsePatchTournament = (id: number) => {
     })
 }
 
-export const UseDeleteTournament = (id: number) => {
+export const UseDeleteTournament = (id: number | undefined) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async () => {

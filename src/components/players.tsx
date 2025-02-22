@@ -39,7 +39,7 @@ export default function PlayersTable({ users }: UserTableProps = { users: [] }) 
 
   const [sex, setSex] = useState("M")
 
-  const [SelectedPlayerId, setSelectedPlayerId] = useState<number | null>(null)
+  const [, setSelectedPlayerId] = useState<number | null>(null)
   const filteredUsers = users.filter((user) => user.sex == sex)
 
   return (

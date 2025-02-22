@@ -10,15 +10,15 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { redirect } from '@tanstack/react-router'
 import { ErrorResponse } from '@/types/types'
-import { useGetCurrentUser } from '@/queries/users'
 import { useUser } from '@/providers/userProvider'
+import { UseGetCurrentUser } from '@/queries/users'
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
     try {
-      await queryClient.ensureQueryData(useGetCurrentUser(),)
+      await queryClient.ensureQueryData(UseGetCurrentUser())
     } catch (error) {
       const err = error as ErrorResponse
       if (err.response.status === 401) {
@@ -47,7 +47,7 @@ function RouteComponent() {
         to: '/admin/dashboard',
       })
     }
-  }, [location.pathname])
+  }, [location.pathname, router])
 
 
 
@@ -79,7 +79,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen w-screen bg-gray-50 ">
+    <div className="flex w-screen bg-gray-50 h-[calc(100vh-4rem-1px)]"> 
       {/* Sidebar */}
       <div className="w-16 md:w-64 bg-white border-r border-gray-200">
         <div className="p-4 md:p-6">
@@ -108,10 +108,8 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="py-10 pt-4 w-[calc(100%-4rem)] md:w-[calc(100%-16rem)] px-4 sm:px-6 lg:px-8 ">
-        <div className="mx-auto container">
-          <Outlet />
-        </div>
+      <div className="flex-1 sm:px-6 lg:px-8 overflow-hidden p-8">
+        <Outlet />
       </div>
     </div>
   )
