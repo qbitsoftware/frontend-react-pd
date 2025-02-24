@@ -31,7 +31,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src='/avatar-fallback.png' className='rounded-full'></img></AvatarFallback>
+                      <AvatarFallback><img src='/test/placeholder-player-profilepic.png' className='rounded-full'></img></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>

@@ -20,7 +20,6 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
     const toast = useToast()
     const { tournamentid } = useParams({ strict: false })
     const { successToast, errorToast } = useToastNotification(toast)
-    console.log("MAtch", match)
     const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id ,match.match.id)
 
     useEffect(() => {
@@ -65,8 +64,6 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
             }
         }
     }
-
-    console.log("MATCH",match)
 
     return (
         <>

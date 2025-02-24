@@ -44,7 +44,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src='/avatar-fallback.png' className='rounded-full'></img></AvatarFallback>
+                      <AvatarFallback><img src='/test/clubs/ViimsiPinx 150x150.jpg' className='rounded-full'></img></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>

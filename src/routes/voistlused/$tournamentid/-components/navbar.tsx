@@ -1,42 +1,57 @@
-import { Link, useParams } from "@tanstack/react-router"
-import { Separator } from "@/components/ui/separator"
+"use client"
+
+import { Link, useParams, useLocation } from "@tanstack/react-router"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 
 const NavLinks = [
-    { name: "Info", href: "/" },
-    { name: "Ajakava", href: "/ajakava" },
-    { name: "Tulemused", href: "/tulemused" },
-    { name: "Osalejad", href: "/osalejad" },
-    { name: "Galerii", href: "/galerii" },
-    { name: "Juhend", href: "/juhend" },
-    { name: "Sponsorid", href: "/sponsorid" },
-    { name: "Meedia", href: "/meedia" },
+  { name: "Info", href: "/" },
+  { name: "Ajakava", href: "/ajakava" },
+  { name: "Tulemused", href: "/tulemused" },
+  { name: "Osalejad", href: "/osalejad" },
+  { name: "Galerii", href: "/galerii" },
+  { name: "Juhend", href: "/juhend" },
+  { name: "Sponsorid", href: "/sponsorid" },
+  { name: "Meedia", href: "/meedia" },
 ]
 
 const Navbar = () => {
+  const params = useParams({ strict: false })
+  const location = useLocation()
 
-    const params = useParams({ strict: false })
+  const currentTab = location.pathname.split("/").pop() || "/"
 
-    return (
-        <div className="">
-            <div className="pt-12 pb-4 text-[#363636]  bg-[#FBFCFD]">
-                <div className="container mx-auto px-4">
-                    <h1 className="text-4xl text-center font-semibold mb-4">Eesti Lauatennise Meistrivõistlused 2025</h1>
-                    <p className="text-xl text-center">27. - 29. Jaanuar 2025 • Tallinna Spordihoone</p>
-                </div>
-            </div>
-            <Separator className="h-[2px]" />
-            <div className="flex justify-center py-3 bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg">
-                <div className="flex justify-between">
-                    <div className="flex space-x-6 px-4 justify-evenly items-center sm:px-6 lg:px-8 flex-wrap">
-                        {NavLinks.map((link) => (
-                            <Link href={`/voistlused/${params.tournamentid}/${link.href}`} key={link.name} className="text-sm sm:text-base text-white hover:text-gray-200 cursor-pointer text-center ">{link.name}</Link>
-                        ))}
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="">
+      <div className="pt-12 pb-4 text-[#363636] bg-[#FBFCFD]">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl text-center font-semibold mb-4">Eesti Lauatennise Meistrivõistlused 2025</h1>
+          <p className="text-xl text-center">27. - 29. Jaanuar 2025 • Tallinna Spordihoone</p>
         </div>
-    )
+      </div>
+      <div className="shadow-lg bg-[#F2F7FD]">
+        <Tabs value={currentTab} className="w-full flex justify-center">
+          <TabsList className="flex-wrap w-[80%] mx-auto">
+            {NavLinks.map((link) => (
+              <Link className="" to={`/voistlused/${params.tournamentid}${link.href}`} key={link.name}>
+                <TabsTrigger
+                  value={link.href.replace("/", "")}
+                  className={cn(
+                    "text-sm sm:text-base px-3 py-2 m-1 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
+                    currentTab === link.href.replace("/", "") && "bg-[#3C83F6] text-white",
+                    currentTab !== link.href.replace("/", "") && "hover:bg-[#3C83F6]/10",
+                  )}
+                >
+                  {link.name}
+                </TabsTrigger>
+              </Link>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    </div>
+  )
 }
 
-
 export default Navbar
+

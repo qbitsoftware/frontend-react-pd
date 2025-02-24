@@ -24,6 +24,7 @@ interface ProtocolModalProps {
 }
 
 export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen, onClose, match, tournament_id }) => {
+    console.log("Tere",match)
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const router = useRouter()

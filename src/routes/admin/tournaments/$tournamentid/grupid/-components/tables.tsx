@@ -19,12 +19,12 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const navigate = useNavigate()
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex md:flex-row flex-col items-center gap-4">
         <CardTitle>Tournament Tables</CardTitle>
-        <Link to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
-          <Button>
+        <Link className="w-full md:w-auto flex justify-center items-center" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
+          <Button className="w-full md:w-auto h-8">
             <Plus className="w-4 h-4 mr-2" />
-            Lisa Grupp
+            Lisa Uus
           </Button>
         </Link>
       </CardHeader>
