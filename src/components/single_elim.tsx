@@ -9,10 +9,10 @@ interface BracketProps {
 }
 
 const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
-    const WIDTH = 180
+    const WIDTH = 220
     const HEIGTH = 60
-    const VERTICAL_GAP = 80
-    const HORISONTAL_GAP = 240
+    const VERTICAL_GAP = 30
+    const HORISONTAL_GAP = 250
     const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP)
     const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH)
     const matches_len = data.matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
@@ -51,7 +51,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                     )
                 })}
                 {/* Bracket lines */}
-                <svg className="absolute" style={{ top: `${starting_y + 100}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGTH}>
+                <svg className="absolute" style={{ top: `${starting_y + 30}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGTH}>
                     {data.matches.map((match) => {
                         if (match.match.round === 0) return null
 
@@ -64,7 +64,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
 
                         if (!firstMatch || !secondMatch) return null
 
-                        const startX = (match.match.round * HORISONTAL_GAP)
+                        const startX = (match.match.round * HORISONTAL_GAP) + 15
                         const startY = (match.match.topCoord + HEIGTH / 2 + 1)
 
                         const endX = ((match.match.round - 1) * HORISONTAL_GAP + WIDTH)
@@ -74,17 +74,17 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                         return (
                             <g key={`line-${match.match.id}-${match.match.order}`}>
                                 <path
-                                    d={`M${startX} ${startY} H${startX - HEIGTH / 2} V${endY1} H${endX}`}
-                                    className="stroke-black/30"
+                                    d={`M${startX} ${startY - 5} H${startX - HEIGTH / 2} V${endY1} H${endX}`}
+                                    className="stroke-gray-300"
                                     strokeWidth="1"
                                     shapeRendering={"crispEdges"}
                                     fill="none"
                                 />
                                 <path
-                                    d={`M${startX} ${startY} H${startX - HEIGTH / 2} V${endY2} H${endX}`}
+                                    d={`M${startX} ${startY + 5} H${startX - HEIGTH / 2} V${endY2} H${endX}`}
                                     strokeWidth="1"
                                     shapeRendering={"crispEdges"}
-                                    className="stroke-black/30"
+                                    className="stroke-gray-300"
                                     fill="none"
                                 />
                             </g>
@@ -92,7 +92,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                     })}
                 </svg>
                 {/* Bracket info */}
-                {Array.from({ length: matches_len + 1 }).map((_, index) => (
+                {/* {Array.from({ length: matches_len + 1 }).map((_, index) => (
                     <div
                         key={index}
                         style={{
@@ -104,7 +104,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                     >
                         <div className="font-semibold">Round {index + 1}</div>
                     </div>
-                ))}
+                ))} */}
             </div>
         );
     }

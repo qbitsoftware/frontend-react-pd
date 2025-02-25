@@ -24,7 +24,6 @@ interface ProtocolModalProps {
 }
 
 export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen, onClose, match, tournament_id }) => {
-    console.log("Tere",match)
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const router = useRouter()
@@ -105,6 +104,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     const [team2SelectedPlayers, setTeam2SelectedPlayers] = useState<Player[]>([])
 
     useEffect(() => {
+        console.log("Useffect firsst one")
         const me = match.match.extra_data
         setTeam1SelectedPlayers(createEmptyPlayers(5, 1, match.match.extra_data))
         setTeam2SelectedPlayers(createEmptyPlayers(5, 2, match.match.extra_data))
@@ -126,6 +126,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     }, [isOpen, match.match.extra_data])
 
     useEffect(() => {
+
+        console.log("Useffect second one")
         const hasChanges = {
             captain_a: captainTeam1 !== prevValuesRef.current.captainTeam1 ? captainTeam1 : undefined,
             captain_b: captainTeam2 !== prevValuesRef.current.captainTeam2 ? captainTeam2 : undefined,
@@ -181,6 +183,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
             return () => clearTimeout(handler);
         }
     }, [captainTeam1, captainTeam2, table_referee, head_referee, notes, table, match.match.extra_data]);
+    console.log("JOU")
 
     const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
 
@@ -199,7 +202,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({ isOpen,
     }
 
     const sendExtraData = async (extra_data: TableTennisExtraData) => {
-        console.log("sending extra data")
         const sendMatch: Match = {
             id: match.match.id,
             tournament_table_id: match.match.tournament_table_id,

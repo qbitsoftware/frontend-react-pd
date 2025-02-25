@@ -217,7 +217,7 @@ export type Match = {
     location: string
     bracket: string
     forfeit: boolean
-    start_time: Date
+    start_date: string
     extra_data: TableTennisExtraData
     topCoord: number // for front end purposes
     table_type: string

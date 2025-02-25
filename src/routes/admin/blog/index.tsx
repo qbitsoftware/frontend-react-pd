@@ -9,7 +9,7 @@ export const Route = createFileRoute('/admin/blog/')({
 
 function RouteComponent() {
   return (
-    <div className='w-full'>
+    <div className='w-full p-4'>
       <div className=''>
         <div className="flex justify-between items-center mb-8">
           <div>

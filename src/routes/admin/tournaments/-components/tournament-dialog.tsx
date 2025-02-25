@@ -8,7 +8,7 @@ import { Dispatch } from 'react'
 
 
 interface TournamentDialogProps {
-    data: Bracket[]
+    data: Bracket
     isOpen: boolean
     setIsOpen: Dispatch<SetStateAction<boolean>>
 }

@@ -171,15 +171,15 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       </AlertDialog>
 
 
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>
+      <Card className="w-full border-none shadow-none px-10">
+        <CardHeader className="px-0">
+          <CardTitle className="text-lg">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
               : t("admin.tournaments.create_tournament.title_create")}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -344,17 +344,18 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
                 <Editor value={value} setValue={setValue} readOnly={false} />
               </div>
-              <div className="flex justify-end gap-4">
+              <div className="flex justify-between gap-4">
+              {initial_data && (
+                  <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
+                    Kustuta turniir
+                  </Button>
+                )}
                 <Button type="submit" className="md:w-[200px] w-full">
                   {initial_data
                     ? t("admin.tournaments.create_tournament.button_edit")
                     : t("admin.tournaments.create_tournament.button_create")}
                 </Button>
-                {initial_data && (
-                  <Button type="button" onClick={() => setShowDeleteDialog(true)} variant={"destructive"}>
-                    Kustuta turniir
-                  </Button>
-                )}
+                
               </div>
             </form>
           </Form>

@@ -246,7 +246,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     if (tournament_data) {
         return (
             <div className="container mx-auto py-6 space-y-6 overflow-x-auto">
-                <Card className="overflow-x-auto container">
+                <Card className="overflow-x-auto container border-[#F0F3F3]">
                     <CardHeader className="">
                         <div className="flex w-[250px] gap-4">
                             <Select  onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>

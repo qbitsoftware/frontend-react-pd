@@ -79,9 +79,9 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex w-screen bg-gray-50 h-[calc(100vh-4rem-1px)]"> 
+    <div className="flex w-screen bg-[#F8F9F9] h-[calc(100vh-4rem-1px)]"> 
       {/* Sidebar */}
-      <div className="w-16 md:w-64 bg-white border-r border-gray-200">
+      <div className="w-16 md:w-56">
         <div className="p-4 md:p-6">
           <h1 className="hidden md:block text-xl font-bold text-gray-900">
             {t('admin.layout.title')}
@@ -108,7 +108,7 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 sm:px-6 lg:px-8 overflow-hidden px-4">
+      <div className="flex-1 bg-white overflow-hidden border border-[#EFEFEF] rounded-[3px] mx-4 my-3">
         <Outlet />
       </div>
     </div>

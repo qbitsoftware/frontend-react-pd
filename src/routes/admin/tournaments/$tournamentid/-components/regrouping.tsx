@@ -54,7 +54,6 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
         }
     }
 
-    console.log("Participants", participants)
 
     const sensors = useSensors(
         useSensor(PointerSensor),

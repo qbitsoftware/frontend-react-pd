@@ -67,7 +67,7 @@ export const TableCard = ({ title, matches }: { title: string; matches: MatchWra
 };
 
 export const MatchTicket = ({ match }: { match: MatchWrapper }) => {
-  const date = new Date(match.match.start_time);
+  const date = new Date(match.match.start_date);
   const time = date.toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit'

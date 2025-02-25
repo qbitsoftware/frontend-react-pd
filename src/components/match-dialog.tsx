@@ -15,6 +15,7 @@ import { Separator } from "./ui/separator"
 import { Score, Match, MatchWrapper } from '@/types/types'
 import { UsePatchMatch } from '@/queries/match'
 import { useLocation, useRouter } from '@tanstack/react-router'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 
 interface MatchDialogProps {
@@ -129,14 +130,15 @@ const MatchDialog: React.FC<MatchDialogProps> = ({ open, onClose, match, tournam
         }
         handleClose()
     }
-
-    console.log(form.getValues())
+    console.log("MATCHHH")
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[800px] max-h-[90vh] p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
                 <DialogHeader className="py-10 pb-2 rounded-t-lg text-2xl font-bold text-center mx-auto">
-                    Match Details
+                    <DialogTitle>
+                        Match Details
+                    </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>

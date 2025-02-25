@@ -10,10 +10,10 @@ interface BracketProps {
 }
 
 const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps) => {
-    const WIDTH = 180
+    const WIDTH = 220
     const HEIGHT = 60
-    const VERTICAL_GAP = 60
-    const HORIZONTAL_GAP = 240
+    const VERTICAL_GAP = 30
+    const HORIZONTAL_GAP = 250
     if (!data.matches) {
         return null
     }
@@ -62,7 +62,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
                     )
                 })}
 
-                <svg className="absolute" style={{ top: `${starting_y + 100}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGHT}>
+                <svg className="absolute" style={{ top: `${starting_y + 30}`, left: `${starting_x}` }} width={SVG_WIDTH} height={SVG_HEIGHT}>
                     {data.matches.map((match) => {
                         if (match.match.round === 0) return null;
 
@@ -76,7 +76,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
 
                             if (!firstMatch || !secondMatch) return null;
 
-                            const startX = match.match.round * HORIZONTAL_GAP;
+                            const startX = match.match.round * HORIZONTAL_GAP + 15
                             const startY = match.match.topCoord + HEIGHT / 2 + 1;
 
                             const endX = (match.match.round - 1) * HORIZONTAL_GAP + WIDTH;
@@ -86,15 +86,15 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
                             return (
                                 <g key={`line-${match.match.round}-${match.match.order}`}>
                                     <path
-                                        d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
-                                        className="stroke-black/30"
+                                        d={`M${startX} ${startY - 5} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
+                                        className="stroke-gray-300"
                                         strokeWidth="1"
                                         fill="none"
                                         shapeRendering={"crispEdges"}
                                     />
                                     <path
-                                        d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY2} H${endX}`}
-                                        className="stroke-black/30"
+                                        d={`M${startX} ${startY + 5} H${startX - HEIGHT / 2} V${endY2} H${endX}`}
+                                        className="stroke-gray-300"
                                         strokeWidth="1"
                                         fill="none"
                                         shapeRendering={"crispEdges"}
@@ -113,14 +113,14 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
                                 <g key={`line-${match.match.round}-${match.match.order}`}>
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY1} H${endX}`}
-                                        className="stroke-black/30"
+                                        className="stroke-gray-300"
                                         strokeWidth="1"
                                         fill="none"
                                         shapeRendering={"crispEdges"}
                                     />
                                     <path
                                         d={`M${startX} ${startY} H${startX - HEIGHT / 2} V${endY2} H${endX}`}
-                                        className="stroke-black/30"
+                                        className="stroke-gray-300"
                                         strokeWidth="1"
                                         fill="none"
                                         shapeRendering={"crispEdges"}
@@ -130,7 +130,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
                         }
                     })}
                 </svg>
-                {Array.from({ length: matches_len + 1 }).map((_, index) => (
+                {/* {Array.from({ length: matches_len + 1 }).map((_, index) => (
                     <div
                         key={index}
                         style={{
@@ -142,7 +142,7 @@ const DoubleElimBracket = ({ data, starting_x, starting_y, index }: BracketProps
                     >
                         <div className="font-semibold">Round {index + 1}</div>
                     </div>
-                ))}
+                ))} */}
 
             </div>
         );

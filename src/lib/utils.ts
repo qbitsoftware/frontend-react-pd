@@ -54,6 +54,18 @@ export function parsePlaces(s: string): number | null {
 //   });
 // }
 
+export const formatDateRange = (startDate: Date, endDate: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }
+  const start = new Intl.DateTimeFormat('et-EE', options).format(startDate)
+  const end = new Intl.DateTimeFormat('et-EE', options).format(endDate)
+
+  const startDay = start.split(' ')[0]
+  const endDay = end.split(' ')[0]
+  const monthYear = end.split(' ').slice(1).join(' ')
+
+  return `${startDay} - ${endDay} ${monthYear}`
+}
+
 export const replaceSpecialCharacters = (str: string) => {
   return str.replace(/[äöõü]/gi, (char) => {
     switch (char.toLowerCase()) {
@@ -98,11 +110,23 @@ export const formatDateTime = (dateTime: string) => {
 
 export const formatDateTimeNew = (dateTime: string) => {
   const date = new Date(dateTime);
-  
+
   return date.toLocaleString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
+export const formatDateTimeBracket = (dateTime: string) => {
+  const date = new Date(dateTime);
+
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'long',
     hour: '2-digit',
     minute: '2-digit',
     hour12: false

@@ -26,7 +26,7 @@ function RouteComponent() {
 
     if (tournaments_data && tournaments_data.data) {
         return (
-            <div className=''>
+            <div className='p-4'>
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">

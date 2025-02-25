@@ -85,7 +85,7 @@ export const UseDeleteTournamentTable = (tournament_id: number, tournament_table
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournament_tables', tournament_table_id] })
+            queryClient.resetQueries({ queryKey: ['tournament_tables', tournament_id] })
         },
     })
 }

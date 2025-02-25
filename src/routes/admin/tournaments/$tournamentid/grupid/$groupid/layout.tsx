@@ -44,24 +44,26 @@ function RouteComponent() {
     { value: "tabelid", label: "Tables" }
   ]
 
+
+
   return (
-    <div className="px-2">
-      <div className="flex flex-col py-2 lg:flex-row justify-between items-center gap-2 bg-gray-50 lg:h-16">
+    <div className="px-10">
+      <div className="flex flex-col py-6 lg:flex-row justify-between items-center gap-2 sticky top-0 bg-white transition-all duration-200  border-b border-gray-200">
         <div>
-          <h3 className="text-2xl font-semibold">{table_data.data.class}</h3>
+          <h3 className="text-lg font-semibold">{table_data.data.class}</h3>
         </div>
-        <Tabs value={currentTab} className="w-full lg:max-w-[500px]">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs value={currentTab}>
+          <TabsList className="grid grid-cols-4">
             {tabs.map((tab) => (
               <Link
                 key={tab.value}
                 to={`/admin/tournaments/${tournamentid}/grupid/${groupid}${tab.value === "/" ? "" : `/${tab.value}`}`}
-                className="w-full"
+                
               >
                 <TabsTrigger
                   value={tab.value}
                   className={cn(
-                    "w-full",
+                    "w-[8rem]",
                     currentTab === tab.value && "bg-secondary text-white hover:bg-secondary/90",
                     currentTab !== tab.value && "hover:bg-secondary/10",
                   )}

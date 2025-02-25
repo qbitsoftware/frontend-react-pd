@@ -52,7 +52,7 @@ function RouteComponent() {
         )
     } else {
         return (
-            <div className='h-[75vh]'>
+            <div className='h-[calc(100vh-13.5rem)]'>
                 <BracketComponent bracket={bracketsData} />
             </div>
         )

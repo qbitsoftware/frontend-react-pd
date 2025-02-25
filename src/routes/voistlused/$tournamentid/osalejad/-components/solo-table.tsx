@@ -9,11 +9,12 @@ interface SoloTableProps {
 }
 
 const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
+  console.log('PARTICIPANBTS', participants)
   return (
-    <div className='overflow-y-scroll h-full'>
+    <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
-        <div className="rounded-md border">
-          <Table className='bg-white'>
+        <div className="rounded-md border h-full overflow-y-auto">
+                 <Table className="bg-white h-full">
             <TableHeader >
               <TableRow className='bg-[#F9F9FB]'>
                 <TableHead>Pilt</TableHead>

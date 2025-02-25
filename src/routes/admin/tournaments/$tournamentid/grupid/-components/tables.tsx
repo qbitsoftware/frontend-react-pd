@@ -18,9 +18,9 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const { tournamentid } = useParams({ strict: false })
   const navigate = useNavigate()
   return (
-    <Card>
-      <CardHeader className="flex md:flex-row flex-col items-center gap-4">
-        <CardTitle>Tournament Tables</CardTitle>
+    <Card className="border-none shadow-none px-10">
+      <CardHeader className="flex md:flex-row flex-col items-center gap-4 px-0">
+        <CardTitle className="text-lg">Tournament Tables</CardTitle>
         <Link className="w-full md:w-auto flex justify-center items-center" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
           <Button className="w-full md:w-auto h-8">
             <Plus className="w-4 h-4 mr-2" />
@@ -28,7 +28,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
           </Button>
         </Link>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2">
         <Table>
           <TableHeader>
             <TableRow>

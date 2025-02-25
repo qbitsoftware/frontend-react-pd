@@ -35,19 +35,19 @@ function RouteComponent() {
   const currentTab = location.pathname.includes("/grupid") ? "groups" : "info"
 
   return (
-    <div className="mx-auto container h-full">
-      <div className="w-full md:px-6">
-        <div className="flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gray-50 lg:my-1 lg:h-16">
-          <h1 className="text-3xl font-bold text-black">{tournament_data.data?.name}</h1>
-          <Tabs value={currentTab} className="w-full lg:max-w-[500px]">
-            <TabsList className="grid w-full grid-cols-2">
-              <Link to={`/admin/tournaments/${tournamentid}`}>
-                <TabsTrigger value="info" className="w-full">
+    <div className="mx-auto  h-full">
+      <div className="w-full">
+        <div className="px-10 md:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50">
+          <h1 className="text-xl font-semibold text-black">{tournament_data.data?.name}</h1>
+          <Tabs value={currentTab} className="">
+            <TabsList className="grid grid-cols-2">
+              <Link to={`/admin/tournaments/${tournamentid}`} >
+                <TabsTrigger value="info" className="w-[8rem]">
                   Info
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/grupid`}>
-                <TabsTrigger value="groups" className="w-full">
+                <TabsTrigger value="groups" className="w-[8rem]">
                   Groups
                 </TabsTrigger>
               </Link>
@@ -55,8 +55,8 @@ function RouteComponent() {
           </Tabs>
         </div>
 
-        <div className="pt-4">
-          <ScrollArea className="h-[calc(100vh-12rem)]">
+        <div className="">
+          <ScrollArea className="h-[calc(100vh-8rem)]">
             <Outlet />
           </ScrollArea>
         </div>

@@ -70,8 +70,8 @@ export default function Navbar() {
     ]
 
     return (
-        <header className="bg-white shadow-sm border-b border-gray-200">
-            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="bg-white shadow-sm border-b border-[#E0E8F1]">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-4 ">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">

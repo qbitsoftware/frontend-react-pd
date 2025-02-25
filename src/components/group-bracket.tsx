@@ -52,7 +52,6 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
 
     const renderMatchCell = (p1_id: string, p2_id: string) => {
         const find_matches = findMatches(p1_id, p2_id);
-        console.log("FINNDD", find_matches)
 
         return (
             <div className="flex flex-col space-y-2">

@@ -141,9 +141,9 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Card className="w-full">
+      <Card className="w-full border-[#F0F3F3]">
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-base">
             {initial_data ? "Edit Table" : "Create Table"}
           </CardTitle>
         </CardHeader>
@@ -278,17 +278,18 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
-              <div className="flex justify-end gap-4 mt-10">
+              <div className="flex justify-between gap-4 mt-10">
+              {initial_data && (
+                  <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
+                    Kustuta turniir
+                  </Button>
+                )}
                 <Button type="submit" className="md:w-[200px] w-full">
                   {initial_data
                     ? t("admin.tournaments.create_tournament.button_edit")
                     : t("admin.tournaments.create_tournament.button_create")}
                 </Button>
-                {initial_data && (
-                  <Button type="button" onClick={() => setShowDeleteDialog(true)} variant={"destructive"}>
-                    Kustuta turniir
-                  </Button>
-                )}
+                
               </div>
             </form>
           </Form>

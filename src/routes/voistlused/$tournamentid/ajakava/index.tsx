@@ -3,14 +3,18 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useTournament } from '../-components/tournament-provider'
 import { useState } from 'react'
 import { Schedule } from './-components/schedule-layout'
+import { UseGetTournamentTables } from '@/queries/tables'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
   loader: async ({ context: { queryClient }, params }) => {
     const matchesData = await queryClient.ensureQueryData(
       UseGetTournamentMatches(Number(params.tournamentid)),
     )
+    const tournament_tables = await queryClient.ensureQueryData(
+      UseGetTournamentTables(Number(params.tournamentid))
+    )
 
-    return { matchesData }
+    return { matchesData, tournament_tables }
   },
   component: RouteComponent,
 })
@@ -19,22 +23,22 @@ function RouteComponent() {
   const { matchesData } = Route.useLoaderData()
   const tournament = useTournament()
 
-  console.log(matchesData)
-
   const start = tournament.start_date
-  const end = tournament.end_date
-  const days = Math.ceil(Number(new Date(end)) - Number(new Date(start))) / (1000 * 60 * 60 * 24);
-  console.log(days)
+
+  
+
+  // if (matchesData.data.match.)
 
   const [activeDay, setActiveDay] = useState<number>(0)
 
+  
   
 
   if (matchesData.data && matchesData.data.length > 0) {
     return (
         <Schedule 
           matches={matchesData.data}
-          days={days}
+          days={6}
           activeDay={activeDay}
           setActiveDay={setActiveDay}
           startDate={start}
