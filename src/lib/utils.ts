@@ -156,7 +156,10 @@ export const CalculateSVGWidth = (matches: TableMatch[], vertical_gap: number) =
 
 export const CalculateSVGHeight = (matches: TableMatch[], horisontal_gap: number, height: number) => {
   const count = matches.filter(item => item.match.round === 0).length || 0
-  const SVG_HEIGTH = count * (height + horisontal_gap)
+  let SVG_HEIGTH = count * (height + horisontal_gap)
+  if (matches.length == 4) {
+    SVG_HEIGTH += height
+  }
   return SVG_HEIGTH
 }
 

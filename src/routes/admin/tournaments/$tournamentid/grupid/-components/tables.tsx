@@ -29,24 +29,24 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
         </Link>
       </CardHeader>
       <CardContent className="px-2">
-        <Table>
+        <Table className="w-full">
           <TableHeader>
             <TableRow>
               <TableHead>Grupp</TableHead>
               <TableHead>Osalejate arv/Tabeli suurus</TableHead>
               <TableHead>Tabeli tüüp</TableHead>
               <TableHead>Formaat</TableHead>
-            
+
             </TableRow>
           </TableHeader>
           <TableBody>
             {tables ? tables.map((table) => (
-              <TableRow key={table.id} onClick={() => (navigate({ to: `${table.id}` }))} className="cursor-pointer">
+              <TableRow key={table.id} onClick={() => (navigate({ to: `${table.id}` }))} className="cursor-pointer h-[100px] sm:h-[40px]">
                 <TableCell className="font-medium">{table.class}</TableCell>
                 <TableCell><span className="font-semibold">{table.participants.length}</span>/{table.size}</TableCell>
-                <TableCell>{parseTableType(table.type)}</TableCell>
+                <TableCell className="truncate">{parseTableType(table.type)}</TableCell>
                 <TableCell>{table.solo ? 'Üksik' : 'Meeskondadega'}</TableCell>
-                
+
               </TableRow>
             ))
               :

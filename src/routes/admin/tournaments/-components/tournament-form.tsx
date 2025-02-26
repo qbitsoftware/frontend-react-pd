@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, Loader2 } from "lucide-react"
+import { CalendarIcon, ChevronLeft, Loader2 } from "lucide-react"
 import { useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
+import { useNavigate } from "@tanstack/react-router"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
@@ -82,6 +83,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       },
   })
 
+  const navigate = useNavigate()
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
   const deleteMutation = UseDeleteTournament(initial_data?.id)
   const { data: tournament_categories } = UseGetTournamentCategories()
@@ -173,6 +175,10 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
       <Card className="w-full border-none shadow-none px-10">
         <CardHeader className="px-0">
+          <Button variant="ghost" className="hover:bg-transparent" size="icon" onClick={() => navigate({ to: ".." })}>
+            <ChevronLeft className="w-5 h-5" />
+            Back
+          </Button>
           <CardTitle className="text-lg">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
@@ -303,23 +309,23 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
-                <FormField
-                  control={form.control}
-                  name="total_tables"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>{"Laudade arv"}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          {...field}
-                          onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                control={form.control}
+                name="total_tables"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{"Laudade arv"}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="private"
@@ -345,7 +351,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 <Editor value={value} setValue={setValue} readOnly={false} />
               </div>
               <div className="flex justify-between gap-4">
-              {initial_data && (
+                {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
                     Kustuta turniir
                   </Button>
@@ -355,7 +361,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                     ? t("admin.tournaments.create_tournament.button_edit")
                     : t("admin.tournaments.create_tournament.button_create")}
                 </Button>
-                
+
               </div>
             </form>
           </Form>

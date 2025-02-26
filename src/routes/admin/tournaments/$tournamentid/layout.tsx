@@ -36,8 +36,8 @@ function RouteComponent() {
 
   return (
     <div className="mx-auto  h-full">
-      <div className="w-full">
-        <div className="px-10 md:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50">
+      <div className="w-full z-12">
+        <div className="py-4 sm: py-auto px-10 lg:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
           <h1 className="text-xl font-semibold text-black">{tournament_data.data?.name}</h1>
           <Tabs value={currentTab} className="">
             <TabsList className="grid grid-cols-2">
@@ -56,7 +56,7 @@ function RouteComponent() {
         </div>
 
         <div className="">
-          <ScrollArea className="h-[calc(100vh-8rem)]">
+          <ScrollArea className="sm:h-[calc(100vh-8rem)]">
             <Outlet />
           </ScrollArea>
         </div>

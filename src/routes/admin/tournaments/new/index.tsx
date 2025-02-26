@@ -8,7 +8,7 @@ export const Route = createFileRoute('/admin/tournaments/new/')({
 
 function RouteComponent() {
   return (
-    <div className="w-full">
+    <div className="w-full overflow-hidden">
       <TournamentForm initial_data={undefined} />
     </div>
   )

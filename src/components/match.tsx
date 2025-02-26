@@ -73,9 +73,10 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                 onClick={() =>
                     !isDisabled &&
                     (match.match.table_type == "champions_league" ? setIsOpen2(true) : setIsOpen(true))}
-                className={`absolute flex flex-col bg-white  z-10 text-sm`}>
+                className={`absolute flex flex-col z-10 bg-white text-sm`}>
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute top-[-20px] w-[60px] text-left text-[10px]'>Laud {match.match.extra_data.table}</div>}
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[112px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.start_date ? formatDateTimeBracket(match.match.start_date) : formatDateTimeBracket(new Date().toISOString())}</div>}
+                {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.bracket}</div>}
                 <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
                     {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
                     {(match.participant_1.id == "empty") ? (

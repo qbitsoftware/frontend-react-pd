@@ -27,8 +27,8 @@ function RouteComponent() {
     if (tournaments_data && tournaments_data.data) {
         return (
             <div className='p-4'>
-                <div className="flex justify-between items-center mb-8">
-                    <div>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+                    <div className='flex items-center justify-center flex-col text-center mb-4 md:mb-0 md:justify-start md:items-start'>
                         <h1 className="text-2xl font-bold text-gray-900">
                             {t('admin.tournaments.title')}
                         </h1>

@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "@tanstack/react-router"
@@ -22,7 +20,7 @@ export const TournamentTable: React.FC<TournamentTableProps> = ({ tournaments })
   }
 
   return (
-    <Table>
+    <Table className="w-full">
       <TableHeader>
         <TableRow>
           <TableHead>{t("admin.tournaments.table.name")}</TableHead>
@@ -39,23 +37,23 @@ export const TournamentTable: React.FC<TournamentTableProps> = ({ tournaments })
           <TableRow
             key={tournament.id}
             onClick={() => handleRowClick(tournament.id)}
-            className="cursor-pointer hover:bg-gray-100"
+            className="cursor-pointer hover:bg-gray-100 h-[100px] sm:h-auto"
           >
-            <TableCell className="font-medium">{tournament.name}</TableCell>
+            <TableCell className="">{tournament.name}</TableCell>
             <TableCell>{tournament.category}</TableCell>
             <TableCell>
               <Badge variant={tournament.state === "started" ? "outline" : "destructive"}>{tournament.state}</Badge>
             </TableCell>
-            <TableCell>
+            <TableCell className="truncate">
               {formatDateString(tournament.start_date)} - {formatDateString(tournament.end_date)}
             </TableCell>
-            <TableCell>
+            <TableCell className="truncate">
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-2 text-red-500" />
                 {tournament.location}
               </div>
             </TableCell>
-            <TableCell>
+            <TableCell className="truncate">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-purple-500" />
                 {getDurationDays(tournament.start_date, tournament.end_date) + 1} days

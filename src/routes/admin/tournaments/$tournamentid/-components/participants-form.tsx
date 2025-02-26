@@ -553,7 +553,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 <Input disabled className="min-w-[100px] border-none" type="text" />
                                             </TableCell>
                                             <TableCell>
-                                                <div className="">
+                                                <div className="relative">
                                                     <Input
                                                         type="text"
                                                         {...form.register("players.0.name")}

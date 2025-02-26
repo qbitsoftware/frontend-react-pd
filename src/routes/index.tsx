@@ -13,10 +13,10 @@ import { TopFive } from './-components/topFive';
 
 export const Route = createFileRoute('/')({
     component: Index,
-    loader: async ({ context: { queryClient } }) => {
-        const articledata = queryClient.ensureQueryData(UseGetArticles())
-        return articledata
-    }
+    // loader: async ({ context: { queryClient } }) => {
+    //     const articledata = queryClient.ensureQueryData(UseGetArticles())
+    //     return articledata
+    // }
 })
 
 function Index() {
@@ -63,7 +63,7 @@ function Index() {
                     transition={{ duration: 0.5, delay: 0.6 }}
                     className="mb-16"
                 >
-                    <LatestArticles articles={articledata.data.slice(0, 3)} />
+                    {/* <LatestArticles articles={articledata.data.slice(0, 3)} /> */}
                 </motion.div>
 
                 <div className="flex justify-center sm:flex-row flex-col gap-10 w-full mb-8">
