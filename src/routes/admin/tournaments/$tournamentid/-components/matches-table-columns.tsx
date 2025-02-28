@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { MatchWrapper } from "@/types/types"
+import { TableNumberForm } from "./table-number-form"
 
 export const columns: ColumnDef<MatchWrapper>[] = [
   {
@@ -20,10 +21,10 @@ export const columns: ColumnDef<MatchWrapper>[] = [
   {
     accessorKey: "match.extra_data.table",
     header: "Table",
-    // cell: ({ row }) => {
-    //   const match = row.original
-    //   return <TableNumberForm match={match.match} initialTableNumber={match.match.extra_data ? match.match.extra_data.table : 0} />
-    // },
+    cell: ({ row }) => {
+      const match = row.original
+      return <TableNumberForm match={match.match} initialTableNumber={match.match.extra_data ? match.match.extra_data.table : 0} />
+    },
   },
   {
     accessorKey: "",

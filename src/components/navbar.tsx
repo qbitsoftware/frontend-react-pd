@@ -81,8 +81,8 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    <NavigationMenu className="hidden lg:flex ">
-                        <NavigationMenuList className="flex space-x-4">
+                    <NavigationMenu className="hidden lg:flex z-50">
+                        <NavigationMenuList className="flex space-x-4 z-50">
                             {menuItems.map((item) => (
                                 <NavigationMenuItem key={item.name}>
                                     {item.dropdownItems ? (

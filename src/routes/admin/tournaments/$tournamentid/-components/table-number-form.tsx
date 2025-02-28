@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { UseGetTournamentQuery } from "@/queries/tournaments"
 import { useParams } from "@tanstack/react-router"
-import { UseGetMatchesQuery, UsePatchMatch } from "@/queries/match"
+import { UsePatchMatch } from "@/queries/match"
 import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
 import { Match } from "@/types/types"
@@ -19,7 +19,7 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
 
   const params = useParams({ strict: false })
   const { data: tournament_data, isLoading: isTournamentLoading } = UseGetTournamentQuery(Number(params.tournamentid))
-  const { data: match_data, isLoading: isMatchLoading } = UseGetMatchesQuery(Number(params.tournamentid), match.tournament_table_id)
+  // const { data: match_data, isLoading: isMatchLoading } = UseGetMatchesQuery(Number(params.tournamentid), match.tournament_table_id)
   const matchMutation = UsePatchMatch(Number(params.tournamentid), match.tournament_table_id, match.id)
 
   const handleChange = async (value: string) => {
@@ -35,23 +35,23 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
     }
   }
 
-  if (isTournamentLoading || isMatchLoading) {
+  if (isTournamentLoading) {
     return <div></div>
   }
 
-  if (!tournament_data?.data || !match_data?.data) {
+  if (!tournament_data?.data) {
     return <div>0</div>
   }
 
   const totalTables = tournament_data.data.total_tables || 20
 
-  const occupiedTables = match_data?.data
-    .map((match) => match.match.extra_data.table)
-    .filter((table) => table !== null) as number[]
+  // const occupiedTables = match_data?.data
+  //   .map((match) => match.match.extra_data.table)
+  //   .filter((table) => table !== null) as number[]
 
   const allTables = Array.from({ length: totalTables }, (_, i) => i + 1)
 
-  const availableTables = allTables.filter((table) => !occupiedTables.includes(table))
+  const availableTables = allTables
 
   return (
     <div>

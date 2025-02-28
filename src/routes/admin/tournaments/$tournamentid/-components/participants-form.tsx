@@ -2,7 +2,7 @@ import { useNavigate, useRouter } from "@tanstack/react-router"
 import { MoreHorizontal, Pencil, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import type { Participant, Tournament, TournamentTable, UserNew } from "@/types/types"
 import {
     UseDeleteParticipant,
@@ -76,17 +76,22 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
     const [focusedField, setFocusedField] = useState<string | null>(null)
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [dropdownPosition, setDropdownPosition] = useState<'top' | 'bottom'>('bottom');
 
-    const updateDropdownPosition = useCallback(() => {
-        if (inputRef.current) {
-            const rect = inputRef.current.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            const inputMiddleY = rect.top + rect.height / 2;
+    const [dropdownPositions, setDropdownPositions] = useState<{ [key: string]: { top: number, left: number, position: 'top' | 'bottom' } }>({});
 
-            setDropdownPosition(inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom');
-        }
+    const updateDropdownPosition = useCallback((e: React.FocusEvent<HTMLInputElement>, id: string) => {
+        const rect = e.target.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const inputMiddleY = rect.top + rect.height / 2;
+
+        setDropdownPositions(prev => ({
+            ...prev,
+            [id]: {
+                top: inputMiddleY > viewportHeight / 2 ? rect.top - 305 : rect.bottom + 5,
+                left: rect.left,
+                position: inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom'
+            }
+        }));
     }, []);
 
     const form = useForm<ParticipantFormValues>({
@@ -272,182 +277,190 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                         </div>
                     </CardHeader>
                     <CardContent className="">
-                        <Table className="min-h-[60vh] flex flex-col">
-                            <TableHeader className="">
-                                <TableRow className="">
-                                    {table_data && table_data.solo ? (
-                                        <>
-                                            <TableHead>JKNR.</TableHead>
-                                            <TableHead>Positsioon</TableHead>
-                                            <TableHead>Nimi</TableHead>
-                                            <TableHead>Rank</TableHead>
-                                            <TableHead>Sugu</TableHead>
-                                            <TableHead>Klubi</TableHead>
-                                            <TableHead>ELTL ID</TableHead>
-                                            <TableHead>Koht Reitingus</TableHead>
-                                            <TableHead>Klass</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <TableHead>JKNR.</TableHead>
-                                            <TableHead>Positsioon</TableHead>
-                                            <TableHead>Meeskond</TableHead>
-                                            <TableHead>Nimi</TableHead>
-                                            <TableHead>Rank</TableHead>
-                                            <TableHead>Sugu</TableHead>
-                                            <TableHead>Klubi</TableHead>
-                                            <TableHead>ELTL ID</TableHead>
-                                            <TableHead>Koht Reitingus</TableHead>
-                                            <TableHead>Actions</TableHead>
-                                        </>
-                                    )}
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody className="">
-                                {participants?.map((participant, idx) =>
-                                    table_data.solo ? (
-                                        <TableRow key={participant.id}>
-                                            <TableCell>{idx + 1}</TableCell>
-                                            <TableCell>{participant.order}</TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? <div className="">
-                                                    <Input
-                                                        type="text"
-                                                        {...editForm.register("players.0.name")}
-                                                        onChange={(e) => {
-                                                            editForm.setValue("players.0.name", e.target.value)
-                                                            setSearchTerm(e.target.value)
-                                                            if (table_data.solo) {
-                                                                editForm.setValue("name", e.target.value)
-                                                            }
-                                                        }}
-                                                        className="min-w-[100px] text-sm md:text-base"
-                                                        autoComplete="off"
-                                                        onFocus={() => setFocusedField("name")}
-                                                        onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                        placeholder="Nimi"
-                                                    />
-                                                    {focusedField === "name" &&
-                                                        playerSuggestions &&
-                                                        playerSuggestions.data &&
-                                                        playerSuggestions.data.length > 0 && (
-                                                            <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
-                                                                {playerSuggestions.data.map((user, i) => (
-                                                                    <div
-                                                                        key={i}
-                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                        onClick={() => setFormValues(user, editForm)}
-                                                                    >
-                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                </div>
-                                                    : (participant.name)
-                                                }
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
-                                                        defaultValue={participant.players[0].extra_data.rate_points}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].extra_data.rate_points
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.sex")}
-                                                        defaultValue={participant.players[0].sex}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].sex
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.extra_data.club")}
-                                                        defaultValue={participant.players[0].extra_data.club}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].extra_data.club
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
-                                                        defaultValue={participant.players[0].extra_data.eltl_id}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].extra_data.eltl_id
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
-                                                        defaultValue={participant.players[0].extra_data.rate_order}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].extra_data.rate_order
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {editingParticipant?.id === participant.id ? (
-                                                    <Input
-                                                        {...editForm.register("players.0.extra_data.class", { valueAsNumber: false })}
-                                                        defaultValue={participant.players[0].extra_data.class}
-                                                    />
-                                                ) : (
-                                                    participant.players[0].extra_data.class
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm">
-                                                            <MoreHorizontal className="w-4 h-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent>
-                                                        {editingParticipant?.id === participant.id ? (
-                                                            <DropdownMenuItem onClick={() => handleAddOrUpdateParticipant(editForm.getValues(), participant.id)}>
-                                                                <Pencil className="w-4 h-4 mr-2" />
-                                                                Save
-                                                            </DropdownMenuItem>
-                                                        ) : (
-                                                            <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                                                <Pencil className="w-4 h-4 mr-2" />
-                                                                Edit
-                                                            </DropdownMenuItem>
-                                                        )}
-                                                        <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
-                                                            <Trash className="w-4 h-4 mr-2" />
-                                                            Delete
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        <>
+                        <div className="min-h-[60vh] flex flex-col">
+                            <Table className="">
+                                <TableHeader className="">
+                                    <TableRow className="">
+                                        {table_data && table_data.solo ? (
+                                            <>
+                                                <TableHead>JKNR.</TableHead>
+                                                <TableHead>Positsioon</TableHead>
+                                                <TableHead>Nimi</TableHead>
+                                                <TableHead>Rank</TableHead>
+                                                <TableHead>Sugu</TableHead>
+                                                <TableHead>Klubi</TableHead>
+                                                <TableHead>ELTL ID</TableHead>
+                                                <TableHead>Koht Reitingus</TableHead>
+                                                <TableHead>Klass</TableHead>
+                                                <TableHead>Actions</TableHead>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <TableHead>JKNR.</TableHead>
+                                                <TableHead>Positsioon</TableHead>
+                                                <TableHead>Meeskond</TableHead>
+                                                <TableHead>Nimi</TableHead>
+                                                <TableHead>Rank</TableHead>
+                                                <TableHead>Sugu</TableHead>
+                                                <TableHead>Klubi</TableHead>
+                                                <TableHead>ELTL ID</TableHead>
+                                                <TableHead>Koht Reitingus</TableHead>
+                                                <TableHead>Actions</TableHead>
+                                            </>
+                                        )}
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody className="">
+                                    {participants?.map((participant, idx) =>
+                                        table_data.solo ? (
                                             <TableRow key={participant.id}>
                                                 <TableCell>{idx + 1}</TableCell>
                                                 <TableCell>{participant.order}</TableCell>
-                                                <TableCell className="font-medium">
+                                                {/* <TableCell>
+                                                    {editingParticipant?.id === participant.id ?
+                                                        <div className="">
+                                                            <Input
+                                                                type="text"
+                                                                {...editForm.register("players.0.name")}
+                                                                onChange={(e) => {
+                                                                    editForm.setValue("players.0.name", e.target.value)
+                                                                    setSearchTerm(e.target.value)
+                                                                    if (table_data.solo) {
+                                                                        editForm.setValue("name", e.target.value)
+                                                                    }
+                                                                }}
+                                                                className="min-w-[100px] text-sm md:text-base"
+                                                                autoComplete="off"
+                                                                onFocus={() => setFocusedField("name")}
+                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                                placeholder="Nimi"
+                                                            />
+                                                            {focusedField === "name" &&
+                                                                playerSuggestions &&
+                                                                playerSuggestions.data &&
+                                                                playerSuggestions.data.length > 0 && (
+                                                                    <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                                        {playerSuggestions.data.map((user, i) => (
+                                                                            <div
+                                                                                key={i}
+                                                                                className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                                onClick={() => setFormValues(user, editForm)}
+                                                                            >
+                                                                                {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                        </div>
+                                                        : (participant.name)
+                                                    }
+                                                </TableCell> */}
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ?
+                                                        <div className="relative">
+                                                            <Input
+                                                                type="text"
+                                                                {...editForm.register("players.0.name")}
+                                                                onChange={(e) => {
+                                                                    editForm.setValue("players.0.name", e.target.value)
+                                                                    setSearchTerm(e.target.value)
+                                                                    if (table_data.solo) {
+                                                                        editForm.setValue("name", e.target.value)
+                                                                    }
+                                                                }}
+                                                                className="min-w-[100px] text-sm md:text-base"
+                                                                autoComplete="off"
+                                                                onFocus={(e) => {
+                                                                    setFocusedField("name");
+                                                                    updateDropdownPosition(e, `edit-${participant.id}`);
+                                                                }}
+                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                                placeholder="Nimi"
+                                                            />
+                                                            {focusedField === "name" &&
+                                                                playerSuggestions &&
+                                                                playerSuggestions.data &&
+                                                                playerSuggestions.data.length > 0 && (
+                                                                    <div className="fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-10"
+                                                                        style={{
+                                                                            top: dropdownPositions[`edit-${participant.id}`]?.top || 0,
+                                                                            left: dropdownPositions[`edit-${participant.id}`]?.left || 0
+                                                                        }}>
+                                                                        {playerSuggestions.data.map((user, i) => (
+                                                                            <div
+                                                                                key={i}
+                                                                                className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                                onClick={() => setFormValues(user, editForm)}
+                                                                            >
+                                                                                {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                        </div>
+                                                        : (participant.name)
+                                                    }
+                                                </TableCell>
+                                                <TableCell>
                                                     {editingParticipant?.id === participant.id ? (
-                                                        <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
+                                                        <Input
+                                                            {...editForm.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
+                                                            defaultValue={participant.players[0].extra_data.rate_points}
+                                                        />
                                                     ) : (
-                                                        (participant.name)
+                                                        participant.players[0].extra_data.rate_points
                                                     )}
                                                 </TableCell>
-                                                <TableCell colSpan={6}></TableCell>
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ? (
+                                                        <Input
+                                                            {...editForm.register("players.0.sex")}
+                                                            defaultValue={participant.players[0].sex}
+                                                        />
+                                                    ) : (
+                                                        participant.players[0].sex
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ? (
+                                                        <Input
+                                                            {...editForm.register("players.0.extra_data.club")}
+                                                            defaultValue={participant.players[0].extra_data.club}
+                                                        />
+                                                    ) : (
+                                                        participant.players[0].extra_data.club
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ? (
+                                                        <Input
+                                                            {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
+                                                            defaultValue={participant.players[0].extra_data.eltl_id}
+                                                        />
+                                                    ) : (
+                                                        participant.players[0].extra_data.eltl_id
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ? (
+                                                        <Input
+                                                            {...editForm.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
+                                                            defaultValue={participant.players[0].extra_data.rate_order}
+                                                        />
+                                                    ) : (
+                                                        participant.players[0].extra_data.rate_order
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {editingParticipant?.id === participant.id ? (
+                                                        <Input
+                                                            {...editForm.register("players.0.extra_data.class", { valueAsNumber: false })}
+                                                            defaultValue={participant.players[0].extra_data.class}
+                                                        />
+                                                    ) : (
+                                                        participant.players[0].extra_data.class
+                                                    )}
+                                                </TableCell>
                                                 <TableCell>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
@@ -456,235 +469,353 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent>
-                                                            <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                                                <Pencil className="w-4 h-4 mr-2" />
-                                                                Edit Team
-                                                            </DropdownMenuItem>
+                                                            {editingParticipant?.id === participant.id ? (
+                                                                <DropdownMenuItem onClick={() => handleAddOrUpdateParticipant(editForm.getValues(), participant.id)}>
+                                                                    <Pencil className="w-4 h-4 mr-2" />
+                                                                    Save
+                                                                </DropdownMenuItem>
+                                                            ) : (
+                                                                <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
+                                                                    <Pencil className="w-4 h-4 mr-2" />
+                                                                    Edit
+                                                                </DropdownMenuItem>
+                                                            )}
                                                             <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
                                                                 <Trash className="w-4 h-4 mr-2" />
-                                                                Delete Team
+                                                                Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
                                             </TableRow>
+                                        ) : (
+                                            <>
+                                                <TableRow key={participant.id}>
+                                                    <TableCell>{idx + 1}</TableCell>
+                                                    <TableCell>{participant.order}</TableCell>
+                                                    <TableCell className="font-medium">
+                                                        {editingParticipant?.id === participant.id ? (
+                                                            <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
+                                                        ) : (
+                                                            (participant.name)
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell colSpan={6}></TableCell>
+                                                    <TableCell>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" size="sm">
+                                                                    <MoreHorizontal className="w-4 h-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent>
+                                                                <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
+                                                                    <Pencil className="w-4 h-4 mr-2" />
+                                                                    Edit Team
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
+                                                                    <Trash className="w-4 h-4 mr-2" />
+                                                                    Delete Team
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </TableRow>
 
-                                            {participant.players && participant.players.length > 0 && participant.players.map((player, playerIdx) => (
-                                                <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
+                                                {participant.players && participant.players.length > 0 && participant.players.map((player, playerIdx) => (
+                                                    <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
+                                                        <TableCell></TableCell>
+                                                        <TableCell></TableCell>
+                                                        <TableCell></TableCell>
+                                                        <TableCell className="pl-8">
+                                                            {player.first_name} {player.last_name}
+                                                        </TableCell>
+                                                        <TableCell>{player.extra_data.rate_points}</TableCell>
+                                                        <TableCell>{player.sex}</TableCell>
+                                                        <TableCell>{player.extra_data.club}</TableCell>
+                                                        <TableCell>{player.extra_data.eltl_id}</TableCell>
+                                                        <TableCell>{player.extra_data.rate_order}</TableCell>
+                                                        <TableCell>
+                                                            <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}>
+                                                                <Trash className="w-4 h-4 cursor-pointer" />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                                <TableRow className="bg-muted/30">
                                                     <TableCell></TableCell>
                                                     <TableCell></TableCell>
                                                     <TableCell></TableCell>
                                                     <TableCell className="pl-8">
-                                                        {player.first_name} {player.last_name}
+                                                        <div className="relative">
+                                                            <Input
+                                                                type="text"
+                                                                value={activeTeamForPlayer == participant.id ? searchTerm : ""}
+                                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                                className="min-w-[200px]"
+                                                                placeholder="Lisa mängija"
+                                                                autoComplete="off"
+                                                                onFocus={(e) => {
+                                                                    setFocusedField("name");
+                                                                    setActiveTeamForPlayer(participant.id);
+                                                                    updateDropdownPosition(e, participant.id);
+                                                                }}
+                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            />
+                                                            {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
+                                                                <div className="fixed max-h-[300px] z-10 w-[200px] bg-background border rounded-md shadow-lg overflow-y-auto"
+                                                                    style={{
+                                                                        top: dropdownPositions[participant.id]?.top || 0,
+                                                                        left: dropdownPositions[participant.id]?.left || 0
+                                                                    }}>
+                                                                    {playerSuggestions.data.map((user, i) => (
+                                                                        <div
+                                                                            key={i}
+                                                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+
+                                                                            onClick={() => {
+                                                                                const team = participants?.find(p => p.id === participant.id);
+                                                                                if (!team) return;
+                                                                                const players = team.players || [];
+                                                                                const updatedTeam: ParticipantFormValues = {
+                                                                                    name: team.name,
+                                                                                    tournament_id: team.tournament_id,
+                                                                                    sport_type: team.sport_type || "tabletennis",
+                                                                                    class: team.extra_data?.class,
+                                                                                    players: [
+                                                                                        ...players.map(player => ({
+                                                                                            id: player.id,
+                                                                                            name: `${player.first_name} ${player.last_name}`,
+                                                                                            sport_type: player.sport_type || "tabletennis",
+                                                                                            first_name: player.first_name,
+                                                                                            last_name: player.last_name,
+                                                                                            user_id: player.user_id,
+                                                                                            sex: player.sex,
+                                                                                            extra_data: {
+                                                                                                rate_order: player.extra_data.rate_order,
+                                                                                                club: player.extra_data.club,
+                                                                                                rate_points: player.extra_data.rate_points,
+                                                                                                eltl_id: player.extra_data.eltl_id,
+                                                                                                class: player.extra_data.class
+                                                                                            }
+                                                                                        })),
+                                                                                        {
+                                                                                            name: `${user.first_name} ${user.last_name}`,
+                                                                                            sport_type: "tabletennis",
+                                                                                            first_name: user.first_name,
+                                                                                            last_name: user.last_name,
+                                                                                            user_id: user.id || 0,
+                                                                                            sex: user.sex || "",
+                                                                                            extra_data: {
+                                                                                                rate_points: user.rate_points || 0,
+                                                                                                rate_order: user.rate_order,
+                                                                                                club: user.club_name,
+                                                                                                eltl_id: user.eltl_id,
+                                                                                                class: ""
+                                                                                            }
+                                                                                        }
+                                                                                    ]
+                                                                                };
+
+                                                                                handleAddOrUpdateParticipant(updatedTeam, participant.id);
+                                                                                setActiveTeamForPlayer(null);
+                                                                                setSearchTerm("");
+                                                                            }}
+                                                                        >
+                                                                            {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </TableCell>
-                                                    <TableCell>{player.extra_data.rate_points}</TableCell>
-                                                    <TableCell>{player.sex}</TableCell>
-                                                    <TableCell>{player.extra_data.club}</TableCell>
-                                                    <TableCell>{player.extra_data.eltl_id}</TableCell>
-                                                    <TableCell>{player.extra_data.rate_order}</TableCell>
-                                                    <TableCell>
-                                                        <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}>
-                                                            <Trash className="w-4 h-4 cursor-pointer" />
-                                                        </Button>
-                                                    </TableCell>
+                                                    <TableCell></TableCell>
+                                                    <TableCell colSpan={6}></TableCell>
                                                 </TableRow>
-                                            ))}
-                                            <TableRow className="bg-muted/30">
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell className="pl-8">
+                                            </>
+                                        )
+                                    )}
+                                    <TableRow className="">
+                                        {table_data && table_data.solo ? (
+                                            <>
+                                                <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
+                                                <TableCell>
+                                                    <Input disabled className="min-w-[100px] border-none" type="text" />
+                                                </TableCell>
+                                                <TableCell className="">
+                                                    {/* <div className="relative" ref={inputRef}>
+                                                        <Input
+                                                            type="text"
+                                                            {...form.register("players.0.name")}
+                                                            onChange={(e) => {
+                                                                form.setValue("players.0.name", e.target.value)
+                                                                setSearchTerm(e.target.value)
+                                                                if (table_data.solo) {
+                                                                    form.setValue("name", e.target.value)
+                                                                }
+                                                            }}
+                                                            className="min-w-[100px] text-sm md:text-base"
+                                                            autoComplete="off"
+                                                            onFocus={() => { setFocusedField("name"); updateDropdownPosition() }}
+                                                            onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            placeholder="Nimi"
+                                                        />
+                                                        {focusedField === "name" &&
+                                                            playerSuggestions &&
+                                                            !editingParticipant &&
+                                                            playerSuggestions.data &&
+                                                            playerSuggestions.data.length > 0 && (
+                                                                <div
+                                                                    className={`fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50`}
+                                                                    style={{
+                                                                        left: inputRef.current ? inputRef.current.getBoundingClientRect().left : 0,
+                                                                        top: dropdownPosition === 'top'
+                                                                            ? (inputRef.current ? inputRef.current.getBoundingClientRect().top - 305 : 0)
+                                                                            : (inputRef.current ? inputRef.current.getBoundingClientRect().bottom + 5 : 0)
+                                                                    }}
+                                                                >
+                                                                    {playerSuggestions.data.map((user, i) => (
+                                                                        <div
+                                                                            key={i}
+                                                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                            onClick={() => setFormValues(user, form)}
+                                                                        >
+                                                                            {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                    </div> */}
                                                     <div className="relative">
                                                         <Input
                                                             type="text"
-                                                            value={activeTeamForPlayer == participant.id ? searchTerm : ""}
-                                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                                            className="min-w-[200px]"
-                                                            placeholder="Lisa mängija"
+                                                            {...form.register("players.0.name")}
+                                                            onChange={(e) => {
+                                                                form.setValue("players.0.name", e.target.value)
+                                                                setSearchTerm(e.target.value)
+                                                                if (table_data.solo) {
+                                                                    form.setValue("name", e.target.value)
+                                                                }
+                                                            }}
+                                                            className="min-w-[100px] text-sm md:text-base"
                                                             autoComplete="off"
-                                                            onFocus={() => { setFocusedField("name"); setActiveTeamForPlayer(participant.id) }}
+                                                            onFocus={(e) => {
+                                                                setFocusedField("name");
+                                                                updateDropdownPosition(e, "soloInput");
+                                                            }}
                                                             onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            placeholder="Nimi"
                                                         />
-                                                        {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
-                                                            <div className="absolute z-10 w-full mt-1 bg-background border rounded-md shadow-lg">
-                                                                {playerSuggestions.data.map((user, i) => (
-                                                                    <div
-                                                                        key={i}
-                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                        onClick={() => {
-                                                                            const team = participants.find(p => p.id === participant.id);
-                                                                            if (!team) return;
-                                                                            const players = team.players || [];
-                                                                            form.setValue("players", [
-                                                                                ...players,
-                                                                                {
-                                                                                    name: `${user.first_name} ${user.last_name}`,
-                                                                                    sport_type: "tabletennis",
-                                                                                    first_name: user.first_name,
-                                                                                    last_name: user.last_name,
-                                                                                    user_id: user.id || 0,
-                                                                                    number: 0,
-                                                                                    sex: user.sex || undefined,
-                                                                                    extra_data: {
-                                                                                        rate_points: user.rate_points || 0,
-                                                                                        rate_order: user.rate_order,
-                                                                                        club: user.club_name,
-                                                                                        eltl_id: user.eltl_id,
-                                                                                        class: undefined
-                                                                                    }
-                                                                                }
-                                                                            ]);
-                                                                            handleAddOrUpdateParticipant(form.getValues(), participant.id);
-                                                                            setActiveTeamForPlayer(null);
-                                                                            setSearchTerm("");
-                                                                        }}
-                                                                    >
-                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
+                                                        {focusedField === "name" &&
+                                                            playerSuggestions &&
+                                                            !editingParticipant &&
+                                                            playerSuggestions.data &&
+                                                            playerSuggestions.data.length > 0 && (
+                                                                <div
+                                                                    className="fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50"
+                                                                    style={{
+                                                                        top: dropdownPositions["soloInput"]?.top || 0,
+                                                                        left: dropdownPositions["soloInput"]?.left || 0
+                                                                    }}
+                                                                >
+                                                                    {playerSuggestions.data.map((user, i) => (
+                                                                        <div
+                                                                            key={i}
+                                                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                            onClick={() => setFormValues(user, form)}
+                                                                        >
+                                                                            {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell colSpan={6}></TableCell>
-                                            </TableRow>
-                                        </>
-                                    )
-                                )}
-                                <TableRow className="">
-                                    {table_data && table_data.solo ? (
-                                        <>
-                                            <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
-                                            <TableCell>
-                                                <Input disabled className="min-w-[100px] border-none" type="text" />
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="relative" ref={inputRef}>
+                                                <TableCell>
+                                                    <Input
+                                                        className="min-w-[100px]"
+                                                        type="number"
+                                                        {...form.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
+                                                        placeholder="Rank"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        className="min-w-[100px]"
+                                                        type="text"
+                                                        {...form.register("players.0.sex")}
+                                                        placeholder="Sugu"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        className="min-w-[100px]"
+                                                        type="text"
+                                                        {...form.register("players.0.extra_data.club")}
+                                                        placeholder="Klubi"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        disabled
+                                                        className="min-w-[100px] border-none"
+                                                        type="number"
+                                                        {...form.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
+                                                        placeholder="ELTL ID"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        disabled
+                                                        className="border-none"
+                                                        type="number"
+                                                        {...form.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
+                                                        placeholder="Koht Reitingus"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        className="min-w-[100px]"
+                                                        type="text"
+                                                        {...form.register("players.0.extra_data.class")}
+                                                        placeholder="Klass"
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
+                                                        Add Participant
+                                                    </Button>
+                                                </TableCell>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
+                                                <TableCell>
+                                                    <Input disabled className="min-w-[100px] border-none" type="text" />
+                                                </TableCell>
+                                                <TableCell>
                                                     <Input
                                                         type="text"
-                                                        {...form.register("players.0.name")}
-                                                        onChange={(e) => {
-                                                            form.setValue("players.0.name", e.target.value)
-                                                            setSearchTerm(e.target.value)
-                                                            if (table_data.solo) {
-                                                                form.setValue("name", e.target.value)
+                                                        {...form.register("name", {
+                                                            onChange: (e) => {
+                                                                form.setValue("name", e.target.value);
                                                             }
-                                                        }}
-                                                        className="min-w-[100px] text-sm md:text-base"
-                                                        autoComplete="off"
-                                                        onFocus={() => { setFocusedField("name"); updateDropdownPosition() }}
-                                                        onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                        placeholder="Nimi"
+                                                        })}
+                                                        placeholder="Team name"
                                                     />
-                                                    {focusedField === "name" &&
-                                                        playerSuggestions &&
-                                                        !editingParticipant &&
-                                                        playerSuggestions.data &&
-                                                        playerSuggestions.data.length > 0 && (
-                                                            <div
-                                                                className={`absolute w-[200px] ${dropdownPosition === 'top'
-                                                                    ? 'bottom-full mb-1'
-                                                                    : 'top-full mt-1'
-                                                                    } max-h-[400px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-10`}
-                                                            >
-                                                                {playerSuggestions.data.map((user, i) => (
-                                                                    <div
-                                                                        key={i}
-                                                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                        onClick={() => setFormValues(user, form)}
-                                                                    >
-                                                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    className="min-w-[100px]"
-                                                    type="number"
-                                                    {...form.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
-                                                    placeholder="Rank"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    className="min-w-[100px]"
-                                                    type="text"
-                                                    {...form.register("players.0.sex")}
-                                                    placeholder="Sugu"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    className="min-w-[100px]"
-                                                    type="text"
-                                                    {...form.register("players.0.extra_data.club")}
-                                                    placeholder="Klubi"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    disabled
-                                                    className="min-w-[100px] border-none"
-                                                    type="number"
-                                                    {...form.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
-                                                    placeholder="ELTL ID"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    disabled
-                                                    className="border-none"
-                                                    type="number"
-                                                    {...form.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
-                                                    placeholder="Koht Reitingus"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    className="min-w-[100px]"
-                                                    type="text"
-                                                    {...form.register("players.0.extra_data.class")}
-                                                    placeholder="Klass"
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
-                                                    Add Participant
-                                                </Button>
-                                            </TableCell>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
-                                            <TableCell>
-                                                <Input disabled className="min-w-[100px] border-none" type="text" />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Input
-                                                    type="text"
-                                                    {...form.register("name", {
-                                                        onChange: (e) => {
-                                                            form.setValue("name", e.target.value);
-                                                        }
-                                                    })}
-                                                    placeholder="Team name"
-                                                />
-                                            </TableCell>
-                                            <TableCell colSpan={6}></TableCell>
-                                            <TableCell>
-                                                <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))} >
-                                                    Add Team
-                                                </Button>
-                                            </TableCell>
-                                        </>
-                                    )}
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                                                </TableCell>
+                                                <TableCell colSpan={6}></TableCell>
+                                                <TableCell>
+                                                    <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))} >
+                                                        Add Team
+                                                    </Button>
+                                                </TableCell>
+                                            </>
+                                        )}
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </div>
                     </CardContent>
                 </Card>
             </div >
