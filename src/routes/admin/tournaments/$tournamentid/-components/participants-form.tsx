@@ -2,7 +2,7 @@ import { useNavigate, useRouter } from "@tanstack/react-router"
 import { MoreHorizontal, Pencil, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import type { Participant, Tournament, TournamentTable, UserNew } from "@/types/types"
 import {
     UseDeleteParticipant,
@@ -75,6 +75,19 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
 
     const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
     const [focusedField, setFocusedField] = useState<string | null>(null)
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [dropdownPosition, setDropdownPosition] = useState<'top' | 'bottom'>('bottom');
+
+    const updateDropdownPosition = useCallback(() => {
+        if (inputRef.current) {
+            const rect = inputRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const inputMiddleY = rect.top + rect.height / 2;
+
+            setDropdownPosition(inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom');
+        }
+    }, []);
 
     const form = useForm<ParticipantFormValues>({
         resolver: zodResolver(participantSchema),
@@ -237,19 +250,13 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         await handleAddOrUpdateParticipant(updatedTeam, teamId);
     };
 
-    // console.log(form.formState.errors)
-
-    // console.log("Form", form.getValues())
-    // console.log("EditForm", editForm.getValues())
-    // console.log("FAWF", activeTeamForPlayer)
-
     if (tournament_data) {
         return (
-            <div className="container mx-auto py-6 space-y-6 overflow-x-auto">
+            <div className="container mx-auto py-6 space-y-6 overflow-x-auto w-full">
                 <Card className="overflow-x-auto container border-[#F0F3F3]">
                     <CardHeader className="">
                         <div className="flex w-[250px] gap-4">
-                            <Select  onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
+                            <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
                                 <SelectTrigger className="">
                                     <SelectValue placeholder="Järjestus" />
                                 </SelectTrigger>
@@ -264,10 +271,10 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                             </Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="overflow-y-scroll">
-                        <Table className="overflow-y-scroll">
-                            <TableHeader>
-                                <TableRow>
+                    <CardContent className="">
+                        <Table className="min-h-[60vh] flex flex-col">
+                            <TableHeader className="">
+                                <TableRow className="">
                                     {table_data && table_data.solo ? (
                                         <>
                                             <TableHead>JKNR.</TableHead>
@@ -545,7 +552,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                         </>
                                     )
                                 )}
-                                <TableRow>
+                                <TableRow className="">
                                     {table_data && table_data.solo ? (
                                         <>
                                             <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
@@ -553,7 +560,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 <Input disabled className="min-w-[100px] border-none" type="text" />
                                             </TableCell>
                                             <TableCell>
-                                                <div className="relative">
+                                                <div className="relative" ref={inputRef}>
                                                     <Input
                                                         type="text"
                                                         {...form.register("players.0.name")}
@@ -566,7 +573,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         }}
                                                         className="min-w-[100px] text-sm md:text-base"
                                                         autoComplete="off"
-                                                        onFocus={() => setFocusedField("name")}
+                                                        onFocus={() => { setFocusedField("name"); updateDropdownPosition() }}
                                                         onBlur={() => setTimeout(() => setFocusedField(null), 200)}
                                                         placeholder="Nimi"
                                                     />
@@ -575,7 +582,12 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         !editingParticipant &&
                                                         playerSuggestions.data &&
                                                         playerSuggestions.data.length > 0 && (
-                                                            <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
+                                                            <div
+                                                                className={`absolute w-[200px] ${dropdownPosition === 'top'
+                                                                    ? 'bottom-full mb-1'
+                                                                    : 'top-full mt-1'
+                                                                    } max-h-[400px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-10`}
+                                                            >
                                                                 {playerSuggestions.data.map((user, i) => (
                                                                     <div
                                                                         key={i}
