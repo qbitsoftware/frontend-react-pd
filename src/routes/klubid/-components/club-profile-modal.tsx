@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import React from 'react';
 import { Club } from "@/types/types";
-import { getLogoSource } from "./club-grid";
 
 interface ClubProfileModal {
   isOpen: boolean;
@@ -32,7 +31,7 @@ export const ClubProfileModal: React.FC<ClubProfileModal> = ({ isOpen, onClose, 
       <DialogContent className="max-w-4xl p-8 bg-white rounded-2xl shadow-xl">
         <div className="flex flex-col items-center space-y-4 mb-8">
           <img
-            src={getLogoSource(club.logoPath)}
+            src={club.logoPath}
             alt={`${club.name}'s logo`}
             className="w-32 h-32 object-cover"
           />

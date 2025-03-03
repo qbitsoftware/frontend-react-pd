@@ -7,6 +7,20 @@ export type ImagesResponse = {
     error: string | null,
 }
 
+export const usePostImage = () => {
+    return useMutation({
+        mutationFn: async (formData: FormData) => {
+            const { data } = await axiosInstance.post('/api/v1/image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true,
+            });
+            return data;
+        },
+    });
+}
+
 export const useGetGamedayImages = (tournament_id: number, game_day: string) => {
     return useQuery<ImagesResponse>({
         queryKey: ["images", tournament_id, game_day],
@@ -39,7 +53,7 @@ export function usePostImages(tournament_id: number, gameday: string) {
 }
 
 
-export function useDeleteImage(tournament_id: number, gameday: string){
+export function useDeleteImage(tournament_id: number, gameday: string) {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (file_key: string) => {

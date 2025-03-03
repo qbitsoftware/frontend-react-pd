@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 180 8% 97%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -84,6 +84,34 @@
   }
 }
 
+p {
+  @apply text-[14px] xl:text-[16px]
+}
+
+h1 {
+  @apply text-[39.81px];
+}
+
+h2 {
+  @apply text-[33.18px];
+}
+
+h3 {
+  @apply text-[27.65px];
+}
+
+h4 {
+  @apply text-[23.04px];
+}
+
+h5 {
+  @apply text-[19.2px];
+}
+
+h6 {
+  @apply text-[14px] xl:text-[16px];
+}
+
 /* ::-webkit-scrollbar {
   display: none;
 } */
@@ -113,4 +141,3 @@
 .wp-block-file {
   margin-top: 16px;
 }
-

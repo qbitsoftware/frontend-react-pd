@@ -22,6 +22,7 @@ import { Route as ReeglidIndexImport } from './routes/reeglid/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as KlubidIndexImport } from './routes/klubid/index'
+import { Route as KalenderIndexImport } from './routes/kalender/index'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
 import { Route as VoistlusedTournamentidLayoutImport } from './routes/voistlused/$tournamentid/layout'
 import { Route as VoistlusedTournamentidIndexImport } from './routes/voistlused/$tournamentid/index'
@@ -113,6 +114,12 @@ const KontaktIndexRoute = KontaktIndexImport.update({
 const KlubidIndexRoute = KlubidIndexImport.update({
   id: '/klubid/',
   path: '/klubid/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const KalenderIndexRoute = KalenderIndexImport.update({
+  id: '/kalender/',
+  path: '/kalender/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -335,6 +342,13 @@ declare module '@tanstack/react-router' {
       path: '/uudised/$blogid'
       fullPath: '/uudised/$blogid'
       preLoaderRoute: typeof UudisedBlogidImport
+      parentRoute: typeof rootRoute
+    }
+    '/kalender/': {
+      id: '/kalender/'
+      path: '/kalender'
+      fullPath: '/kalender'
+      preLoaderRoute: typeof KalenderIndexImport
       parentRoute: typeof rootRoute
     }
     '/klubid/': {
@@ -684,6 +698,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutLazyRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidLayoutRouteWithChildren
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/kalender': typeof KalenderIndexRoute
   '/klubid': typeof KlubidIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
@@ -723,6 +738,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminLayoutRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/kalender': typeof KalenderIndexRoute
   '/klubid': typeof KlubidIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
@@ -762,6 +778,7 @@ export interface FileRoutesById {
   '/about': typeof AboutLazyRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidLayoutRouteWithChildren
   '/uudised/$blogid': typeof UudisedBlogidRoute
+  '/kalender/': typeof KalenderIndexRoute
   '/klubid/': typeof KlubidIndexRoute
   '/kontakt/': typeof KontaktIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -804,6 +821,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/voistlused/$tournamentid'
     | '/uudised/$blogid'
+    | '/kalender'
     | '/klubid'
     | '/kontakt'
     | '/login'
@@ -842,6 +860,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/about'
     | '/uudised/$blogid'
+    | '/kalender'
     | '/klubid'
     | '/kontakt'
     | '/login'
@@ -879,6 +898,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/voistlused/$tournamentid'
     | '/uudised/$blogid'
+    | '/kalender/'
     | '/klubid/'
     | '/kontakt/'
     | '/login/'
@@ -920,6 +940,7 @@ export interface RootRouteChildren {
   AboutLazyRoute: typeof AboutLazyRoute
   VoistlusedTournamentidLayoutRoute: typeof VoistlusedTournamentidLayoutRouteWithChildren
   UudisedBlogidRoute: typeof UudisedBlogidRoute
+  KalenderIndexRoute: typeof KalenderIndexRoute
   KlubidIndexRoute: typeof KlubidIndexRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
@@ -937,6 +958,7 @@ const rootRouteChildren: RootRouteChildren = {
   VoistlusedTournamentidLayoutRoute:
     VoistlusedTournamentidLayoutRouteWithChildren,
   UudisedBlogidRoute: UudisedBlogidRoute,
+  KalenderIndexRoute: KalenderIndexRoute,
   KlubidIndexRoute: KlubidIndexRoute,
   KontaktIndexRoute: KontaktIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
@@ -962,6 +984,7 @@ export const routeTree = rootRoute
         "/about",
         "/voistlused/$tournamentid",
         "/uudised/$blogid",
+        "/kalender/",
         "/klubid/",
         "/kontakt/",
         "/login/",
@@ -1005,6 +1028,9 @@ export const routeTree = rootRoute
     },
     "/uudised/$blogid": {
       "filePath": "uudised/$blogid.tsx"
+    },
+    "/kalender/": {
+      "filePath": "kalender/index.tsx"
     },
     "/klubid/": {
       "filePath": "klubid/index.tsx"

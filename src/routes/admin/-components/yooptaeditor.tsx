@@ -15,31 +15,11 @@ import { NumberedList, BulletedList, TodoList } from '@yoopta/lists';
 import LinkTool, { DefaultLinkToolRender } from '@yoopta/link-tool';
 import ActionMenu, { DefaultActionMenuRender } from '@yoopta/action-menu-list';
 import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
+import Image from '@yoopta/image';
 import { Dispatch, SetStateAction } from 'react';
+import { usePostImage } from '@/queries/images';
 
-const plugins = [
-  Paragraph,
-  Table,
-  Divider.extend({
-    elementProps: {
-      divider: (props) => ({
-        ...props,
-        color: '#007aff',
-      }),
-    },
-  }),
-  Accordion,
-  HeadingOne,
-  HeadingTwo,
-  HeadingThree,
-  Blockquote,
-  Callout,
-  NumberedList,
-  BulletedList,
-  TodoList,
-  Code,
-  Embed,
-];
+
 const TOOLS = {
   Toolbar: {
     tool: Toolbar,
@@ -65,7 +45,70 @@ interface Props {
 
 export default function Editor({ value, setValue, readOnly }: Props) {
   const editor = useMemo(() => createYooptaEditor(), []);
-  // const [value, setValue] = useState<YooptaContentValue>();
+  const postImageMutation = usePostImage()
+
+  const uploadFile = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const result = await postImageMutation.mutateAsync(formData);
+
+      return {
+        secure_url: result.data.url,
+        width: result.data.width || 600,
+        height: result.data.height || 600
+      };
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      // Fallback to local URL for testing or when upload fails
+      return {
+        secure_url: URL.createObjectURL(file),
+        width: 600,
+        height: 600
+      };
+    }
+  }
+
+  const plugins = useMemo(() => [
+    Paragraph,
+    Table,
+    Divider.extend({
+      elementProps: {
+        divider: (props) => ({
+          ...props,
+          color: '#007aff',
+        }),
+      },
+    }),
+    Accordion,
+    HeadingOne,
+    HeadingTwo,
+    HeadingThree,
+    Blockquote,
+    Callout,
+    NumberedList,
+    BulletedList,
+    TodoList,
+    Code,
+    Embed,
+    Image.extend({
+      options: {
+        async onUpload(file) {
+          const data = await uploadFile(file);
+
+          return {
+            src: data.secure_url,
+            alt: 'digitalocean',
+            sizes: {
+              width: data.width,
+              height: data.height,
+            },
+          };
+        },
+      },
+    }),
+  ], [])
 
 
   if (setValue && readOnly == false) {
@@ -75,7 +118,7 @@ export default function Editor({ value, setValue, readOnly }: Props) {
     return (
       <div className="w-full">
         <YooptaEditor
-          // placeholder='Start typing here...'
+          placeholder='Start typing here...'
           editor={editor}
           //@ts-expect-error yoopta
           plugins={plugins}
@@ -95,9 +138,8 @@ export default function Editor({ value, setValue, readOnly }: Props) {
     return (
       <div className="w-full">
         <YooptaEditor
-          // placeholder='Start typing here...'
           editor={editor}
-           //@ts-expect-error yoopta
+          //@ts-expect-error yoopta
           plugins={plugins}
           className='w-full'
           autoFocus={true}
@@ -109,6 +151,8 @@ export default function Editor({ value, setValue, readOnly }: Props) {
         />
       </div>
     );
+  } else {
+    return null
   }
 
 }

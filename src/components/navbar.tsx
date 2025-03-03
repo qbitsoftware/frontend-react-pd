@@ -87,7 +87,7 @@ export default function Navbar() {
                                 <NavigationMenuItem key={item.name}>
                                     {item.dropdownItems ? (
                                         <NavigationMenuTrigger className={cn(
-                                            " text-sm font-medium transition-colors hover:text-primary",
+                                            " text-sm font-medium transition-colors hover:text-primary bg-transparent",
                                             activeItem === item.name
                                                 ? "text-blue-600"
                                                 : "text-gray-700 hover:text-blue-600"

@@ -77,22 +77,67 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const [focusedField, setFocusedField] = useState<string | null>(null)
 
 
-    const [dropdownPositions, setDropdownPositions] = useState<{ [key: string]: { top: number, left: number, position: 'top' | 'bottom' } }>({});
+    // const [dropdownPositions, setDropdownPositions] = useState<{ [key: string]: { top: number, left: number, position: 'top' | 'bottom' } }>({});
+    const [dropdownPositions, setDropdownPositions] = useState<{
+        [key: string]: {
+            top: number,
+            left: number,
+            position: 'top' | 'bottom',
+            width: number
+        }
+    }>({});
 
     const updateDropdownPosition = useCallback((e: React.FocusEvent<HTMLInputElement>, id: string) => {
         const rect = e.target.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
         const inputMiddleY = rect.top + rect.height / 2;
+        const position = inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom';
 
         setDropdownPositions(prev => ({
             ...prev,
             [id]: {
-                top: inputMiddleY > viewportHeight / 2 ? rect.top - 305 : rect.bottom + 5,
+                // If positioned above, align to top of input; if below, align to bottom
+                top: position === 'top' ? rect.top : rect.bottom,
                 left: rect.left,
-                position: inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom'
+                position: position,
+                width: rect.width
             }
         }));
     }, []);
+
+    useEffect(() => {
+        const handleScroll = (e: Event) => {
+            if (focusedField) {
+                const target = e.target as HTMLElement
+                const isSuggestionDropdown = target.classList.contains('suggestion-dropdown') || target.closest('.suggestion-dropdown');
+                if (!isSuggestionDropdown) {
+                    setFocusedField(null);
+                    setActiveTeamForPlayer(null);
+                    setSearchTerm("");
+                    const activeElement = document.activeElement;
+                    const isInputFocused = activeElement instanceof HTMLInputElement &&
+                        (activeElement.getAttribute('placeholder') === 'Lisa mängija' ||
+                            activeElement.getAttribute('placeholder') === 'Nimi');
+
+                    if (!isInputFocused) {
+                        setSearchTerm("");
+                    }
+
+                    if (isInputFocused) {
+                        (activeElement as HTMLElement).blur();
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, true);
+        document.addEventListener('touchmove', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll, true);
+            document.removeEventListener('touchmove', handleScroll);
+        };
+    }, [focusedField]);
+
 
     const form = useForm<ParticipantFormValues>({
         resolver: zodResolver(participantSchema),
@@ -316,91 +361,68 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                             <TableRow key={participant.id}>
                                                 <TableCell>{idx + 1}</TableCell>
                                                 <TableCell>{participant.order}</TableCell>
-                                                {/* <TableCell>
-                                                    {editingParticipant?.id === participant.id ?
-                                                        <div className="">
-                                                            <Input
-                                                                type="text"
-                                                                {...editForm.register("players.0.name")}
-                                                                onChange={(e) => {
-                                                                    editForm.setValue("players.0.name", e.target.value)
-                                                                    setSearchTerm(e.target.value)
-                                                                    if (table_data.solo) {
-                                                                        editForm.setValue("name", e.target.value)
-                                                                    }
-                                                                }}
-                                                                className="min-w-[100px] text-sm md:text-base"
-                                                                autoComplete="off"
-                                                                onFocus={() => setFocusedField("name")}
-                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                                placeholder="Nimi"
-                                                            />
-                                                            {focusedField === "name" &&
-                                                                playerSuggestions &&
-                                                                playerSuggestions.data &&
-                                                                playerSuggestions.data.length > 0 && (
-                                                                    <div className="absolute w-[200px] h-full max-h-[400px] overflow-x-auto overflow-y-auto mt-1 py-1 bg-background border rounded-md shadow-lg z-10">
-                                                                        {playerSuggestions.data.map((user, i) => (
-                                                                            <div
-                                                                                key={i}
-                                                                                className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                                onClick={() => setFormValues(user, editForm)}
-                                                                            >
-                                                                                {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                )}
-                                                        </div>
-                                                        : (participant.name)
-                                                    }
-                                                </TableCell> */}
                                                 <TableCell>
                                                     {editingParticipant?.id === participant.id ?
                                                         <div className="relative">
                                                             <Input
                                                                 type="text"
-                                                                {...editForm.register("players.0.name")}
-                                                                onChange={(e) => {
-                                                                    editForm.setValue("players.0.name", e.target.value)
-                                                                    setSearchTerm(e.target.value)
-                                                                    if (table_data.solo) {
-                                                                        editForm.setValue("name", e.target.value)
-                                                                    }
-                                                                }}
-                                                                className="min-w-[100px] text-sm md:text-base"
+                                                                value={activeTeamForPlayer == participant.id ? searchTerm : ""}
+                                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                                className="min-w-[200px]"
+                                                                placeholder="Lisa mängija"
                                                                 autoComplete="off"
                                                                 onFocus={(e) => {
                                                                     setFocusedField("name");
-                                                                    updateDropdownPosition(e, `edit-${participant.id}`);
+                                                                    setActiveTeamForPlayer(participant.id);
+                                                                    updateDropdownPosition(e, participant.id);
                                                                 }}
-                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                                placeholder="Nimi"
+                                                                onBlur={(e) => {
+                                                                    const relatedTarget = e.relatedTarget as HTMLElement;
+                                                                    const isRelatedToDropdown = relatedTarget &&
+                                                                        (relatedTarget.classList.contains('suggestion-dropdown') ||
+                                                                            !!relatedTarget.closest('.suggestion-dropdown'));
+
+                                                                    if (!isRelatedToDropdown) {
+                                                                        setTimeout(() => {
+                                                                            setFocusedField(null);
+                                                                            setActiveTeamForPlayer(null);
+                                                                            setSearchTerm("");
+                                                                        }, 200);
+                                                                    }
+                                                                }}
                                                             />
-                                                            {focusedField === "name" &&
-                                                                playerSuggestions &&
-                                                                playerSuggestions.data &&
-                                                                playerSuggestions.data.length > 0 && (
-                                                                    <div className="fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-10"
-                                                                        style={{
-                                                                            top: dropdownPositions[`edit-${participant.id}`]?.top || 0,
-                                                                            left: dropdownPositions[`edit-${participant.id}`]?.left || 0
-                                                                        }}>
-                                                                        {playerSuggestions.data.map((user, i) => (
-                                                                            <div
-                                                                                key={i}
-                                                                                className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                                onClick={() => setFormValues(user, editForm)}
-                                                                            >
-                                                                                {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                )}
+                                                            {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
+                                                                <div className="fixed max-h-[200px] w-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
+                                                                    style={{
+                                                                        left: dropdownPositions[participant.id]?.left || 0,
+                                                                        width: dropdownPositions[participant.id]?.width || 200,
+                                                                        ...(dropdownPositions[participant.id]?.position === 'top'
+                                                                            ? {
+                                                                                bottom: window.innerHeight - dropdownPositions[participant.id]?.top,
+                                                                                maxHeight: dropdownPositions[participant.id]?.top - 10
+                                                                            }
+                                                                            : {
+                                                                                top: dropdownPositions[participant.id]?.top,
+                                                                                maxHeight: window.innerHeight - dropdownPositions[participant.id]?.top - 10
+                                                                            })
+                                                                    }}>
+                                                                    {playerSuggestions.data.map((user, i) => (
+                                                                        <div
+                                                                            key={i}
+                                                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                                            onClick={() => setFormValues(user, editForm)}
+                                                                        >
+                                                                            {capitalize(user.first_name)} {capitalize(user.last_name)}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                         : (participant.name)
                                                     }
                                                 </TableCell>
+
+
                                                 <TableCell>
                                                     {editingParticipant?.id === participant.id ? (
                                                         <Input
@@ -560,19 +582,40 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                     setActiveTeamForPlayer(participant.id);
                                                                     updateDropdownPosition(e, participant.id);
                                                                 }}
-                                                                onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                                onBlur={(e) => {
+                                                                    const relatedTarget = e.relatedTarget as HTMLElement;
+                                                                    const isRelatedToDropdown = relatedTarget &&
+                                                                        (relatedTarget.classList.contains('suggestion-dropdown') ||
+                                                                            !!relatedTarget.closest('.suggestion-dropdown'));
+
+                                                                    if (!isRelatedToDropdown) {
+                                                                        setTimeout(() => {
+                                                                            setFocusedField(null);
+                                                                            setActiveTeamForPlayer(null);
+                                                                            setSearchTerm("");
+                                                                        }, 200);
+                                                                    }
+                                                                }}
                                                             />
                                                             {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
-                                                                <div className="fixed max-h-[300px] z-10 w-[200px] bg-background border rounded-md shadow-lg overflow-y-auto"
+                                                                <div className="fixed max-h-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
                                                                     style={{
-                                                                        top: dropdownPositions[participant.id]?.top || 0,
-                                                                        left: dropdownPositions[participant.id]?.left || 0
+                                                                        left: dropdownPositions[participant.id]?.left || 0,
+                                                                        width: dropdownPositions[participant.id]?.width || 200,
+                                                                        ...(dropdownPositions[participant.id]?.position === 'top'
+                                                                            ? {
+                                                                                bottom: window.innerHeight - dropdownPositions[participant.id]?.top,
+                                                                                maxHeight: dropdownPositions[participant.id]?.top - 10
+                                                                            }
+                                                                            : {
+                                                                                top: dropdownPositions[participant.id]?.top,
+                                                                                maxHeight: window.innerHeight - dropdownPositions[participant.id]?.top - 10
+                                                                            })
                                                                     }}>
                                                                     {playerSuggestions.data.map((user, i) => (
                                                                         <div
                                                                             key={i}
                                                                             className="px-3 py-2 cursor-pointer hover:bg-accent"
-
                                                                             onClick={() => {
                                                                                 const team = participants?.find(p => p.id === participant.id);
                                                                                 if (!team) return;
@@ -643,49 +686,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     <Input disabled className="min-w-[100px] border-none" type="text" />
                                                 </TableCell>
                                                 <TableCell className="">
-                                                    {/* <div className="relative" ref={inputRef}>
-                                                        <Input
-                                                            type="text"
-                                                            {...form.register("players.0.name")}
-                                                            onChange={(e) => {
-                                                                form.setValue("players.0.name", e.target.value)
-                                                                setSearchTerm(e.target.value)
-                                                                if (table_data.solo) {
-                                                                    form.setValue("name", e.target.value)
-                                                                }
-                                                            }}
-                                                            className="min-w-[100px] text-sm md:text-base"
-                                                            autoComplete="off"
-                                                            onFocus={() => { setFocusedField("name"); updateDropdownPosition() }}
-                                                            onBlur={() => setTimeout(() => setFocusedField(null), 200)}
-                                                            placeholder="Nimi"
-                                                        />
-                                                        {focusedField === "name" &&
-                                                            playerSuggestions &&
-                                                            !editingParticipant &&
-                                                            playerSuggestions.data &&
-                                                            playerSuggestions.data.length > 0 && (
-                                                                <div
-                                                                    className={`fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50`}
-                                                                    style={{
-                                                                        left: inputRef.current ? inputRef.current.getBoundingClientRect().left : 0,
-                                                                        top: dropdownPosition === 'top'
-                                                                            ? (inputRef.current ? inputRef.current.getBoundingClientRect().top - 305 : 0)
-                                                                            : (inputRef.current ? inputRef.current.getBoundingClientRect().bottom + 5 : 0)
-                                                                    }}
-                                                                >
-                                                                    {playerSuggestions.data.map((user, i) => (
-                                                                        <div
-                                                                            key={i}
-                                                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                                                            onClick={() => setFormValues(user, form)}
-                                                                        >
-                                                                            {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                    </div> */}
                                                     <div className="relative">
                                                         <Input
                                                             type="text"
@@ -703,7 +703,20 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                 setFocusedField("name");
                                                                 updateDropdownPosition(e, "soloInput");
                                                             }}
-                                                            onBlur={() => setTimeout(() => setFocusedField(null), 200)}
+                                                            onBlur={(e) => {
+                                                                const relatedTarget = e.relatedTarget as HTMLElement;
+                                                                const isRelatedToDropdown = relatedTarget &&
+                                                                    (relatedTarget.classList.contains('suggestion-dropdown') ||
+                                                                        !!relatedTarget.closest('.suggestion-dropdown'));
+
+                                                                if (!isRelatedToDropdown) {
+                                                                    setTimeout(() => {
+                                                                        setFocusedField(null);
+                                                                        setActiveTeamForPlayer(null);
+                                                                        setSearchTerm("");
+                                                                    }, 200);
+                                                                }
+                                                            }}
                                                             placeholder="Nimi"
                                                         />
                                                         {focusedField === "name" &&
@@ -712,10 +725,19 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                             playerSuggestions.data &&
                                                             playerSuggestions.data.length > 0 && (
                                                                 <div
-                                                                    className="fixed w-[200px] max-h-[300px] overflow-x-auto overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50"
+                                                                    className="fixed max-h-[200px] w-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
                                                                     style={{
-                                                                        top: dropdownPositions["soloInput"]?.top || 0,
-                                                                        left: dropdownPositions["soloInput"]?.left || 0
+                                                                        left: dropdownPositions["soloInput"]?.left || 0,
+                                                                        width: dropdownPositions["soloInput"]?.width || 200,
+                                                                        ...(dropdownPositions["soloInput"]?.position === 'top'
+                                                                            ? {
+                                                                                bottom: window.innerHeight - dropdownPositions["soloInput"]?.top,
+                                                                                maxHeight: dropdownPositions["soloInput"]?.top - 10
+                                                                            }
+                                                                            : {
+                                                                                top: dropdownPositions["soloInput"]?.top,
+                                                                                maxHeight: window.innerHeight - dropdownPositions["soloInput"]?.top - 10
+                                                                            })
                                                                     }}
                                                                 >
                                                                     {playerSuggestions.data.map((user, i) => (
@@ -728,7 +750,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                         </div>
                                                                     ))}
                                                                 </div>
-                                                            )}
+                                                            )
+                                                        }
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>

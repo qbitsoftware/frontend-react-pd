@@ -1,23 +1,30 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { useFadeIn } from "@/hooks/useFadeIn";
-import { UpcomingTournaments } from "./-components/comingTournaments";
+import { createFileRoute } from "@tanstack/react-router";
+import HomePageGrid from "./-components/home-grid";
+import { UseGetTournaments } from "@/queries/tournaments";
 
-import { TopMonthPerformers } from "./-components/topPerformers";
-import { TopFive } from "./-components/topFive";
 
 export const Route = createFileRoute("/")({
   component: Index,
-  // loader: async ({ context: { queryClient } }) => {
-  //     const articledata = queryClient.ensureQueryData(UseGetArticles())
-  //     return articledata
-  // }
+  loader: async ({ context: { queryClient } }) => {
+    //     const articledata = queryClient.ensureQueryData(UseGetArticles())
+    //     return articledata
+    const tournaments = await queryClient.ensureQueryData(UseGetTournaments())
+    console.log("Tournaments", tournaments)
+    return { tournaments }
+  }
 });
 
 function Index() {
-  const { t } = useTranslation();
+  const { tournaments } = Route.useLoaderData();
+
+  return (
+    <HomePageGrid tournaments={tournaments.data} />
+  )
+}
+
+
+
+{/*
 
   const [heroControls, heroRef] = useFadeIn();
   const [tournamentsControls, tournamentsRef] = useFadeIn(0.2);
@@ -68,6 +75,8 @@ function Index() {
           className="mb-16"
         >
           {/* <LatestArticles articles={articledata.data.slice(0, 3)} /> */}
+
+{/*
         </motion.div>
 
         <div className="flex justify-center sm:flex-row flex-col gap-10 w-full mb-8">
@@ -100,3 +109,4 @@ function Index() {
     </div>
   );
 }
+          */}

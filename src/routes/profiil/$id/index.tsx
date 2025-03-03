@@ -1,7 +1,5 @@
-import { Link, useParams, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Twitter, Linkedin, Globe } from "lucide-react";
 import { mockPlayers } from "@/lib/mock_data/player_mocks";
 import { PlayerRankingChangeGraph } from "@/routes/reiting/-components/rating-chart";
 
@@ -15,11 +13,11 @@ function RouteComponent() {
   const player = mockPlayers.find(
     (player) => player.id === parseInt(id || "", 10),
   );
-  const [rivals, setRivals] = useState(player.rivals || []);
+  const [rivals, setRivals] = useState(player && player.rivals || []);
 
   useEffect(() => {
     // Reset rivals every time a new player is selected
-    setRivals(player.rivals || []);
+    setRivals(player && player.rivals || []);
   }, [player]);
 
   useEffect(() => {
