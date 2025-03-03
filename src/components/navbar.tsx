@@ -15,14 +15,16 @@ import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
 import { AuthButton } from './ui/auth-button'
 import { SidebarTrigger } from './ui/sidebar'
+import { useUser } from '@/providers/userProvider'
 
 
-// [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
 
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
     const { t } = useTranslation();
+    const { user } = useUser()
+
     const menuItems = [
         {
             name: t('navbar.menu.news.name'),
@@ -61,33 +63,31 @@ export default function Navbar() {
                 { name: 'Club Rankings', href: '/klubid/rankings' },
             ]
         },
-        // { name: t('navbar.menu.young_sport'), href: '/noortesport' },
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },
         { name: t('navbar.menu.contact'), href: '/kontakt' },
-        { name: t('navbar.menu.admin'), href: '/admin/dashboard' },
 
     ]
 
     return (
-        <header className="bg-white shadow-sm border-b border-gray-200">
-            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="bg-white shadow-sm border-b border-[#E0E8F1]">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-4 ">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/">
-                                <img className="h-10 lg:h-8 xl:h-10 w-auto" src="/RLogo.png" alt="ELTA Logo" />
+                                <img className="h-10 lg:h-8 xl:h-8 w-auto" src="/RLogo.png" alt="ELTA Logo" />
                             </Link>
                         </div>
                     </div>
 
-                    <NavigationMenu className="hidden lg:flex">
-                        <NavigationMenuList className="flex space-x-4">
+                    <NavigationMenu className="hidden lg:flex z-50">
+                        <NavigationMenuList className="flex space-x-4 z-50">
                             {menuItems.map((item) => (
                                 <NavigationMenuItem key={item.name}>
                                     {item.dropdownItems ? (
                                         <NavigationMenuTrigger className={cn(
-                                            "text-sm font-medium transition-colors hover:text-primary",
+                                            " text-sm font-medium transition-colors hover:text-primary",
                                             activeItem === item.name
                                                 ? "text-blue-600"
                                                 : "text-gray-700 hover:text-blue-600"
@@ -98,7 +98,7 @@ export default function Navbar() {
                                         <NavigationMenuLink
                                             href={item.href}
                                             className={cn(
-                                                "text-sm font-medium px-2 transition-colors hover:text-primary",
+                                                " text-sm font-medium px-2 transition-colors hover:text-primary",
                                                 activeItem === item.name
                                                     ? "text-blue-600"
                                                     : "text-gray-700 hover:text-blue-600"
@@ -109,7 +109,7 @@ export default function Navbar() {
                                         </NavigationMenuLink>
                                     )}
                                     {item.dropdownItems && (
-                                        <NavigationMenuContent>
+                                        <NavigationMenuContent className=''>
                                             <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] md:grid-cols-1 lg:w-[400px]">
                                                 {item.dropdownItems.map((dropdownItem) => (
                                                     <li key={dropdownItem.name}>
@@ -128,6 +128,17 @@ export default function Navbar() {
                                     )}
                                 </NavigationMenuItem>
                             ))}
+                            {user && user.role == 1 &&
+                                <NavigationMenuItem>
+                                    < NavigationMenuLink
+                                        href={"/admin/dashboard"}
+                                        className={
+                                            "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
+                                    >
+                                        Admin
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            }
                             <LanguageDropdown />
                             <AuthButton />
                         </NavigationMenuList>

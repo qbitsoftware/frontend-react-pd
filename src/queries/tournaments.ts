@@ -1,7 +1,7 @@
 
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
-import { Bracket, Tournament } from "@/types/types";
+import { Bracket, Category, Tournament, TournamentSize, TournamentType } from "@/types/types";
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
 
 export type TournamentsResponse = {
@@ -29,9 +29,78 @@ export function UseGetTournaments() {
     });
 }
 
+export type TournamentTypesResposne = {
+    data: TournamentType[] | null
+    message: string;
+    error: string | null;
+}
+
+export type TournamentCategoriesResponse = {
+    data: Category[] | null
+    message: string;
+    error: string | null;
+}
+
+
+export type TournamentSizeResposne = {
+    data: TournamentSize[] | null
+    message: string;
+    error: string | null;
+}
+
+export function UseGetTournamentTypes() {
+    return useQuery<TournamentTypesResposne>({
+        queryKey: ["tournament_types"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/types`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
+export function UseGetTournamentCategories() {
+    return useQuery<TournamentCategoriesResponse>({
+        queryKey: ["tournament_categories"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/categories`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
+
+export function UseGetTournamentSizes() {
+    return useQuery<TournamentSizeResposne>({
+        queryKey: ["tournament_sizes"],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/sizes`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
 
 export const UseGetTournament = (id: number) => {
     return queryOptions<TournamentResponse>({
+        queryKey: ["tournament", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}`, {
+                withCredentials: true
+            })
+            return data;
+        }
+
+    })
+}
+
+export const UseGetTournamentQuery = (id: number) => {
+    return useQuery<TournamentResponse>({
         queryKey: ["tournament", id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${id}`, {
@@ -60,7 +129,7 @@ export const UsePostTournament = () => {
 }
 
 export interface BracketReponse {
-    data: Bracket[] | null
+    data: Bracket | null
     message: string;
     error: string | null;
 }
@@ -92,11 +161,14 @@ export const UsePatchTournament = (id: number) => {
 
         onSuccess: () => {
             queryClient.resetQueries({ queryKey: ['tournaments'] })
+            queryClient.resetQueries({ queryKey: ['tournament', id] })
+            queryClient.resetQueries({ queryKey: ['bracket', id] })
+            queryClient.resetQueries({ queryKey: ['matches', id] })
         }
     })
 }
 
-export const UseDeleteTournament = (id: number) => {
+export const UseDeleteTournament = (id: number | undefined) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async () => {

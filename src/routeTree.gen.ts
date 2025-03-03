@@ -17,23 +17,38 @@ import { Route as AdminLayoutImport } from './routes/admin/layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
-import { Route as TereIndexImport } from './routes/tere/index'
 import { Route as ReitingIndexImport } from './routes/reiting/index'
 import { Route as ReeglidIndexImport } from './routes/reeglid/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
 import { Route as KlubidIndexImport } from './routes/klubid/index'
-import { Route as VoistlusedTournamentidImport } from './routes/voistlused/$tournamentid'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
+import { Route as VoistlusedTournamentidLayoutImport } from './routes/voistlused/$tournamentid/layout'
+import { Route as VoistlusedTournamentidIndexImport } from './routes/voistlused/$tournamentid/index'
 import { Route as ProfiilIdIndexImport } from './routes/profiil/$id/index'
 import { Route as AdminTournamentsIndexImport } from './routes/admin/tournaments/index'
 import { Route as AdminDashboardIndexImport } from './routes/admin/dashboard/index'
+import { Route as AdminBlogIndexImport } from './routes/admin/blog/index'
 import { Route as AdminTournamentsTournamentidLayoutImport } from './routes/admin/tournaments/$tournamentid/layout'
+import { Route as VoistlusedTournamentidTulemusedIndexImport } from './routes/voistlused/$tournamentid/tulemused/index'
+import { Route as VoistlusedTournamentidSponsoridIndexImport } from './routes/voistlused/$tournamentid/sponsorid/index'
+import { Route as VoistlusedTournamentidOsalejadIndexImport } from './routes/voistlused/$tournamentid/osalejad/index'
+import { Route as VoistlusedTournamentidMeediaIndexImport } from './routes/voistlused/$tournamentid/meedia/index'
+import { Route as VoistlusedTournamentidJuhendIndexImport } from './routes/voistlused/$tournamentid/juhend/index'
+import { Route as VoistlusedTournamentidGaleriiIndexImport } from './routes/voistlused/$tournamentid/galerii/index'
+import { Route as VoistlusedTournamentidAjakavaIndexImport } from './routes/voistlused/$tournamentid/ajakava/index'
 import { Route as AdminTournamentsNewIndexImport } from './routes/admin/tournaments/new/index'
-import { Route as AdminTournamentsTournamentidParticipantsIndexImport } from './routes/admin/tournaments/$tournamentid/participants/index'
-import { Route as AdminTournamentsTournamentidMatchesIndexImport } from './routes/admin/tournaments/$tournamentid/matches/index'
-import { Route as AdminTournamentsTournamentidEditIndexImport } from './routes/admin/tournaments/$tournamentid/edit/index'
-import { Route as AdminTournamentsTournamentidBracketsIndexImport } from './routes/admin/tournaments/$tournamentid/brackets/index'
+import { Route as AdminTournamentsTournamentidIndexImport } from './routes/admin/tournaments/$tournamentid/index'
+import { Route as AdminBlogNewIndexImport } from './routes/admin/blog/new/index'
+import { Route as VoistlusedTournamentidTulemusedGroupidIndexImport } from './routes/voistlused/$tournamentid/tulemused/$groupid/index'
+import { Route as AdminTournamentsTournamentidMangudIndexImport } from './routes/admin/tournaments/$tournamentid/mangud/index'
+import { Route as AdminTournamentsTournamentidGrupidIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/index'
+import { Route as AdminTournamentsTournamentidGrupidGroupidLayoutImport } from './routes/admin/tournaments/$tournamentid/grupid/$groupid/layout'
+import { Route as AdminTournamentsTournamentidGrupidUusIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/uus/index'
+import { Route as AdminTournamentsTournamentidGrupidGroupidIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/$groupid/index'
+import { Route as AdminTournamentsTournamentidGrupidGroupidTabelidIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/index'
+import { Route as AdminTournamentsTournamentidGrupidGroupidOsalejadIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/index'
+import { Route as AdminTournamentsTournamentidGrupidGroupidMangudIndexImport } from './routes/admin/tournaments/$tournamentid/grupid/$groupid/mangud/index'
 
 // Create Virtual Routes
 
@@ -71,12 +86,6 @@ const UudisedIndexRoute = UudisedIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TereIndexRoute = TereIndexImport.update({
-  id: '/tere/',
-  path: '/tere/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ReitingIndexRoute = ReitingIndexImport.update({
   id: '/reiting/',
   path: '/reiting/',
@@ -107,9 +116,9 @@ const KlubidIndexRoute = KlubidIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const VoistlusedTournamentidRoute = VoistlusedTournamentidImport.update({
-  id: '/voistlused/$tournamentid',
-  path: '/voistlused/$tournamentid',
+const KlubidIndexRoute = KlubidIndexImport.update({
+  id: '/klubid/',
+  path: '/klubid/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -118,6 +127,20 @@ const UudisedBlogidRoute = UudisedBlogidImport.update({
   path: '/uudised/$blogid',
   getParentRoute: () => rootRoute,
 } as any)
+
+const VoistlusedTournamentidLayoutRoute =
+  VoistlusedTournamentidLayoutImport.update({
+    id: '/voistlused/$tournamentid',
+    path: '/voistlused/$tournamentid',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const VoistlusedTournamentidIndexRoute =
+  VoistlusedTournamentidIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
 
 const ProfiilIdIndexRoute = ProfiilIdIndexImport.update({
   id: '/profiil/$id/',
@@ -137,11 +160,66 @@ const AdminDashboardIndexRoute = AdminDashboardIndexImport.update({
   getParentRoute: () => AdminLayoutRoute,
 } as any)
 
+const AdminBlogIndexRoute = AdminBlogIndexImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => AdminLayoutRoute,
+} as any)
+
 const AdminTournamentsTournamentidLayoutRoute =
   AdminTournamentsTournamentidLayoutImport.update({
     id: '/tournaments/$tournamentid',
     path: '/tournaments/$tournamentid',
     getParentRoute: () => AdminLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidTulemusedIndexRoute =
+  VoistlusedTournamentidTulemusedIndexImport.update({
+    id: '/tulemused/',
+    path: '/tulemused/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidSponsoridIndexRoute =
+  VoistlusedTournamentidSponsoridIndexImport.update({
+    id: '/sponsorid/',
+    path: '/sponsorid/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidOsalejadIndexRoute =
+  VoistlusedTournamentidOsalejadIndexImport.update({
+    id: '/osalejad/',
+    path: '/osalejad/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidMeediaIndexRoute =
+  VoistlusedTournamentidMeediaIndexImport.update({
+    id: '/meedia/',
+    path: '/meedia/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidJuhendIndexRoute =
+  VoistlusedTournamentidJuhendIndexImport.update({
+    id: '/juhend/',
+    path: '/juhend/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidGaleriiIndexRoute =
+  VoistlusedTournamentidGaleriiIndexImport.update({
+    id: '/galerii/',
+    path: '/galerii/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const VoistlusedTournamentidAjakavaIndexRoute =
+  VoistlusedTournamentidAjakavaIndexImport.update({
+    id: '/ajakava/',
+    path: '/ajakava/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
   } as any)
 
 const AdminTournamentsNewIndexRoute = AdminTournamentsNewIndexImport.update({
@@ -150,32 +228,80 @@ const AdminTournamentsNewIndexRoute = AdminTournamentsNewIndexImport.update({
   getParentRoute: () => AdminLayoutRoute,
 } as any)
 
-const AdminTournamentsTournamentidParticipantsIndexRoute =
-  AdminTournamentsTournamentidParticipantsIndexImport.update({
-    id: '/participants/',
-    path: '/participants/',
+const AdminTournamentsTournamentidIndexRoute =
+  AdminTournamentsTournamentidIndexImport.update({
+    id: '/',
+    path: '/',
     getParentRoute: () => AdminTournamentsTournamentidLayoutRoute,
   } as any)
 
-const AdminTournamentsTournamentidMatchesIndexRoute =
-  AdminTournamentsTournamentidMatchesIndexImport.update({
-    id: '/matches/',
-    path: '/matches/',
+const AdminBlogNewIndexRoute = AdminBlogNewIndexImport.update({
+  id: '/blog/new/',
+  path: '/blog/new/',
+  getParentRoute: () => AdminLayoutRoute,
+} as any)
+
+const VoistlusedTournamentidTulemusedGroupidIndexRoute =
+  VoistlusedTournamentidTulemusedGroupidIndexImport.update({
+    id: '/tulemused/$groupid/',
+    path: '/tulemused/$groupid/',
+    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidMangudIndexRoute =
+  AdminTournamentsTournamentidMangudIndexImport.update({
+    id: '/mangud/',
+    path: '/mangud/',
     getParentRoute: () => AdminTournamentsTournamentidLayoutRoute,
   } as any)
 
-const AdminTournamentsTournamentidEditIndexRoute =
-  AdminTournamentsTournamentidEditIndexImport.update({
-    id: '/edit/',
-    path: '/edit/',
+const AdminTournamentsTournamentidGrupidIndexRoute =
+  AdminTournamentsTournamentidGrupidIndexImport.update({
+    id: '/grupid/',
+    path: '/grupid/',
     getParentRoute: () => AdminTournamentsTournamentidLayoutRoute,
   } as any)
 
-const AdminTournamentsTournamentidBracketsIndexRoute =
-  AdminTournamentsTournamentidBracketsIndexImport.update({
-    id: '/brackets/',
-    path: '/brackets/',
+const AdminTournamentsTournamentidGrupidGroupidLayoutRoute =
+  AdminTournamentsTournamentidGrupidGroupidLayoutImport.update({
+    id: '/grupid/$groupid',
+    path: '/grupid/$groupid',
     getParentRoute: () => AdminTournamentsTournamentidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidGrupidUusIndexRoute =
+  AdminTournamentsTournamentidGrupidUusIndexImport.update({
+    id: '/grupid/uus/',
+    path: '/grupid/uus/',
+    getParentRoute: () => AdminTournamentsTournamentidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidGrupidGroupidIndexRoute =
+  AdminTournamentsTournamentidGrupidGroupidIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminTournamentsTournamentidGrupidGroupidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute =
+  AdminTournamentsTournamentidGrupidGroupidTabelidIndexImport.update({
+    id: '/tabelid/',
+    path: '/tabelid/',
+    getParentRoute: () => AdminTournamentsTournamentidGrupidGroupidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute =
+  AdminTournamentsTournamentidGrupidGroupidOsalejadIndexImport.update({
+    id: '/osalejad/',
+    path: '/osalejad/',
+    getParentRoute: () => AdminTournamentsTournamentidGrupidGroupidLayoutRoute,
+  } as any)
+
+const AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute =
+  AdminTournamentsTournamentidGrupidGroupidMangudIndexImport.update({
+    id: '/mangud/',
+    path: '/mangud/',
+    getParentRoute: () => AdminTournamentsTournamentidGrupidGroupidLayoutRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -201,6 +327,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/voistlused/$tournamentid': {
+      id: '/voistlused/$tournamentid'
+      path: '/voistlused/$tournamentid'
+      fullPath: '/voistlused/$tournamentid'
+      preLoaderRoute: typeof VoistlusedTournamentidLayoutImport
       parentRoute: typeof rootRoute
     }
     '/uudised/$blogid': {
@@ -252,13 +385,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReitingIndexImport
       parentRoute: typeof rootRoute
     }
-    '/tere/': {
-      id: '/tere/'
-      path: '/tere'
-      fullPath: '/tere'
-      preLoaderRoute: typeof TereIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/uudised/': {
       id: '/uudised/'
       path: '/uudised'
@@ -280,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTournamentsTournamentidLayoutImport
       parentRoute: typeof AdminLayoutImport
     }
+    '/admin/blog/': {
+      id: '/admin/blog/'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogIndexImport
+      parentRoute: typeof AdminLayoutImport
+    }
     '/admin/dashboard/': {
       id: '/admin/dashboard/'
       path: '/dashboard'
@@ -293,6 +426,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/tournaments'
       preLoaderRoute: typeof AdminTournamentsIndexImport
       parentRoute: typeof AdminLayoutImport
+    }
+    '/voistlused/$tournamentid/': {
+      id: '/voistlused/$tournamentid/'
+      path: '/'
+      fullPath: '/voistlused/$tournamentid/'
+      preLoaderRoute: typeof VoistlusedTournamentidIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/admin/blog/new/': {
+      id: '/admin/blog/new/'
+      path: '/blog/new'
+      fullPath: '/admin/blog/new'
+      preLoaderRoute: typeof AdminBlogNewIndexImport
+      parentRoute: typeof AdminLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/': {
+      id: '/admin/tournaments/$tournamentid/'
+      path: '/'
+      fullPath: '/admin/tournaments/$tournamentid/'
+      preLoaderRoute: typeof AdminTournamentsTournamentidIndexImport
+      parentRoute: typeof AdminTournamentsTournamentidLayoutImport
     }
     '/profiil/$id/': {
       id: '/profiil/$id/'
@@ -308,56 +462,167 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTournamentsNewIndexImport
       parentRoute: typeof AdminLayoutImport
     }
-    '/admin/tournaments/$tournamentid/brackets/': {
-      id: '/admin/tournaments/$tournamentid/brackets/'
-      path: '/brackets'
-      fullPath: '/admin/tournaments/$tournamentid/brackets'
-      preLoaderRoute: typeof AdminTournamentsTournamentidBracketsIndexImport
+    '/voistlused/$tournamentid/ajakava/': {
+      id: '/voistlused/$tournamentid/ajakava/'
+      path: '/ajakava'
+      fullPath: '/voistlused/$tournamentid/ajakava'
+      preLoaderRoute: typeof VoistlusedTournamentidAjakavaIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/galerii/': {
+      id: '/voistlused/$tournamentid/galerii/'
+      path: '/galerii'
+      fullPath: '/voistlused/$tournamentid/galerii'
+      preLoaderRoute: typeof VoistlusedTournamentidGaleriiIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/juhend/': {
+      id: '/voistlused/$tournamentid/juhend/'
+      path: '/juhend'
+      fullPath: '/voistlused/$tournamentid/juhend'
+      preLoaderRoute: typeof VoistlusedTournamentidJuhendIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/meedia/': {
+      id: '/voistlused/$tournamentid/meedia/'
+      path: '/meedia'
+      fullPath: '/voistlused/$tournamentid/meedia'
+      preLoaderRoute: typeof VoistlusedTournamentidMeediaIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/osalejad/': {
+      id: '/voistlused/$tournamentid/osalejad/'
+      path: '/osalejad'
+      fullPath: '/voistlused/$tournamentid/osalejad'
+      preLoaderRoute: typeof VoistlusedTournamentidOsalejadIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/sponsorid/': {
+      id: '/voistlused/$tournamentid/sponsorid/'
+      path: '/sponsorid'
+      fullPath: '/voistlused/$tournamentid/sponsorid'
+      preLoaderRoute: typeof VoistlusedTournamentidSponsoridIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/voistlused/$tournamentid/tulemused/': {
+      id: '/voistlused/$tournamentid/tulemused/'
+      path: '/tulemused'
+      fullPath: '/voistlused/$tournamentid/tulemused'
+      preLoaderRoute: typeof VoistlusedTournamentidTulemusedIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/$groupid': {
+      id: '/admin/tournaments/$tournamentid/grupid/$groupid'
+      path: '/grupid/$groupid'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/$groupid'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutImport
       parentRoute: typeof AdminTournamentsTournamentidLayoutImport
     }
-    '/admin/tournaments/$tournamentid/edit/': {
-      id: '/admin/tournaments/$tournamentid/edit/'
-      path: '/edit'
-      fullPath: '/admin/tournaments/$tournamentid/edit'
-      preLoaderRoute: typeof AdminTournamentsTournamentidEditIndexImport
+    '/admin/tournaments/$tournamentid/grupid/': {
+      id: '/admin/tournaments/$tournamentid/grupid/'
+      path: '/grupid'
+      fullPath: '/admin/tournaments/$tournamentid/grupid'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidIndexImport
       parentRoute: typeof AdminTournamentsTournamentidLayoutImport
     }
-    '/admin/tournaments/$tournamentid/matches/': {
-      id: '/admin/tournaments/$tournamentid/matches/'
-      path: '/matches'
-      fullPath: '/admin/tournaments/$tournamentid/matches'
-      preLoaderRoute: typeof AdminTournamentsTournamentidMatchesIndexImport
+    '/admin/tournaments/$tournamentid/mangud/': {
+      id: '/admin/tournaments/$tournamentid/mangud/'
+      path: '/mangud'
+      fullPath: '/admin/tournaments/$tournamentid/mangud'
+      preLoaderRoute: typeof AdminTournamentsTournamentidMangudIndexImport
       parentRoute: typeof AdminTournamentsTournamentidLayoutImport
     }
-    '/admin/tournaments/$tournamentid/participants/': {
-      id: '/admin/tournaments/$tournamentid/participants/'
-      path: '/participants'
-      fullPath: '/admin/tournaments/$tournamentid/participants'
-      preLoaderRoute: typeof AdminTournamentsTournamentidParticipantsIndexImport
+    '/voistlused/$tournamentid/tulemused/$groupid/': {
+      id: '/voistlused/$tournamentid/tulemused/$groupid/'
+      path: '/tulemused/$groupid'
+      fullPath: '/voistlused/$tournamentid/tulemused/$groupid'
+      preLoaderRoute: typeof VoistlusedTournamentidTulemusedGroupidIndexImport
+      parentRoute: typeof VoistlusedTournamentidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/$groupid/': {
+      id: '/admin/tournaments/$tournamentid/grupid/$groupid/'
+      path: '/'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/$groupid/'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidGroupidIndexImport
+      parentRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/uus/': {
+      id: '/admin/tournaments/$tournamentid/grupid/uus/'
+      path: '/grupid/uus'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/uus'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidUusIndexImport
       parentRoute: typeof AdminTournamentsTournamentidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/': {
+      id: '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/'
+      path: '/mangud'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/$groupid/mangud'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidGroupidMangudIndexImport
+      parentRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/': {
+      id: '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/'
+      path: '/osalejad'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidGroupidOsalejadIndexImport
+      parentRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutImport
+    }
+    '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/': {
+      id: '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/'
+      path: '/tabelid'
+      fullPath: '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid'
+      preLoaderRoute: typeof AdminTournamentsTournamentidGrupidGroupidTabelidIndexImport
+      parentRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AdminTournamentsTournamentidGrupidGroupidLayoutRouteChildren {
+  AdminTournamentsTournamentidGrupidGroupidIndexRoute: typeof AdminTournamentsTournamentidGrupidGroupidIndexRoute
+  AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute: typeof AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute
+  AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute: typeof AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute
+  AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute: typeof AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute
+}
+
+const AdminTournamentsTournamentidGrupidGroupidLayoutRouteChildren: AdminTournamentsTournamentidGrupidGroupidLayoutRouteChildren =
+  {
+    AdminTournamentsTournamentidGrupidGroupidIndexRoute:
+      AdminTournamentsTournamentidGrupidGroupidIndexRoute,
+    AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute:
+      AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute,
+    AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute:
+      AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute,
+    AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute:
+      AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute,
+  }
+
+const AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren =
+  AdminTournamentsTournamentidGrupidGroupidLayoutRoute._addFileChildren(
+    AdminTournamentsTournamentidGrupidGroupidLayoutRouteChildren,
+  )
+
 interface AdminTournamentsTournamentidLayoutRouteChildren {
-  AdminTournamentsTournamentidBracketsIndexRoute: typeof AdminTournamentsTournamentidBracketsIndexRoute
-  AdminTournamentsTournamentidEditIndexRoute: typeof AdminTournamentsTournamentidEditIndexRoute
-  AdminTournamentsTournamentidMatchesIndexRoute: typeof AdminTournamentsTournamentidMatchesIndexRoute
-  AdminTournamentsTournamentidParticipantsIndexRoute: typeof AdminTournamentsTournamentidParticipantsIndexRoute
+  AdminTournamentsTournamentidIndexRoute: typeof AdminTournamentsTournamentidIndexRoute
+  AdminTournamentsTournamentidGrupidGroupidLayoutRoute: typeof AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren
+  AdminTournamentsTournamentidGrupidIndexRoute: typeof AdminTournamentsTournamentidGrupidIndexRoute
+  AdminTournamentsTournamentidMangudIndexRoute: typeof AdminTournamentsTournamentidMangudIndexRoute
+  AdminTournamentsTournamentidGrupidUusIndexRoute: typeof AdminTournamentsTournamentidGrupidUusIndexRoute
 }
 
 const AdminTournamentsTournamentidLayoutRouteChildren: AdminTournamentsTournamentidLayoutRouteChildren =
   {
-    AdminTournamentsTournamentidBracketsIndexRoute:
-      AdminTournamentsTournamentidBracketsIndexRoute,
-    AdminTournamentsTournamentidEditIndexRoute:
-      AdminTournamentsTournamentidEditIndexRoute,
-    AdminTournamentsTournamentidMatchesIndexRoute:
-      AdminTournamentsTournamentidMatchesIndexRoute,
-    AdminTournamentsTournamentidParticipantsIndexRoute:
-      AdminTournamentsTournamentidParticipantsIndexRoute,
+    AdminTournamentsTournamentidIndexRoute:
+      AdminTournamentsTournamentidIndexRoute,
+    AdminTournamentsTournamentidGrupidGroupidLayoutRoute:
+      AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren,
+    AdminTournamentsTournamentidGrupidIndexRoute:
+      AdminTournamentsTournamentidGrupidIndexRoute,
+    AdminTournamentsTournamentidMangudIndexRoute:
+      AdminTournamentsTournamentidMangudIndexRoute,
+    AdminTournamentsTournamentidGrupidUusIndexRoute:
+      AdminTournamentsTournamentidGrupidUusIndexRoute,
   }
 
 const AdminTournamentsTournamentidLayoutRouteWithChildren =
@@ -367,16 +632,20 @@ const AdminTournamentsTournamentidLayoutRouteWithChildren =
 
 interface AdminLayoutRouteChildren {
   AdminTournamentsTournamentidLayoutRoute: typeof AdminTournamentsTournamentidLayoutRouteWithChildren
+  AdminBlogIndexRoute: typeof AdminBlogIndexRoute
   AdminDashboardIndexRoute: typeof AdminDashboardIndexRoute
   AdminTournamentsIndexRoute: typeof AdminTournamentsIndexRoute
+  AdminBlogNewIndexRoute: typeof AdminBlogNewIndexRoute
   AdminTournamentsNewIndexRoute: typeof AdminTournamentsNewIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminTournamentsTournamentidLayoutRoute:
     AdminTournamentsTournamentidLayoutRouteWithChildren,
+  AdminBlogIndexRoute: AdminBlogIndexRoute,
   AdminDashboardIndexRoute: AdminDashboardIndexRoute,
   AdminTournamentsIndexRoute: AdminTournamentsIndexRoute,
+  AdminBlogNewIndexRoute: AdminBlogNewIndexRoute,
   AdminTournamentsNewIndexRoute: AdminTournamentsNewIndexRoute,
 }
 
@@ -384,29 +653,82 @@ const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
   AdminLayoutRouteChildren,
 )
 
+interface VoistlusedTournamentidLayoutRouteChildren {
+  VoistlusedTournamentidIndexRoute: typeof VoistlusedTournamentidIndexRoute
+  VoistlusedTournamentidAjakavaIndexRoute: typeof VoistlusedTournamentidAjakavaIndexRoute
+  VoistlusedTournamentidGaleriiIndexRoute: typeof VoistlusedTournamentidGaleriiIndexRoute
+  VoistlusedTournamentidJuhendIndexRoute: typeof VoistlusedTournamentidJuhendIndexRoute
+  VoistlusedTournamentidMeediaIndexRoute: typeof VoistlusedTournamentidMeediaIndexRoute
+  VoistlusedTournamentidOsalejadIndexRoute: typeof VoistlusedTournamentidOsalejadIndexRoute
+  VoistlusedTournamentidSponsoridIndexRoute: typeof VoistlusedTournamentidSponsoridIndexRoute
+  VoistlusedTournamentidTulemusedIndexRoute: typeof VoistlusedTournamentidTulemusedIndexRoute
+  VoistlusedTournamentidTulemusedGroupidIndexRoute: typeof VoistlusedTournamentidTulemusedGroupidIndexRoute
+}
+
+const VoistlusedTournamentidLayoutRouteChildren: VoistlusedTournamentidLayoutRouteChildren =
+  {
+    VoistlusedTournamentidIndexRoute: VoistlusedTournamentidIndexRoute,
+    VoistlusedTournamentidAjakavaIndexRoute:
+      VoistlusedTournamentidAjakavaIndexRoute,
+    VoistlusedTournamentidGaleriiIndexRoute:
+      VoistlusedTournamentidGaleriiIndexRoute,
+    VoistlusedTournamentidJuhendIndexRoute:
+      VoistlusedTournamentidJuhendIndexRoute,
+    VoistlusedTournamentidMeediaIndexRoute:
+      VoistlusedTournamentidMeediaIndexRoute,
+    VoistlusedTournamentidOsalejadIndexRoute:
+      VoistlusedTournamentidOsalejadIndexRoute,
+    VoistlusedTournamentidSponsoridIndexRoute:
+      VoistlusedTournamentidSponsoridIndexRoute,
+    VoistlusedTournamentidTulemusedIndexRoute:
+      VoistlusedTournamentidTulemusedIndexRoute,
+    VoistlusedTournamentidTulemusedGroupidIndexRoute:
+      VoistlusedTournamentidTulemusedGroupidIndexRoute,
+  }
+
+const VoistlusedTournamentidLayoutRouteWithChildren =
+  VoistlusedTournamentidLayoutRoute._addFileChildren(
+    VoistlusedTournamentidLayoutRouteChildren,
+  )
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminLayoutRouteWithChildren
   '/about': typeof AboutLazyRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidLayoutRouteWithChildren
   '/uudised/$blogid': typeof UudisedBlogidRoute
-  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/klubid': typeof KlubidIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
+  '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
+  '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
+  '/admin/blog/new': typeof AdminBlogNewIndexRoute
+  '/admin/tournaments/$tournamentid/': typeof AdminTournamentsTournamentidIndexRoute
   '/profiil/$id': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new': typeof AdminTournamentsNewIndexRoute
-  '/admin/tournaments/$tournamentid/brackets': typeof AdminTournamentsTournamentidBracketsIndexRoute
-  '/admin/tournaments/$tournamentid/edit': typeof AdminTournamentsTournamentidEditIndexRoute
-  '/admin/tournaments/$tournamentid/matches': typeof AdminTournamentsTournamentidMatchesIndexRoute
-  '/admin/tournaments/$tournamentid/participants': typeof AdminTournamentsTournamentidParticipantsIndexRoute
+  '/voistlused/$tournamentid/ajakava': typeof VoistlusedTournamentidAjakavaIndexRoute
+  '/voistlused/$tournamentid/galerii': typeof VoistlusedTournamentidGaleriiIndexRoute
+  '/voistlused/$tournamentid/juhend': typeof VoistlusedTournamentidJuhendIndexRoute
+  '/voistlused/$tournamentid/meedia': typeof VoistlusedTournamentidMeediaIndexRoute
+  '/voistlused/$tournamentid/osalejad': typeof VoistlusedTournamentidOsalejadIndexRoute
+  '/voistlused/$tournamentid/sponsorid': typeof VoistlusedTournamentidSponsoridIndexRoute
+  '/voistlused/$tournamentid/tulemused': typeof VoistlusedTournamentidTulemusedIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid': typeof AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren
+  '/admin/tournaments/$tournamentid/grupid': typeof AdminTournamentsTournamentidGrupidIndexRoute
+  '/admin/tournaments/$tournamentid/mangud': typeof AdminTournamentsTournamentidMangudIndexRoute
+  '/voistlused/$tournamentid/tulemused/$groupid': typeof VoistlusedTournamentidTulemusedGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/': typeof AdminTournamentsTournamentidGrupidGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/uus': typeof AdminTournamentsTournamentidGrupidUusIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/mangud': typeof AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad': typeof AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid': typeof AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -414,24 +736,36 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminLayoutRouteWithChildren
   '/about': typeof AboutLazyRoute
   '/uudised/$blogid': typeof UudisedBlogidRoute
-  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/klubid': typeof KlubidIndexRoute
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/tere': typeof TereIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
-  '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
+  '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidIndexRoute
+  '/admin/blog/new': typeof AdminBlogNewIndexRoute
+  '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidIndexRoute
   '/profiil/$id': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new': typeof AdminTournamentsNewIndexRoute
-  '/admin/tournaments/$tournamentid/brackets': typeof AdminTournamentsTournamentidBracketsIndexRoute
-  '/admin/tournaments/$tournamentid/edit': typeof AdminTournamentsTournamentidEditIndexRoute
-  '/admin/tournaments/$tournamentid/matches': typeof AdminTournamentsTournamentidMatchesIndexRoute
-  '/admin/tournaments/$tournamentid/participants': typeof AdminTournamentsTournamentidParticipantsIndexRoute
+  '/voistlused/$tournamentid/ajakava': typeof VoistlusedTournamentidAjakavaIndexRoute
+  '/voistlused/$tournamentid/galerii': typeof VoistlusedTournamentidGaleriiIndexRoute
+  '/voistlused/$tournamentid/juhend': typeof VoistlusedTournamentidJuhendIndexRoute
+  '/voistlused/$tournamentid/meedia': typeof VoistlusedTournamentidMeediaIndexRoute
+  '/voistlused/$tournamentid/osalejad': typeof VoistlusedTournamentidOsalejadIndexRoute
+  '/voistlused/$tournamentid/sponsorid': typeof VoistlusedTournamentidSponsoridIndexRoute
+  '/voistlused/$tournamentid/tulemused': typeof VoistlusedTournamentidTulemusedIndexRoute
+  '/admin/tournaments/$tournamentid/grupid': typeof AdminTournamentsTournamentidGrupidIndexRoute
+  '/admin/tournaments/$tournamentid/mangud': typeof AdminTournamentsTournamentidMangudIndexRoute
+  '/voistlused/$tournamentid/tulemused/$groupid': typeof VoistlusedTournamentidTulemusedGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid': typeof AdminTournamentsTournamentidGrupidGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/uus': typeof AdminTournamentsTournamentidGrupidUusIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/mangud': typeof AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad': typeof AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid': typeof AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute
 }
 
 export interface FileRoutesById {
@@ -439,25 +773,40 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminLayoutRouteWithChildren
   '/about': typeof AboutLazyRoute
+  '/voistlused/$tournamentid': typeof VoistlusedTournamentidLayoutRouteWithChildren
   '/uudised/$blogid': typeof UudisedBlogidRoute
-  '/voistlused/$tournamentid': typeof VoistlusedTournamentidRoute
   '/klubid/': typeof KlubidIndexRoute
   '/kontakt/': typeof KontaktIndexRoute
   '/login/': typeof LoginIndexRoute
   '/reeglid/': typeof ReeglidIndexRoute
   '/reiting/': typeof ReitingIndexRoute
-  '/tere/': typeof TereIndexRoute
   '/uudised/': typeof UudisedIndexRoute
   '/voistlused/': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
+  '/admin/blog/': typeof AdminBlogIndexRoute
   '/admin/dashboard/': typeof AdminDashboardIndexRoute
   '/admin/tournaments/': typeof AdminTournamentsIndexRoute
+  '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
+  '/admin/blog/new/': typeof AdminBlogNewIndexRoute
+  '/admin/tournaments/$tournamentid/': typeof AdminTournamentsTournamentidIndexRoute
   '/profiil/$id/': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new/': typeof AdminTournamentsNewIndexRoute
-  '/admin/tournaments/$tournamentid/brackets/': typeof AdminTournamentsTournamentidBracketsIndexRoute
-  '/admin/tournaments/$tournamentid/edit/': typeof AdminTournamentsTournamentidEditIndexRoute
-  '/admin/tournaments/$tournamentid/matches/': typeof AdminTournamentsTournamentidMatchesIndexRoute
-  '/admin/tournaments/$tournamentid/participants/': typeof AdminTournamentsTournamentidParticipantsIndexRoute
+  '/voistlused/$tournamentid/ajakava/': typeof VoistlusedTournamentidAjakavaIndexRoute
+  '/voistlused/$tournamentid/galerii/': typeof VoistlusedTournamentidGaleriiIndexRoute
+  '/voistlused/$tournamentid/juhend/': typeof VoistlusedTournamentidJuhendIndexRoute
+  '/voistlused/$tournamentid/meedia/': typeof VoistlusedTournamentidMeediaIndexRoute
+  '/voistlused/$tournamentid/osalejad/': typeof VoistlusedTournamentidOsalejadIndexRoute
+  '/voistlused/$tournamentid/sponsorid/': typeof VoistlusedTournamentidSponsoridIndexRoute
+  '/voistlused/$tournamentid/tulemused/': typeof VoistlusedTournamentidTulemusedIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid': typeof AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren
+  '/admin/tournaments/$tournamentid/grupid/': typeof AdminTournamentsTournamentidGrupidIndexRoute
+  '/admin/tournaments/$tournamentid/mangud/': typeof AdminTournamentsTournamentidMangudIndexRoute
+  '/voistlused/$tournamentid/tulemused/$groupid/': typeof VoistlusedTournamentidTulemusedGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/': typeof AdminTournamentsTournamentidGrupidGroupidIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/uus/': typeof AdminTournamentsTournamentidGrupidUusIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/': typeof AdminTournamentsTournamentidGrupidGroupidMangudIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/': typeof AdminTournamentsTournamentidGrupidGroupidOsalejadIndexRoute
+  '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/': typeof AdminTournamentsTournamentidGrupidGroupidTabelidIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -466,73 +815,115 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/about'
-    | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
+    | '/uudised/$blogid'
     | '/klubid'
     | '/kontakt'
     | '/login'
     | '/reeglid'
     | '/reiting'
-    | '/tere'
     | '/uudised'
     | '/voistlused'
     | '/admin/tournaments/$tournamentid'
+    | '/admin/blog'
     | '/admin/dashboard'
     | '/admin/tournaments'
+    | '/voistlused/$tournamentid/'
+    | '/admin/blog/new'
+    | '/admin/tournaments/$tournamentid/'
     | '/profiil/$id'
     | '/admin/tournaments/new'
-    | '/admin/tournaments/$tournamentid/brackets'
-    | '/admin/tournaments/$tournamentid/edit'
-    | '/admin/tournaments/$tournamentid/matches'
-    | '/admin/tournaments/$tournamentid/participants'
+    | '/voistlused/$tournamentid/ajakava'
+    | '/voistlused/$tournamentid/galerii'
+    | '/voistlused/$tournamentid/juhend'
+    | '/voistlused/$tournamentid/meedia'
+    | '/voistlused/$tournamentid/osalejad'
+    | '/voistlused/$tournamentid/sponsorid'
+    | '/voistlused/$tournamentid/tulemused'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid'
+    | '/admin/tournaments/$tournamentid/grupid'
+    | '/admin/tournaments/$tournamentid/mangud'
+    | '/voistlused/$tournamentid/tulemused/$groupid'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/'
+    | '/admin/tournaments/$tournamentid/grupid/uus'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/mangud'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/about'
     | '/uudised/$blogid'
-    | '/voistlused/$tournamentid'
     | '/klubid'
     | '/kontakt'
     | '/login'
     | '/reeglid'
     | '/reiting'
-    | '/tere'
     | '/uudised'
     | '/voistlused'
-    | '/admin/tournaments/$tournamentid'
+    | '/admin/blog'
     | '/admin/dashboard'
     | '/admin/tournaments'
+    | '/voistlused/$tournamentid'
+    | '/admin/blog/new'
+    | '/admin/tournaments/$tournamentid'
     | '/profiil/$id'
     | '/admin/tournaments/new'
-    | '/admin/tournaments/$tournamentid/brackets'
-    | '/admin/tournaments/$tournamentid/edit'
-    | '/admin/tournaments/$tournamentid/matches'
-    | '/admin/tournaments/$tournamentid/participants'
+    | '/voistlused/$tournamentid/ajakava'
+    | '/voistlused/$tournamentid/galerii'
+    | '/voistlused/$tournamentid/juhend'
+    | '/voistlused/$tournamentid/meedia'
+    | '/voistlused/$tournamentid/osalejad'
+    | '/voistlused/$tournamentid/sponsorid'
+    | '/voistlused/$tournamentid/tulemused'
+    | '/admin/tournaments/$tournamentid/grupid'
+    | '/admin/tournaments/$tournamentid/mangud'
+    | '/voistlused/$tournamentid/tulemused/$groupid'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid'
+    | '/admin/tournaments/$tournamentid/grupid/uus'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/mangud'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/about'
-    | '/uudised/$blogid'
     | '/voistlused/$tournamentid'
+    | '/uudised/$blogid'
     | '/klubid/'
     | '/kontakt/'
     | '/login/'
     | '/reeglid/'
     | '/reiting/'
-    | '/tere/'
     | '/uudised/'
     | '/voistlused/'
     | '/admin/tournaments/$tournamentid'
+    | '/admin/blog/'
     | '/admin/dashboard/'
     | '/admin/tournaments/'
+    | '/voistlused/$tournamentid/'
+    | '/admin/blog/new/'
+    | '/admin/tournaments/$tournamentid/'
     | '/profiil/$id/'
     | '/admin/tournaments/new/'
-    | '/admin/tournaments/$tournamentid/brackets/'
-    | '/admin/tournaments/$tournamentid/edit/'
-    | '/admin/tournaments/$tournamentid/matches/'
-    | '/admin/tournaments/$tournamentid/participants/'
+    | '/voistlused/$tournamentid/ajakava/'
+    | '/voistlused/$tournamentid/galerii/'
+    | '/voistlused/$tournamentid/juhend/'
+    | '/voistlused/$tournamentid/meedia/'
+    | '/voistlused/$tournamentid/osalejad/'
+    | '/voistlused/$tournamentid/sponsorid/'
+    | '/voistlused/$tournamentid/tulemused/'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid'
+    | '/admin/tournaments/$tournamentid/grupid/'
+    | '/admin/tournaments/$tournamentid/mangud/'
+    | '/voistlused/$tournamentid/tulemused/$groupid/'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/'
+    | '/admin/tournaments/$tournamentid/grupid/uus/'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/'
+    | '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/'
   fileRoutesById: FileRoutesById
 }
 
@@ -540,14 +931,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminLayoutRoute: typeof AdminLayoutRouteWithChildren
   AboutLazyRoute: typeof AboutLazyRoute
+  VoistlusedTournamentidLayoutRoute: typeof VoistlusedTournamentidLayoutRouteWithChildren
   UudisedBlogidRoute: typeof UudisedBlogidRoute
-  VoistlusedTournamentidRoute: typeof VoistlusedTournamentidRoute
   KlubidIndexRoute: typeof KlubidIndexRoute
   KontaktIndexRoute: typeof KontaktIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   ReeglidIndexRoute: typeof ReeglidIndexRoute
   ReitingIndexRoute: typeof ReitingIndexRoute
-  TereIndexRoute: typeof TereIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
   ProfiilIdIndexRoute: typeof ProfiilIdIndexRoute
@@ -557,6 +947,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminLayoutRoute: AdminLayoutRouteWithChildren,
   AboutLazyRoute: AboutLazyRoute,
+  VoistlusedTournamentidLayoutRoute:
+    VoistlusedTournamentidLayoutRouteWithChildren,
   UudisedBlogidRoute: UudisedBlogidRoute,
   VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
   KlubidIndexRoute: KlubidIndexRoute,
@@ -564,7 +956,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginIndexRoute: LoginIndexRoute,
   ReeglidIndexRoute: ReeglidIndexRoute,
   ReitingIndexRoute: ReitingIndexRoute,
-  TereIndexRoute: TereIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
   ProfiilIdIndexRoute: ProfiilIdIndexRoute,
@@ -583,14 +974,13 @@ export const routeTree = rootRoute
         "/",
         "/admin",
         "/about",
-        "/uudised/$blogid",
         "/voistlused/$tournamentid",
         "/klubid/",
+        "/uudised/$blogid",
         "/kontakt/",
         "/login/",
         "/reeglid/",
         "/reiting/",
-        "/tere/",
         "/uudised/",
         "/voistlused/",
         "/profiil/$id/"
@@ -603,19 +993,32 @@ export const routeTree = rootRoute
       "filePath": "admin/layout.tsx",
       "children": [
         "/admin/tournaments/$tournamentid",
+        "/admin/blog/",
         "/admin/dashboard/",
         "/admin/tournaments/",
+        "/admin/blog/new/",
         "/admin/tournaments/new/"
       ]
     },
     "/about": {
       "filePath": "about.lazy.tsx"
     },
+    "/voistlused/$tournamentid": {
+      "filePath": "voistlused/$tournamentid/layout.tsx",
+      "children": [
+        "/voistlused/$tournamentid/",
+        "/voistlused/$tournamentid/ajakava/",
+        "/voistlused/$tournamentid/galerii/",
+        "/voistlused/$tournamentid/juhend/",
+        "/voistlused/$tournamentid/meedia/",
+        "/voistlused/$tournamentid/osalejad/",
+        "/voistlused/$tournamentid/sponsorid/",
+        "/voistlused/$tournamentid/tulemused/",
+        "/voistlused/$tournamentid/tulemused/$groupid/"
+      ]
+    },
     "/uudised/$blogid": {
       "filePath": "uudised/$blogid.tsx"
-    },
-    "/voistlused/$tournamentid": {
-      "filePath": "voistlused/$tournamentid.tsx"
     },
     "/klubid/": {
       "filePath": "klubid/index.tsx"
@@ -632,9 +1035,6 @@ export const routeTree = rootRoute
     "/reiting/": {
       "filePath": "reiting/index.tsx"
     },
-    "/tere/": {
-      "filePath": "tere/index.tsx"
-    },
     "/uudised/": {
       "filePath": "uudised/index.tsx"
     },
@@ -645,11 +1045,16 @@ export const routeTree = rootRoute
       "filePath": "admin/tournaments/$tournamentid/layout.tsx",
       "parent": "/admin",
       "children": [
-        "/admin/tournaments/$tournamentid/brackets/",
-        "/admin/tournaments/$tournamentid/edit/",
-        "/admin/tournaments/$tournamentid/matches/",
-        "/admin/tournaments/$tournamentid/participants/"
+        "/admin/tournaments/$tournamentid/",
+        "/admin/tournaments/$tournamentid/grupid/$groupid",
+        "/admin/tournaments/$tournamentid/grupid/",
+        "/admin/tournaments/$tournamentid/mangud/",
+        "/admin/tournaments/$tournamentid/grupid/uus/"
       ]
+    },
+    "/admin/blog/": {
+      "filePath": "admin/blog/index.tsx",
+      "parent": "/admin"
     },
     "/admin/dashboard/": {
       "filePath": "admin/dashboard/index.tsx",
@@ -662,25 +1067,95 @@ export const routeTree = rootRoute
     "/profiil/$id/": {
       "filePath": "profiil/$id/index.tsx"
     },
+    "/voistlused/$tournamentid/": {
+      "filePath": "voistlused/$tournamentid/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/admin/blog/new/": {
+      "filePath": "admin/blog/new/index.tsx",
+      "parent": "/admin"
+    },
+    "/admin/tournaments/$tournamentid/": {
+      "filePath": "admin/tournaments/$tournamentid/index.tsx",
+      "parent": "/admin/tournaments/$tournamentid"
+    },
     "/admin/tournaments/new/": {
       "filePath": "admin/tournaments/new/index.tsx",
       "parent": "/admin"
     },
-    "/admin/tournaments/$tournamentid/brackets/": {
-      "filePath": "admin/tournaments/$tournamentid/brackets/index.tsx",
+    "/voistlused/$tournamentid/ajakava/": {
+      "filePath": "voistlused/$tournamentid/ajakava/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/galerii/": {
+      "filePath": "voistlused/$tournamentid/galerii/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/juhend/": {
+      "filePath": "voistlused/$tournamentid/juhend/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/meedia/": {
+      "filePath": "voistlused/$tournamentid/meedia/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/osalejad/": {
+      "filePath": "voistlused/$tournamentid/osalejad/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/sponsorid/": {
+      "filePath": "voistlused/$tournamentid/sponsorid/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/voistlused/$tournamentid/tulemused/": {
+      "filePath": "voistlused/$tournamentid/tulemused/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/$groupid": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/$groupid/layout.tsx",
+      "parent": "/admin/tournaments/$tournamentid",
+      "children": [
+        "/admin/tournaments/$tournamentid/grupid/$groupid/",
+        "/admin/tournaments/$tournamentid/grupid/$groupid/mangud/",
+        "/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/",
+        "/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/"
+      ]
+    },
+    "/admin/tournaments/$tournamentid/grupid/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/index.tsx",
       "parent": "/admin/tournaments/$tournamentid"
     },
-    "/admin/tournaments/$tournamentid/edit/": {
-      "filePath": "admin/tournaments/$tournamentid/edit/index.tsx",
+    "/admin/tournaments/$tournamentid/mangud/": {
+      "filePath": "admin/tournaments/$tournamentid/mangud/index.tsx",
       "parent": "/admin/tournaments/$tournamentid"
     },
-    "/admin/tournaments/$tournamentid/matches/": {
-      "filePath": "admin/tournaments/$tournamentid/matches/index.tsx",
+    "/voistlused/$tournamentid/tulemused/$groupid/": {
+      "filePath": "voistlused/$tournamentid/tulemused/$groupid/index.tsx",
+      "parent": "/voistlused/$tournamentid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/$groupid/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/$groupid/index.tsx",
+      "parent": "/admin/tournaments/$tournamentid/grupid/$groupid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/uus/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/uus/index.tsx",
       "parent": "/admin/tournaments/$tournamentid"
     },
     "/admin/tournaments/$tournamentid/participants/": {
       "filePath": "admin/tournaments/$tournamentid/participants/index.tsx",
       "parent": "/admin/tournaments/$tournamentid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/$groupid/mangud/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/$groupid/mangud/index.tsx",
+      "parent": "/admin/tournaments/$tournamentid/grupid/$groupid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/$groupid/osalejad/index.tsx",
+      "parent": "/admin/tournaments/$tournamentid/grupid/$groupid"
+    },
+    "/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/": {
+      "filePath": "admin/tournaments/$tournamentid/grupid/$groupid/tabelid/index.tsx",
+      "parent": "/admin/tournaments/$tournamentid/grupid/$groupid"
     }
   }
 }

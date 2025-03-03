@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 import { AuthButton } from "./ui/auth-button"
 import { LanguageDropdown } from "./languageSelector"

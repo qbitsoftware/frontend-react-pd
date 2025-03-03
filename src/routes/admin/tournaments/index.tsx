@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { UseGetTournaments } from '@/queries/tournaments'
-import AdminTournament from './-components/tournaments'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle } from 'lucide-react'
 import { ErrorResponse } from '@/types/types'
 import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
+import { TournamentTable } from './-components/tournaments'
 
 export const Route = createFileRoute('/admin/tournaments/')({
     loader: async ({ context: { queryClient } }) => {
@@ -26,9 +26,9 @@ function RouteComponent() {
 
     if (tournaments_data && tournaments_data.data) {
         return (
-            <div className=''>
-                <div className="flex justify-between items-center mb-8">
-                    <div>
+            <div className='p-4'>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+                    <div className='flex items-center justify-center flex-col text-center mb-4 md:mb-0 md:justify-start md:items-start'>
                         <h1 className="text-2xl font-bold text-gray-900">
                             {t('admin.tournaments.title')}
                         </h1>
@@ -36,8 +36,13 @@ function RouteComponent() {
                             {t('admin.tournaments.description')}
                         </p>
                     </div>
+                    <Link href='/admin/tournaments/new'>
+                        <Button className='mt-2 px-6'>
+                            {t('admin.tournaments.add_new')}
+                        </Button>
+                    </Link>
                 </div>
-                <AdminTournament tournaments={tournaments_data.data} />
+                <TournamentTable tournaments={tournaments_data.data} />
             </div>
         )
 
@@ -52,7 +57,7 @@ function RouteComponent() {
                         {t('admin.tournaments.errors.not_found.description')}
                     </p>
                     <Link href='/admin/tournaments/new'>
-                        <Button>
+                        <Button className='mt-2 px-6'>
                             {t('admin.tournaments.add_new')}
                         </Button>
                     </Link>

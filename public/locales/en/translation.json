@@ -142,7 +142,7 @@
           "title": "Latest matches"
         },
         "temp_placeholder": {
-          "title": "Temp placeholder"
+          "title": "Detailed player information"
         },
         "rating_change_graph": {
           "title": "Ranking change graph"
@@ -197,8 +197,8 @@
         "max_team_size": "Maximum Team Size",
         "private": "Private Tournament",
         "private_description": "Make this tournament private (only seen to admins)",
-        "solo": "Solo Tournament (No Teams)",
-        "solo_description": "Enable individual participation"
+        "team": "Tournament with teams",
+        "team_description": "Enable tournament with teams"
       },
       "filters": {
         "status": {
@@ -262,6 +262,15 @@
           "title": "Network error",
           "description": "An error occurred while fetching tournaments"
         }
+      },
+      "table": {
+        "name": "Name",
+        "category": "Category",
+        "status": "Status",
+        "dates": "Dates",
+        "location": "Location",
+        "duratiion": "Duration",
+        "tables": "Total tables"
       }
     }
   }

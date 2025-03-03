@@ -1,22 +1,23 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { UseGetTournament } from '@/queries/tournaments'
-import { ErrorResponse } from '@/types/types'
-import { Button } from '@/components/ui/button'
-import { Link } from '@tanstack/react-router'
+"use client"
 
-export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
+import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router"
+import { UseGetTournament } from "@/queries/tournaments"
+import type { ErrorResponse } from "@/types/types"
+import { Link } from "@tanstack/react-router"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+export const Route = createFileRoute("/admin/tournaments/$tournamentid")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params }) => {
     let tournament_data = undefined
     try {
-      tournament_data = await queryClient.ensureQueryData(
-        UseGetTournament(Number(params.tournamentid)),
-      )
+      tournament_data = await queryClient.ensureQueryData(UseGetTournament(Number(params.tournamentid)))
     } catch (error) {
       const err = error as ErrorResponse
       if (err.response.status === 404) {
         throw redirect({
-          to: '/admin/tournaments',
+          to: "/admin/tournaments",
         })
       }
       throw error
@@ -27,29 +28,40 @@ export const Route = createFileRoute('/admin/tournaments/$tournamentid')({
 })
 
 function RouteComponent() {
+  const location = useLocation()
   const { tournament_data } = Route.useLoaderData()
   const { tournamentid } = Route.useParams()
 
+  const currentTab = location.pathname.includes("/grupid") ? "groups" : "info"
+
   return (
-    <div className="w-full p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">{tournament_data.data?.name}</h1>
-        <div className="space-x-4">
-          <Link to={`/admin/tournaments/${tournamentid}/matches`}>
-            <Button variant="outline">Matches</Button>
-          </Link>
-          <Link to={`/admin/tournaments/${tournamentid}/participants`}>
-            <Button variant="outline">Participants</Button>
-          </Link>
-          <Link to={`/admin/tournaments/${tournamentid}/brackets`}>
-            <Button variant="outline">Brackets</Button>
-          </Link>
-          <Link to={`/admin/tournaments/${tournamentid}/edit`}>
-            <Button variant="outline">Brackets</Button>
-          </Link>
+    <div className="mx-auto  h-full">
+      <div className="w-full z-12">
+        <div className="py-4 sm: py-auto px-10 lg:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
+          <h1 className="text-xl font-semibold text-black">{tournament_data.data?.name}</h1>
+          <Tabs value={currentTab} className="">
+            <TabsList className="grid grid-cols-2">
+              <Link to={`/admin/tournaments/${tournamentid}`} >
+                <TabsTrigger value="info" className="w-[8rem]">
+                  Info
+                </TabsTrigger>
+              </Link>
+              <Link to={`/admin/tournaments/${tournamentid}/grupid`}>
+                <TabsTrigger value="groups" className="w-[8rem]">
+                  Groups
+                </TabsTrigger>
+              </Link>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div className="">
+          <ScrollArea className="sm:h-[calc(100vh-8rem)]">
+            <Outlet />
+          </ScrollArea>
         </div>
       </div>
-      <Outlet/>
     </div>
   )
 }
+

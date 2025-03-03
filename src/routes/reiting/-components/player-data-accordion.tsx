@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 // TODO: playeri andmete kuvamine Useri põhjal, info, eelmised pelad ja graafik lõpuni
 export function PlayerProfileData(player: User) {
+  void player
   const { t } = useTranslation();
   return (
     <Accordion type="single" collapsible className="w-full bg-white rounded-lg ">
@@ -18,7 +19,7 @@ export function PlayerProfileData(player: User) {
         {t('rating.player_modal.menus.latest_matches.title')}
         </AccordionTrigger>
         <AccordionContent className="px-6 py-4 text-gray-700">
-          <p> Hiljutiste mängude andmed puuduvad </p>
+          <p> This player has not played any matches in the past 180 days.</p>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2" className="border-b border-gray-200">

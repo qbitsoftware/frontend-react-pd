@@ -41,17 +41,29 @@ export function parsePlaces(s: string): number | null {
   return Number(startingPlace)
 }
 
-export function sortBrackets(data: any[]): any[] {
-  return data.sort((a, b) => {
-    const placeA = parsePlaces(a.tables[0].name);
-    const placeB = parsePlaces(b.tables[0].name);
+// export function sortBrackets(data: any[]): any[] {
+//   return data.sort((a, b) => {
+//     const placeA = parsePlaces(a.tables[0].name);
+//     const placeB = parsePlaces(b.tables[0].name);
 
-    if (placeA === null || placeB === null) {
-      return 0;
-    }
+//     if (placeA === null || placeB === null) {
+//       return 0;
+//     }
 
-    return placeA - placeB;
-  });
+//     return placeA - placeB;
+//   });
+// }
+
+export const formatDateRange = (startDate: Date, endDate: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }
+  const start = new Intl.DateTimeFormat('et-EE', options).format(startDate)
+  const end = new Intl.DateTimeFormat('et-EE', options).format(endDate)
+
+  const startDay = start.split(' ')[0]
+  const endDay = end.split(' ')[0]
+  const monthYear = end.split(' ').slice(1).join(' ')
+
+  return `${startDay} - ${endDay} ${monthYear}`
 }
 
 export const replaceSpecialCharacters = (str: string) => {
@@ -96,6 +108,31 @@ export const formatDateTime = (dateTime: string) => {
   return `${date} ${time}`;
 };
 
+export const formatDateTimeNew = (dateTime: string) => {
+  const date = new Date(dateTime);
+
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
+export const formatDateTimeBracket = (dateTime: string) => {
+  const date = new Date(dateTime);
+
+  return date.toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
 export const formatDate = (time: string) => {
   const date = new Date(time);
 
@@ -119,7 +156,10 @@ export const CalculateSVGWidth = (matches: TableMatch[], vertical_gap: number) =
 
 export const CalculateSVGHeight = (matches: TableMatch[], horisontal_gap: number, height: number) => {
   const count = matches.filter(item => item.match.round === 0).length || 0
-  const SVG_HEIGTH = count * (height + horisontal_gap)
+  let SVG_HEIGTH = count * (height + horisontal_gap)
+  if (matches.length == 4) {
+    SVG_HEIGTH += height
+  }
   return SVG_HEIGTH
 }
 
@@ -176,4 +216,18 @@ export function useDebounce(value: string, delay: number) {
   return debouncedValue
 }
 
+export function parseTableType(s: string): string {
+  const parts = s.split("_")
+
+  if (parts.length == 1) {
+    return capitalize(s)
+  }
+
+  let res = ""
+  parts.forEach(part => {
+    res += capitalize(part) + " "
+  })
+
+  return res.trim()
+}
 

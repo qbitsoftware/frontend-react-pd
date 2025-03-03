@@ -197,8 +197,8 @@
         "max_team_size": "Maksimaalne tiimi suurus",
         "private": "Privaatne turniir",
         "private_description": "Muuda turniir ainult adminitele nähtavaks",
-        "solo": "Individuaalne turniir (Ilma meeskondadeta)",
-        "solo_description": "Luba individuaalne turniir"
+        "team": "Meeskondadega turniir",
+        "team_description": "Luba meeskondadega turniir"
       },
       "filters": {
         "status": {
@@ -262,6 +262,15 @@
           "title": "Serveri viga",
           "description": "Serveril tekkis probleeme turniiride leidmisega"
         }
+      },
+      "table": {
+        "name": "Nimi",
+        "category": "Kategooria",
+        "status": "Staatus",
+        "dates": "Kuupäevad",
+        "location": "Asukoht",
+        "duration": "Kestus",
+        "tables": "Laudu kokku"
       }
     }
   }
