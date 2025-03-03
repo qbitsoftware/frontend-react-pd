@@ -116,12 +116,6 @@ const KlubidIndexRoute = KlubidIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const KlubidIndexRoute = KlubidIndexImport.update({
-  id: '/klubid/',
-  path: '/klubid/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const UudisedBlogidRoute = UudisedBlogidImport.update({
   id: '/uudised/$blogid',
   path: '/uudised/$blogid',
@@ -343,13 +337,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UudisedBlogidImport
       parentRoute: typeof rootRoute
     }
-    '/voistlused/$tournamentid': {
-      id: '/voistlused/$tournamentid'
-      path: '/voistlused/$tournamentid'
-      fullPath: '/voistlused/$tournamentid'
-      preLoaderRoute: typeof VoistlusedTournamentidImport
-      parentRoute: typeof rootRoute
-    }
     '/klubid/': {
       id: '/klubid/'
       path: '/klubid'
@@ -427,6 +414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTournamentsIndexImport
       parentRoute: typeof AdminLayoutImport
     }
+    '/profiil/$id/': {
+      id: '/profiil/$id/'
+      path: '/profiil/$id'
+      fullPath: '/profiil/$id'
+      preLoaderRoute: typeof ProfiilIdIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/voistlused/$tournamentid/': {
       id: '/voistlused/$tournamentid/'
       path: '/'
@@ -447,13 +441,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/tournaments/$tournamentid/'
       preLoaderRoute: typeof AdminTournamentsTournamentidIndexImport
       parentRoute: typeof AdminTournamentsTournamentidLayoutImport
-    }
-    '/profiil/$id/': {
-      id: '/profiil/$id/'
-      path: '/profiil/$id'
-      fullPath: '/profiil/$id'
-      preLoaderRoute: typeof ProfiilIdIndexImport
-      parentRoute: typeof rootRoute
     }
     '/admin/tournaments/new/': {
       id: '/admin/tournaments/new/'
@@ -708,10 +695,10 @@ export interface FileRoutesByFullPath {
   '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
+  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/new': typeof AdminBlogNewIndexRoute
   '/admin/tournaments/$tournamentid/': typeof AdminTournamentsTournamentidIndexRoute
-  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new': typeof AdminTournamentsNewIndexRoute
   '/voistlused/$tournamentid/ajakava': typeof VoistlusedTournamentidAjakavaIndexRoute
   '/voistlused/$tournamentid/galerii': typeof VoistlusedTournamentidGaleriiIndexRoute
@@ -746,10 +733,10 @@ export interface FileRoutesByTo {
   '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
+  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/new': typeof AdminBlogNewIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidIndexRoute
-  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new': typeof AdminTournamentsNewIndexRoute
   '/voistlused/$tournamentid/ajakava': typeof VoistlusedTournamentidAjakavaIndexRoute
   '/voistlused/$tournamentid/galerii': typeof VoistlusedTournamentidGaleriiIndexRoute
@@ -786,10 +773,10 @@ export interface FileRoutesById {
   '/admin/blog/': typeof AdminBlogIndexRoute
   '/admin/dashboard/': typeof AdminDashboardIndexRoute
   '/admin/tournaments/': typeof AdminTournamentsIndexRoute
+  '/profiil/$id/': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/new/': typeof AdminBlogNewIndexRoute
   '/admin/tournaments/$tournamentid/': typeof AdminTournamentsTournamentidIndexRoute
-  '/profiil/$id/': typeof ProfiilIdIndexRoute
   '/admin/tournaments/new/': typeof AdminTournamentsNewIndexRoute
   '/voistlused/$tournamentid/ajakava/': typeof VoistlusedTournamentidAjakavaIndexRoute
   '/voistlused/$tournamentid/galerii/': typeof VoistlusedTournamentidGaleriiIndexRoute
@@ -828,10 +815,10 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/dashboard'
     | '/admin/tournaments'
+    | '/profiil/$id'
     | '/voistlused/$tournamentid/'
     | '/admin/blog/new'
     | '/admin/tournaments/$tournamentid/'
-    | '/profiil/$id'
     | '/admin/tournaments/new'
     | '/voistlused/$tournamentid/ajakava'
     | '/voistlused/$tournamentid/galerii'
@@ -865,10 +852,10 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/dashboard'
     | '/admin/tournaments'
+    | '/profiil/$id'
     | '/voistlused/$tournamentid'
     | '/admin/blog/new'
     | '/admin/tournaments/$tournamentid'
-    | '/profiil/$id'
     | '/admin/tournaments/new'
     | '/voistlused/$tournamentid/ajakava'
     | '/voistlused/$tournamentid/galerii'
@@ -903,10 +890,10 @@ export interface FileRouteTypes {
     | '/admin/blog/'
     | '/admin/dashboard/'
     | '/admin/tournaments/'
+    | '/profiil/$id/'
     | '/voistlused/$tournamentid/'
     | '/admin/blog/new/'
     | '/admin/tournaments/$tournamentid/'
-    | '/profiil/$id/'
     | '/admin/tournaments/new/'
     | '/voistlused/$tournamentid/ajakava/'
     | '/voistlused/$tournamentid/galerii/'
@@ -950,7 +937,6 @@ const rootRouteChildren: RootRouteChildren = {
   VoistlusedTournamentidLayoutRoute:
     VoistlusedTournamentidLayoutRouteWithChildren,
   UudisedBlogidRoute: UudisedBlogidRoute,
-  VoistlusedTournamentidRoute: VoistlusedTournamentidRoute,
   KlubidIndexRoute: KlubidIndexRoute,
   KontaktIndexRoute: KontaktIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
@@ -975,8 +961,8 @@ export const routeTree = rootRoute
         "/admin",
         "/about",
         "/voistlused/$tournamentid",
-        "/klubid/",
         "/uudised/$blogid",
+        "/klubid/",
         "/kontakt/",
         "/login/",
         "/reeglid/",
@@ -1139,10 +1125,6 @@ export const routeTree = rootRoute
     },
     "/admin/tournaments/$tournamentid/grupid/uus/": {
       "filePath": "admin/tournaments/$tournamentid/grupid/uus/index.tsx",
-      "parent": "/admin/tournaments/$tournamentid"
-    },
-    "/admin/tournaments/$tournamentid/participants/": {
-      "filePath": "admin/tournaments/$tournamentid/participants/index.tsx",
       "parent": "/admin/tournaments/$tournamentid"
     },
     "/admin/tournaments/$tournamentid/grupid/$groupid/mangud/": {

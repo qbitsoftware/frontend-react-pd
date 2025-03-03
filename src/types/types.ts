@@ -5,6 +5,27 @@ export type TableMatch = {
     is_bronze_match: boolean
 }
 
+export type Bracket = {
+    eliminations: Eliminations[]
+    round_robins: RoundRobins[]
+}
+
+export type EliminationBracket = {
+    rounds: Round[],
+    matches: TableMatch[],
+    name: string;
+}
+
+export type Eliminations = {
+    elimination: EliminationBracket[]
+}
+
+export type RoundRobinBracket = {
+    participant: Participant
+    matches: MatchWrapper[]
+    total_points: number
+}
+
 export type RoundRobins = {
     round_robin: RoundRobinBracket[]
 }
@@ -12,10 +33,10 @@ export type RoundRobins = {
 
 
 export type ErrorResponse = {
-  response: {
-    status: number;
-  };
-};
+    response: {
+        status: number
+    }
+}
 
 export type UserNew = {
     id: number
@@ -37,38 +58,39 @@ export type UserNew = {
 }
 
 export interface User {
-  ID: number;
-  CreatedAt: Date;
-  UpdatedAt: Date;
-  DeletedAt?: Date | null;
-  first_name: string;
-  last_name: string;
-  birth_date: Date;
-  club_id: string;
-  email: string;
-  password?: string;
-  sex: string;
-  rating_points: number;
-  placement_points: number;
-  weight_points: number;
-  eltl_id: number;
-  has_rating: boolean;
-  confirmation: string;
-  nationality: string;
-  placing_order: number;
-  img_url?: string;
+    ID: number;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    DeletedAt?: Date | null;
+    first_name: string;
+    last_name: string;
+    birth_date: Date;
+    club_id: string;
+    email: string;
+    password?: string;
+    sex: string;
+    rating_points: number;
+    placement_points: number;
+    weight_points: number;
+    eltl_id: number;
+    has_rating: boolean;
+    confirmation: string;
+    nationality: string;
+    placing_order: number;
+    img_url?: string;
 }
 
 export interface Article {
-  id: number;
-  title: string;
-  thumbnail: string;
-  user: string;
-  category: string;
-  content_html: string;
-  created_at: string;
-  updated_at: string;
+    id: number;
+    title: string,
+    thumbnail: string,
+    user: string,
+    category: string,
+    content_html: string,
+    created_at: string,
+    updated_at: string,
 }
+
 
 export type Round = {
     name: string,
@@ -181,52 +203,6 @@ export type TournamentSize = {
     size: number;
 }
 
-// export type Participant = {
-//   id: string;
-//   name: string;
-//   rank: number;
-//   sport_type: string;
-//   tournament_id: number;
-//   created_at: string;
-//   updated_at: string;
-//   deleted_at: string;
-//   players: PlayerNew[];
-// };
-
-export type PlayerNew = {
-  id: string;
-  user_id: number;
-  first_name: string;
-  last_name: string;
-  sport_type: string;
-  number: number;
-  rank: number;
-  sex: string;
-  created_at: string;
-  deleted_at: string | null;
-  updated_at: string;
-};
-
-// export type Tournament = {
-//   created_at: string;
-//   deleted_at: string | null;
-//   id: number;
-//   updated_at: string;
-//   name: string;
-//   start_date: string;
-//   end_date: string;
-//   location: string;
-//   image: string;
-//   type: string;
-//   sport: string;
-//   state: string;
-//   private: boolean;
-//   solo: boolean;
-//   min_team_size: number;
-//   max_team_size: number;
-//   max_players: number;
-//   information: string;
-// };
 
 export type Match = {
     id: string
@@ -278,44 +254,17 @@ export type TableTennisExtraData = {
 }
 
 export type Score = {
-  number: number;
-  p1_score: number;
-  p2_score: number;
-};
+    number: number;
+    p1_score: number;
+    p2_score: number;
+}
 
 export interface Blog {
-  ID?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date | null;
-  data: string;
-  tournamentId?: number;
-  authorId?: number;
-}
-export interface Rival {
-  id: number;
-  name: string;
-  photo: string;
-}
-export interface PlayerProfile {
-  id: number;
-  name: string;
-  birthYear: number;
-  club: string;
-  description: string;
-  photo: string;
-  coverPhoto: string;
-  stats: {
-    matches: number;
-    goals: number;
-    assists: number;
-    winRate: number;
-  };
-  achievements: string[];
-  rivals: Rival[];
-  socials: {
-    twitter?: string;
-    linkedin?: string;
-    website?: string;
-  };
+    ID?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date | null;
+    data: string;
+    tournamentId?: number;
+    authorId?: number;
 }
