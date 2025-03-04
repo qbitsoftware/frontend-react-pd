@@ -2,15 +2,16 @@ import { useRef, useEffect, useState } from 'react'
 import WidgetWrapper from "./widget-wrapper";
 import NewsWidget from "./news-widget";
 import CalendarWidget from "./calendar-widget";
-import { Tournament } from '@/types/types';
+import { Tournament, UserNew } from '@/types/types';
 import Adboard from "./adboard";
 import RatingWidget from "./rating-widget";
 
 interface Props {
   tournaments: Tournament[] | null
+  users: UserNew[] | null
 }
 
-const HomePageGrid = ({ tournaments }: Props) => {
+const HomePageGrid = ({ tournaments, users }: Props) => {
   const newsRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const adboardRef = useRef<HTMLDivElement>(null);
@@ -62,7 +63,7 @@ const HomePageGrid = ({ tournaments }: Props) => {
     if (currentNewsRef) {
       resizeObserver.observe(currentNewsRef);
     }
-    
+
     if (currentAdboardRef) {
       resizeObserver.observe(currentAdboardRef);
     }
@@ -79,43 +80,43 @@ const HomePageGrid = ({ tournaments }: Props) => {
       if (currentNewsRef) {
         resizeObserver.unobserve(currentNewsRef);
       }
-      
+
       if (currentAdboardRef) {
         resizeObserver.unobserve(currentAdboardRef);
       }
-      
+
       resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
     };
   }, [isMobile]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 p-1 lg:p-4 max-w-[1440px] mx-auto">
-      <div className="sm:col-span-2 md:col-span-8 flex flex-col">
-        <WidgetWrapper heading="Uudised" view_all="Kõik uudised" addr="blog">
-          <div className="p-2 flex-grow" ref={newsRef}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 gap-y-4 p-1 lg:p-6 max-w-[1440px] mx-auto">
+      <div className="sm:col-span-2 md:col-span-8 flex flex-col ">
+        <WidgetWrapper heading="Uudised" view_all="Kõik uudised" addr="uudised">
+          <div className="py-2 px-4  flex-grow" ref={newsRef}>
             <NewsWidget />
           </div>
         </WidgetWrapper>
       </div>
       <div className="sm:col-span-2 md:col-span-4 flex flex-col">
-        <WidgetWrapper heading="Tulemas" view_all="Kogu kalender" addr="kalender">
-          <div className="p-2 flex-grow" ref={calendarRef}>
+        <WidgetWrapper heading="Kalender" view_all="Kogu kalender" addr="kalender">
+          <div className="py-2 px-4 flex-grow" ref={calendarRef}>
             <CalendarWidget tournaments={tournaments} />
           </div>
         </WidgetWrapper>
       </div>
       <div className="sm:col-span-1 md:col-span-5 flex flex-col">
-        <WidgetWrapper>
-          <div className="p-2 flex-grow" ref={adboardRef}>
-            <Adboard/>
+        <div className="h-full">
+          <div className="p-2  flex-grow" ref={adboardRef}>
+            <Adboard />
           </div>
-        </WidgetWrapper>
+        </div>
       </div>
       <div className="sm:col-span-1 md:col-span-7 flex flex-col">
-        <WidgetWrapper heading="Edetabel" view_all="Kogu edetabel">
-          <div className="p-2 flex-grow" ref={ratingRef}>
-            <RatingWidget/>
+        <WidgetWrapper heading="Edetabel" view_all="Kogu edetabel" addr="reiting">
+          <div className="py-2 px-4  flex-grow" ref={ratingRef}>
+            <RatingWidget users={users} />
           </div>
         </WidgetWrapper>
       </div>

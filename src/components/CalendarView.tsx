@@ -1,6 +1,8 @@
 import * as React from 'react';
 import TournamentCard from './TournamentCard';
 import { Tournament } from '@/types/types';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 interface CalendarViewProps {
     tournaments: Tournament[];
@@ -63,27 +65,31 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
     };
 
     return (
-        <div className="w-full bg-white p-4 rounded-lg shadow-sm">
-            {/* Year filter as tabs */}
-            <div className="sticky top-0 z-10 bg-white pb-2 border-b mb-6">
-                <div className="flex flex-wrap justify-center w-full">
+        <div className="py-4">
+        <div className="rounded-lg bg-white px-6 py-6 space-y-4">
+            <h2>Kalender</h2>
+            <div className="p-1 rounded-t-[2px] mb-1 bg-[#F0F4F7] w-full ">
+                <Tabs 
+                    defaultValue={selectedYear.toString()} 
+                    value={selectedYear.toString()} 
+                    onValueChange={(value) => setSelectedYear(parseInt(value))}
+                    className=""
+                >
+                    <TabsList className="w-1/2 flex">
                     {availableYears.map(year => (
-                        <button
-                            key={year}
-                            onClick={() => setSelectedYear(year)}
-                            className={`px-6 py-3 border-b-2 mx-1 transition-colors ${selectedYear === year
-                                ? 'border-blue-600 text-blue-600 font-medium'
-                                : 'border-transparent hover:border-gray-300 text-gray-600'
-                                }`}
+                        <TabsTrigger
+                        key={year}
+                        value={year.toString()}
+                        className="flex-1 py-[5px]"
                         >
-                            {year}
-                        </button>
+                        {year}
+                        </TabsTrigger>
                     ))}
-                </div>
+                    </TabsList>
+                </Tabs>
             </div>
 
-            {/* Calendar grid - scrollable */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                 {columns.map((columnMonths, columnIndex) => (
                     <div key={columnIndex} className="space-y-8">
                         {columnMonths.map(month => (
@@ -91,14 +97,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
                                 key={month.name}
                                 className={`mb-6 ${month.tournaments.length === 0 ? 'opacity-70' : ''}`}
                             >
-                                <h2 className={`text-xl font-bold mb-4 pb-2 ${month.tournaments.length === 0
-                                    ? 'text-gray-400 border-b border-gray-200'
-                                    : 'border-b'
-                                    }`}>
+                                <h2 className={`text-xl font-bold pb-2 pl-1 ${month.tournaments.length > 0 ? 'text-stone-700' : 'text-stone-400'}`}>
                                     {month.name} {selectedYear}
                                 </h2>
 
+                                <div className="space-y-1">
+
                                 {month.tournaments.length > 0 ? (
+                                    
                                     month.tournaments.map(tournament => (
                                         <TournamentCard
                                             id={tournament.id}
@@ -109,17 +115,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
                                             isCompleted={tournament.state === 'completed'}
                                         />
                                     ))
+
+                                    
                                 ) : (
-                                    <div className="text-gray-300 italic py-2 bg-gray-50 px-3 rounded-md text-center">
+                                    <div className="text-stone-400 italic py-2 bg-gray-50 px-3 rounded-md select-none">
                                         No tournaments
                                     </div>
                                 )}
+                             </div>
+
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
         </div>
+    </div>
     );
 };
 

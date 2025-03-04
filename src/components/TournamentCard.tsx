@@ -20,11 +20,11 @@ export const TournamentCard: React.FC<TournamentCardProps> = ({
 }) => {
     const router = useRouter()
     return (
-        <div className={cn(`border rounded-md p-2 px-4 mb-3 cursor-pointer shadow-sm relative  ${isCompleted ? "bg-[#D2D8DD]" : "bg-[#F0F4F7]"} hover:shadow-md transition-shadow`)}
+        <div className={cn(` group flex flex-col bg-[#ECEFF2]/55 hover:bg-[#f9f9f9]  py-2 px-3 rounded-md shadow-sm cursor-pointer text-stone-800  ${isCompleted ? "bg-[#D2D8DD]" : "bg-[#F0F4F7]"}  transition-shadow`)}
             onClick={() => router.navigate({ to: "/voistlused/" + id })}
         >
-            <div className="text-sm text-gray-700 font-bold">{date}</div>
-            <div className="font-bold text-[16px]">{name}</div>
+            <div className="text-sm text-stone-700 font-semibold">{date}</div>
+            <h6 className="font-semibold">{name}</h6>
             <div className="flex items-center text-sm mt-2 text-gray-600">
                 <MapPin size={14} className="mr-1 flex-shrink-0" />
                 <span>{location}</span>

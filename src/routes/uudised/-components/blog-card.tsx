@@ -1,15 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { replaceSpecialCharacters } from "@/lib/utils";
+import { Blog } from "@/types/types";
 import { Link } from "@tanstack/react-router";
-
-export interface Blog {
-    id: number
-    title: string
-    created_at: string
-    category: string
-    thumbnail: string
-}
 
 export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: string }) => {
 
@@ -18,9 +11,9 @@ export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: str
     return (
         <Card className={`overflow-hidden ${className}`}>
             <div className="h-48 overflow-hidden">
-                {blog.thumbnail ? (
+                {blog.has_image && blog.image_url ? (
                     <img
-                        src={blog.thumbnail}
+                        src={blog.image_url}
                         alt={blog.title}
                         className="w-full h-full object-contain"
                     />
@@ -32,23 +25,23 @@ export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: str
             </div>
             <CardHeader>
                 <div className="text-sm font-medium text-blue-600 mb-2">{categories.map((category, idx) => {
-                                    if (idx === categories.length - 1) {
-                                        return (
-                                            <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
-                                                <span key={idx}>{category}</span>
-                                            </Link>
-                                    )
-                                    } else {
-                                        return (
-                                            <div key={idx}>
-                                            <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
-                                                <span key={category} className="mr-2">{category}</span>
-                                            </Link>
-                                                <span className='mr-2'>/</span>
-                                            </div>
-                                        )
-                                    }
-                                })}</div>
+                    if (idx === categories.length - 1) {
+                        return (
+                            <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
+                                <span key={idx}>{category}</span>
+                            </Link>
+                        )
+                    } else {
+                        return (
+                            <div key={idx}>
+                                <Link key={idx} href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
+                                    <span key={category} className="mr-2">{category}</span>
+                                </Link>
+                                <span className='mr-2'>/</span>
+                            </div>
+                        )
+                    }
+                })}</div>
                 <CardTitle className="mt-2 line-clamp-2">{blog.title}</CardTitle>
             </CardHeader>
             <CardFooter>

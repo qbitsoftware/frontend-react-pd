@@ -37,7 +37,7 @@ const NewsWidget = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="flex flex-col pb-6">
-        <a href="/" className="group hover:bg-stone-100/60 p-1 rounded-sm">
+        <a href="/" className="group p-1 rounded-sm">
           <div className="w-full aspect-[16/9] sm:aspect-auto overflow-hidden rounded-sm">
             <img 
               src={mainNews.image} 
@@ -53,11 +53,7 @@ const NewsWidget = () => {
 
       <div className="flex flex-col space-y-3">
         {latestNews.map((news, index) => (
-          <a key={news.id} href="/" className={`flex group border-b border-black/20 p-1 hover:bg-stone-100/60 rounded-t-sm ${index === 0 ? 'pb-2' : 'py-2'}` }>
-            <div className="w-2/3 pr-2 flex flex-col justify-between">
-              <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
-              <p className="text-sm font-medium text-stone-700">{news.date}</p>
-            </div>
+          <a key={news.id} href="/" className={`flex group  p-1 bg-[#f9f9f9] rounded-t-sm ${index === 0 ? 'pb-2' : 'py-2'}` }>
             <div className="w-1/3 aspect-[4/3] overflow-hidden rounded-sm">
               <img 
                 src={news.image} 
@@ -66,6 +62,12 @@ const NewsWidget = () => {
                 loading="lazy"
               />
             </div>
+            <div className="w-2/3 pl-2 flex flex-col justify-start">
+              <p className="text-sm text-stone-700">{news.date}</p>
+
+              <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
+            </div>
+            
           </a>
         ))}
       </div>

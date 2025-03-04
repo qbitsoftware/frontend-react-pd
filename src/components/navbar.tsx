@@ -51,7 +51,7 @@ export default function Navbar() {
             dropdownItems: [
                 { name: 'Competitions', href: '/voistlused' },
                 { name: 'Results', href: '/voistlused/results' },
-                { name: 'Calendar', href: '/voistlused/calendar' },
+                { name: 'Calendar', href: '/kalender' },
             ]
         },
         {

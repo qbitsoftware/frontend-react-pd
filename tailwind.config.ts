@@ -68,7 +68,8 @@ export default {
   		},
 		  boxShadow: {
 			'scheduleCard': 'rgba(149, 157, 165, .2) -4px 9px 25px -6px',
-			'selectedFilter': 'rgba(0, 0, 0, .1) 0px 2px 10px'
+			'selectedFilter': 'rgba(0, 0, 0, .1) 0px 2px 10px',
+			'eventCard': 'rgba(0, 0, 0, 0.1) 0px 10px 50px;'
 			
 		  }
   	}

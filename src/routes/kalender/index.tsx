@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
 import { UseGetTournaments } from '@/queries/tournaments'
 import CalendarView from '@/components/CalendarView'
+import { motion } from 'framer-motion'
+
 
 export const Route = createFileRoute('/kalender/')({
   errorComponent: ({ error, reset }) => {
@@ -19,9 +21,15 @@ function RouteComponent() {
 
   if (tournaments.data) {
     return (
-      <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-medium mb-6">Calendar</h1>
-        <CalendarView tournaments={tournaments.data} />
+    <div className="w-full mx-auto px-4 max-w-[1440px]">
+        <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2, delay: 0 }}
+            className=""
+        >
+            <CalendarView tournaments={tournaments.data}/>
+        </motion.div>
       </div>
     )
   } else {

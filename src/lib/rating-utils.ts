@@ -1,9 +1,9 @@
-import { User } from "@/types/types";
+import { UserNew } from "@/types/types";
 import { TFunction } from "i18next";
 
 // tabelipõhised asjad
 
-export const filterByAgeClass = (user: User, ageClass: string) => {
+export const filterByAgeClass = (user: UserNew, ageClass: string) => {
   const year = new Date(user.birth_date).getFullYear();
   const sex = user.sex;
 
@@ -72,6 +72,6 @@ export const modifyTitleDependingOnFilter = (
   return prefix + " " + t('rating.header');
 };
 
-export const getYear = (date: Date) => {
+export const getYear = (date: string) => {
   return new Date(date).getFullYear()
 }

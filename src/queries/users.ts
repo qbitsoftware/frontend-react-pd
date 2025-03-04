@@ -85,7 +85,7 @@ export const useLogout = () => {
         },
         onSuccess: () => {
             queryClient.setQueryData(["user"], { data: null, message: "", error: null })
-            queryClient.invalidateQueries({ queryKey: ["user"]})
+            queryClient.invalidateQueries({ queryKey: ["user"] })
             queryClient.refetchQueries({ queryKey: ["user"] })
         }
     })
@@ -94,6 +94,22 @@ export const useLogout = () => {
 
 export const UseGetUsersDebounce = (searchTerm: string) => {
     return useQuery<UsersResponse>({
+        queryKey: ["users", searchTerm],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/users?search=${searchTerm}`, {
+                withCredentials: true
+            })
+            return data
+        },
+        enabled: !!searchTerm,
+    })
+}
+
+export const UseGetUsers= (searchTerm?: string) => {
+    if (searchTerm === undefined) {
+        searchTerm = ""
+    }   
+    return queryOptions<UsersResponse>({
         queryKey: ["users", searchTerm],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/users?search=${searchTerm}`, {

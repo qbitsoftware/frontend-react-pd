@@ -50,7 +50,7 @@ export default function Editor({ value, setValue, readOnly }: Props) {
   const uploadFile = async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('image', file);
 
       const result = await postImageMutation.mutateAsync(formData);
 

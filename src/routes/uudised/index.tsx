@@ -7,14 +7,14 @@ import { useTranslation } from 'react-i18next'
 import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import { BlogCard } from './-components/blog-card'
-import { UseGetArticles } from '@/queries/articles'
+import { UseGetBlogsOption } from '@/queries/blogs'
 
 
 
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
     loader: async ({ context: { queryClient } }) => {
-        const articles_data = queryClient.ensureQueryData(UseGetArticles())
+        const articles_data = queryClient.ensureQueryData(UseGetBlogsOption())
         return articles_data
     }
 })
@@ -35,10 +35,10 @@ export default function RouteComponent() {
     const ITEMS_PER_PAGE = 10
 
     const [heroControls, heroRef] = useFadeIn()
-    
+
     const blogCategories = useMemo(() => {
         return [...new Set(articles_data.data.map(blog => blog.category.split('/').map(category => category.trim())).flat())];
-      }, [articles_data]);
+    }, [articles_data]);
     const blogCategoriesDisplay = [t('navbar.menu.news.all'), t('navbar.menu.news.announcements'), t('navbar.menu.news.tournaments'), t('navbar.menu.news.newsletter')]
 
     useEffect(() => {
@@ -134,9 +134,9 @@ export default function RouteComponent() {
                                 <Card key={blog.id} className="overflow-hidden">
                                     <div className="md:flex flex-col md:flex-row-reverse">
                                         <div className="md:w-1/2 h-48 md:h-full overflow-hidden">
-                                            {blog.thumbnail ? (
+                                            {blog.has_image && blog.image_url ? (
                                                 <img
-                                                    src={blog.thumbnail}
+                                                    src={blog.image_url}
                                                     alt={blog.title}
                                                     className="w-full h-full object-fill"
                                                 />
@@ -170,9 +170,9 @@ export default function RouteComponent() {
                                 <Card className="overflow-hidden">
                                     <div className="md:flex">
                                         <div className="md:flex-shrink-0 md:w-2/5 h-64 md:h-full overflow-hidden">
-                                            {paginated_articles[9].thumbnail ? (
+                                            {paginated_articles[9].has_image && paginated_articles[9].image_url ? (
                                                 <img
-                                                    src={paginated_articles[9].thumbnail}
+                                                    src={paginated_articles[9].image_url}
                                                     alt={paginated_articles[9].title}
                                                     className="w-full h-full object-contain"
                                                 />

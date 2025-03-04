@@ -1,4 +1,5 @@
-import { User, TableMatch } from "@/types/types"
+import { User, TableMatch, ContentNode, TextNode, ComplexNode, YooptaContent, ContentBlock, ContentBlockWithText, ContentBlockWithImage } from "@/types/types"
+import { YooptaContentValue } from "@yoopta/editor"
 import { type ClassValue, clsx } from "clsx"
 import { useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
@@ -229,5 +230,103 @@ export function parseTableType(s: string): string {
   })
 
   return res.trim()
+}
+
+
+
+function isTextNode(node: ContentNode): node is TextNode {
+  return 'text' in node && typeof node.text === 'string';
+}
+
+function hasChildren(node: ContentNode): node is ComplexNode & { children: ContentNode[] } {
+  return 'children' in node && Array.isArray(node.children);
+}
+
+export function contentParser(content?: YooptaContent | YooptaContentValue): { title: string; description: string; hasImages: boolean; imageUrl: string } {
+  if (!content || typeof content !== 'object') {
+    return { title: "", description: "", hasImages: false, imageUrl: "" };
+  }
+
+  const blocks = Object.values(content) as ContentBlock[];
+
+  const titleBlock = blocks.find(block =>
+    block.type === 'HeadingOne' ||
+    block.type === 'HeadingTwo' ||
+    block.type === 'HeadingThree'
+  ) as ContentBlockWithText | undefined;
+
+  let title = "";
+  if (titleBlock?.value) {
+    title = extractText(titleBlock.value);
+  }
+
+  const paragraphBlocks = blocks.filter(block =>
+    block.type === 'Paragraph' &&
+    'value' in block &&
+    block.value &&
+    hasValidText(block.value)
+  ) as ContentBlockWithText[];
+
+  let description = "";
+  for (const paragraphBlock of paragraphBlocks) {
+    if (paragraphBlock.value) {
+      const paragraphText = extractText(paragraphBlock.value);
+      description += (description ? ' ' : '') + paragraphText;
+
+      if (description.length >= 150) {
+        break;
+      }
+    }
+  }
+
+  if (description.length > 150) {
+    description = description.substring(0, 150) + '...';
+  }
+
+  const imageBlock = blocks.find(block => block.type === 'Image') as ContentBlockWithImage | undefined;
+  let imageUrl = "";
+  let hasImages = false;
+
+  if (imageBlock?.value &&
+    Array.isArray(imageBlock.value) &&
+    imageBlock.value.length > 0 &&
+    imageBlock.value[0]?.props?.src) {
+    imageUrl = imageBlock.value[0].props.src;
+    hasImages = true;
+  }
+
+  return { title, description, hasImages, imageUrl };
+}
+
+// Update your helper functions to use the new type guards
+function extractText(children: ContentNode[]): string {
+  if (!Array.isArray(children)) return '';
+
+  return children
+    .map(child => {
+      if (isTextNode(child)) {
+        return child.text;
+      }
+      if (hasChildren(child)) {
+        return extractText(child.children);
+      }
+      return '';
+    })
+    .join('')
+    .trim();
+}
+
+function hasValidText(children: ContentNode[]): boolean {
+  if (!Array.isArray(children)) return false;
+
+  return children.some(child => {
+    if (isTextNode(child) && child.text.trim().length > 0) {
+      return true;
+    }
+    if (hasChildren(child)) {
+      return hasValidText(child.children);
+    }
+    return false;
+  });
 }
 
