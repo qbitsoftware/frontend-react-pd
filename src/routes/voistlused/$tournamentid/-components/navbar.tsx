@@ -36,7 +36,7 @@ const Navbar = () => {
       </div>
       <div className="shadow-lg bg-[#F2F7FD]">
         <Tabs value={currentTab} className="w-full flex justify-center">
-          <TabsList className="flex-wrap w-[80%] mx-auto">
+          <TabsList className="flex-wrap  mx-auto space-x-2">
             {NavLinks.map((link) => (
               <Link
                 className=""
@@ -50,7 +50,7 @@ const Navbar = () => {
                     currentTab === link.href.replace("/", "") &&
                       "bg-[#3C83F6] text-white",
                     currentTab !== link.href.replace("/", "") &&
-                      "hover:bg-[#3C83F6]/10",
+                      "hover:bg-white",
                   )}
                 >
                   {link.name}

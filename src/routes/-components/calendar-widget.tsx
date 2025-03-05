@@ -60,7 +60,7 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
             <h5 className="capitalize font-semibold text-stone-800/80">{monthYear}</h5>
 
           {tournaments.map((tournament) => (
-            <div key={tournament.id} className="group flex flex-col bg-[#ECEFF2]/55 hover:bg-[#f9f9f9] space-y-2 py-2 px-3 rounded-md shadow-sm text-stone-800 cursor-pointer"
+            <div key={tournament.id} className="group flex flex-col bg-[#F2F7FD] hover:bg-[#F2F7FD]/80 space-y-2 py-2 px-3 rounded-md shadow-scheduleCard border border-[#eeeeee] text-stone-800 cursor-pointer"
             onClick={() => router.navigate({ to: "/voistlused/" + tournament.id })}
           >
             <h6 className="font-semibold flex flex-col text-stone-800">{formatDate(tournament.start_date)}

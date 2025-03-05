@@ -95,7 +95,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
 
       <div className="rounded-lg bg-white px-6 py-6">
         <div className="space-y-4">
-          <h2 className="">
+          <h2 className="font-bold">
             {modifyTitleDependingOnFilter(t, showCombined, sex, ageClass)}
           </h2>
           <p className="font-medium pb-1">{t('rating.last_updated')}: <span className="bg-[#FBFBFB] px-3 py-1 rounded-full border border-[#EAEAEA]">11.01.2025, 9:00</span></p>

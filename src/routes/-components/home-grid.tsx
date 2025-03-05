@@ -109,13 +109,6 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
           </div>
         </WidgetWrapper>
       </div>
-      <div className="sm:col-span-1 md:col-span-5 flex flex-col">
-        <div className="h-full">
-          <div className="p-2  flex-grow" ref={adboardRef}>
-            <Adboard />
-          </div>
-        </div>
-      </div>
       <div className="sm:col-span-1 md:col-span-7 flex flex-col">
         <WidgetWrapper heading={t("homepage.ranking.name")} view_all={t("homepage.ranking.view_all")} addr="reiting">
           <div className="py-2 px-4  flex-grow" ref={ratingRef}>
@@ -123,6 +116,14 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
           </div>
         </WidgetWrapper>
       </div>
+      <div className="sm:col-span-1 md:col-span-5 flex flex-col">
+        <div className="h-full">
+          <div className="p-2  flex-grow" ref={adboardRef}>
+            <Adboard />
+          </div>
+        </div>
+      </div>
+      
     </div>
 
   )

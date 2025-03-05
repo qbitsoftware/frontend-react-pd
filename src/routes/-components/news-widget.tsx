@@ -32,7 +32,7 @@ const NewsWidget = ({ blogs }: Props) => {
     )
   }
 
-  const secondaryNews = blogs.slice(1, 5);
+  const secondaryNews = blogs.slice(1, 6);
   const placeholdersNeeded = Math.max(0, 4 - secondaryNews.length);
 
   return (
@@ -56,31 +56,14 @@ const NewsWidget = ({ blogs }: Props) => {
         </Link>
       </div>
 
-      <div className="flex flex-col space-y-3">
+      <div className="flex flex-col space-y-2">
         {secondaryNews.map((news, index) => (
-          <Link key={news.id} href={`/uudised/${news.id}`} className={`flex group p-1 bg-[#f9f9f9] rounded-t-sm ${index === 0 ? 'pb-2' : 'py-2'}`}>
-            {news.has_image && news.image_url ? (
-              <>
-                <div className="w-1/3 aspect-[4/3] overflow-hidden rounded-sm">
-                  <img
-                    src={news.image_url}
-                    alt={news.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="w-2/3 pl-2 flex flex-col justify-start">
-                  <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
-                  <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
-                </div>
-              </>
-            ) : (
-              <div className="w-full flex flex-col justify-start">
-                <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
-                <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
-                <p className="text-sm pt-1 text-gray-700 line-clamp-2">{news.description}</p>
-              </div>
-            )}
+          <Link key={index} href={`/uudised/${news.id}`} className={`flex group p-1 border rounded-sm py-2`}>
+            <div className="w-full px-1 flex flex-col justify-start space-y-1">
+              <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
+              <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
+              {/*} <p className="text-sm pt-1 text-gray-700 line-clamp-2">{news.description}</p> */}
+            </div>
           </Link>
         ))}
 

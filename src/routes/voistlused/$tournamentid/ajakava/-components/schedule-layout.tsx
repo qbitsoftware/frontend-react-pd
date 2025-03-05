@@ -23,8 +23,8 @@ export const ScheduleLayout = ({ children, days, activeDay, setActiveDay, startD
   const currentDate = getDateForDay(startDate, activeDay);
   const formattedDate = formatDateString(currentDate);
   return (
-    <div className="py-12">
-      <div className="max-h-screen bg-white rounded-lg">
+    <div className="p-4 bg-white">
+      <div className="max-h-screen  rounded-lg">
         <div className="flex flex-col h-full">
           <div className="flex-none">
             <div className="">
@@ -110,7 +110,7 @@ export const Filters = ({ days, activeDay, setActiveDay }: FiltersProps) => {
             className={`
                     h-8 rounded-sm
                   ${activeDay === index
-                ? "border-none shadow-sm hover:bg-white active:bg-white/90"
+                ? "border-none shadow-sm bg-white hover:bg-white"
                 : "hover:bg-gray-100/90 active:bg-gray-200/90"
               }
                   transition-all duration-200

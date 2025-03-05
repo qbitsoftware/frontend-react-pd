@@ -16,7 +16,7 @@ function RouteComponent() {
   const { tables_data } = Route.useLoaderData()
   
   return (
-    <div className="min-h-screen mt-[20px] lg:mt-[60px] rounded-lg py-8">
+    <div className="min-h-screen px-4 py-8">
       <div className="mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Tournament Participants</h1>
         <div className="flex flex-col gap-10">
