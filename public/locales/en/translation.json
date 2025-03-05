@@ -12,11 +12,9 @@
       "news": {
         "name": "News",
         "all": "All",
-        "announcements": "Announcements",
-        "international": "International",
-        "tournaments": "Tournaments",
-        "youth": "Youth",
-        "newsletter": "Newsletter"
+        "competitions": "Competitions",
+        "good_read": "Good Read",
+        "results": "Results"
       },
       "eltl": "ELTL",
       "competition": "Competitions",
@@ -57,7 +55,17 @@
       "location": "Location"
     },
     "news": {
+      "name": "News",
+      "view_all": "View all",
       "read_more": "Read more"
+    },
+    "calendar": {
+      "name": "Calendar",
+      "view_all": "View all"
+    },
+    "ranking": {
+      "name": "Ranking",
+      "view_all": "View all"
     },
     "best_performers": {
       "title": "Best Performers of the Month",
@@ -166,6 +174,22 @@
       },
       "title": "Tournament Hub",
       "description": "Administration"
+    },
+    "dashboard": {
+      "name": "Dashboard",
+      "total_tournaments": "Total tournaments",
+      "active_tournaments": "Active tournaments",
+      "upcoming_tournaments": "Upcoming tournaments",
+      "upcoming_tournaments_description": "Overview of upcoming tournaments",
+      "recently_created_tournaments": "Recently created tournaments",
+      "recently_created_tournaments_description": "Overview of recently created tournaments",
+      "tournament_activity": "Tournament activity",
+      "tournament_activity_description": "Tournaments created per month",
+      "utils": {
+        "name": "Name",
+        "status": "Status",
+        "start_date": "Start date"
+      }
     },
     "tournaments": {
       "title": "Tournaments",

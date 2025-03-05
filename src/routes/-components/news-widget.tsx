@@ -1,75 +1,104 @@
-const mainNews = {
-    id: 1,
-    title: "Sakala karikasarja V etapi tulemused",
-    date: "12.03.2025",
-    image: "https://uus.lauatennis.ee/wp-content/uploads/2024/10/463025810_1994239327691657_5655715395941921724_n-600x600.jpg",
-    excerpt: "Taaskord, lauatennist ja muud sporti täis nädalavahetusel leidis tänasel kenal talvisel pühapäeval tee Viljandi spordihalli 57 lauatennisemängijat. Sel korral oli võistlema tulnud ka päris uusi mängijaid, mis on väga tore..."
-  }
-  
-  const latestNews = [
-    {
-      id: 2,
-      title: "Rahvapinksi 7. etapi võitsid Mart Vaarpu ja Andre Küüsvek",
-      date: "29.02.2025",
-      image: "https://uus.lauatennis.ee/wp-content/uploads/2025/02/Sakala-V-etapi-autasustatud-600x600.jpg"
-    },
-    {
-      id: 3,
-      title: "Kutse Lauatennisekeskuse karikasarja III etapile",
-      date: "16.02.2025",
-      image: "https://uus.lauatennis.ee/wp-content/uploads/2025/03/WhatsAppi-pilt-2025-03-01-kell-21.33.36_dc6b07ab-600x600.jpg"
-    },
-    {
-      id: 4,
-      title: "Pongfinity Cup 2025 / 1.02-2.02.2025 Helsingis",
-      date: "02.02.2025",
-      image: "https://uus.lauatennis.ee/wp-content/uploads/2025/02/DSC03281-600x600.jpg"
-    },
-    {
-        id: 5,
-        title: "Jalgpalliklubide meistrivõistlused lauatennises 2025 (lisatud video)",
-        date: "30.01.2024",
-        image: "https://uus.lauatennis.ee/wp-content/uploads/2025/02/476806306_943283267910869_3238725823865532970_n-600x600.jpg"
-      }
-  ]
+import { Blog } from "@/types/types"
+import { Link } from "@tanstack/react-router"
 
-const NewsWidget = () => {
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('et-EE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+interface Props {
+  blogs: Blog[] | null
+}
+
+const NewsWidget = ({ blogs }: Props) => {
+
+  if (!blogs) {
+    return (
+      <div className="flex items-center justify-center p-6 bg-gray-100 rounded-sm">
+        <p className="text-lg text-gray-600">Error retrieving news. Please try again later.</p>
+      </div>
+    )
+  }
+
+  if (blogs.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-6 bg-gray-100 rounded-sm">
+        <p className="text-lg text-gray-600">There are currently no news to display.</p>
+      </div>
+    )
+  }
+
+  const secondaryNews = blogs.slice(1, 5);
+  const placeholdersNeeded = Math.max(0, 4 - secondaryNews.length);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="flex flex-col pb-6">
-        <a href="/" className="group p-1 rounded-sm">
-          <div className="w-full aspect-[16/9] sm:aspect-auto overflow-hidden rounded-sm">
-            <img 
-              src={mainNews.image} 
-              className="w-full h-full sm:h-56 2xl:h-72 object-cover"
-              alt={mainNews.title}
-            />
-          </div>
-            <h4 className="font-bold leading-[109.9%] pt-2 group-hover:underline 2xl:text-2xl">{mainNews.title}</h4>
-            <p className="pt-1 font-medium text-stone-700">{mainNews.date}</p>
-            <p className="pt-4 leading-[20px]">{mainNews.excerpt}</p>
-        </a>
+        <Link href={`/uudised/${blogs[0].id}`} className="group p-1 rounded-sm">
+          {blogs[0].has_image && blogs[0].image_url && (
+            <div className="w-full aspect-[16/9] sm:aspect-auto overflow-hidden rounded-sm">
+              <img
+                src={blogs[0].image_url}
+                className="w-full h-full sm:h-56 2xl:h-72 object-cover"
+                alt={blogs[0].title}
+              />
+            </div>
+          )}
+          <h4 className={`font-bold leading-[109.9%] ${blogs[0].has_image ? 'pt-2' : 'pt-0'} group-hover:underline 2xl:text-2xl`}>
+            {blogs[0].title}
+          </h4>
+          <p className="pt-1 font-medium text-stone-700">{formatDate(blogs[0].created_at)}</p>
+          <p className="pt-4 leading-[20px]">{blogs[0].description}</p>
+        </Link>
       </div>
 
       <div className="flex flex-col space-y-3">
-        {latestNews.map((news, index) => (
-          <a key={news.id} href="/" className={`flex group  p-1 bg-[#f9f9f9] rounded-t-sm ${index === 0 ? 'pb-2' : 'py-2'}` }>
-            <div className="w-1/3 aspect-[4/3] overflow-hidden rounded-sm">
-              <img 
-                src={news.image} 
-                alt={news.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="w-2/3 pl-2 flex flex-col justify-start">
-              <p className="text-sm text-stone-700">{news.date}</p>
-
-              <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
-            </div>
-            
-          </a>
+        {secondaryNews.map((news, index) => (
+          <Link key={news.id} href={`/uudised/${news.id}`} className={`flex group p-1 bg-[#f9f9f9] rounded-t-sm ${index === 0 ? 'pb-2' : 'py-2'}`}>
+            {news.has_image && news.image_url ? (
+              <>
+                <div className="w-1/3 aspect-[4/3] overflow-hidden rounded-sm">
+                  <img
+                    src={news.image_url}
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="w-2/3 pl-2 flex flex-col justify-start">
+                  <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
+                  <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
+                </div>
+              </>
+            ) : (
+              <div className="w-full flex flex-col justify-start">
+                <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
+                <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
+                <p className="text-sm pt-1 text-gray-700 line-clamp-2">{news.description}</p>
+              </div>
+            )}
+          </Link>
         ))}
+
+        {placeholdersNeeded > 0 && Array.from({ length: placeholdersNeeded }).map((_, index) => (
+          <div key={`placeholder-${index}`} className="flex p-1 bg-[#f9f9f9] rounded-t-sm py-2">
+            <div className="w-1/3 aspect-[4/3] overflow-hidden rounded-sm bg-gray-200"></div>
+            <div className="w-2/3 pl-2 flex flex-col justify-start">
+              <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+              <div className="h-6 bg-gray-200 rounded w-5/6"></div>
+            </div>
+          </div>
+        ))}
+
+        {secondaryNews.length === 0 && (
+          <div className="flex items-center justify-center p-6 bg-gray-100 h-full rounded-sm">
+            <p className="text-gray-600">No additional news available.</p>
+          </div>
+        )}
       </div>
     </div>
   )

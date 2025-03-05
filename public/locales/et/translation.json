@@ -12,11 +12,9 @@
       "news": {
         "name": "Uudised",
         "all": "Kõik",
-        "announcements": "Teadaanded",
-        "international": "International",
-        "tournaments": "Võistlused",
-        "youth": "Noored",
-        "newsletter": "Uudiskiri"
+        "competitions": "Võistlused",
+        "good_read": "Hea Lugemine",
+        "results": "Tulemused"
       },
       "eltl": "ELTL",
       "competition": "Võistlused",
@@ -40,7 +38,7 @@
       "news": "Uudised",
       "tournaments": "Võistlused",
       "clubs": "Klubid",
-      "contact":"Kontakt"
+      "contact": "Kontakt"
     },
     "links": "Menüü"
   },
@@ -57,7 +55,17 @@
       "location": "Asukoht"
     },
     "news": {
+      "name": "Uudised",
+      "view_all": "Kõik uudised",
       "read_more": "Loe lähemalt"
+    },
+    "calendar": {
+      "name": "Kalender",
+      "view_all": "Vaata kõiki"
+    },
+    "ranking": {
+      "name": "Edetabel",
+      "view_all": "Kogu edetabel"
     },
     "best_performers": {
       "title": "Kuu parimad mängijad",
@@ -166,6 +174,22 @@
       },
       "title": "Turniirihaldus",
       "description": "Administreerimine"
+    },
+    "dashboard": {
+      "name": "Töölaud",
+      "total_tournaments": "Turniire kokku",
+      "active_tournaments": "Aktiivseid turniire",
+      "upcoming_tournaments": "Tulevased turniirid",
+      "upcoming_tournaments_description": "Ülevaade tulevastest turniiridest",
+      "recently_created_tournaments": "Hiljuti loodud turniirid",
+      "recently_created_tournaments_description": "Ülevaade viimati loodud turniiridest",
+      "tournament_activity": "Turniirid kuu lõikes",
+      "tournament_activity_description": "Turniiride arv kuu lõikes",
+      "utils": {
+        "name": "Nimi",
+        "status": "Staatus",
+        "start_date": "Alguskuupäev"
+      }
     },
     "tournaments": {
       "title": "Turniirid",

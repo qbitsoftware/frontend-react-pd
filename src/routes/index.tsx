@@ -2,24 +2,24 @@ import { createFileRoute } from "@tanstack/react-router";
 import HomePageGrid from "./-components/home-grid";
 import { UseGetTournaments } from "@/queries/tournaments";
 import { UseGetUsers } from "@/queries/users";
+import { UseGetBlogsOption } from "@/queries/blogs";
 
 
 export const Route = createFileRoute("/")({
   component: Index,
   loader: async ({ context: { queryClient } }) => {
-    //     const articledata = queryClient.ensureQueryData(UseGetArticles())
-    //     return articledata
     const tournaments = await queryClient.ensureQueryData(UseGetTournaments())
     const users = await queryClient.ensureQueryData(UseGetUsers())
-    return { tournaments, users }
+    const articles_data = await queryClient.ensureQueryData(UseGetBlogsOption())
+    return { tournaments, users, articles_data }
   }
 });
 
 function Index() {
-  const { tournaments, users } = Route.useLoaderData();
+  const { tournaments, users, articles_data } = Route.useLoaderData();
 
   return (
-    <HomePageGrid tournaments={tournaments.data} users={users.data} />
+    <HomePageGrid tournaments={tournaments.data} users={users.data} articles={articles_data.data.blogs} />
   )
 }
 

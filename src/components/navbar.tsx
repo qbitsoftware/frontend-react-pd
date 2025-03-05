@@ -31,9 +31,10 @@ export default function Navbar() {
             href: '/uudised',
             dropdownItems: [
                 { name: t('navbar.menu.news.all'), href: '/uudised' },
-                { name: t('navbar.menu.news.announcements'), href: `/uudised?category=Announcements` },
-                { name: t('navbar.menu.news.tournaments'), href: `/uudised?category=Tournaments` },
-                { name: t('navbar.menu.news.newsletter'), href: `/uudised?category=Newsletter` },
+                { name: t('navbar.menu.news.competitions'), href: `/uudised?category=competitions` },
+                { name: t('navbar.menu.news.name'), href: `/uudised?category=news` },
+                { name: t('navbar.menu.news.good_read'), href: `/uudised?category=good_read` },
+                { name: t('navbar.menu.news.results'), href: `/uudised?category=results` },
             ]
         },
         {
@@ -47,21 +48,21 @@ export default function Navbar() {
         },
         {
             name: t('navbar.menu.competition'),
-            href: '/voistlused',
-            dropdownItems: [
-                { name: 'Competitions', href: '/voistlused' },
-                { name: 'Results', href: '/voistlused/results' },
-                { name: 'Calendar', href: '/kalender' },
-            ]
+            href: '/kalender',
+            // dropdownItems: [
+            // { name: 'Competitions', href: '/voistlused' },
+            // { name: 'Results', href: '/voistlused/results' },
+            // { name: 'Calendar', href: '/kalender' },
+            // ]
         },
         {
             name: t('navbar.menu.clubs'),
             href: '/klubid',
-            dropdownItems: [
-                { name: 'All Clubs', href: '/klubid' },
-                { name: 'Register a Club', href: '/klubid/register' },
-                { name: 'Club Rankings', href: '/klubid/rankings' },
-            ]
+            // dropdownItems: [
+            //     { name: 'All Clubs', href: '/klubid' },
+            //     { name: 'Register a Club', href: '/klubid/register' },
+            //     { name: 'Club Rankings', href: '/klubid/rankings' },
+            // ]
         },
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },

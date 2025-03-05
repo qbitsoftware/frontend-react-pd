@@ -2,21 +2,24 @@ import { useRef, useEffect, useState } from 'react'
 import WidgetWrapper from "./widget-wrapper";
 import NewsWidget from "./news-widget";
 import CalendarWidget from "./calendar-widget";
-import { Tournament, UserNew } from '@/types/types';
+import { Blog, Tournament, UserNew } from '@/types/types';
 import Adboard from "./adboard";
 import RatingWidget from "./rating-widget";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   tournaments: Tournament[] | null
   users: UserNew[] | null
+  articles: Blog[] | null
 }
 
-const HomePageGrid = ({ tournaments, users }: Props) => {
+const HomePageGrid = ({ tournaments, users, articles }: Props) => {
   const newsRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const adboardRef = useRef<HTMLDivElement>(null);
   const ratingRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const { t } = useTranslation()
 
   useEffect(() => {
     const checkMobile = () => {
@@ -93,14 +96,14 @@ const HomePageGrid = ({ tournaments, users }: Props) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 gap-y-4 p-1 lg:p-6 max-w-[1440px] mx-auto">
       <div className="sm:col-span-2 md:col-span-8 flex flex-col ">
-        <WidgetWrapper heading="Uudised" view_all="Kõik uudised" addr="uudised">
+        <WidgetWrapper heading={t("homepage.news.name")} view_all={t("homepage.news.view_all")} addr="uudised">
           <div className="py-2 px-4  flex-grow" ref={newsRef}>
-            <NewsWidget />
+            <NewsWidget blogs={articles} />
           </div>
         </WidgetWrapper>
       </div>
       <div className="sm:col-span-2 md:col-span-4 flex flex-col">
-        <WidgetWrapper heading="Kalender" view_all="Kogu kalender" addr="kalender">
+        <WidgetWrapper heading={t("homepage.calendar.name")} view_all={t("homepage.calendar.view_all")} addr="kalender">
           <div className="py-2 px-4 flex-grow" ref={calendarRef}>
             <CalendarWidget tournaments={tournaments} />
           </div>
@@ -114,7 +117,7 @@ const HomePageGrid = ({ tournaments, users }: Props) => {
         </div>
       </div>
       <div className="sm:col-span-1 md:col-span-7 flex flex-col">
-        <WidgetWrapper heading="Edetabel" view_all="Kogu edetabel" addr="reiting">
+        <WidgetWrapper heading={t("homepage.ranking.name")} view_all={t("homepage.ranking.view_all")} addr="reiting">
           <div className="py-2 px-4  flex-grow" ref={ratingRef}>
             <RatingWidget users={users} />
           </div>

@@ -31,6 +31,14 @@ export const formatTournamentType = (type: string) => {
     .join(' ');
 };
 
+export const categories = [
+  { id: "competitions", label: "Competitions" },
+  { id: "news", label: "News" },
+  { id: "good_read", label: "Good Read" },
+  { id: "results", label: "Results" }
+];
+
+
 export function parsePlaces(s: string): number | null {
   const parts = s.split(" ")
   if (parts.length != 2) {

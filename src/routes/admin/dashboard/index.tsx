@@ -9,6 +9,7 @@ import { UseGetTournaments } from "@/queries/tournaments"
 import ErrorPage from "@/components/error"
 import { formatDateString } from "@/lib/utils"
 import { Tournament } from "@/types/types"
+import { useTranslation } from "react-i18next"
 
 
 export const Route = createFileRoute("/admin/dashboard/")({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/admin/dashboard/")({
 export default function RouteComponent() {
   const { tournaments_data } = Route.useLoaderData()
   const router = useRouter()
+  const { t } = useTranslation()
 
   const processChartData = (tournaments: Tournament[]) => {
     const monthMap = new Map();
@@ -67,7 +69,7 @@ export default function RouteComponent() {
 
     return (
       <div className="space-y-6 p-8 overflow-y-scroll h-full">
-        <h1 className="text-3xl font-bold">Tournament Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t("admin.dashboard.name")}</h1>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -76,14 +78,14 @@ export default function RouteComponent() {
             iconColor="text-blue-600"
             bgColor="bg-blue-100"
             title={stats.totalTournaments}
-            description="Total Tournaments"
+            description={t("admin.dashboard.total_tournaments")}
           />
           <StatsCard
             Icon={Target}
             iconColor="text-green-600"
             bgColor="bg-green-100"
             title={stats.activeTournaments}
-            description="Active Tournaments"
+            description={t("admin.dashboard.active_tournaments")}
           />
         </div>
 
@@ -91,16 +93,16 @@ export default function RouteComponent() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming Tournaments</CardTitle>
-              <CardDescription>Overview of upcoming tournaments</CardDescription>
+              <CardTitle>{t("admin.dashboard.upcoming_tournaments")}</CardTitle>
+              <CardDescription>{t("admin.dashboard.upcoming_tournaments_description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Start Date</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.name")}</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.status")}</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.start_date")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -119,16 +121,16 @@ export default function RouteComponent() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Recenty Created Tournaments</CardTitle>
-              <CardDescription>Overview of the recently created tournaments</CardDescription>
+              <CardTitle>{t("admin.dashboard.recently_created_tournaments")}</CardTitle>
+              <CardDescription>{t("admin.dashboard.recently_created_tournaments_description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Start Date</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.name")}</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.status")}</TableHead>
+                    <TableHead>{t("admin.dashboard.utils.start_date")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -148,8 +150,8 @@ export default function RouteComponent() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>Tournament Activity</CardTitle>
-            <CardDescription>Number of tournaments per month</CardDescription>
+            <CardTitle>{t("admin.dashboard.tournament_activity")}</CardTitle>
+            <CardDescription>{t("admin.dashboard.tournament_activity_description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>

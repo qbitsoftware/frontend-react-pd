@@ -20,14 +20,40 @@ export function UseGetBlogs() {
     })
 }
 
-export function UseGetBlogsOption() {
-    return queryOptions<BlogsResponse>({
-        queryKey: ["blogs"],
+interface BlogsResponseUser {
+    data: {
+        blogs: Blog[],
+        total_pages: number,
+    }
+    message: string
+    error: string | null
+}
+
+export function UseGetBlogsOption(page?: number, category?: string, search?: string) {
+    return queryOptions<BlogsResponseUser>({
+        queryKey: ["blogs", { page, category, search }],
         queryFn: async () => {
-            const { data } = await axiosInstance.get("/api/v1/blogs")
-            return data
+            const queryParams = new URLSearchParams();
+
+            if (page !== undefined) {
+                queryParams.append("page", page.toString());
+            }
+
+            if (category !== undefined && category !== '') {
+                queryParams.append("category", category);
+            }
+
+            if (search !== undefined && search !== '') {
+                queryParams.append("search", search);
+            }
+
+            const queryString = queryParams.toString();
+            const url = queryString ? `/api/v1/blogs?${queryString}` : "/api/v1/blogs";
+
+            const { data } = await axiosInstance.get(url);
+            return data;
         }
-    })
+    });
 }
 
 interface BlogResponse {
@@ -36,9 +62,19 @@ interface BlogResponse {
     error: string | null
 }
 
-export function UseGetBlog(id: number) {
+export function UseGetBlogAdmin(id: number) {
     return useQuery<BlogResponse>({
-        queryKey: ["blog", id],
+        queryKey: ["blog_admin", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/blogs/${id}/admin`)
+            return data
+        }
+    })
+}
+
+export function UseGetBlog(id: number) {
+    return queryOptions<BlogResponse>({
+        queryKey: ["blog_client", id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/blogs/${id}`)
             return data
@@ -54,7 +90,6 @@ export function UseCreateBlog() {
             return data
         },
         onSuccess: () => {
-            // queryClient.invalidateQueries({ queryKey: ["blogs"] })
             queryClient.refetchQueries({ queryKey: ["blogs"] })
         }
     })
@@ -69,7 +104,7 @@ export function UseUpdateBlog() {
         },
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ["blogs"] })
-            queryClient.invalidateQueries({ queryKey: ["blog", variables.id] })
+            queryClient.invalidateQueries({ queryKey: ["blog_admin", variables.id] })
         }
     })
 }
@@ -83,7 +118,6 @@ export function UseDeleteBlog() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["blogs"] })
-            // queryClient.refetchQueries({ queryKey: ["blogs"] })
         }
     })
 }

@@ -1,17 +1,20 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { UseGetArticle } from '@/queries/articles'
 import ErrorPage from '@/components/error'
 import { replaceSpecialCharacters } from '@/lib/utils'
+import { UseGetBlog } from '@/queries/blogs'
+import Editor from '../admin/-components/yooptaeditor'
+import { useState } from 'react'
+import { YooptaContentValue } from '@yoopta/editor'
 
 export const Route = createFileRoute('/uudised/$blogid')({
     errorComponent: ({ error, reset }) => {
         return <ErrorPage error={error} reset={reset} />
-      },
+    },
     component: RouteComponent,
     loader: async ({ context: { queryClient }, params }) => {
-        const articledata = queryClient.ensureQueryData(UseGetArticle(Number(params.blogid)))
+        const articledata = queryClient.ensureQueryData(UseGetBlog(Number(params.blogid)))
         return articledata
     }
 })
@@ -19,6 +22,8 @@ export const Route = createFileRoute('/uudised/$blogid')({
 function RouteComponent() {
 
     const article = Route.useLoaderData()
+
+    const [value, setValue] = useState<YooptaContentValue | undefined>(article.data.full_content ? JSON.parse(article.data.full_content) : undefined);
 
     const categories = article.data.category.split('/').map((category) => category.trim())
 
@@ -38,39 +43,29 @@ function RouteComponent() {
                                 <Link href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
                                     <span key={category}>{category}</span>
                                 </Link>
-                        )
+                            )
                         } else {
                             return (
                                 <>
-                                <Link href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
-                                    <span key={category} className="mr-2">{category}</span>
-                                </Link>
+                                    <Link href={`/uudised?category=${replaceSpecialCharacters(category)}`}>
+                                        <span key={category} className="mr-2">{category}</span>
+                                    </Link>
                                     <span className='mr-2'>/</span>
                                 </>
                             )
                         }
                     })}</div>
-                    <CardTitle className="text-3xl font-bold">{article.data.title}</CardTitle>
-                    <div className="text-gray-500 mt-2">{article.data.created_at}</div>
                 </CardHeader>
-                {article.data.thumbnail ? (
-                    <img
-                        src={article.data.thumbnail}
-                        alt={article.data.title}
-                        width={800}
-                        height={500}
-                        className="w-full h-[500px] object-cover"
-                    />
-                ) :  <img
-                src={"/racket.svg"}
-                alt={article.data.title}
-                width={800}
-                height={500}
-                className="w-full h-[500px] object-fill"
-            />
-            }
                 <CardContent className="prose max-w-none mt-6">
-                    <p className='blog-content' dangerouslySetInnerHTML={{__html: article.data.content_html}}></p>
+                    {/* <p className='blog-content' dangerouslySetInnerHTML={{ __html: article.data.content_html }}></p> */}
+                    {value ? (
+                        <Editor value={value} setValue={setValue} readOnly={true} />
+                    ) : (
+                        <div className="p-8 text-center">
+                            <p>Loading editor...</p>
+                        </div>
+                    )}
+
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
                     <div className="text-sm text-gray-500">

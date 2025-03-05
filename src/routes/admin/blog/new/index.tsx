@@ -7,7 +7,7 @@ import { YooptaContentValue } from '@yoopta/editor'
 import { Link } from '@tanstack/react-router'
 import { UseCreateBlog } from '@/queries/blogs'
 import { Blog } from '@/types/types'
-import { contentParser } from '@/lib/utils'
+import { categories, contentParser } from '@/lib/utils'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
@@ -25,12 +25,6 @@ function RouteComponent() {
   const router = useRouter()
   const { toast } = useToast()
 
-  const categories = [
-    { id: "announcements", label: "Announcements" },
-    { id: "news", label: "News" },
-    { id: "good-read", label: "Good Read" },
-    { id: "tournaments", label: "Tournaments" }
-  ];
 
   const handleClick = async () => {
     if (!value) {

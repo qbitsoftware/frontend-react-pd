@@ -1,8 +1,8 @@
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
-import { UseGetBlog, UseUpdateBlog } from '@/queries/blogs'
+import { UseGetBlogAdmin, UseUpdateBlog } from '@/queries/blogs'
 import { useEffect, useState } from 'react'
 import { YooptaContentValue } from '@yoopta/editor'
-import { contentParser } from '@/lib/utils'
+import { categories, contentParser } from '@/lib/utils'
 import { Blog } from '@/types/types'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/admin/blog/$blogid/')({
 
 function RouteComponent() {
     const params = useParams({ strict: false })
-    const { data: blogData, isLoading } = UseGetBlog(Number(params.blogid))
+    const { data: blogData, isLoading } = UseGetBlogAdmin(Number(params.blogid))
     const [value, setValue] = useState<YooptaContentValue | undefined>(undefined);
     const [category, setCategory] = useState<string>('');
     const [isPublished, setIsPublished] = useState(false);
@@ -28,15 +28,8 @@ function RouteComponent() {
     const router = useRouter()
     const { toast } = useToast()
 
-    const categories = [
-        { id: "announcements", label: "Announcements" },
-        { id: "news", label: "News" },
-        { id: "good-read", label: "Good Read" },
-        { id: "tournaments", label: "Tournaments" }
-    ];
 
     useEffect(() => {
-        // Only set the editor value and publication status after data is loaded
         if (!isLoading && blogData?.data) {
             try {
                 setValue(JSON.parse(blogData.data.full_content));
@@ -142,42 +135,6 @@ function RouteComponent() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="h-16 flex items-center justify-between">
-                        <div className="flex items-center">
-                            <div
-                                onClick={() => { router.navigate({ to: '/admin/blog' }) }}
-                                className='flex items-center cursor-pointer px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50'
-                            >
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                Tagasi
-                            </div>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-2">
-                                <Switch
-                                    id="publish-mode"
-                                    checked={isPublished}
-                                    onCheckedChange={setIsPublished}
-                                />
-                                <Label htmlFor="publish-mode">
-                                    {isPublished ? 'Published' : 'Draft'}
-                                </Label>
-                            </div>
-                            <Button
-                                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                onClick={handleClick}
-                                disabled={blogUpdateMutation.isPending}
-                            >
-                                <Save className="w-4 h-4 mr-2" />
-                                {blogUpdateMutation.isPending ? "Saving..." : (isPublished ? 'Publish' : 'Save Draft')}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </header> */}
-
             <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="h-16 flex items-center justify-between">
