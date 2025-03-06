@@ -6,6 +6,7 @@ import { Plus } from "lucide-react"
 import type { Tournament, TournamentTable } from "@/types/types"
 import { Link, useNavigate, useParams } from "@tanstack/react-router"
 import { parseTableType } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 
 interface TournamentTablesProps {
@@ -17,14 +18,15 @@ interface TournamentTablesProps {
 export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) => {
   const { tournamentid } = useParams({ strict: false })
   const navigate = useNavigate()
+  const { t } = useTranslation()
   return (
     <Card className="border-none shadow-none px-10">
       <CardHeader className="flex md:flex-row flex-col items-center gap-4 px-0">
-        <CardTitle className="text-lg">Tournament Tables</CardTitle>
+        <CardTitle className="text-lg">{t("admin.tournaments.groups.title")}</CardTitle>
         <Link className="w-full md:w-auto flex justify-center items-center" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
           <Button className="w-full md:w-auto h-8">
             <Plus className="w-4 h-4 mr-2" />
-            Lisa Uus
+            {t("admin.tournaments.groups.add_new")}
           </Button>
         </Link>
       </CardHeader>
@@ -32,10 +34,10 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
         <Table className="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead>Grupp</TableHead>
-              <TableHead>Osalejate arv/Tabeli suurus</TableHead>
-              <TableHead>Tabeli tüüp</TableHead>
-              <TableHead>Formaat</TableHead>
+              <TableHead>{t("admin.tournaments.groups.table.group")}</TableHead>
+              <TableHead>{t("admin.tournaments.groups.table.number_and_team_size")}</TableHead>
+              <TableHead>{t("admin.tournaments.groups.table.type")}</TableHead>
+              <TableHead>{t("admin.tournaments.groups.table.format")}</TableHead>
 
             </TableRow>
           </TableHeader>
@@ -52,7 +54,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
               :
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-6">
-                  No tables created yet
+                  {t("admin.tournaments.groups.no_tables")}
                 </TableCell>
               </TableRow>
             }

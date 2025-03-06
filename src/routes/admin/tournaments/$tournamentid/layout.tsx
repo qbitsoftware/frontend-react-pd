@@ -6,6 +6,7 @@ import type { ErrorResponse } from "@/types/types"
 import { Link } from "@tanstack/react-router"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useTranslation } from "react-i18next"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid")({
   component: RouteComponent,
@@ -31,6 +32,7 @@ function RouteComponent() {
   const location = useLocation()
   const { tournament_data } = Route.useLoaderData()
   const { tournamentid } = Route.useParams()
+  const { t } = useTranslation()
 
   const currentTab = location.pathname.includes("/grupid") ? "groups" : "info"
 
@@ -43,12 +45,12 @@ function RouteComponent() {
             <TabsList className="grid grid-cols-2">
               <Link to={`/admin/tournaments/${tournamentid}`} >
                 <TabsTrigger value="info" className="w-[8rem]">
-                  Info
+                  {t("admin.layout.info")}
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/grupid`}>
                 <TabsTrigger value="groups" className="w-[8rem]">
-                  Groups
+                  {t("admin.layout.groups")}
                 </TabsTrigger>
               </Link>
             </TabsList>

@@ -38,6 +38,7 @@ import {
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
 import { useNavigate } from "@tanstack/react-router"
+import { t } from "i18next"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
@@ -145,7 +146,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   console.log(form.getValues())
 
   return (
-    <div>
+    <div className="">
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -177,7 +178,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         <CardHeader className="px-0">
           <Button variant="ghost" className="hover:bg-transparent" size="icon" onClick={() => navigate({ to: ".." })}>
             <ChevronLeft className="w-5 h-5" />
-            Back
+            {t("admin.tournaments.create_tournament.back")}
           </Button>
           <CardTitle className="text-lg">
             {initial_data
@@ -314,10 +315,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 name="total_tables"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>{"Laudade arv"}</FormLabel>
+                    <FormLabel>{t("admin.tournaments.create_tournament.number_of_tables")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
+                        placeholder={t("admin.tournaments.create_tournament.number_of_tables_placeholder")}
                         {...field}
                         onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
                       />
@@ -346,14 +348,14 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
               {/* Pane siiia */}
               <div className="w-full flex flex-col gap-4 ">
-                <p className="text-sm">Additional information </p>
+                <p className="text-sm">{t("admin.tournaments.create_tournament.additional_information")} </p>
 
                 <Editor value={value} setValue={setValue} readOnly={false} />
               </div>
               <div className="flex justify-between gap-4">
                 {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
-                    Kustuta turniir
+                    {t("admin.tournaments.delete")}
                   </Button>
                 )}
                 <Button type="submit" className="md:w-[200px] w-full">
@@ -402,12 +404,12 @@ function CategoryInput({
 
   return (
     <FormItem className="flex flex-col">
-      <FormLabel>Category</FormLabel>
+      <FormLabel>{t("admin.tournaments.create_tournament.category")}</FormLabel>
       <div className="relative">
         <FormControl>
           <Input
             ref={inputRef}
-            placeholder="Type a category"
+            placeholder={t("admin.tournaments.create_tournament.category_placeholder")}
             value={inputValue}
             onChange={handleInputChange}
             onFocus={() => setShowSuggestions(true)}

@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tournament } from '@/types/types';
 import { useRouter } from '@tanstack/react-router';
+import Sfumato from "@/components/sfumato/sfumato"
 
 interface Props {
   tournaments: Tournament[] | null
@@ -57,6 +58,7 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
       <div className="flex flex-col space-y-4 h-full overflow-y-auto ">
         {Object.entries(tournamentsByMonth).map(([monthYear, tournaments]) => (
           <div key={monthYear} className="space-y-2 ">
+          <Sfumato/>
             <h5 className="capitalize font-semibold text-stone-800/80">{monthYear}</h5>
 
           {tournaments.map((tournament) => (

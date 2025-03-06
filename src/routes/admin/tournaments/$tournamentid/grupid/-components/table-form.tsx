@@ -144,7 +144,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
       <Card className="w-full border-[#F0F3F3]">
         <CardHeader>
           <CardTitle className="text-base">
-            {initial_data ? "Edit Table" : "Create Table"}
+            {initial_data ? t("admin.tournaments.create_tournament.edit_group") : t("admin.tournaments.create_tournament.create_group")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -156,9 +156,9 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   name="class"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Klass</FormLabel>
+                      <FormLabel>{t("admin.tournaments.create_tournament.class")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={"Klass"} {...field} />
+                        <Input placeholder={t("admin.tournaments.create_tournament.class_placeholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -199,7 +199,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   name="size"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{"Turniiri suurus"}</FormLabel>
+                      <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(Number.parseInt(value, 10))}
                         defaultValue={String(field.value)}
@@ -279,7 +279,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                 />
               </div>
               <div className="flex justify-between gap-4 mt-10">
-              {initial_data && (
+                {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
                     Kustuta turniir
                   </Button>
@@ -289,7 +289,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     ? t("admin.tournaments.create_tournament.button_edit")
                     : t("admin.tournaments.create_tournament.button_create")}
                 </Button>
-                
+
               </div>
             </form>
           </Form>

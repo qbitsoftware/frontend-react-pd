@@ -79,7 +79,20 @@
     }
   },
   "news": {
-    "title": "Uudised"
+    "title": "Uudised",
+    "search_category": "Otsi kategooria järgi:",
+    "search_content": "Otsi sisu järgi",
+    "no_image": "Pilt pole saadaval",
+    "categories": {
+      "all": "Kõik",
+      "news": "Teadaanded",
+      "competitions": "Võistlused",
+      "good_read": "Hea Lugemine",
+      "results": "Tulemused"
+    }
+  },
+  "calendar": {
+    "title": "Kalender"
   },
   "tournaments": {
     "header": "Turniirid",
@@ -172,6 +185,8 @@
         "blogs": "Blogid",
         "settings": "Sätted"
       },
+      "info": "Info",
+      "groups": "Grupid",
       "title": "Turniirihaldus",
       "description": "Administreerimine"
     },
@@ -195,7 +210,11 @@
       "title": "Turniirid",
       "description": "Halda turniire siit",
       "add_new": "Lisa Uus",
+      "delete": "Kustuta turniir",
       "create_tournament": {
+        "back": "Tagasi",
+        "edit_group": "Muuda gruppi",
+        "create_group": "Loo grupp",
         "title_create": "Loo uus turniir",
         "title_edit": "Muuda turniiri",
         "button_create": "Loo",
@@ -206,6 +225,13 @@
         "start_date": "Alguskuupäev",
         "location": "Asukoht",
         "location_placeholder": "Sisestage asukoht",
+        "category": "Kategooria",
+        "category_placeholder": "Sisestage kategooria",
+        "number_of_tables": "Laudade arv",
+        "number_of_tables_placeholder": "Sisestage laudade arv",
+        "class": "Klass",
+        "class_placeholder": "Sisestage klass",
+        "tournament_size": "Turniiri suurus",
         "min_team_size": "Minimaalne tiimi suurus",
         "additional_information": "Lisa informatisoon",
         "sport": "Sport",
@@ -223,6 +249,38 @@
         "private_description": "Muuda turniir ainult adminitele nähtavaks",
         "team": "Meeskondadega turniir",
         "team_description": "Luba meeskondadega turniir"
+      },
+      "groups": {
+        "layout": {
+          "info": "Info",
+          "participants": "Osalejad",
+          "matches": "Matšid",
+          "tables": "Tabelid"
+        },
+        "table": {
+          "group": "Grupp",
+          "number_and_team_size": "Osalejate arv / Tabeli suurus",
+          "type": "Tabeli tüüp",
+          "format": "Formaat"
+        },
+        "add_new": "Lisa uus",
+        "no_tables": "Gruppe pole veel lisatud",
+        "title": "Turniiri grupid",
+        "participants": {
+          "table": {
+            "serial_number": "JKNR.",
+            "position": "Positsioon",
+            "team": "Meeskond",
+            "name": "Nimi",
+            "rank": "Koht",
+            "sex": "Sugu",
+            "club": "Klubi",
+            "class": "Klass",
+            "eltl_id": "ELTL ID",
+            "rating": "Koht reitingus",
+            "actions": "Tegevused"
+          }
+        }
       },
       "filters": {
         "status": {

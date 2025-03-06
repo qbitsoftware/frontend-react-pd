@@ -6,19 +6,9 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { UseGetBlogsOption } from '@/queries/blogs'
 import { z } from 'zod'
 import { Input } from '@/components/ui/input'
-import { categories } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
-const categoryMapping: Record<string, string> = categories.reduce((acc, cat) => ({
-    ...acc,
-    [cat.label]: cat.id
-}), {});
 
-const reverseCategoryMapping: Record<string, string> = categories.reduce((acc, cat) => ({
-    ...acc,
-    [cat.id]: cat.label
-}), {});
-
-const displayCategories = categories.map(cat => cat.label);
 
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
@@ -44,6 +34,28 @@ export default function RouteComponent() {
     const articles_data = Route.useLoaderData()
     const { category, page, search } = Route.useSearch()
     const navigate = Route.useNavigate()
+
+    const { t } = useTranslation()
+
+    const categories = [
+        { id: "competitions", label: t("news.categories.competitions") },
+        { id: "news", label: t("news.categories.news") },
+        { id: "good_read", label: t("news.categories.good_read") },
+        { id: "results", label: t("news.categories.results") }
+    ];
+
+    const categoryMapping: Record<string, string> = categories.reduce((acc, cat) => ({
+        ...acc,
+        [cat.label]: cat.id
+    }), {});
+
+    const reverseCategoryMapping: Record<string, string> = categories.reduce((acc, cat) => ({
+        ...acc,
+        [cat.id]: cat.label
+    }), {});
+
+    const displayCategories = categories.map(cat => cat.label);
+
 
     const [searchInput, setSearchInput] = useState(search || '')
     const [currentPage, setCurrentPage] = useState(page || 1)
@@ -73,34 +85,20 @@ export default function RouteComponent() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          if (searchInput !== search) {
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                search: searchInput || undefined,
-                page: 1
-              }),
-              replace: true
-            })
-          }
-        }, 500) // 500ms debounce delay
-      
+            if (searchInput !== search) {
+                navigate({
+                    search: (prev) => ({
+                        ...prev,
+                        search: searchInput || undefined,
+                        page: 1
+                    }),
+                    replace: true
+                })
+            }
+        }, 500)
+
         return () => clearTimeout(timer)
     }, [searchInput, navigate, search])
-
-    // const handleSearch = (e: React.FormEvent) => {
-    //     e.preventDefault()
-    //     setCurrentPage(1)
-
-    //     navigate({
-    //         search: (prev) => ({
-    //             ...prev,
-    //             search: searchInput || undefined,
-    //             page: 1
-    //         }),
-    //         replace: true
-    //     })
-    // }
 
     const handlePageChange = (page: number) => {
         navigate({
@@ -130,11 +128,11 @@ export default function RouteComponent() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="space-y-3">
-                <h2 className="font-bold text-gray-900">Uudised</h2>
+                <h2 className="font-bold text-gray-900">{t("news.title")}</h2>
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div className="w-full lg:w-auto flex flex-col lg:flex-row lg:items-center gap-4">
-                        <p className="text-sm font-medium  ">Otsi kategooria järgi:</p>
+                        <p className="text-sm font-medium">{t("news.search_category")}</p>
                         <Tabs value={activeDisplayCategory} className="w-full md:w-auto">
                             <TabsList className="bg-transparent flex flex-wrap gap-2 justify-start">
                                 <TabsTrigger
@@ -142,7 +140,7 @@ export default function RouteComponent() {
                                     onClick={() => handleCategoryChange('all')}
                                     className="px-4 py-1 bg-white border border-gray-300 rounded-full data-[state=active]:border-blue-400 data-[state=active]:border-2"
                                 >
-                                    Kõik
+                                    {t("news.categories.all")}
                                 </TabsTrigger>
                                 {displayCategories.map((displayCategory) => (
                                     <TabsTrigger
@@ -161,12 +159,12 @@ export default function RouteComponent() {
                     <div className="flex w-full md:w-64">
                         <Input
                             type="text"
-                            placeholder="Otsi sisu järgi"
+                            placeholder={t("news.search_content")}
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             className=""
                         />
-                       
+
                     </div>
                 </div>
             </div>
@@ -175,34 +173,34 @@ export default function RouteComponent() {
                 <div className="grid grid-cols-1 md:grid-cols-3 md:flex-row items-start gap-4 mt-4">
                     {articles_data.data.blogs.slice(0, 3).map((article, index) => (
                         <Link to={`/uudised/${article.id}`} >
-                            <Card key={index}  className="bg-[#fafafa] hover:bg-white">
-                            <div className="flex flex-col ">
-                                <div className="md:w-full h-64 md:h-48">
-                                    {article.has_image && article.image_url ? (
-                                        <img
-                                            src={article.image_url}
-                                            alt={article.title}
-                                            className="w-full h-full object-cover rounded-t-md"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-t-md">
-                                            <span className="text-gray-400">No image available</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="p-4 space-y-1">
-                                    <CardTitle className="text-xl font-bold">{article.title}</CardTitle>
-                                    <p className="text-sm text-stone-600 mb-3">
-                                        {formatDate(article.created_at)}
-                                    </p>
-                                    <CardContent className="px-0 py-2">
-                                        <p className="text-stone-800 text-sm">
-                                            {truncateDescription(article.description || '')}
+                            <Card key={index} className="bg-[#fafafa] hover:bg-white">
+                                <div className="flex flex-col ">
+                                    <div className="md:w-full h-64 md:h-48">
+                                        {article.has_image && article.image_url ? (
+                                            <img
+                                                src={article.image_url}
+                                                alt={article.title}
+                                                className="w-full h-full object-cover rounded-t-md"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-t-md">
+                                                <span className="text-gray-400">{t("news.no_image")}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="p-4 space-y-1">
+                                        <CardTitle className="text-xl font-bold">{article.title}</CardTitle>
+                                        <p className="text-sm text-stone-600 mb-3">
+                                            {formatDate(article.created_at)}
                                         </p>
-                                    </CardContent>
+                                        <CardContent className="px-0 py-2">
+                                            <p className="text-stone-800 text-sm">
+                                                {truncateDescription(article.description || '')}
+                                            </p>
+                                        </CardContent>
+                                    </div>
                                 </div>
-                            </div>
-                        </Card>
+                            </Card>
                         </Link>
                     ))}
                 </div>
@@ -221,7 +219,7 @@ export default function RouteComponent() {
                                 </div>
                                 <div className="w-32 flex-shrink-0">
                                     <div className="aspect-[3/2] relative">
-                                    {article.has_image && article.image_url ? (
+                                        {article.has_image && article.image_url ? (
                                             <img
                                                 src={article.image_url}
                                                 alt={article.title}

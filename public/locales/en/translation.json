@@ -79,7 +79,20 @@
     }
   },
   "news": {
-    "title": "News and Updates"
+    "title": "News",
+    "search_category": "Search by category:",
+    "search_content": "Search by content",
+    "no_image": "No image available",
+    "categories": {
+      "all": "All",
+      "competitions": "Competitions",
+      "news": "News",
+      "good_read": "Good read",
+      "results": "Results"
+    }
+  },
+  "calendar": {
+    "title": "Calendar"
   },
   "tournaments": {
     "header": "Tournaments",
@@ -172,6 +185,8 @@
         "blogs": "Blogs",
         "settings": "Settings"
       },
+      "info": "Info",
+      "groups": "Groups",
       "title": "Tournament Hub",
       "description": "Administration"
     },
@@ -195,7 +210,11 @@
       "title": "Tournaments",
       "description": "Manage and organize tournaments",
       "add_new": "New Tournament",
+      "delete": "Delete a tournament",
       "create_tournament": {
+        "back": "Back",
+        "edit_group": "Edit Group",
+        "create_group": "Create Group",
         "title_create": "Create Tournament",
         "title_edit": "Edit Tournament",
         "button_create": "Create",
@@ -206,6 +225,13 @@
         "start_date": "Start Date",
         "location": "Location",
         "location_placeholder": "Enter Location",
+        "category": "Category",
+        "category_placeholder": "Type a Category",
+        "number_of_tables": "Number of tables",
+        "number_of_tables_placeholder": "Enter number of tables",
+        "class": "Class",
+        "class_placeholder": "Type a Class",
+        "tournament_size": "Tournament Size",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
         "sport": "Sport",
@@ -223,6 +249,38 @@
         "private_description": "Make this tournament private (only seen to admins)",
         "team": "Tournament with teams",
         "team_description": "Enable tournament with teams"
+      },
+      "groups": {
+        "layout": {
+          "info": "Info",
+          "participants": "Participants",
+          "matches": "Matches",
+          "tables": "Tables"
+        },
+        "table": {
+          "group": "Group",
+          "number_and_team_size": "Participants / Tabel size",
+          "type": "Table type",
+          "format": "Format"
+        },
+        "add_new": "Add new",
+        "no_tables": "No groups created yet",
+        "title": "Tournament Groups",
+        "participants": {
+          "table": {
+            "serial_number": "SN",
+            "position": "Position",
+            "team": "Team",
+            "name": "Name",
+            "rank": "Placement",
+            "sex": "Sex",
+            "club": "Club",
+            "class": "Class",
+            "eltl_id": "ELTL ID",
+            "rating": "Placement in rating",
+            "actions": "Actions"
+          }
+        }
       },
       "filters": {
         "status": {

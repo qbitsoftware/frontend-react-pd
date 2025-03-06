@@ -22,6 +22,7 @@ import { z } from "zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslation } from "react-i18next"
 
 interface ParticipantFormProps {
     participants: Participant[] | null
@@ -75,6 +76,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
 
     const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
     const [focusedField, setFocusedField] = useState<string | null>(null)
+
+    const { t } = useTranslation()
 
 
     // const [dropdownPositions, setDropdownPositions] = useState<{ [key: string]: { top: number, left: number, position: 'top' | 'bottom' } }>({});
@@ -328,29 +331,29 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                     <TableRow className="">
                                         {table_data && table_data.solo ? (
                                             <>
-                                                <TableHead>JKNR.</TableHead>
-                                                <TableHead>Positsioon</TableHead>
-                                                <TableHead>Nimi</TableHead>
-                                                <TableHead>Rank</TableHead>
-                                                <TableHead>Sugu</TableHead>
-                                                <TableHead>Klubi</TableHead>
-                                                <TableHead>ELTL ID</TableHead>
-                                                <TableHead>Koht Reitingus</TableHead>
-                                                <TableHead>Klass</TableHead>
-                                                <TableHead>Actions</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.position")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.name")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.club")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.class")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
                                             </>
                                         ) : (
                                             <>
-                                                <TableHead>JKNR.</TableHead>
-                                                <TableHead>Positsioon</TableHead>
-                                                <TableHead>Meeskond</TableHead>
-                                                <TableHead>Nimi</TableHead>
-                                                <TableHead>Rank</TableHead>
-                                                <TableHead>Sugu</TableHead>
-                                                <TableHead>Klubi</TableHead>
-                                                <TableHead>ELTL ID</TableHead>
-                                                <TableHead>Koht Reitingus</TableHead>
-                                                <TableHead>Actions</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.position")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.team")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.name")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.club")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
+                                                <TableHead>{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
                                             </>
                                         )}
                                     </TableRow>

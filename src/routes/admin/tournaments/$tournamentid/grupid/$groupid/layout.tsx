@@ -5,6 +5,7 @@ import type { ErrorResponse } from "@/types/types"
 import { UseGetTournamentTable } from "@/queries/tables"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useTranslation } from "react-i18next"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/grupid/$groupid")({
   component: RouteComponent,
@@ -29,6 +30,7 @@ function RouteComponent() {
   const { table_data } = Route.useLoaderData()
   const { tournamentid, groupid } = Route.useParams()
   const location = useLocation()
+  const { t } = useTranslation()
 
   if (!table_data || !table_data.data) {
     return <></>
@@ -38,10 +40,10 @@ function RouteComponent() {
   const currentTab = pathSegments[pathSegments.length - 1] === groupid ? "/" : pathSegments.pop() || "/"
 
   const tabs = [
-    { value: "/", label: "Info" },
-    { value: "osalejad", label: "Participants" },
-    { value: "mangud", label: "Matches" },
-    { value: "tabelid", label: "Tables" }
+    { value: "/", label: t("admin.tournaments.groups.layout.info") },
+    { value: "osalejad", label: t("admin.tournaments.groups.layout.participants") },
+    { value: "mangud", label: t("admin.tournaments.groups.layout.matches") },
+    { value: "tabelid", label: t("admin.tournaments.groups.layout.tables") }
   ]
 
 
@@ -58,7 +60,7 @@ function RouteComponent() {
               <Link
                 key={tab.value}
                 to={`/admin/tournaments/${tournamentid}/grupid/${groupid}${tab.value === "/" ? "" : `/${tab.value}`}`}
-                
+
               >
                 <TabsTrigger
                   value={tab.value}
