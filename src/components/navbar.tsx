@@ -81,73 +81,73 @@ export default function Navbar() {
                             </Link>
                         </div>
                         <NavigationMenu className="hidden lg:flex z-50">
-                        <NavigationMenuList className="flex space-x-4 z-50">
-                            {menuItems.map((item) => (
-                                <NavigationMenuItem key={item.name}>
-                                    {item.dropdownItems ? (
-                                        <NavigationMenuTrigger className={cn(
-                                            " text-sm font-medium transition-colors hover:text-primary bg-transparent",
-                                            activeItem === item.name
-                                                ? "text-blue-600"
-                                                : "text-gray-700 hover:text-blue-600"
-                                        )}>
-                                            {item.name}
-                                        </NavigationMenuTrigger>
-                                    ) : (
-                                        <NavigationMenuLink
-                                            href={item.href}
-                                            className={cn(
-                                                " text-sm font-medium px-2 transition-colors hover:text-primary",
+                            <NavigationMenuList className="flex space-x-4 z-50">
+                                {menuItems.map((item) => (
+                                    <NavigationMenuItem key={item.name}>
+                                        {item.dropdownItems ? (
+                                            <NavigationMenuTrigger className={cn(
+                                                " text-sm font-medium transition-colors hover:text-primary bg-transparent",
                                                 activeItem === item.name
                                                     ? "text-blue-600"
                                                     : "text-gray-700 hover:text-blue-600"
-                                            )}
-                                            onClick={() => setActiveItem(item.name)}
+                                            )}>
+                                                {item.name}
+                                            </NavigationMenuTrigger>
+                                        ) : (
+                                            <NavigationMenuLink
+                                                href={item.href}
+                                                className={cn(
+                                                    " text-sm font-medium px-2 transition-colors hover:text-primary",
+                                                    activeItem === item.name
+                                                        ? "text-blue-600"
+                                                        : "text-gray-700 hover:text-blue-600"
+                                                )}
+                                                onClick={() => setActiveItem(item.name)}
+                                            >
+                                                {item.name}
+                                            </NavigationMenuLink>
+                                        )}
+                                        {item.dropdownItems && (
+                                            <NavigationMenuContent className=''>
+                                                <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] md:grid-cols-1 lg:w-[400px]">
+                                                    {item.dropdownItems.map((dropdownItem) => (
+                                                        <li key={dropdownItem.name}>
+                                                            <NavigationMenuLink asChild>
+                                                                <Link
+                                                                    href={dropdownItem.href}
+                                                                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                                >
+                                                                    <div className="text-sm font-medium leading-none">{dropdownItem.name}</div>
+                                                                </Link>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </NavigationMenuContent>
+                                        )}
+                                    </NavigationMenuItem>
+                                ))}
+                                {user && user.role == 'admin' &&
+                                    <NavigationMenuItem>
+                                        < NavigationMenuLink
+                                            href={"/admin/dashboard"}
+                                            className={
+                                                "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
                                         >
-                                            {item.name}
+                                            Admin
                                         </NavigationMenuLink>
-                                    )}
-                                    {item.dropdownItems && (
-                                        <NavigationMenuContent className=''>
-                                            <ul className="grid w-[200px] gap-3 p-4 md:w-[300px] md:grid-cols-1 lg:w-[400px]">
-                                                {item.dropdownItems.map((dropdownItem) => (
-                                                    <li key={dropdownItem.name}>
-                                                        <NavigationMenuLink asChild>
-                                                            <Link
-                                                                href={dropdownItem.href}
-                                                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                                            >
-                                                                <div className="text-sm font-medium leading-none">{dropdownItem.name}</div>
-                                                            </Link>
-                                                        </NavigationMenuLink>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </NavigationMenuContent>
-                                    )}
-                                </NavigationMenuItem>
-                            ))}
-                            {user && user.role == 1 &&
-                                <NavigationMenuItem>
-                                    < NavigationMenuLink
-                                        href={"/admin/dashboard"}
-                                        className={
-                                            "text-sm font-medium px-2 transition-colors hover:text-primary text-gray-700 hover:text-blue-600"}
-                                    >
-                                        Admin
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                            }
+                                    </NavigationMenuItem>
+                                }
 
 
-                        </NavigationMenuList>
-                    </NavigationMenu>
+                            </NavigationMenuList>
+                        </NavigationMenu>
                     </div>
 
-                    
+
                     <div className="flex items-center gap-2">
-                    <AuthButton/>
-                    <LanguageDropdown />
+                        <AuthButton />
+                        <LanguageDropdown />
 
                     </div>
 

@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { UserNew } from '@/types/types';
+import { UserLogin } from '@/types/types';
 import { useGetCurrentUserQuery } from '@/queries/users';
 
 interface UserContextType {
-  user: UserNew | null;
-  setUser: (user: UserNew | null) => void;
+  user: UserLogin | null;
+  setUser: (user: UserLogin | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { data: user_data } = useGetCurrentUserQuery();
-  const [user, setUser] = useState<UserNew | null>(null);
+  const [user, setUser] = useState<UserLogin | null>(null);
 
   useEffect(() => {
     if (user_data) {

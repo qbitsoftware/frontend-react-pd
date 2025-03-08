@@ -21,7 +21,7 @@ function RouteComponent() {
     return (
       <TournamentProvider tournamentData={tournamentData.data}>
         <Navbar />
-        <div className="max-w-[1440px] mx-auto">
+        <div className="max-w-[1440px] rounded-[16px] border border-stone-200 mx-12 my-3">
           <Outlet />
         </div>
       </TournamentProvider>

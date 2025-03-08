@@ -1,15 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ErrorPage from '../../../components/error'
-import { Card, CardContent } from '@/components/ui/card'
-import { CalendarIcon, MapPinIcon } from 'lucide-react'
 import {
-  formatDate,
   formatDateString,
-  formatDateTime,
-  formatDateTimeNew,
 } from '@/lib/utils'
 import { useTournament } from './-components/tournament-provider'
 import Editor from '@/routes/admin/-components/yooptaeditor'
+import { useState } from 'react'
+import { YooptaContentValue } from '@yoopta/editor'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/')({
   errorComponent: ({ error, reset }) => {
@@ -20,6 +17,7 @@ export const Route = createFileRoute('/voistlused/$tournamentid/')({
 
 function RouteComponent() {
   const tournament = useTournament()
+  const [value, setValue] = useState<YooptaContentValue | undefined>(JSON.parse(tournament.information))
 
   return (
     <div className="overflow-y-auto flex flex-col items-start justify-center md:flex-row py-12 px-12 md:space-x-12 min-h-[75vh]">
@@ -49,7 +47,7 @@ function RouteComponent() {
       </div>
       <div className="w-full md:w-1/2">
         <h6 className="font-medium">Lisainfo:</h6>
-        <p>{tournament.information}</p>
+        <Editor value={value} setValue={setValue} readOnly />
       </div>
     </div>
   )

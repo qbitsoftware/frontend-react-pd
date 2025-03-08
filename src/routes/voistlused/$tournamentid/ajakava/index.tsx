@@ -2,7 +2,7 @@ import { UseGetTournamentMatches } from '@/queries/match'
 import { createFileRoute } from '@tanstack/react-router'
 import { useTournament } from '../-components/tournament-provider'
 import { useState } from 'react'
-import { Schedule } from './-components/schedule-layout'
+import TournamentSchedule from './-components/tournament-schedule'
 import { UseGetTournamentTables } from '@/queries/tables'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
@@ -29,6 +29,8 @@ function RouteComponent() {
 
   // if (matchesData.data.match.)
 
+  console.log(matchesData.data)
+
   const [activeDay, setActiveDay] = useState<number>(0)
 
   
@@ -36,7 +38,7 @@ function RouteComponent() {
 
   if (matchesData.data && matchesData.data.length > 0) {
     return (
-        <Schedule 
+        <TournamentSchedule 
           matches={matchesData.data}
           days={6}
           activeDay={activeDay}

@@ -38,6 +38,13 @@ export type ErrorResponse = {
   }
 }
 
+export type UserLogin = {
+  id: number,
+  email: string,
+  username: string,
+  role: string,
+}
+
 export type UserNew = {
   id: number
   email: string

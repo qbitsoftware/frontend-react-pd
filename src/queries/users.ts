@@ -1,10 +1,10 @@
-import { UserNew } from "@/types/types"
+import { UserLogin, UserNew } from "@/types/types"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { LoginFormData } from "@/routes/login"
 import { axiosInstance } from "./axiosconf"
 
 export interface LoginResponse {
-    data: UserNew
+    data: UserLogin
     message: string
     error: string | null
 }
@@ -78,7 +78,7 @@ export const useLogout = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async () => {
-            const { data } = await axiosInstance.post(`/api/v1/logout`, {}, {
+            const { data } = await axiosInstance.post(`/auth/logout`, {}, {
                 withCredentials: true
             })
             return data

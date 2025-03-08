@@ -338,3 +338,8 @@ function hasValidText(children: ContentNode[]): boolean {
   });
 }
 
+export const getDateForDay = (startDate: string, dayIndex: number): string => {
+  const date = new Date(startDate);
+  date.setDate(date.getDate() + dayIndex);
+  return date.toISOString();
+};

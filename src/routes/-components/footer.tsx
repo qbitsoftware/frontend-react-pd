@@ -10,7 +10,7 @@ export default function Footer() {
         return
     }
         return (
-            <footer className="bg-secondary border-t ">
+            <footer className="bg-[#064DA3] border-t ">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-white">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="text-center md:text-left">
@@ -32,7 +32,7 @@ export default function Footer() {
                             <p className="text-sm ">{t('footer.contact.phone')}: +372 123 4567</p>
                         </div>
                     </div>
-                    <div className="mt-8 pt-8 border-t text-center">
+                    <div className="mt-8 pt-8 border-t border-stone-200 text-center">
                         <p className="text-sm ">{t('eltl.name')}</p>
                         <p className="text-sm">&copy; {new Date().getFullYear()} </p>
                     </div>

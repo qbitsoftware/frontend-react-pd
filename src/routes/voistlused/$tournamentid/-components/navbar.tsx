@@ -38,16 +38,16 @@ const Navbar = () => {
   return (
     <div className="">
       <div className="pt-12 pb-4 px-12 text-[#363636] bg-[#FBFCFD]">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl text-center font-semibold mb-4">
+        <div className="flex flex-col">
+          <h1 className="text-4xl font-semibold mb-4">
             {tournament.name}
           </h1>
-          <p className="text-xl text-center">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
+          <p className="text-xl">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
         </div>
       </div>
-      <div className="shadow-sm bg-[#F2F7FD]">
-        <Tabs value={currentTab} className="w-full flex justify-center">
-          <TabsList className="flex-wrap  mx-auto space-x-2">
+      <div className=" px-12 ">
+        <Tabs value={currentTab} className="w-full flex justify-start">
+          <TabsList className="flex-wrap  space-x-2">
             {NavLinks.map((link) => (
               <Link
                 className=""
@@ -59,7 +59,7 @@ const Navbar = () => {
                   className={cn(
                     "text-sm 2xl:text-base px-3 py-2 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
                     isActivePath(link.href) &&
-                      "bg-white shadow-sm",
+                      "bg-white shadow-selectedFilter",
                     !isActivePath(link.href) &&
                       "hover:bg-white",
                   )}

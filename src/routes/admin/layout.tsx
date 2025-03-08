@@ -37,7 +37,7 @@ function RouteComponent() {
   const location = useLocation()
   const { t } = useTranslation()
   const { user } = useUser()
-  if (!user || user.role != 1) {
+  if (!user || user.role != 'admin') {
     router.navigate({ to: "/" })
   }
 
