@@ -1,0 +1,124 @@
+.table-tennis-loader {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+
+.table-tennis-loader.small {
+    width: 60px;
+    height: 60px;
+}
+
+.table-tennis-loader.large {
+    width: 120px;
+    height: 120px;
+}
+
+.racket {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-10deg);
+    transform-origin: bottom center;
+    width: 60%;
+    height: 25%;
+    border-radius: 50% 50% 5% 5%;
+    background-color: #ff2121;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: racketMove 1.2s infinite ease-in-out;
+}
+
+.racket-handle {
+    position: absolute;
+    bottom: -15px;
+    width: 20%;
+    height: 20px;
+    background-color: #333;
+    border-radius: 2px;
+}
+
+.racket-strings {
+    width: 80%;
+    height: 80%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    border-radius: inherit;
+}
+
+.racket-strings::before,
+.racket-strings::after {
+    content: '';
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.racket-strings::before {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+}
+
+.racket-strings::after {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+}
+
+.ball {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-radius: 50%;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    animation: ballBounce 1.2s infinite ease-in-out;
+}
+
+.table-tennis-loader.small .ball {
+    width: 8px;
+    height: 8px;
+}
+
+.table-tennis-loader.large .ball {
+    width: 14px;
+    height: 14px;
+}
+
+@keyframes ballBounce {
+
+    0%,
+    100% {
+        bottom: 30%;
+        transform: translateX(-50%) scale(1);
+    }
+
+    10% {
+        transform: translateX(-50%) scale(0.9);
+    }
+
+    50% {
+        bottom: 70%;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes racketMove {
+
+    0%,
+    100% {
+        transform: translateX(-50%) rotate(-10deg);
+    }
+
+    50% {
+        transform: translateX(-50%) rotate(-5deg);
+    }
+}

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import TournamentCard from './TournamentCard';
 import { Tournament } from '@/types/types';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from 'react-i18next';
+import {Button} from "@/components/ui/button";
+import {ChevronDown, Search} from "lucide-react";
 
 
 interface CalendarViewProps {
@@ -66,30 +67,38 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
         });
     };
 
+    const isTournamentEnd = (endDate: string) => {
+        const now = new Date();
+        const tournamentEndDate = new Date(endDate);
+        return now > tournamentEndDate;
+    };
+
+
     return (
         <div className="py-4">
-            <div className="rounded-lg bg-white px-6 py-6 space-y-4">
-                <h2>{t("calendar.title")}</h2>
-                <div className="p-1 rounded-t-[2px] mb-1 bg-[#F0F4F7] w-full ">
-                    <Tabs
-                        defaultValue={selectedYear.toString()}
-                        value={selectedYear.toString()}
-                        onValueChange={(value) => setSelectedYear(parseInt(value))}
-                        className=""
-                    >
-                        <TabsList className="w-1/2 flex">
-                            {availableYears.map(year => (
-                                <TabsTrigger
-                                    key={year}
-                                    value={year.toString()}
-                                    className="flex-1 py-[5px]"
-                                >
-                                    {year}
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                    </Tabs>
-                </div>
+            <div className="rounded-lg bg-white px-12 py-6 space-y-4 ">
+                <h2 className="font-bold">{t("calendar.title")}</h2>
+                <div className="p-2 rounded-[6px] flex space-x-4">
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Otsi turniiri"
+                            className="h-12 w-full pl-4 pr-10 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
+                        />
+                        <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    </div>
+
+                    <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
+                        <span>Kõik kategooriad</span>
+                        <ChevronDown className="h-4 w-4" />
+                    </Button>
+
+                    <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
+                        <span>2025</span>
+                        <ChevronDown className="h-4 w-4" />
+                    </Button>
+                    
+            </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                     {columns.map((columnMonths, columnIndex) => (
@@ -103,7 +112,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
                                         {month.name} {selectedYear}
                                     </h2>
 
-                                    <div className="space-y-1">
+                                    <div className="space-y-2">
 
                                         {month.tournaments.length > 0 ? (
 
@@ -113,8 +122,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
                                                     key={tournament.id}
                                                     date={formatDate(tournament.start_date)}
                                                     name={tournament.name}
+                                                    category={tournament.category}
                                                     location={tournament.location}
                                                     isCompleted={tournament.state === 'completed'}
+                                                    hasEnded={isTournamentEnd(tournament.end_date)}
                                                 />
                                             ))
 

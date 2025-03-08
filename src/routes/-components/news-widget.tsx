@@ -5,8 +5,8 @@ const formatDate = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleDateString('et-EE', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+    month: '2-digit',
+    day: '2-digit'
   })
 }
 
@@ -32,6 +32,28 @@ const NewsWidget = ({ blogs }: Props) => {
     )
   }
 
+  return (
+    <div>
+      <ul className="space-y-6">
+      {blogs.slice(0, 5).map((post) => (
+
+        <li className="px-2 group border-b pb-2">
+                  <Link href={`/uudised/${post.id}`} className="group">
+
+          <p>{formatDate(post.created_at)}</p>
+          <h6 className="font-medium group-hover:underline">{post.title}</h6>
+          </Link>
+        </li>
+      ))}
+
+        
+        </ul>
+    </div>
+  )
+
+}
+  
+  {/*}
   const secondaryNews = blogs.slice(1, 6);
   const placeholdersNeeded = Math.max(0, 4 - secondaryNews.length);
 
@@ -62,10 +84,11 @@ const NewsWidget = ({ blogs }: Props) => {
             <div className="w-full px-1 flex flex-col justify-start space-y-1">
               <h6 className="font-semibold leading-[109.9%] group-hover:underline 2xl:text-lg">{news.title}</h6>
               <p className="text-sm text-stone-700">{formatDate(news.created_at)}</p>
-              {/*} <p className="text-sm pt-1 text-gray-700 line-clamp-2">{news.description}</p> */}
+              } <p className="text-sm pt-1 text-gray-700 line-clamp-2">{news.description}</p> 
             </div>
           </Link>
         ))}
+        
 
         {placeholdersNeeded > 0 && Array.from({ length: placeholdersNeeded }).map((_, index) => (
           <div key={`placeholder-${index}`} className="flex p-1 bg-[#f9f9f9] rounded-t-sm py-2">
@@ -85,6 +108,8 @@ const NewsWidget = ({ blogs }: Props) => {
       </div>
     </div>
   )
-}
+
+    */}
+
 
 export default NewsWidget

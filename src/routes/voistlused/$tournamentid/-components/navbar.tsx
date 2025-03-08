@@ -19,14 +19,25 @@ const NavLinks = [
 const Navbar = () => {
   const params = useParams({ strict: false });
   const location = useLocation();
+  
+  const pathSegments = location.pathname.split(`/voistlused/${params.tournamentid}`)[1];
+  const currentTab = pathSegments === "/" || pathSegments === "" ? "/" : pathSegments.split("/").pop() || "/";
 
-  const currentTab = location.pathname.split("/").pop() || "/";
+  const isActivePath = (href) => {
+    if (href === "/" && (pathSegments === "/" || pathSegments === "")) {
+      return true;
+    }
+    if (href !== "/" && pathSegments.startsWith(href)) {
+      return true;
+    }
+    return false;
+  };
 
   const tournament = useTournament();
 
   return (
     <div className="">
-      <div className="pt-12 pb-4 text-[#363636] bg-[#FBFCFD]">
+      <div className="pt-12 pb-4 px-12 text-[#363636] bg-[#FBFCFD]">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl text-center font-semibold mb-4">
             {tournament.name}
@@ -34,7 +45,7 @@ const Navbar = () => {
           <p className="text-xl text-center">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
         </div>
       </div>
-      <div className="shadow-lg bg-[#F2F7FD]">
+      <div className="shadow-sm bg-[#F2F7FD]">
         <Tabs value={currentTab} className="w-full flex justify-center">
           <TabsList className="flex-wrap  mx-auto space-x-2">
             {NavLinks.map((link) => (
@@ -44,12 +55,12 @@ const Navbar = () => {
                 key={link.name}
               >
                 <TabsTrigger
-                  value={link.href.replace("/", "")}
+                  value={link.href}
                   className={cn(
-                    "text-sm sm:text-base px-3 py-2 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
-                    currentTab === link.href.replace("/", "") &&
-                      "bg-[#3C83F6] text-white",
-                    currentTab !== link.href.replace("/", "") &&
+                    "text-sm 2xl:text-base px-3 py-2 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
+                    isActivePath(link.href) &&
+                      "bg-white shadow-sm",
+                    !isActivePath(link.href) &&
                       "hover:bg-white",
                   )}
                 >

@@ -52,7 +52,7 @@ export function UseGetTournamentTypes() {
     return useQuery<TournamentTypesResposne>({
         queryKey: ["tournament_types"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/types`, {
+            const { data } = await axiosInstance.get(`/api/v1/org_stats/types`, {
                 withCredentials: true
             })
             return data
@@ -64,7 +64,7 @@ export function UseGetTournamentCategories() {
     return useQuery<TournamentCategoriesResponse>({
         queryKey: ["tournament_categories"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/categories`, {
+            const { data } = await axiosInstance.get(`/api/v1/org_stats/categories`, {
                 withCredentials: true
             })
             return data
@@ -77,7 +77,7 @@ export function UseGetTournamentSizes() {
     return useQuery<TournamentSizeResposne>({
         queryKey: ["tournament_sizes"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/sizes`, {
+            const { data } = await axiosInstance.get(`/api/v1/org_stats/sizes`, {
                 withCredentials: true
             })
             return data

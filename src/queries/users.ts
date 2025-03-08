@@ -21,7 +21,7 @@ export const useGetUser = () => {
     return queryOptions<LoginResponse>({
         queryKey: ["user"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get("/api/v1/auth/users/current", {
+            const { data } = await axiosInstance.get("/auth/check", {
                 withCredentials: true
             })
             return data
@@ -34,7 +34,7 @@ export const useLogin = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (formData: LoginFormData) => {
-            const { data } = await axiosInstance.post("/api/v1/login", formData, {
+            const { data } = await axiosInstance.post("/auth/login", formData, {
                 withCredentials: true
             })
             return data
@@ -49,7 +49,7 @@ export const useGetCurrentUserQuery = () => {
     return useQuery<LoginResponse>({
         queryKey: ["user"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/auth`, {
+            const { data } = await axiosInstance.get(`/auth/check`, {
                 withCredentials: true
             })
             return data
@@ -64,7 +64,7 @@ export const UseGetCurrentUser = () => {
     return queryOptions<LoginResponse>({
         queryKey: ["auth"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/auth`, {
+            const { data } = await axiosInstance.get(`/auth/check`, {
                 withCredentials: true
             })
             return data
@@ -105,10 +105,10 @@ export const UseGetUsersDebounce = (searchTerm: string) => {
     })
 }
 
-export const UseGetUsers= (searchTerm?: string) => {
+export const UseGetUsers = (searchTerm?: string) => {
     if (searchTerm === undefined) {
         searchTerm = ""
-    }   
+    }
     return queryOptions<UsersResponse>({
         queryKey: ["users", searchTerm],
         queryFn: async () => {

@@ -17,22 +17,16 @@ export const Route = createFileRoute('/voistlused/$tournamentid')({
 function RouteComponent() {
   const { tournamentData } = Route.useLoaderData()
 
-
   if (tournamentData.data) {
     return (
       <TournamentProvider tournamentData={tournamentData.data}>
         <Navbar />
-        <div className='max-w-[1440px] mx-auto'>
+        <div className="max-w-[1440px] mx-auto">
           <Outlet />
         </div>
       </TournamentProvider>
     )
   } else {
-    return (
-      <div>
-        Vaike error
-      </div>
-    )
+    return <div>Vaike error</div>
   }
-
 }

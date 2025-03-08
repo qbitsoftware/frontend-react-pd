@@ -73,16 +73,14 @@ export default function Navbar() {
     return (
         <header className="bg-white shadow-sm border-b border-[#E0E8F1]">
             <div className="max-w-[1440px] mx-auto px-4 sm:px-4 ">
-                <div className="flex justify-between h-16">
-                    <div className="flex">
+                <div className="flex justify-between items-center gap-6 h-16">
+                    <div className="flex gap-8">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/">
                                 <img className="h-10 lg:h-8 xl:h-8 w-auto" src="/RLogo.png" alt="ELTA Logo" />
                             </Link>
                         </div>
-                    </div>
-
-                    <NavigationMenu className="hidden lg:flex z-50">
+                        <NavigationMenu className="hidden lg:flex z-50">
                         <NavigationMenuList className="flex space-x-4 z-50">
                             {menuItems.map((item) => (
                                 <NavigationMenuItem key={item.name}>
@@ -140,10 +138,19 @@ export default function Navbar() {
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
                             }
-                            <LanguageDropdown />
-                            <AuthButton />
+
+
                         </NavigationMenuList>
                     </NavigationMenu>
+                    </div>
+
+                    
+                    <div className="flex items-center gap-2">
+                    <AuthButton/>
+                    <LanguageDropdown />
+
+                    </div>
+
                     <SidebarTrigger className='lg:hidden my-auto text-secondary' />
                 </div>
             </div>

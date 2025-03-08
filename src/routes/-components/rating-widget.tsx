@@ -41,21 +41,21 @@ const RatingWidget = ({ users }: Props) => {
 
   return (
     <div className='h-full flex flex-col relative space-y-1'>
-      <div className="w-full bg-[#F0F4F7] rounded-[2px]">
+      <div className="w-fit bg-[#F0F4F7] rounded-[2px]">
         <Tabs
           defaultValue="men"
           value={activeTab}
           onValueChange={setActiveTab}
-          className="w-1/2"
+          className=""
         >
-          <TabsList className=" flex justify-start py-2">
-            <TabsTrigger value="women" className="rounded-[4px] flex-1">
+          <TabsList className=" flex justify-start py-2 px-2 w-[32rem]">
+            <TabsTrigger value="women" className="rounded-[4px] flex-1 px-4 w-1/3">
               {t('rating.filtering.buttons.women')}
             </TabsTrigger>
-            <TabsTrigger value="men" className="rounded-[4px] flex-1">
+            <TabsTrigger value="men" className="rounded-[4px] flex-1 w-1/3">
               {t('rating.filtering.buttons.men')}
             </TabsTrigger>
-            <TabsTrigger value="combined" className="rounded-[4px] flex-1">
+            <TabsTrigger value="combined" className="rounded-[4px] flex-1 w-1/3">
               {t('rating.filtering.buttons.combined')}
             </TabsTrigger>
           </TabsList>
@@ -65,11 +65,11 @@ const RatingWidget = ({ users }: Props) => {
         <ScrollArea className="h-full w-full overflow-auto pr-4 rounded-t-[2px]">
           <Table className="w-full mx-auto border-collapse shadow-lg ">
             <TableHeader className="">
-              <TableRow className="bg-[#4E5676] hover:bg-[#4E5676] ">
-                <TableHead className="px-6 py-3 text-left font-normal text-[#F0F0F0]">#</TableHead>
-                <TableHead className="px-6 py-3 text-left font-normal text-[#F0F0F0]">Player</TableHead>
-                <TableHead className="px-6 py-3 text-left font-normal text-[#F0F0F0]">{t('rating.table.head.club')}</TableHead>
-                <TableHead className="px-6 py-3 text-left font-normal text-[#F0F0F0]">RP</TableHead>
+              <TableRow className="bg-white ">
+                <TableHead className="px-6 py-3 text-left font-meidum">#</TableHead>
+                <TableHead className="px-6 py-3 text-left font-meidum">Player</TableHead>
+                <TableHead className="px-6 py-3 text-left font-meidum">{t('rating.table.head.club')}</TableHead>
+                <TableHead className="px-6 py-3 text-left font-meidum">RP</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

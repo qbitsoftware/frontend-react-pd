@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import {ArrowRight} from "lucide-react";
+import reitingIcon from "@/assets/reiting-icon.png"
 
 interface WidgetProps {
   heading?: string,
@@ -10,11 +10,12 @@ interface WidgetProps {
 
 const WidgetWrapper = ({ heading, view_all, addr, children }: WidgetProps) => {
   return (
-    <div className="sm:border sm:rounded-[16px] h-full flex-grow bg-white"
-    >
-      <div className="py-4 px-4 flex justify-between items-center gap-4 bg-[#F9F9F9] sm:rounded-t-[16px] border-b border-[#F5F6F8]">
-        <h3 className="font-semibold text-foreground/80">{heading}</h3><a href={`/${addr}`} className="flex items-center text-sm font-medium gap-1 px-2 py-2 mt-1 hover:bg-stone-600/5 rounded-sm">{view_all}<ArrowRight className="h-4 w-4"/></a>
-      </div>
+    <div className="h-full flex-grow">
+        <div className="pb-6 px-4 flex justify-start items-center gap-2">
+          <a href={`/${addr}`} className="flex items-center gap-3 rounded-sm hover:bg-gradient-to-r hover:from-[#f4f4f3] hover:to-[#f5f5f5] transition-all duration-300"><h3 className="font-bold text-foreground/80">{heading}</h3><svg className="mt-1 " width="18" height="8" viewBox="0 0 18 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.0312 3.01562V0.015625L17.0156 4L13.0312 7.98438V4.98438H0.984375V3.01562H13.0312Z" fill="black"/>
+            </svg></a>
+          </div>
       {children}
     </div>
   )

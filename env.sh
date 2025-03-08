@@ -1,3 +1,3 @@
-export VITE_BACKEND_API_URL="http://localhost:8080/"
+export VITE_BACKEND_API_URL="http://localhost:5000/"
 export VITE_BLOG_BACKEND_API_URL="http://localhost:4000/"
 export VITE_TOURNAMENT10_API_KEY="NjqfC8xyMJrBCzV51HQmCgpVoj0TcnoIWLxvcr8-1Q--3RVhatIiANZQsWi84uwRikRcdW4_rXYjQjgGkbl9dWdVauS73w4H0IQnmYkmrm1dIF5FQElLDknBi_At9dWv-9OyOupFe8vFdVeY_HcBLxr7Ytd5dLq8DRxaLBqrPiek_XpbkGDESJIO3W8fD8ioXmLvk_NQ8HgbSIshrWG358UboPZ4nJiOuCfBUGwkxh5s6Q=="

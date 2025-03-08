@@ -23,8 +23,8 @@ export const ScheduleLayout = ({ children, days, activeDay, setActiveDay, startD
   const currentDate = getDateForDay(startDate, activeDay);
   const formattedDate = formatDateString(currentDate);
   return (
-    <div className="p-4 bg-white">
-      <div className="max-h-screen  rounded-lg">
+    <div className="p-12 bg-white">
+      <div className="max-h-screen rounded-lg">
         <div className="flex flex-col h-full">
           <div className="flex-none">
             <div className="">
@@ -53,7 +53,8 @@ export const TableCard = ({ title, matches }: { title: string; matches: MatchWra
         <div className="border-b mb-2">
           <h2 className="text-xl font-bold text-center text-[#565656] mb-4">{title}</h2>
         </div>
-        <ScrollArea className="h-[50vh]">
+        
+        <ScrollArea className="h-[60vh]">
           <div className="space-y-1 pr-4 pl-1">
             {matches.map((match) => (
               <MatchTicket key={match.match.id} match={match} />
@@ -102,8 +103,26 @@ interface FiltersProps {
 export const Filters = ({ days, activeDay, setActiveDay }: FiltersProps) => {
 
   return (
-    <div className="flex flex-col md:flex-row lg:justify-between gap-8 mb-4">
-      <div className="flex flex-wrap md:flex-nowrap md:space-x-2 bg-[#F1F5F9] py-3 px-2 rounded-sm">
+    <div className="flex flex-col md:flex-row lg:justify-between  px-1 rounded-[6px] gap-8 mb-4">
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Otsi"
+            className="h-12 w-full pl-4 pr-10 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
+          />
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        </div>
+        <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
+          <span>Päev 1</span>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+        <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
+          <span>Kõik tabelid</span>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </div>
+      {/*<div className="flex flex-wrap md:flex-nowrap md:space-x-2  py-3 px-2 rounded-md">
         {days > 1 && [...Array(days)].map((_, index) => (
           <Button
             variant={activeDay === index ? "outline" : "ghost"}
@@ -123,21 +142,9 @@ export const Filters = ({ days, activeDay, setActiveDay }: FiltersProps) => {
             Päev {index + 1}
           </Button>
         ))}
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Otsi"
-            className="h-12 w-full pl-4 pr-10 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
-          />
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-        </div>
-        <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
-          <span>Filtrid</span>
-          <ChevronDown className="h-4 w-4" />
-        </Button>
-      </div>
+      </div> */}
+      
+      
     </div>
   );
 };

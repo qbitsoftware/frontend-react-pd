@@ -8,7 +8,9 @@ interface TournamentCardProps {
     date: string;
     name: string;
     location: string;
+    category: string;
     isCompleted: boolean;
+    hasEnded: boolean;
 }
 
 export const TournamentCard: React.FC<TournamentCardProps> = ({
@@ -16,19 +18,23 @@ export const TournamentCard: React.FC<TournamentCardProps> = ({
     name,
     location,
     id,
+    category,
     isCompleted,
+    hasEnded
 }) => {
     const router = useRouter()
+    console.log("cat",category, location)
     return (
-        <div className={cn(` group flex flex-col bg-[#ECEFF2]/55 hover:bg-[#f9f9f9]  py-2 px-3 rounded-md shadow-sm cursor-pointer text-stone-800  ${isCompleted ? "bg-[#D2D8DD]" : "bg-[#F0F4F7]"}  transition-shadow`)}
+        <div className={cn(`relative rounded-tl-[2px] rounded-tr-[6px] rounded-br-[6px] rounded-bl-[2px] border-l-4 border-[#90D3FF] group flex flex-col bg-white hover:bg-[#f9f9f9]  py-2 px-3 shadow-eventCard cursor-pointer text-stone-800 ${hasEnded && "shadow-sm bg-[#EEEFF2] border-none rounded-[6px]"}  transition-shadow`)}
             onClick={() => router.navigate({ to: "/voistlused/" + id })}
         >
             <div className="text-sm text-stone-700 font-semibold">{date}</div>
-            <h6 className="font-semibold">{name}</h6>
+            <h6 className="font-bold text-[#212121]">{name}</h6>
             <div className="flex items-center text-sm mt-2 text-gray-600">
                 <MapPin size={14} className="mr-1 flex-shrink-0" />
-                <span>{location}</span>
+                <span className="capitalize">{location}</span>
             </div>
+            <p className="text-xs absolute top-2 right-2">{category}</p>
 
             {
                 isCompleted && (

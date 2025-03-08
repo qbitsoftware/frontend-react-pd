@@ -32,11 +32,11 @@ export const AuthButton: React.FC<AuthButtonProps> = ({ className }) => {
     }
 
     if (user && user.role == 1) {
-        return <Button variant="secondary" className="text-white rounded-xl px-6  hover:bg-secondary" onClick={handleLogout}>{t('navbar.logout')}</Button>
+        return <Button variant="ghost" className="rounded-[6px]" onClick={handleLogout}>{t('navbar.logout')}</Button>
     } else {
         return (
             <Link to="/login">
-                <Button variant="secondary" className={cn("text-white rounded-xl px-3  hover:bg-secondary py-1", className)}>{t('navbar.login')}</Button>
+                <Button variant="ghost" className={cn("rounded-[6px] text-stone-700", className)}>{t('navbar.login')}</Button>
             </Link>
         )
     }
