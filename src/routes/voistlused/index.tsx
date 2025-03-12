@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import TournamentList from './-components/tournamentList'
 import ErrorPage from '@/components/error'
 import { XCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/voistlused/')({
   errorComponent: ({ error, reset }) => {
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/voistlused/')({
 
 function RouteComponent() {
   const { tournaments } = Route.useLoaderData()
+  const { t } = useTranslation()
   return (
     <div className="w-full h-full flex flex-col mb-20">
       {tournaments.data ? (
@@ -25,7 +27,7 @@ function RouteComponent() {
         <div className="w-full h-[90vh] flex flex-col items-center justify-center space-y-4 text-center">
           <XCircle className="w-16 h-16 text-gray-400 dark:text-gray-600" />
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-gray-300">
-            Turniirid puuduvad
+            {t("admin.tournaments.errors.not_found")}
           </h2>
         </div>
       )}

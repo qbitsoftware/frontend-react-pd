@@ -15,7 +15,6 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
   const HORISONTAL_GAP = 250;
   const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP);
   const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH);
-  // const matches_len = data.matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
 
   if (data && data.matches) {
     return (
@@ -105,20 +104,6 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
             );
           })}
         </svg>
-        {/* Bracket info */}
-        {/* {Array.from({ length: matches_len + 1 }).map((_, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            top: `${starting_y}px`,
-                            left: `${starting_x + (WIDTH + VERTICAL_GAP + (matches_len === index ? -15 : -20)) * index}px`,
-                            width: `${WIDTH}px`
-                        }}
-                        className="absolute text-center border-[1px] border-black/10 shadow-md rounded-md py-2"
-                    >
-                        <div className="font-semibold">Round {index + 1}</div>
-                    </div>
-                ))} */}
       </div>
     );
   }

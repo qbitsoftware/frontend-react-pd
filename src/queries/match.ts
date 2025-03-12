@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation, queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Match, MatchWrapper, Participant } from "@/types/types"
+import { Match, MatchTimeUpdate, MatchWrapper, Participant } from "@/types/types"
 
 export interface MatchesResponse {
     data: MatchWrapper[] | null
@@ -88,7 +88,6 @@ export const UseStartMatch = (tournament_id: number, group_id: number, match_id:
             queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
-            // queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })
 }
@@ -111,3 +110,23 @@ export const UseRegroupMatches = (tournament_id: number, group_id: number, regro
         }
     })
 }
+
+
+export const UseUpdateMatchTime = (tournament_id: number, group_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (match_time: MatchTimeUpdate[]) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/time`, { match_time }, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches', group_id] })
+        }
+    })
+}
+

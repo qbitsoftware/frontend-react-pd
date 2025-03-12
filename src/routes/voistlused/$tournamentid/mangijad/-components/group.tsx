@@ -1,5 +1,5 @@
 import { TournamentTable } from "@/types/types"
-import { Expand, UserRound } from "lucide-react"
+import { UserRound } from "lucide-react"
 import SoloTable from "./solo-table"
 import TeamTable from "./team-table"
 
@@ -9,19 +9,18 @@ interface GroupProps {
 
 const Group: React.FC<GroupProps> = ({ group }) => {
     return (
-        <div className="bg-[#F9F8F8] w-full min-h-[400px] rounded-md max-h-[600px] p-6 shadow-md">
+        <div className="bg-[#F9F8F8] w-full rounded-md py-6 ">
             <div className="flex justify-between">
-                <div className="flex gap-6 font-semibold">
-                    <h3 className="text-lg">{group.class}</h3>
+                <div className="flex gap-6 items-center">
+                    <h6 className="px-1 font-semibold">{group.class}</h6>
                     <div className="flex gap-1 justify-center items-center">
                         <UserRound className="h-5" />
                         <p className="text-lg">{group.participants.length}</p>
                     </div>
                 </div>
-                <Expand />
             </div>
-            <div className="h-[500px] mt-4">
-                {group.solo ? <SoloTable participants={group.participants} /> : <TeamTable participants={group.participants}/>}
+            <div className="mt-4 overflow-y-scroll max-h-[400px]">
+                {group.solo ? <SoloTable participants={group.participants} /> : <TeamTable participants={group.participants} />}
             </div>
         </div>
     )

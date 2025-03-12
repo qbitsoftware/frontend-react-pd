@@ -168,6 +168,7 @@ export type Tournament = {
   private: boolean;
   total_tables: number;
   information: string;
+  media: string;
 };
 
 export type TournamentTable = {
@@ -366,4 +367,16 @@ export type ContentNode = TextNode | ComplexNode;
 
 export interface YooptaContent {
   [id: string]: ContentBlock;
+}
+
+export interface RoundTime {
+  id: string
+  name: string
+  date: string
+  time: string
+}
+
+export interface MatchTimeUpdate {
+  match_id: string;
+  start_date: string;
 }

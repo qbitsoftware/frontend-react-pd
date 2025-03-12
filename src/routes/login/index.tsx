@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ErrorResponse } from '@/types/types'
 import { redirect } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/login/')({
     component: RouteComponent,
@@ -47,6 +48,7 @@ export type LoginFormData = z.infer<typeof loginSchema>
 function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const { mutate: loginMutation, isPending } = useLogin()
     const toast = useToast()
@@ -78,10 +80,10 @@ function RouteComponent() {
             <div className="max-w-md w-full space-y-8 bg-white p-6 sm:p-8 rounded-lg shadow-md">
                 <div>
                     <div className="mx-auto flex items-center justify-center mb-10">
-                        <img src="/tournament10_lightblue.png" alt="logo" className='h-10 w-auto' />
+                        <img src="/RLogo.png" alt="logo" className='h-10 w-auto' />
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-                        Tere tulemast tagasi
+                        {t("login.title")}
                     </h2>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -95,7 +97,7 @@ function RouteComponent() {
                                 type="email"
                                 {...register('login')}
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                                placeholder="E-posti aadress"
+                                placeholder={t("login.email")}
                             />
                         </div>
                         <div>
@@ -107,7 +109,7 @@ function RouteComponent() {
                                 type="password"
                                 {...register('password')}
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                                placeholder="Parool"
+                                placeholder={t("login.password")}
                             />
                         </div>
                     </div>
@@ -132,10 +134,10 @@ function RouteComponent() {
                             {isPending ? (
                                 <>
                                     <ReloadIcon className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                                    Sisselogimine...
+                                    {t("login.login_progress")}
                                 </>
                             ) : (
-                                'Logi sisse'
+                                t("login.login")
                             )}
                         </Button>
                     </div>

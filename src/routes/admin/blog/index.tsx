@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import { PlusCircle, Search, Edit, Trash2, AlertCircle } from 'lucide-react'
-import { UseDeleteBlog, UseGetBlogs } from '@/queries/blogs'
+import { UseDeleteBlog, UseGetBlogsQuery } from '@/queries/blogs'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import {
@@ -21,6 +21,7 @@ import { format } from 'date-fns'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/admin/blog/')({
   component: RouteComponent,
@@ -30,8 +31,9 @@ function RouteComponent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [blogIdToDelete, setBlogIdToDelete] = useState<number | null>(null)
   const deleteMutation = UseDeleteBlog()
-  const { data: blogData, isLoading, error } = UseGetBlogs()
+  const { data: blogData, isLoading, error } = UseGetBlogsQuery()
   const { toast } = useToast()
+  const { t } = useTranslation()
 
   const handleDeleteClick = (blogId: number) => {
     setBlogIdToDelete(blogId)
@@ -118,23 +120,23 @@ function RouteComponent() {
       <div className='w-full p-4'>
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Blogs</h1>
-            <p className="text-gray-600 mt-1">Manage blogs here</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t("admin.blogs.title")}</h1>
+            <p className="text-gray-600 mt-1">{t("admin.blogs.description")}</p>
           </div>
         </div>
 
         <div className="flex justify-center items-center h-[500px]">
           <div className="text-center p-8 bg-red-50 rounded-lg max-w-xl">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-red-800">Failed to load blogs</h3>
+            <h3 className="text-lg font-semibold text-red-800">{t("admin.blogs.load_failed")}</h3>
             <p className="text-red-600 mt-2 mb-4">
-              There was an error loading the blog data. Please try refreshing the page.
+              {t("admin.blogs.load_failed_description")}
             </p>
             <Button
               onClick={() => window.location.reload()}
               className="bg-red-600 hover:bg-red-700"
             >
-              Refresh Page
+              {t("admin.blogs.refresh")}
             </Button>
           </div>
         </div>
@@ -148,13 +150,13 @@ function RouteComponent() {
       <div className='w-full p-4'>
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Blogs</h1>
-            <p className="text-gray-600 mt-1">Manage blogs here</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t("admin.blogs.title")}</h1>
+            <p className="text-gray-600 mt-1">{t("admin.blogs.description")}</p>
           </div>
           <Link href="/admin/blog/new">
             <Button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white">
               <PlusCircle className="w-4 h-4 mr-2" />
-              Create New Blog
+              {t("admin.blogs.add_new")}
             </Button>
           </Link>
         </div>
@@ -165,14 +167,14 @@ function RouteComponent() {
               <div className="bg-gray-100 p-6 rounded-full inline-flex items-center justify-center mb-4">
                 <Search className="h-10 w-10 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900">No blogs found</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t("admin.blogs.not_found")}</h3>
               <p className="text-gray-500 mt-1 mb-4 max-w-sm">
-                Get started by creating your first blog post
+                {t("admin.blogs.text")}
               </p>
               <Link href="/admin/blog/new">
                 <Button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white">
                   <PlusCircle className="w-4 h-4 mr-2" />
-                  Create New Blog
+                  {t("admin.blogs.add_new")}
                 </Button>
               </Link>
             </div>
@@ -194,10 +196,10 @@ function RouteComponent() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Blogs
+              {t("admin.blogs.title")}
             </h1>
             <p className="text-gray-600 mt-1">
-              Manage blogs here
+              {t("admin.blogs.description")}
             </p>
           </div>
         </div>
@@ -206,14 +208,14 @@ function RouteComponent() {
           <Link href="/admin/blog/new">
             <Button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
               <PlusCircle className="w-4 h-4 mr-2" />
-              Create New blog
+              {t("admin.blogs.add_new")}
             </Button>
           </Link>
 
           <div className="relative w-full sm:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search blogs..."
+              placeholder={t("admin.blogs.search")}
               className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -226,10 +228,10 @@ function RouteComponent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[300px]">Title</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="w-[300px]">{t("admin.blogs.table.title")}</TableHead>
+                  <TableHead>{t('admin.blogs.table.date')}</TableHead>
+                  <TableHead>{t("admin.blogs.table.status")}</TableHead>
+                  <TableHead className="text-right">{t("admin.blogs.table.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -251,12 +253,12 @@ function RouteComponent() {
                           <Link to={`/admin/blog/${blog.id}`}>
                             <Button variant="outline" size="sm">
                               <Edit className="h-4 w-4 mr-1" />
-                              Edit
+                              {t("admin.blogs.edit")}
                             </Button>
                           </Link>
                           <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(blog.id)}>
                             <Trash2 className="h-4 w-4 mr-1" />
-                            Delete
+                            {t("admin.blogs.delete")}
                           </Button>
                         </div>
                       </TableCell>
@@ -278,15 +280,15 @@ function RouteComponent() {
       <AlertDialog open={blogIdToDelete !== null}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.blogs.delete_title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the blog post.
+              {t("admin.blogs.delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteCancel}>{t("admin.blogs.delete_cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-500 hover:bg-red-600">
-              Delete
+              {t("admin.blogs.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

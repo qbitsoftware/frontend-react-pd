@@ -92,7 +92,12 @@
     }
   },
   "calendar": {
-    "title": "Calendar"
+    "title": "Calendar",
+    "all_categories": "All categories",
+    "no_tournaments": "No tournaments",
+    "search_placeholder": "Find a tournament...",
+    "upcoming": "Upcoming",
+    "finished": "Finished"
   },
   "tournaments": {
     "header": "Tournaments",
@@ -109,6 +114,9 @@
     }
   },
   "rating": {
+    "component": {
+      "missing": "No data available"
+    },
     "header": "National Ranking",
     "header_prefix": {
       "men": "Men's",
@@ -147,7 +155,8 @@
         "last_name": "Surname",
         "birthyear": "YOB",
         "profile": "Profile",
-        "club": "Club"
+        "club": "Club",
+        "player": "Player"
       },
       "body": {
         "profile_button": "Player profile"
@@ -177,6 +186,13 @@
       "button": "Club profile"
     }
   },
+  "login": {
+    "title": "Welcome back",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "login_progress": "Logging in..."
+  },
   "admin": {
     "layout": {
       "sidebar": {
@@ -187,6 +203,8 @@
       },
       "info": "Info",
       "groups": "Groups",
+      "media": "Media",
+      "images": "Images",
       "title": "Tournament Hub",
       "description": "Administration"
     },
@@ -217,6 +235,9 @@
         "create_group": "Create Group",
         "title_create": "Create Tournament",
         "title_edit": "Edit Tournament",
+        "title_create_table": "Create Group",
+        "title_edit_table": "Edit Group",
+        "title_delete_table": "Delete Group",
         "button_create": "Create",
         "button_edit": "Update Tournament",
         "back_button": "Back to Tournaments",
@@ -291,7 +312,11 @@
           "newest": "Newest First",
           "oldest": "Oldest First"
         },
-        "search": "Search tournaments..."
+        "search": "Search tournaments...",
+        "all_games": "All games",
+        "winner_declared": "Ended games",
+        "ongoing_games": "Ongoing games",
+        "upcoming_games": "Upcoming games"
       },
       "confirmations": {
         "delete": {
@@ -353,7 +378,52 @@
         "location": "Location",
         "duratiion": "Duration",
         "tables": "Total tables"
+      },
+      "matches": {
+        "table": {
+          "serial_number": "SN.",
+          "round": "Round",
+          "class": "Class",
+          "table": "Table",
+          "participant_1": "Participant 1",
+          "participant_2": "Participant 2",
+          "participant_1_score": "Participant 1 score",
+          "participant_2_score": "Participant 2 score",
+          "winner_placement": "Winner placement",
+          "loser_placement": "Loser placement",
+          "winner": "Winner"
+        },
+        "not_played": "Not played yet"
+      },
+      "brackets": {
+        "not_found": "No brackets found",
+        "not_found_description": "We couldn't find any brackets for this tournament.",
+        "refresh": "Refresh brackets"
       }
+    },
+    "blogs": {
+      "title": "Blogs",
+      "description": "Manage blogs",
+      "add_new": "Add new",
+      "delete": "Delete a blog",
+      "text": "Start writing a blog",
+      "search": "Search for blogs...",
+      "status_published": "Published",
+      "status_draft": "Draft",
+      "edit": "Edit",
+      "delete_title": "Are you sure?",
+      "delete_description": "This action cannot be undone. This will permanently delete the data.",
+      "delete_cancel": "Cancel",
+      "table": {
+        "title": "Title",
+        "date": "Date",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "not_found": "No blogs found",
+      "load_failed": "Failed to load blogs. Please try again.",
+      "load_failed_description": "An error occurred while fetching blogs. Please try again.",
+      "refresh": "Refresh the page"
     }
   }
 }

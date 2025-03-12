@@ -1,12 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 
-const SfumatoBackground = ({ children, className = '' }) => {
-  const [blobs, setBlobs] = useState([]);
+interface BlobProps {
+  id: number;
+  size: number;
+  top: number;
+  left: number;
+  color1: string;
+  color2: string;
+}
 
-  const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+interface SfumatoBackgroundProps {
+  children: ReactNode;
+  className?: string;
+}
+
+const SfumatoBackground = ({ children, className = '' }: SfumatoBackgroundProps) => {
+  const [blobs, setBlobs] = useState<BlobProps[]>([]);
+
+  const random = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
 
   useEffect(() => {
-    const newBlobs = [];
+    const newBlobs: BlobProps[] = [];
     // Create 6 blobs with vibrant colors
     for (let i = 0; i < 6; i++) {
       // Use more vibrant, noticeable colors
@@ -46,32 +60,16 @@ const SfumatoBackground = ({ children, className = '' }) => {
               background: `radial-gradient(circle, ${blob.color1} 0%, ${blob.color2} 70%, transparent 100%)`,
               filter: 'blur(25px)',
               opacity: 0.8,
-              animation: `blobFloat ${random(15, 25)}s ease-in-out infinite alternate`,
-              animationDelay: `${random(-5, 0)}s`,
+              animation: `blobFloat ${random(15, 25)}s ease-in-out ${random(-5, 0)}s infinite alternate`,
             }}
           />
         ))}
       </div>
       
-      {/* Content layer */}
       <div className="relative z-10 w-full h-full">
         {children}
       </div>
       
-      {/* CSS for animation */}
-      <style jsx>{`
-        @keyframes blobFloat {
-          0% {
-            transform: translate(0, 0) scale(1);
-          }
-          50% {
-            transform: translate(30px, -20px) scale(1.1);
-          }
-          100% {
-            transform: translate(-20px, 30px) scale(0.9);
-          }
-        }
-      `}</style>
     </div>
   );
 };

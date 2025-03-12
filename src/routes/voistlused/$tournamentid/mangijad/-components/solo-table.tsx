@@ -9,12 +9,11 @@ interface SoloTableProps {
 }
 
 const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
-  console.log('PARTICIPANBTS', participants)
   return (
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
         <div className="rounded-md border h-full overflow-y-auto">
-                 <Table className="bg-white h-full">
+                 <Table className="bg-white h-full ">
             <TableHeader >
               <TableRow className='bg-[#F9F9FB]'>
                 <TableHead>Pilt</TableHead>
@@ -28,7 +27,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
             </TableHeader>
             <TableBody>
               {participants.map((participant) => (
-                <TableRow key={participant.id}>
+                <TableRow key={participant.id} className="bg-white bg-[#F9F9FB]/40 ">
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>

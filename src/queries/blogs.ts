@@ -8,18 +8,6 @@ interface BlogsResponse {
     error: string | null
 }
 
-export function UseGetBlogs() {
-    return useQuery<BlogsResponse>({
-        queryKey: ["blogs"],
-        queryFn: async () => {
-            const { data } = await axiosInstance.get("/api/v1/blogs/admin", {
-                withCredentials: true,
-            })
-            return data
-        }
-    })
-}
-
 interface BlogsResponseUser {
     data: {
         blogs: Blog[],
@@ -27,6 +15,35 @@ interface BlogsResponseUser {
     }
     message: string
     error: string | null
+}
+
+export function UseGetBlogsQuery(page?: number, category?: string, search?: string) {
+    return useQuery<BlogsResponse>({
+        queryKey: ["blogs_admin", { page, category, search }],
+        queryFn: async () => {
+            const queryParams = new URLSearchParams();
+
+            if (page !== undefined) {
+                queryParams.append("page", page.toString());
+            }
+
+            if (category !== undefined && category !== '') {
+                queryParams.append("category", category);
+            }
+
+            if (search !== undefined && search !== '') {
+                queryParams.append("search", search);
+            }
+
+            const queryString = queryParams.toString();
+            const url = queryString ? `/api/v1/blogs?${queryString}` : "/api/v1/blogs";
+
+            const { data } = await axiosInstance.get(url, {
+                withCredentials: true
+            });
+            return data;
+        }
+    });
 }
 
 export function UseGetBlogsOption(page?: number, category?: string, search?: string) {
@@ -62,21 +79,25 @@ interface BlogResponse {
     error: string | null
 }
 
-export function UseGetBlogAdmin(id: number) {
-    return useQuery<BlogResponse>({
-        queryKey: ["blog_admin", id],
+export function UseGetBlog(id: number) {
+    return queryOptions<BlogResponse>({
+        queryKey: ["blog_client", id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/blogs/${id}/admin`)
+            const { data } = await axiosInstance.get(`/api/v1/blogs/${id}`, {
+                withCredentials: true
+            })
             return data
         }
     })
 }
 
-export function UseGetBlog(id: number) {
-    return queryOptions<BlogResponse>({
-        queryKey: ["blog_client", id],
+export function UseGetBlogQuery(id: number) {
+    return useQuery<BlogResponse>({
+        queryKey: ["blog_admin", id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/blogs/${id}`)
+            const { data } = await axiosInstance.get(`/api/v1/blogs/${id}`, {
+                withCredentials: true
+            })
             return data
         }
     })
@@ -86,11 +107,16 @@ export function UseCreateBlog() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (blog: Blog) => {
-            const { data } = await axiosInstance.post("/api/v1/blogs", blog)
+            const { data } = await axiosInstance.post("/api/v1/blogs", blog,
+                {
+                    withCredentials: true
+                }
+            )
             return data
         },
         onSuccess: () => {
-            queryClient.refetchQueries({ queryKey: ["blogs"] })
+            queryClient.refetchQueries({ queryKey: ["blogs_admin"] })
+            queryClient.invalidateQueries({ queryKey: ["blogs"] })
         }
     })
 }
@@ -99,10 +125,13 @@ export function UseUpdateBlog() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (blog: Blog) => {
-            const { data } = await axiosInstance.patch(`/api/v1/blogs/${blog.id}`, blog)
+            const { data } = await axiosInstance.patch(`/api/v1/blogs/${blog.id}`, blog, {
+                withCredentials: true
+            })
             return data
         },
         onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ["blogs_admin"] })
             queryClient.invalidateQueries({ queryKey: ["blogs"] })
             queryClient.invalidateQueries({ queryKey: ["blog_admin", variables.id] })
         }
@@ -113,10 +142,13 @@ export function UseDeleteBlog() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (id: number) => {
-            const { data } = await axiosInstance.delete(`/api/v1/blogs/${id}`)
+            const { data } = await axiosInstance.delete(`/api/v1/blogs/${id}`, {
+                withCredentials: true
+            })
             return data
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["blogs_admin"] })
             queryClient.invalidateQueries({ queryKey: ["blogs"] })
         }
     })

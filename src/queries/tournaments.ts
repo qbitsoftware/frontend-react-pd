@@ -52,7 +52,7 @@ export function UseGetTournamentTypes() {
     return useQuery<TournamentTypesResposne>({
         queryKey: ["tournament_types"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/org_stats/types`, {
+            const { data } = await axiosInstance.get(`/api/v1/types`, {
                 withCredentials: true
             })
             return data
@@ -64,7 +64,7 @@ export function UseGetTournamentCategories() {
     return useQuery<TournamentCategoriesResponse>({
         queryKey: ["tournament_categories"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/org_stats/categories`, {
+            const { data } = await axiosInstance.get(`/api/v1/categories`, {
                 withCredentials: true
             })
             return data
@@ -77,11 +77,26 @@ export function UseGetTournamentSizes() {
     return useQuery<TournamentSizeResposne>({
         queryKey: ["tournament_sizes"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/org_stats/sizes`, {
+            const { data } = await axiosInstance.get(`/api/v1/sizes`, {
                 withCredentials: true
             })
             return data
         },
+    })
+}
+
+export const UsePatchTournamentMedia = (tournament_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (media: { media: string }) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/media`, media, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ['tournament', tournament_id] })
+        }
     })
 }
 

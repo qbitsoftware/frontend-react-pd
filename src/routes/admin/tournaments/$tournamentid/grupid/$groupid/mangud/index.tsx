@@ -32,20 +32,20 @@ export const Route = createFileRoute(
 function RouteComponent() {
 
   const { tournamentid, groupid } = Route.useParams()
-  const {data: matches} = UseGetMatchesQuery(Number(tournamentid), Number(groupid))
+  const { data: matches } = UseGetMatchesQuery(Number(tournamentid), Number(groupid))
 
 
   const { table_data } = Route.useLoaderData()
   if (matches && matches.data && table_data && table_data.data) {
     return (
       <div className='pb-12'>
-        <MatchesTable tournament_id={Number(tournamentid)} data={matches.data || []} />
+        <MatchesTable tournament_id={Number(tournamentid)} data={matches.data || []} tournament_table={table_data.data} />
       </div>
     )
   } else {
     return (
       <div className='flex justify-center items-center h-[50vh]'>
-        <Loader/>
+        <Loader />
       </div>
     )
   }

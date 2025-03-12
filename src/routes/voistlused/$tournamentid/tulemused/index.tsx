@@ -11,18 +11,19 @@ import { Link } from '@tanstack/react-router'
 export const Route = createFileRoute('/voistlused/$tournamentid/tulemused/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params }) => {
-    let tournament_tables
+    let tournament_tables = null;
     try {
       tournament_tables = await queryClient.ensureQueryData(
         UseGetTournamentTables(Number(params.tournamentid)),
       )
+      return { tournament_tables }
     } catch (error) {
       const err = error as ErrorResponse
-      if (err.response.status !== 404) {
-        throw error
+      if (err.response?.status === 404) {
+        return { tournament_tables: null }
       }
+      throw error
     }
-    return { tournament_tables }
   },
 })
 
@@ -36,8 +37,6 @@ function RouteComponent() {
 
   //   }
   // }
-  console.log(tournament_tables)
-
   const startDate = formatDateTimeNew(tournament.start_date);
 
   const tournamentState = () => {
@@ -74,20 +73,19 @@ function RouteComponent() {
 
 
   return (
-      <div className='w-full md:max-w-2xl mx-auto py-12'>
-      <h2 className='font-semibold text-[#020817] border-b border-stone-100 pb-2 px-1'>Tabelid</h2>
-        <ul className='py-4 flex flex-col gap-2'>
+      <div className='mx-auto px-4 md:px-12 py-4 md:py-8'>
+      <h5 className='font-bold mb-4 md:mb-8 text-center md:text-left'>Tabelid</h5>
+      <ul className='pb-8 flex flex-col gap-2'>
           {tournament_tables && tournament_tables.data ? tournament_tables.data.map((table) => (
-            <Link href={`/voistlused/${tournament.id}/tulemused/${table.id}`}>
-            <li  key={table.id} className='bg-white flex flex-row items-center justify-between border border-stone-100 pr-12 pl-6 py-4 rounded-sm shadow-scheduleCard cursor-pointer hover:bg-[#F9F9FB]'>
-              
-              <div className='flex flex-row items-center'>
-              <div className='flex flex-row items-center gap-2 border border-stone-100 rounded-sm p-1'><UsersRound className='h-6 w-6'/><span className=' text-lg font-medium'>{table.participants.length}</span></div>
-              <div className='px-6 flex flex-col'>
-                <h3 className='text-xl font-medium'>{table.class}</h3>
-                <span className=''>{parseTableType(table.type)}</span>
-              </div>
-              </div>
+            <Link key={table.id} href={`/voistlused/${tournament.id}/tulemused/${table.id}`}>
+            <li className='md:w-2/3 bg-white flex flex-row items-center justify-between border border-stone-100 px-4 md:pr-12 md:pl-6 py-4 rounded-sm shadow-scheduleCard cursor-pointer hover:bg-[#F9F9FB]'>
+                <div className='flex flex-row items-center'>
+                  <div className='flex flex-row items-center gap-2 border border-stone-100 rounded-sm p-1'><UsersRound className='h-4 w-4 md:h-6 md:w-6'/><span className=' md:text-lg font-medium'>{table.participants.length}</span></div>
+                  <div className='px-6 flex flex-col'>
+                    <h3 className='text-base md:text-xl font-medium'>{table.class}</h3>
+                    <span className='hidden md:block'>{parseTableType(table.type)}</span>
+                  </div>
+                </div>
               {stateComponents[tournamentState()]}
             </li>
             </Link>
@@ -96,7 +94,7 @@ function RouteComponent() {
               No tables created yet
             </div>
           }
-        </ul>
+      </ul>
     </div>
   )
 

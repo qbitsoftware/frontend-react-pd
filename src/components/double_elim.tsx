@@ -153,19 +153,6 @@ const DoubleElimBracket = ({
             }
           })}
         </svg>
-        {/* {Array.from({ length: matches_len + 1 }).map((_, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            top: `${starting_y}px`,
-                            left: `${starting_x + (WIDTH + VERTICAL_GAP + (matches_len === index ? 5 : 0)) * index}px`,
-                            width: `${WIDTH}px`
-                        }}
-                        className="absolute text-center border-[1px] border-black/10 shadow-md rounded-md py-2"
-                    >
-                        <div className="font-semibold">Round {index + 1}</div>
-                    </div>
-                ))} */}
       </div>
     );
   }

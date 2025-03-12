@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import ErrorPage from '@/components/error'
 import { UseGetBlog } from '@/queries/blogs'
 import Editor from '../admin/-components/yooptaeditor'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { YooptaContentValue } from '@yoopta/editor'
 import { formatDateString } from '@/lib/utils'
 
@@ -27,6 +27,10 @@ function RouteComponent() {
 
     const categories = article.data.category.split('/').map((category) => category.trim())
     const category = categories[0] 
+
+    useEffect(() => {
+        window.scrollTo(0,0)
+      }, [])
 
 
     return (
@@ -57,7 +61,7 @@ function RouteComponent() {
                         <span className="font-bold">{article.data.title}</span>
                     </div>
                 </CardHeader>
-                <CardContent className="prose max-w-none ">
+                <CardContent className="prose max-w-none overflow-scroll">
                     {/* <p className='blog-content' dangerouslySetInnerHTML={{ __html: article.data.content_html }}></p> */}
                     {value ? (
                         <Editor value={value} setValue={setValue} readOnly={true} />

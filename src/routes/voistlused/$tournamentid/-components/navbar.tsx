@@ -9,7 +9,7 @@ const NavLinks = [
   { name: "Info", href: "/" },
   { name: "Ajakava", href: "/ajakava" },
   { name: "Tulemused", href: "/tulemused" },
-  { name: "Osalejad", href: "/osalejad" },
+  { name: "Mängijad", href: "/mangijad" },
   { name: "Galerii", href: "/galerii" },
   { name: "Juhend", href: "/juhend" },
   { name: "Sponsorid", href: "/sponsorid" },
@@ -19,35 +19,32 @@ const NavLinks = [
 const Navbar = () => {
   const params = useParams({ strict: false });
   const location = useLocation();
-  
-  const pathSegments = location.pathname.split(`/voistlused/${params.tournamentid}`)[1];
-  const currentTab = pathSegments === "/" || pathSegments === "" ? "/" : pathSegments.split("/").pop() || "/";
-
-  const isActivePath = (href) => {
-    if (href === "/" && (pathSegments === "/" || pathSegments === "")) {
-      return true;
-    }
-    if (href !== "/" && pathSegments.startsWith(href)) {
-      return true;
-    }
-    return false;
-  };
-
   const tournament = useTournament();
+
+  const currentPath = location.pathname;
+  const baseUrl = `/voistlused/${params.tournamentid}`;
+  
+  let activeTab = "/";
+  
+  NavLinks.forEach(link => {
+    if (link.href !== "/" && currentPath.includes(baseUrl + link.href)) {
+      activeTab = link.href;
+    }
+  });
 
   return (
     <div className="">
-      <div className="pt-12 pb-4 px-12 text-[#363636] bg-[#FBFCFD]">
+      <div className="pt-12 pb-4 px-2 md:px-12 text-[#363636] ">
         <div className="flex flex-col">
-          <h1 className="text-4xl font-semibold mb-4">
+          <h1 className="text-4xl text-center md:text-left font-semibold mb-4">
             {tournament.name}
           </h1>
-          <p className="text-xl">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
+          <p className="text-xl text-center md:text-left">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
         </div>
       </div>
-      <div className=" px-12 ">
-        <Tabs value={currentTab} className="w-full flex justify-start">
-          <TabsList className="flex-wrap  space-x-2">
+      <div className="px-2 md:px-12 ">
+        <Tabs value={activeTab} className="w-full flex justify-start">
+          <TabsList className="flex-wrap space-x-2">
             {NavLinks.map((link) => (
               <Link
                 className=""
@@ -58,9 +55,9 @@ const Navbar = () => {
                   value={link.href}
                   className={cn(
                     "text-sm 2xl:text-base px-3 py-2 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
-                    isActivePath(link.href) &&
-                      "bg-white shadow-selectedFilter",
-                    !isActivePath(link.href) &&
+                    activeTab === link.href &&
+                      "bg-white text-[#212121] shadow-selectedFilter",
+                    activeTab !== link.href &&
                       "hover:bg-white",
                   )}
                 >

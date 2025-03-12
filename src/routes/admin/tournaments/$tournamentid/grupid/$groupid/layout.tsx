@@ -43,7 +43,7 @@ function RouteComponent() {
     { value: "/", label: t("admin.tournaments.groups.layout.info") },
     { value: "osalejad", label: t("admin.tournaments.groups.layout.participants") },
     { value: "mangud", label: t("admin.tournaments.groups.layout.matches") },
-    { value: "tabelid", label: t("admin.tournaments.groups.layout.tables") }
+    { value: "tabelid", label: t("admin.tournaments.groups.layout.tables") },
   ]
 
 

@@ -92,7 +92,12 @@
     }
   },
   "calendar": {
-    "title": "Kalender"
+    "title": "Kalender",
+    "all_categories": "Kõik kategooriad",
+    "no_tournaments": "Turniirid puuduvad",
+    "search_placeholder": "Otsi turniiri...",
+    "upcoming": "Tulemas",
+    "finished": "Lõppenud"
   },
   "tournaments": {
     "header": "Turniirid",
@@ -109,6 +114,9 @@
     }
   },
   "rating": {
+    "component": {
+      "missing": "Edetabel hetkel puudub"
+    },
     "header": "Reiting",
     "header_prefix": {
       "men": "Meeste",
@@ -147,7 +155,8 @@
         "last_name": "Perenimi",
         "birthyear": "SA",
         "profile": "Profiil",
-        "club": "Klubi"
+        "club": "Klubi",
+        "player": "Mängija"
       },
       "body": {
         "profile_button": "Mängija profiil"
@@ -177,6 +186,13 @@
       "button": "Klubi profiil"
     }
   },
+  "login": {
+    "title": "Tere tulemast tagasi",
+    "email": "E-posti aadress",
+    "password": "Parool",
+    "login": "Logi sisse",
+    "login_progress": "Sisselogimine..."
+  },
   "admin": {
     "layout": {
       "sidebar": {
@@ -187,6 +203,8 @@
       },
       "info": "Info",
       "groups": "Grupid",
+      "media": "Meedia",
+      "images": "Pildid",
       "title": "Turniirihaldus",
       "description": "Administreerimine"
     },
@@ -217,6 +235,9 @@
         "create_group": "Loo grupp",
         "title_create": "Loo uus turniir",
         "title_edit": "Muuda turniiri",
+        "title_create_table": "Loo grupp",
+        "title_edit_table": "Muuda gruppi",
+        "title_delete_table": "Kustuta grupp",
         "button_create": "Loo",
         "button_edit": "Uuenda turniiri andmeid",
         "back_button": "Tagasi turniiride juurde",
@@ -291,7 +312,11 @@
           "newest": "Uusimad ennem",
           "oldest": "Vanimad ennem"
         },
-        "search": "Otsi turniiri..."
+        "search": "Otsi turniiri...",
+        "all_games": "Kõik mängud",
+        "winner_declared": "Lõppenud mängud",
+        "ongoing_games": "Käimas mängud",
+        "upcoming_games": "Tulevased mängud"
       },
       "confirmations": {
         "delete": {
@@ -353,7 +378,52 @@
         "location": "Asukoht",
         "duration": "Kestus",
         "tables": "Laudu kokku"
+      },
+      "matches": {
+        "table": {
+          "serial_number": "JKNR.",
+          "round": "Ring",
+          "class": "Grupp",
+          "table": "Laud",
+          "participant_1": "Osaleja 1",
+          "participant_2": "Osaleja 2",
+          "participant_1_score": "Osaleja 1 tulemus",
+          "participant_2_score": "Osaleja 2 tulemus",
+          "winner_placement": "Võitja koht",
+          "loser_placement": "Kaotaja koht",
+          "winner": "Võitja"
+        },
+        "not_played": "Mängimata"
+      },
+      "brackets": {
+        "not_found": "Turniiri tabelit ei leitud",
+        "not_found_description": "Turniiri tabelit ei leitud. Palun kontrollige, kas turniir on lõppenud või pole veel alanud.",
+        "refresh": "Uuendage lehte"
       }
+    },
+    "blogs": {
+      "title": "Blogid",
+      "description": "Halda blogisid siit",
+      "add_new": "Lisa Uus",
+      "delete": "Kustuta blogi",
+      "text": "Alusta esimese blogiga",
+      "search": "Otsi blogisid...",
+      "status_published": "Avaldatud",
+      "status_draft": "Mustand",
+      "edit": "Muuda",
+      "delete_title": "Oled kindel?",
+      "delete_description": "Peale toimingut on blogi kustutatud ja seda ei saa tagasi võtta.",
+      "delete_cancel": "Katkesta",
+      "table": {
+        "title": "Pealkiri",
+        "date": "Kuupäev",
+        "status": "Staatus",
+        "actions": "Tegevused"
+      },
+      "not_found": "Blogisid ei leitud",
+      "load_failed": "Blogisid ei õnnestunud laadida",
+      "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
+      "refresh": "Uuenda lehte"
     }
   }
 }

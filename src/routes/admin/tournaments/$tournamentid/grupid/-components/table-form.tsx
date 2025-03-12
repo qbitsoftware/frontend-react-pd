@@ -194,7 +194,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   )}
                 />
 
-                <FormField
+                {form.getValues().type != "champions_league" && <FormField
                   control={form.control}
                   name="size"
                   render={({ field }) => (
@@ -226,6 +226,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
+                }
                 <FormField
                   control={form.control}
                   name="solo"
@@ -281,13 +282,13 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
               <div className="flex justify-between gap-4 mt-10">
                 {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
-                    Kustuta turniir
+                    {t("admin.tournaments.create_tournament.title_delete_table")}
                   </Button>
                 )}
                 <Button type="submit" className="md:w-[200px] w-full">
                   {initial_data
-                    ? t("admin.tournaments.create_tournament.button_edit")
-                    : t("admin.tournaments.create_tournament.button_create")}
+                    ? t("admin.tournaments.create_tournament.title_edit_table")
+                    : t("admin.tournaments.create_tournament.title_create_table")}
                 </Button>
 
               </div>

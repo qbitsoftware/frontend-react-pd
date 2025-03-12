@@ -1,4 +1,3 @@
-// import GroupBracket from '@/components/group-bracket'
 import GroupBracket from '@/components/group-bracket'
 import { Window } from '@/components/window'
 import { UseGetBracket } from '@/queries/brackets'
@@ -18,15 +17,15 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const { bracket_data } = Route.useLoaderData()
+  const { bracket_data, table_data } = Route.useLoaderData()
 
-  if (!bracket_data.data) {
+  if (!bracket_data.data || !table_data.data) {
     return <div>0</div>
   }
   return (
     <div className='h-screen py-10'>
-      <GroupBracket brackets={bracket_data.data.round_robins[0]}/>
-      <Window data={bracket_data.data} />
+      <GroupBracket brackets={bracket_data.data.round_robins[0]} />
+      <Window data={bracket_data.data} tournament_table={table_data.data} />
     </div>
   )
 }

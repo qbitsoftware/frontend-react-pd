@@ -34,15 +34,15 @@ function RouteComponent() {
   const { tournamentid } = Route.useParams()
   const { t } = useTranslation()
 
-  const currentTab = location.pathname.includes("/grupid") ? "groups" : "info"
+  const currentTab = location.pathname.includes("/grupid") ? "groups" : location.pathname.includes("/meedia") ? "media" : location.pathname.includes("/pildid") ? "images" : "info"
 
   return (
     <div className="mx-auto  h-full">
       <div className="w-full z-12">
-        <div className="py-4 sm: py-auto px-10 lg:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
+        <div className="py-4 sm:py-auto px-10 lg:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
           <h1 className="text-xl font-semibold text-black">{tournament_data.data?.name}</h1>
           <Tabs value={currentTab} className="">
-            <TabsList className="grid grid-cols-2">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-4">
               <Link to={`/admin/tournaments/${tournamentid}`} >
                 <TabsTrigger value="info" className="w-[8rem]">
                   {t("admin.layout.info")}
@@ -53,12 +53,22 @@ function RouteComponent() {
                   {t("admin.layout.groups")}
                 </TabsTrigger>
               </Link>
+              <Link to={`/admin/tournaments/${tournamentid}/meedia`} >
+                <TabsTrigger value="media" className="w-[8rem]">
+                  {t("admin.layout.media")}
+                </TabsTrigger>
+              </Link>
+              <Link to={`/admin/tournaments/${tournamentid}/pildid`} >
+                <TabsTrigger value="images" className="w-[8rem]">
+                  {t("admin.layout.images")}
+                </TabsTrigger>
+              </Link>
             </TabsList>
           </Tabs>
         </div>
 
         <div className="">
-          <ScrollArea className="sm:h-[calc(100vh-8rem)]">
+          <ScrollArea className="sm:h-[calc(100vh-5.5rem)]">
             <Outlet />
           </ScrollArea>
         </div>

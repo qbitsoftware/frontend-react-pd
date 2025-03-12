@@ -125,6 +125,8 @@ export default function RouteComponent() {
         return text.substring(0, maxLength) + '...'
     }
 
+    
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="space-y-3">
@@ -172,7 +174,7 @@ export default function RouteComponent() {
             {articles_data.data.blogs.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 md:flex-row items-start gap-4 mt-4">
                     {articles_data.data.blogs.slice(0, 3).map((article, index) => (
-                        <Link to={`/uudised/${article.id}`} >
+                        <Link key={article.id} to={`/uudised/${article.id}`} >
                             <Card key={index} className="bg-[#fafafa] hover:bg-white">
                                 <div className="flex flex-col ">
                                     <div className="md:w-full h-64 md:h-48">

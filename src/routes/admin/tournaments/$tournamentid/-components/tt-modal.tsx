@@ -144,8 +144,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
       const selectedPlayer = playerId
         ? (team_number === 1 ? match.p1.players : match.p2.players).find(
-            (player) => player.id === playerId,
-          )
+          (player) => player.id === playerId,
+        )
         : null;
       return (
         selectedPlayer || {
@@ -525,6 +525,67 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
+                        {(() => {
+                          // First check if the players array exists
+                          const playersArray = team === 1 ? match.p1?.players : match.p2?.players;
+
+                          // If players array doesn't exist or is empty, show no players message
+                          if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+                            return (
+                              <SelectItem disabled value="no-players">
+                                No players available
+                              </SelectItem>
+                            );
+                          }
+
+                          // Filter valid players only if array exists
+                          const validPlayers = playersArray.filter(player =>
+                            player &&
+                            player.id &&
+                            (player.first_name || player.last_name)
+                          );
+
+                          // Return either valid players or a message that none are available
+                          return validPlayers.length > 0 ? (
+                            validPlayers.map(player => (
+                              <SelectItem
+                                key={player.id}
+                                value={player.id.toString()}
+                              >
+                                {player.first_name + " " + player.last_name || ""}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem disabled value="no-players">
+                              No players available
+                            </SelectItem>
+                          );
+                        })()}
+                      </SelectContent>
+                      {/* <SelectContent>
+                        {(() => {
+                          const validPlayers = (team === 1 ? match.p1.players : match.p2.players)
+                            .filter(player =>
+                              player &&
+                              player.id &&
+                              (player.first_name || player.last_name)
+                            );
+
+                          return validPlayers.length > 0 ? (
+                            validPlayers.map(player => (
+                              <SelectItem
+                                key={player.id}
+                                value={player.id.toString()}
+                              >
+                                {player.first_name + " " + player.last_name || ""}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem disabled value="no-players">
+                              No players available
+                            </SelectItem>
+                          );
+                        })()}
                         {(team === 1 ? match.p1.players : match.p2.players).map(
                           (player) => (
                             <SelectItem
@@ -535,7 +596,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                             </SelectItem>
                           ),
                         )}
-                      </SelectContent>
+                      </SelectContent> */}
                     </Select>
                   </div>
                 ))}
@@ -566,6 +627,46 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
+                          {(() => {
+                            // First check if the players array exists
+                            const playersArray = team === 1
+                              ? (match.p1?.players || [])
+                              : (match.p2?.players || []);
+
+                            // If players array doesn't exist or is empty, show no players message
+                            if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+                              return (
+                                <SelectItem disabled value="no-players">
+                                  No players available
+                                </SelectItem>
+                              );
+                            }
+
+                            // Filter valid players only
+                            const validPlayers = playersArray.filter(player =>
+                              player &&
+                              player.id &&
+                              (player.first_name || player.last_name)
+                            );
+
+                            // Return either valid players or a message that none are available
+                            return validPlayers.length > 0 ? (
+                              validPlayers.map(player => (
+                                <SelectItem
+                                  key={player.id}
+                                  value={player.id.toString()}
+                                >
+                                  {player.first_name + " " + player.last_name || ""}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem disabled value="no-players">
+                                No players available
+                              </SelectItem>
+                            );
+                          })()}
+                        </SelectContent>
+                        {/* <SelectContent>
                           {(team === 1
                             ? match.p1.players
                             : match.p2.players
@@ -577,7 +678,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                               {player.first_name + " " + player.last_name || ""}
                             </SelectItem>
                           ))}
-                        </SelectContent>
+                        </SelectContent> */}
                       </Select>
                     </div>
                   ))}

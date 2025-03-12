@@ -4,17 +4,27 @@ import { useTournament } from '../-components/tournament-provider'
 import { useState } from 'react'
 import TournamentSchedule from './-components/tournament-schedule'
 import { UseGetTournamentTables } from '@/queries/tables'
+import {ErrorResponse} from "@/types/types"
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
   loader: async ({ context: { queryClient }, params }) => {
-    const matchesData = await queryClient.ensureQueryData(
+    try { 
+      const matchesData = await queryClient.ensureQueryData(
       UseGetTournamentMatches(Number(params.tournamentid)),
     )
-    const tournament_tables = await queryClient.ensureQueryData(
+    const tournamentTables = await queryClient.ensureQueryData(
       UseGetTournamentTables(Number(params.tournamentid))
     )
 
-    return { matchesData, tournament_tables }
+    return { matchesData, tournamentTables }
+
+   } catch (error) {
+    const err = error as ErrorResponse
+    if (err.response?.status === 404) {
+      return {matchesData: null, tournamentTables: null}
+    }
+    throw error
+   }
   },
   component: RouteComponent,
 })
@@ -22,59 +32,29 @@ export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
 function RouteComponent() {
   const { matchesData } = Route.useLoaderData()
   const tournament = useTournament()
-
-  const start = tournament.start_date
-
-  
-
-  // if (matchesData.data.match.)
-
-  console.log(matchesData.data)
-
   const [activeDay, setActiveDay] = useState<number>(0)
-
+  const [activeClass, setActiveClass] = useState<string>("Kõik klassid")
   
-  
+  console.log("Tournament data:", tournament)
+  console.log("Match data:", matchesData?.data)
 
-  if (matchesData.data && matchesData.data.length > 0) {
     return (
-        <TournamentSchedule 
-          matches={matchesData.data}
-          days={6}
-          activeDay={activeDay}
-          setActiveDay={setActiveDay}
-          startDate={start}
-        />
-    )}
-  
+      <>
+        <div className="px-2 md:px-12 py-4 md:py-8">
+          <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Ajakava</h5>
+            <div className="pb-8">
 
-// const LoadingSkeleton = () => (
-//   <Card className="w-full">
-//     <CardHeader>
-//       <Skeleton className="h-8 w-3/4" />
-//     </CardHeader>
-//     <CardContent>
-//       <Skeleton className="h-10 w-full mb-4" />
-//       <Skeleton className="h-64 w-full" />
-//     </CardContent>
-//   </Card>
-// )
-
-// const ErrorMessage = ({ message }: { message: string }) => (
-//   <Card className="w-full">
-//     <CardContent className="p-6">
-//       <p className="text-red-500 text-center">Error: {message}</p>
-//     </CardContent>
-//   </Card>
-// )
-
-// const NoMatches = () => (
-//   <Card className="w-full">
-//     <CardContent className="p-6">
-//       <p className="text-center">Mängud pole ajakavas</p>
-//     </CardContent>
-//   </Card>
-// )
-
-
+              {matchesData?.data && Array.isArray(matchesData.data) && matchesData.data.length > 0 ? (
+                <TournamentSchedule
+                  matches={matchesData.data}
+                  activeDay={activeDay}
+                  setActiveDay={setActiveDay}
+                  activeClass={activeClass}
+                  setActiveClass={setActiveClass}
+                />
+              ) : <div>Ajakava puudub</div>}
+            </div>
+          </div>
+      </>
+    )
 }

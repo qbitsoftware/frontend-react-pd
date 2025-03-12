@@ -2,6 +2,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 import Navbar from './-components/navbar'
 import { UseGetTournament } from '@/queries/tournaments'
 import { TournamentProvider } from './-components/tournament-provider'
+import {useEffect} from "react"
 
 export const Route = createFileRoute('/voistlused/$tournamentid')({
   component: RouteComponent,
@@ -17,12 +18,18 @@ export const Route = createFileRoute('/voistlused/$tournamentid')({
 function RouteComponent() {
   const { tournamentData } = Route.useLoaderData()
 
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, [])
+
   if (tournamentData.data) {
     return (
       <TournamentProvider tournamentData={tournamentData.data}>
+        <div className="max-w-[1440px] mx-auto">
         <Navbar />
-        <div className="max-w-[1440px] rounded-[16px] border border-stone-200 mx-12 my-3">
+        <div className=" rounded-[16px] border border-stone-200 mx-2 md:mx-12 my-3">
           <Outlet />
+        </div>
         </div>
       </TournamentProvider>
     )

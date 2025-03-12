@@ -23,7 +23,6 @@ export const TournamentCard: React.FC<TournamentCardProps> = ({
     hasEnded
 }) => {
     const router = useRouter()
-    console.log("cat",category, location)
     return (
         <div className={cn(`relative rounded-tl-[2px] rounded-tr-[6px] rounded-br-[6px] rounded-bl-[2px] border-l-4 border-[#90D3FF] group flex flex-col bg-white hover:bg-[#f9f9f9]  py-2 px-3 shadow-eventCard cursor-pointer text-stone-800 ${hasEnded && "shadow-sm bg-[#EEEFF2] border-none rounded-[6px]"}  transition-shadow`)}
             onClick={() => router.navigate({ to: "/voistlused/" + id })}

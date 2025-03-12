@@ -37,7 +37,7 @@ const NewsWidget = ({ blogs }: Props) => {
       <ul className="space-y-6">
       {blogs.slice(0, 5).map((post) => (
 
-        <li className="px-2 group border-b pb-2">
+        <li key={post.id} className="px-2 group border-b pb-2">
                   <Link href={`/uudised/${post.id}`} className="group">
 
           <p>{formatDate(post.created_at)}</p>

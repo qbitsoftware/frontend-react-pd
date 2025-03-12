@@ -1,5 +1,5 @@
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
-import { UseGetBlogAdmin, UseUpdateBlog } from '@/queries/blogs'
+import { UseGetBlogQuery, UseUpdateBlog } from '@/queries/blogs'
 import { useEffect, useState } from 'react'
 import { YooptaContentValue } from '@yoopta/editor'
 import { categories, contentParser } from '@/lib/utils'
@@ -20,7 +20,7 @@ export const Route = createFileRoute('/admin/blog/$blogid/')({
 
 function RouteComponent() {
     const params = useParams({ strict: false })
-    const { data: blogData, isLoading } = UseGetBlogAdmin(Number(params.blogid))
+    const { data: blogData, isLoading } = UseGetBlogQuery(Number(params.blogid))
     const [value, setValue] = useState<YooptaContentValue | undefined>(undefined);
     const [category, setCategory] = useState<string>('');
     const [isPublished, setIsPublished] = useState(false);

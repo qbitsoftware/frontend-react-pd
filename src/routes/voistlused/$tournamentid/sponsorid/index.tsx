@@ -16,8 +16,8 @@ const sponsors = [
 
 function RouteComponent() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6 text-center">Meie Sponsorid</h2>
+    <div className="px-4 md:px-12 py-4 md:py-8">
+      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Meie sponsorid</h5>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sponsors.map((sponsor, index) => (
           <Card key={index} className="flex flex-col h-full">

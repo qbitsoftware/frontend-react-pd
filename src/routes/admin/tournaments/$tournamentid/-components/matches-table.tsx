@@ -1,8 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
-import type { MatchWrapper } from "@/types/types"
-import { columns } from "./matches-table-columns"
+import type { MatchWrapper, TournamentTable } from "@/types/types"
 import MatchDialog from "@/components/match-dialog"
 import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -10,20 +9,27 @@ import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TableTennisProtocolModal } from "./tt-modal"
 import ReGrouping from "./regrouping"
+// import TimeEditingModal from "./time-editing-modal"
+import TimeEditingModal from "./time-editing-modal"
+import { createColumns } from "./matches-table-columns"
+import { useTranslation } from "react-i18next"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
   tournament_id: number
+  tournament_table: TournamentTable
 }
 
 type FilterOption = "all" | "winner_declared" | "ongoing" | "not_started"
 
-export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id }: MatchesTableProps) => {
+export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id, tournament_table }: MatchesTableProps) => {
   const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false)
+  const [isTimeEditingModalOpen, setIsTimeEditingModalOpen] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
   const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
+  const { t } = useTranslation()
 
 
   const filteredData = useMemo(() => {
@@ -38,6 +44,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
         return data
     }
   }, [data, filterValue])
+  const columns = useMemo(() => createColumns(t), [t])
 
   const table = useReactTable({
     data: filteredData,
@@ -59,18 +66,24 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
             <SelectValue placeholder="Filter matches" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Kõik mängud</SelectItem>
-            <SelectItem value="winner_declared">Lõppenud mängud</SelectItem>
-            <SelectItem value="ongoing">Käimasolevad mängud</SelectItem>
-            <SelectItem value="not_started">Upcoming matches</SelectItem>
+            <SelectItem value="all">{t("admin.tournaments.filters.all_games")}</SelectItem>
+            <SelectItem value="winner_declared">{t("admin.tournaments.filters.winner_declared")}</SelectItem>
+            <SelectItem value="ongoing">{t("admin.tournaments.filters.ongoing_games")}</SelectItem>
+            <SelectItem value="not_started">{t("admin.tournaments.filters.upcoming_games")}</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="text-white bg-secondary" onClick={() => {
-          setInitialTab("regrouping")
-          setIsRegroupingModalOpen(true)
-        }}
-        >Regrupeeri</Button>
-        <Button className="text-white bg-secondary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
+        {tournament_table.type == "champions_league" && (
+          <div className="flex gap-4">
+            <Button className="text-white bg-secondary" onClick={() => {
+              setInitialTab("regrouping")
+              setIsRegroupingModalOpen(true)
+            }}
+            >Regrupeeri</Button>
+            <Button className="text-white bg-secondary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
+            <Button className="text-white bg-secondary" onClick={() => setIsTimeEditingModalOpen(true)}>Muuda aegu</Button>
+          </div>
+        )
+        }
       </div>
       <div className="rounded-md border my-2">
         <Table>
@@ -125,6 +138,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id 
         isOpen={isRegroupingModalOpen}
         onClose={() => setIsRegroupingModalOpen(false)}
         state={initialTab}
+      />
+      <TimeEditingModal
+        matches={data}
+        tournament_table_id={tournament_table.id}
+        tournament_id={tournament_id}
+        isOpen={isTimeEditingModalOpen}
+        onClose={() => setIsTimeEditingModalOpen(false)}
       />
     </div>
   )

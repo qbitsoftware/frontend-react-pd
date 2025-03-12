@@ -17,9 +17,6 @@ import { AuthButton } from './ui/auth-button'
 import { SidebarTrigger } from './ui/sidebar'
 import { useUser } from '@/providers/userProvider'
 
-
-
-
 export default function Navbar() {
     const [activeItem, setActiveItem] = useState('')
     const { t } = useTranslation();
@@ -49,20 +46,10 @@ export default function Navbar() {
         {
             name: t('navbar.menu.competition'),
             href: '/kalender',
-            // dropdownItems: [
-            // { name: 'Competitions', href: '/voistlused' },
-            // { name: 'Results', href: '/voistlused/results' },
-            // { name: 'Calendar', href: '/kalender' },
-            // ]
         },
         {
             name: t('navbar.menu.clubs'),
             href: '/klubid',
-            // dropdownItems: [
-            //     { name: 'All Clubs', href: '/klubid' },
-            //     { name: 'Register a Club', href: '/klubid/register' },
-            //     { name: 'Club Rankings', href: '/klubid/rankings' },
-            // ]
         },
         { name: t('navbar.menu.ratings'), href: '/reiting' },
         { name: t('navbar.menu.rules'), href: '/reeglid' },
@@ -145,10 +132,9 @@ export default function Navbar() {
                     </div>
 
 
-                    <div className="flex items-center gap-2">
+                    <div className="hidden lg:flex items-center gap-2">
                         <AuthButton />
                         <LanguageDropdown />
-
                     </div>
 
                     <SidebarTrigger className='lg:hidden my-auto text-secondary' />
