@@ -3,11 +3,13 @@ import { TournamentTables } from './-components/tables'
 import { UseGetTournamentTables } from '@/queries/tables'
 import { UseGetTournament } from '@/queries/tournaments'
 import { ErrorResponse } from '@/types/types'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/',
 )({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     let tournament_tables
     try {

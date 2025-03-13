@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { TournamentForm } from '../-components/tournament-form'
 import { UseGetTournament } from '@/queries/tournaments'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute('/admin/tournaments/$tournamentid/')({
     loader: async ({ context: { queryClient }, params }) => {
@@ -13,6 +14,8 @@ export const Route = createFileRoute('/admin/tournaments/$tournamentid/')({
 
         return { tournament }
     },
+
+    errorComponent: () => <ErrorPage />,
     component: RouteComponent,
 })
 

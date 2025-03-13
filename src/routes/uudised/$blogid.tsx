@@ -9,8 +9,8 @@ import { YooptaContentValue } from '@yoopta/editor'
 import { formatDateString } from '@/lib/utils'
 
 export const Route = createFileRoute('/uudised/$blogid')({
-    errorComponent: ({ error, reset }) => {
-        return <ErrorPage error={error} reset={reset} />
+    errorComponent: () => {
+        return <ErrorPage />
     },
     component: RouteComponent,
     loader: async ({ context: { queryClient }, params }) => {
@@ -26,29 +26,29 @@ function RouteComponent() {
     const [value, setValue] = useState<YooptaContentValue | undefined>(article.data.full_content ? JSON.parse(article.data.full_content) : undefined);
 
     const categories = article.data.category.split('/').map((category) => category.trim())
-    const category = categories[0] 
+    const category = categories[0]
 
     useEffect(() => {
-        window.scrollTo(0,0)
-      }, [])
+        window.scrollTo(0, 0)
+    }, [])
 
 
     return (
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <Card>
-            <CardHeader className='pb-2 pt-4'>
+                <CardHeader className='pb-2 pt-4'>
                     <div className="text-sm font-medium text-blue-600 mb-2">
-                        <Link 
+                        <Link
                             href="/uudised/"
                             className="mr-2"
                         >
                             Kõik uudised
                         </Link>
-                        
+
                         {category && (
                             <>
                                 <span className="mr-2">/</span>
-                                <Link 
+                                <Link
                                     href={`/uudised/?category=${category}`}
                                     className="mr-2 capitalize"
                                 >
@@ -56,7 +56,7 @@ function RouteComponent() {
                                 </Link>
                             </>
                         )}
-                        
+
                         <span className="mr-2">/</span>
                         <span className="font-bold">{article.data.title}</span>
                     </div>

@@ -1,3 +1,4 @@
+import ErrorPage from '@/components/error'
 import { UseGetTournament } from '@/queries/tournaments'
 import Editor from '@/routes/admin/-components/yooptaeditor'
 import { createFileRoute } from '@tanstack/react-router'
@@ -6,6 +7,7 @@ import { useState } from 'react'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/meedia/')({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage/>,
   loader: async ({ context: { queryClient }, params }) => {
     const tournamentId = Number(params.tournamentid)
     let tournament = queryClient.getQueryData(UseGetTournament(tournamentId).queryKey)

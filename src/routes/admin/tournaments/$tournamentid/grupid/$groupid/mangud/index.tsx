@@ -4,10 +4,12 @@ import { MatchesTable } from '../../../-components/matches-table'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ErrorResponse } from '@/types/types'
 import Loader from '@/components/loader'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(
   '/admin/tournaments/$tournamentid/grupid/$groupid/mangud/',
 )({
+    errorComponent: () => <ErrorPage/>,
   loader: async ({ context: { queryClient }, params }) => {
     const matches: MatchesResponse | undefined = undefined
     let table_data;

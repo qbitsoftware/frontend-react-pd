@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button"
 import { ChevronDown, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { ErrorResponse } from "@/types/types"
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/mangijad/')({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     try {
       const tables_data = await queryClient.ensureQueryData(

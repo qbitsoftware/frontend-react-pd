@@ -6,8 +6,8 @@ import { motion } from 'framer-motion'
 
 
 export const Route = createFileRoute('/kalender/')({
-  errorComponent: ({ error, reset }) => {
-    return <ErrorPage error={error} reset={reset} />
+  errorComponent: () => {
+    return <ErrorPage />
   },
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
@@ -21,14 +21,14 @@ function RouteComponent() {
 
   if (tournaments.data) {
     return (
-    <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
+      <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
         <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2, delay: 0 }}
-            className=""
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.2, delay: 0 }}
+          className=""
         >
-            <CalendarView tournaments={tournaments.data}/>
+          <CalendarView tournaments={tournaments.data} />
         </motion.div>
       </div>
     )

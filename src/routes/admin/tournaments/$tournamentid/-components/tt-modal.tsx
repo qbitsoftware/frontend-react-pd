@@ -42,6 +42,7 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 
 interface ProtocolModalProps {
   isOpen: boolean;
@@ -79,6 +80,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const [table, setTableNumber] = useState<number>(0);
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
+  const [_, setActiveTab] = useState<string>("players")
 
   const prevValuesRef = useRef({
     captainTeam1: match.match.extra_data.captain_a || "",
@@ -298,7 +300,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
-      start_date: new Date().toString(),
+      start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
       extra_data,
@@ -414,7 +416,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
-      start_date: new Date().toString(),
+      start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
       extra_data,
@@ -470,346 +472,302 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[350px] md:max-w-[720px] lg:max-w-4xl xl:max-w-6xl h-[80vh] flex flex-col p-0">
-        <DialogHeader className="sticky top-0 z-10 bg-background p-6">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center mb-6 md:mb-0 gap-[30px]">
-              <DialogTitle className="">
-                Protokoll: {match.p1.name} vs {match.p2.name}
-              </DialogTitle>
-              <Input
-                type="number"
-                min="0"
-                className="w-[75px]"
-                onChange={(e) => setTableNumber(Number(e.target.value))}
-                value={!table ? "" : table}
-              ></Input>
-              <X className="md:hidden cursor-pointer" onClick={onClose} />
+      <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[90vw] md:max-w-[80vw] lg:max-w-[1200px] overflow-auto flex flex-col p-0">
+        <DialogHeader className="z-10 bg-background p-4 md:px-6">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-base md:text-lg">
+              Protokoll: {match.p1.name} vs {match.p2.name}
+            </DialogTitle>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm hidden md:inline">Laud:</span>
+                <Input
+                  type="number"
+                  min="0"
+                  className="w-16 h-8"
+                  onChange={(e) => setTableNumber(Number(e.target.value))}
+                  value={!table ? "" : table}
+                />
+              </div>
+              <X className="cursor-pointer md:hidden" onClick={onClose} />
             </div>
           </div>
         </DialogHeader>
-        <ScrollArea className="flex-grow px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 w-[300px] md:w-[660px] lg:w-[820px] mx-auto xl:w-[1100px] gap-4 mb-4">
-            {[1, 2].map((team) => (
-              <div key={team}>
-                <h3 className="font-bold mb-2">
-                  {team === 1 ? match.p1.name : match.p2.name} Mängijad
-                </h3>
-                {[0, 1, 2].map((index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <Select
-                      value={
-                        team === 1
-                          ? team1SelectedPlayers[index]?.id.toString()
-                          : team2SelectedPlayers[index]?.id.toString()
-                      }
-                      onValueChange={(value) =>
-                        handlePlayerChange(team, index, value)
-                      }
-                    >
-                      <SelectTrigger className="w-full mr-2">
-                        <SelectValue
-                          placeholder={
-                            team === 1 && team1SelectedPlayers[index]
-                              ? `${team1SelectedPlayers[index].first_name} ${team1SelectedPlayers[index].last_name}`
-                              : team === 2 && team2SelectedPlayers[index]
-                                ? `${team2SelectedPlayers[index].first_name} ${team2SelectedPlayers[index].last_name}`
-                                : `Mängija ${team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}`
-                          }
-                        >
-                          {team === 1 && team1SelectedPlayers[index]
-                            ? `${team1SelectedPlayers[index].first_name} ${team1SelectedPlayers[index].last_name}`
-                            : team === 2 && team2SelectedPlayers[index]
-                              ? `${team2SelectedPlayers[index].first_name} ${team2SelectedPlayers[index].last_name}`
-                              : ""}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {(() => {
-                          // First check if the players array exists
-                          const playersArray = team === 1 ? match.p1?.players : match.p2?.players;
 
-                          // If players array doesn't exist or is empty, show no players message
-                          if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
-                            return (
-                              <SelectItem disabled value="no-players">
-                                No players available
-                              </SelectItem>
-                            );
-                          }
+        <Tabs defaultValue="players" className="flex-grow flex flex-col" onValueChange={setActiveTab}>
+          <div className="flex flex-row justify-center items-center pb-4">
+            <TabsList className="mx-4 md:mx-6 mt-2 space-x-2 w-[300px]">
+              <TabsTrigger value="players" className="flex-1">Mängijad</TabsTrigger>
+              <TabsTrigger value="scores" className="flex-1">Skoorid</TabsTrigger>
+            </TabsList>
+          </div>
 
-                          // Filter valid players only if array exists
-                          const validPlayers = playersArray.filter(player =>
-                            player &&
-                            player.id &&
-                            (player.first_name || player.last_name)
-                          );
+          <ScrollArea className="flex-grow px-4 md:px-6 py-4">
+            <TabsContent value="players" className="mt-0 h-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                {[1, 2].map((team) => (
+                  <div key={team} className="space-y-4">
+                    <h5 className="font-bold">
+                      {team === 1 ? match.p1.name : match.p2.name} Mängijad
+                    </h5>
+                    <div className="space-y-3">
+                      {[0, 1, 2].map((index) => (
+                        <div key={index} className="flex items-center">
+                          <Select
+                            value={
+                              team === 1
+                                ? team1SelectedPlayers[index]?.id?.toString()
+                                : team2SelectedPlayers[index]?.id?.toString()
+                            }
+                            onValueChange={(value) =>
+                              handlePlayerChange(team, index, value)
+                            }
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue
+                                placeholder={
+                                  `Mängija ${team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}`
+                                }
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {(() => {
+                                const playersArray = team === 1 ? match.p1?.players : match.p2?.players;
 
-                          // Return either valid players or a message that none are available
-                          return validPlayers.length > 0 ? (
-                            validPlayers.map(player => (
-                              <SelectItem
-                                key={player.id}
-                                value={player.id.toString()}
-                              >
-                                {player.first_name + " " + player.last_name || ""}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem disabled value="no-players">
-                              No players available
-                            </SelectItem>
-                          );
-                        })()}
-                      </SelectContent>
-                      {/* <SelectContent>
-                        {(() => {
-                          const validPlayers = (team === 1 ? match.p1.players : match.p2.players)
-                            .filter(player =>
-                              player &&
-                              player.id &&
-                              (player.first_name || player.last_name)
-                            );
+                                if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+                                  return (
+                                    <SelectItem disabled value="no-players">
+                                      No players available
+                                    </SelectItem>
+                                  );
+                                }
 
-                          return validPlayers.length > 0 ? (
-                            validPlayers.map(player => (
-                              <SelectItem
-                                key={player.id}
-                                value={player.id.toString()}
-                              >
-                                {player.first_name + " " + player.last_name || ""}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem disabled value="no-players">
-                              No players available
-                            </SelectItem>
-                          );
-                        })()}
-                        {(team === 1 ? match.p1.players : match.p2.players).map(
-                          (player) => (
-                            <SelectItem
-                              key={player.id}
-                              value={player.id.toString()}
-                            >
-                              {player.first_name + " " + player.last_name || ""}
-                            </SelectItem>
-                          ),
-                        )}
-                      </SelectContent> */}
-                    </Select>
+                                const validPlayers = playersArray.filter(player =>
+                                  player &&
+                                  player.id &&
+                                  (player.first_name || player.last_name)
+                                );
+
+                                return validPlayers.length > 0 ? (
+                                  validPlayers.map(player => (
+                                    <SelectItem
+                                      key={player.id}
+                                      value={player.id.toString()}
+                                    >
+                                      {player.first_name + " " + player.last_name || ""}
+                                    </SelectItem>
+                                  ))
+                                ) : (
+                                  <SelectItem disabled value="no-players">
+                                    No players available
+                                  </SelectItem>
+                                );
+                              })()}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h6 className="font-semibold mt-4">Paarismäng</h6>
+                    <div className="space-y-3">
+                      {[3, 4].map((index) => (
+                        <div key={index} className="flex items-center">
+                          <Select
+                            value={
+                              team === 1
+                                ? team1SelectedPlayers[index]?.id?.toString()
+                                : team2SelectedPlayers[index]?.id?.toString()
+                            }
+                            onValueChange={(value) =>
+                              handlePlayerChange(team, index, value)
+                            }
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue
+                                placeholder={
+                                  `Mängija ${team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(80 + index)}`
+                                }
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {(() => {
+                                const playersArray = team === 1
+                                  ? (match.p1?.players || [])
+                                  : (match.p2?.players || []);
+
+                                if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+                                  return (
+                                    <SelectItem disabled value="no-players">
+                                      No players available
+                                    </SelectItem>
+                                  );
+                                }
+
+                                const validPlayers = playersArray.filter(player =>
+                                  player &&
+                                  player.id &&
+                                  (player.first_name || player.last_name)
+                                );
+
+                                return validPlayers.length > 0 ? (
+                                  validPlayers.map(player => (
+                                    <SelectItem
+                                      key={player.id}
+                                      value={player.id.toString()}
+                                    >
+                                      {player.first_name + " " + player.last_name || ""}
+                                    </SelectItem>
+                                  ))
+                                ) : (
+                                  <SelectItem disabled value="no-players">
+                                    No players available
+                                  </SelectItem>
+                                );
+                              })()}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-4">
+                      <h6 className="font-semibold mb-2">Kapten</h6>
+                      <Input
+                        type="text"
+                        value={team === 1 ? captainTeam1 : captainTeam2}
+                        onChange={(e) =>
+                          team === 1
+                            ? setCaptainTeam1(e.target.value)
+                            : setCaptainTeam2(e.target.value)
+                        }
+                        placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
+                      />
+                    </div>
                   </div>
                 ))}
-                <h4 className="font-semibold mt-4 mb-2">Paaris mäng</h4>
-                <div className="w-[300px] mb-[15px] md:w-full">
-                  {[3, 4].map((index) => (
-                    <div key={index} className="flex items-center mb-2">
-                      <Select
-                        onValueChange={(value) =>
-                          handlePlayerChange(team, index, value)
-                        }
-                      >
-                        <SelectTrigger className="w-full mr-2">
-                          <SelectValue
-                            placeholder={
-                              team === 1 && team1SelectedPlayers[index]
-                                ? `${team1SelectedPlayers[index].first_name} ${team1SelectedPlayers[index].last_name}`
-                                : team === 2 && team2SelectedPlayers[index]
-                                  ? `${team2SelectedPlayers[index].first_name} ${team2SelectedPlayers[index].last_name} `
-                                  : `Mängija ${team == 1 ? String.fromCharCode(65 + index) : String.fromCharCode(80 + index)}`
-                            }
-                          >
-                            {team === 1 && team1SelectedPlayers[index]
-                              ? `${team1SelectedPlayers[index].first_name} ${team1SelectedPlayers[index].last_name}`
-                              : team === 2 && team2SelectedPlayers[index]
-                                ? `${team2SelectedPlayers[index].first_name} ${team2SelectedPlayers[index].last_name} `
-                                : ""}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {(() => {
-                            // First check if the players array exists
-                            const playersArray = team === 1
-                              ? (match.p1?.players || [])
-                              : (match.p2?.players || []);
+              </div>
 
-                            // If players array doesn't exist or is empty, show no players message
-                            if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
-                              return (
-                                <SelectItem disabled value="no-players">
-                                  No players available
-                                </SelectItem>
-                              );
-                            }
+              <div className="mt-6">
+                <h6 className="font-semibold mb-2">Märkmed</h6>
+                <Textarea
+                  placeholder="Märkmed"
+                  onChange={(e) => setNotes(e.target.value)}
+                  value={notes}
+                  className="w-full min-h-[80px]"
+                />
+              </div>
 
-                            // Filter valid players only
-                            const validPlayers = playersArray.filter(player =>
-                              player &&
-                              player.id &&
-                              (player.first_name || player.last_name)
-                            );
+              <div className="mt-6">
+                <Button onClick={handleMatchStart}>Alusta</Button>
+              </div>
+            </TabsContent>
 
-                            // Return either valid players or a message that none are available
-                            return validPlayers.length > 0 ? (
-                              validPlayers.map(player => (
-                                <SelectItem
-                                  key={player.id}
-                                  value={player.id.toString()}
-                                >
-                                  {player.first_name + " " + player.last_name || ""}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <SelectItem disabled value="no-players">
-                                No players available
-                              </SelectItem>
-                            );
-                          })()}
-                        </SelectContent>
-                        {/* <SelectContent>
-                          {(team === 1
-                            ? match.p1.players
-                            : match.p2.players
-                          ).map((player) => (
-                            <SelectItem
-                              key={player.id}
-                              value={player.id.toString()}
-                            >
-                              {player.first_name + " " + player.last_name || ""}
-                            </SelectItem>
-                          ))}
-                        </SelectContent> */}
-                      </Select>
-                    </div>
-                  ))}
+            <TabsContent value="scores" className="mt-0 h-full">
+              <ScrollArea className="w-full overflow-x-auto">
+                <div className="w-full">
+                  <Table className="w-full">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-left w-20">Jarjekord</TableHead>
+                        <TableHead className="text-center w-16">Sett 1</TableHead>
+                        <TableHead className="text-center w-16">Sett 2</TableHead>
+                        <TableHead className="text-center w-16">Sett 3</TableHead>
+                        <TableHead className="text-center w-16">Sett 4</TableHead>
+                        <TableHead className="text-center w-16">Sett 5</TableHead>
+                        <TableHead className="text-center w-20">
+                          {match.p1.name} Skoor
+                        </TableHead>
+                        <TableHead className="text-center w-20">
+                          {match.p2.name} Skoor
+                        </TableHead>
+                        <TableHead className="text-center w-24">Loobumisvõit</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {!isLoading &&
+                        childMathes &&
+                        childMathes.data &&
+                        childMathes.data.map((player_match) => (
+                          <TableRow key={player_match.match.id}>
+                            <TableCell className="text-left py-2">
+                              {player_match.match.order == 1
+                                ? "A-Y"
+                                : player_match.match.order == 2
+                                  ? "B-X"
+                                  : player_match.match.order == 3
+                                    ? "C-Z"
+                                    : player_match.match.order == 4
+                                      ? "DE-VW"
+                                      : player_match.match.order == 5
+                                        ? "A-X"
+                                        : player_match.match.order == 6
+                                          ? "C-Y"
+                                          : "B-Z"}
+                            </TableCell>
+                            <MatchSets
+                              key={player_match.match.id}
+                              match={player_match}
+                            />
+                            <TableCell className="text-center py-2">
+                              {player_match.match.extra_data.team_1_total}
+                            </TableCell>
+                            <TableCell className="text-center py-2">
+                              {player_match.match.extra_data.team_2_total}
+                            </TableCell>
+                            <TableCell className="py-2">
+                              <Button
+                                onClick={() => {
+                                  handleForfeitMatch(player_match);
+                                }}
+                                className="text-xs font-normal h-6 px-1 w-full"
+                                size="sm"
+                              >
+                                Loobumisvõit
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                  <ScrollBar orientation="horizontal" />
                 </div>
-                <div className="mb-[40px] mr-2">
-                  <h4 className="font-semibold mt-4 mb-2">Kapten</h4>
-                  <Input
-                    type="text"
-                    value={team === 1 ? captainTeam1 : captainTeam2}
-                    onChange={(e) =>
-                      team == 1
-                        ? setCaptainTeam1(e.target.value)
-                        : setCaptainTeam2(e.target.value)
-                    }
-                    placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
-                    className=""
-                  />
+              </ScrollArea>
+
+              <div className="w-full flex justify-center items-center gap-2 my-4">
+                <h6 className="font-bold">Võitja:</h6>
+                <div>
+                  {match.match.winner_id !== ""
+                    ? match.match.winner_id === match.p1.id
+                      ? match.p1.name
+                      : match.p2.name
+                    : "Siia tuleb võitja"}
+                  <Separator className="bg-black" />
                 </div>
               </div>
-            ))}
-          </div>
-          <div>
-            <Textarea
-              placeholder="Märkmed"
-              onChange={(e) => setNotes(e.target.value)}
-              value={notes}
-              className="w-full min-h-[140px] p-2 border-[1px] border-gray/20 rounded-md mb-4"
-            />
-          </div>
-          <div className="mb-4 flex justify-between">
-            <Button onClick={handleMatchStart}>Alusta</Button>
-            {/* {teamMatch?.data && <Button onClick={deleteTeamMatch} variant={'destructive'}>{"Reseti Mäng"}</Button>} */}
-          </div>
-          <ScrollArea>
-            <div className="w-[300px] md:w-[660px] lg:w-[850px] xl:w-[1100px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-center">Jarjekord</TableHead>
-                    <TableHead className="text-center">Sett 1</TableHead>
-                    <TableHead className="text-center">Sett 2</TableHead>
-                    <TableHead className="text-center">Sett 3</TableHead>
-                    <TableHead className="text-center">Sett 4</TableHead>
-                    <TableHead className="text-center">Sett 5</TableHead>
-                    <TableHead className="text-center">
-                      {match.p1.name} Skoor
-                    </TableHead>
-                    <TableHead className="text-center">
-                      {match.p2.name} Skoor
-                    </TableHead>
-                    <TableHead className="text-center">Loobumisvõit</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {!isLoading &&
-                    childMathes &&
-                    childMathes.data &&
-                    childMathes.data.map((player_match: MatchWrapper) => (
-                      <TableRow key={player_match.match.id}>
-                        <TableCell>
-                          {player_match.match.order == 1
-                            ? "A-Y"
-                            : player_match.match.order == 2
-                              ? "B-X"
-                              : player_match.match.order == 3
-                                ? "C-Z"
-                                : player_match.match.order == 4
-                                  ? "DE-VW"
-                                  : player_match.match.order == 5
-                                    ? "A-X"
-                                    : player_match.match.order == 6
-                                      ? "C-Y"
-                                      : "B-Z"}
-                        </TableCell>
-                        <MatchSets
-                          key={player_match.match.id}
-                          match={player_match}
-                        />
-                        <TableCell className="text-center">
-                          {player_match.match.extra_data.team_1_total}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {player_match.match.extra_data.team_2_total}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            onClick={() => {
-                              handleForfeitMatch(player_match);
-                            }}
-                            className="text-[12px] bg-[#f6f6f6] border-[1px] text-black hover:text-white"
-                          >
-                            Loobumisvõit
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              <ScrollBar />
-            </div>
+            </TabsContent>
           </ScrollArea>
-          <div className="w-full flex justify-center items-center gap-4 my-4">
-            <h4 className="font-bold">Võitja:</h4>
-            <div>
-              {match.match.winner_id !== ""
-                ? match.match.winner_id === match.p1.id
-                  ? match.p1.name
-                  : match.p2.name
-                : "Siia tuleb võitja"}
-              <Separator className="bg-black" />
-            </div>
-          </div>
-        </ScrollArea>
-        <div className="flex flex-col gap-4 bg-secondary p-6">
+        </Tabs>
+
+        <div className="bg-[#EBEFF5] p-4 md:p-6 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <Input
               className="flex-grow"
               value={table_referee}
-              placeholder={"Lauakohtunik"}
+              placeholder="Lauakohtunik"
               onChange={(e) => setTableReferee(e.target.value)}
             />
             <Input
               className="flex-grow"
               value={head_referee}
-              placeholder={"Peakohtunik"}
+              placeholder="Peakohtunik"
               onChange={(e) => setMainReferee(e.target.value)}
             />
           </div>
           <Button
             disabled={match.match.winner_id !== ""}
             onClick={() => handleFinish()}
+            className="w-full"
           >
             Lõpeta Mängud
           </Button>

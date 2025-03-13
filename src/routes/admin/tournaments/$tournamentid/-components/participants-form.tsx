@@ -847,7 +847,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
             </div >
         )
     } else {
-        return <ErrorPage error={new Error("Tournament not found")} reset={() => { }} />
+        return <ErrorPage />
     }
 }
 

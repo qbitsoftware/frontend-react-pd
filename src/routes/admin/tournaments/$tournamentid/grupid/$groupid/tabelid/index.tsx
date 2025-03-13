@@ -7,14 +7,14 @@ import BracketComponent from '@/routes/admin/tournaments/-components/bracket'
 import Loader from '@/components/loader'
 import { useTranslation } from 'react-i18next'
 import { UseGetTournamentTableQuery } from '@/queries/tables'
+import ErrorPage from '@/components/error'
 
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/tabelid/',
 )({
     component: RouteComponent,
-
-
+    errorComponent: () => <ErrorPage />,
 })
 
 function RouteComponent() {

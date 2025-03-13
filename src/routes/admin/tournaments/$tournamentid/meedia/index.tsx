@@ -5,11 +5,13 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { UseGetTournament, UsePatchTournamentMedia } from '@/queries/tournaments'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/meedia/',
 )({
     component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
         const tournamentId = Number(params.tournamentid)
         let tournament = queryClient.getQueryData(UseGetTournament(tournamentId).queryKey)

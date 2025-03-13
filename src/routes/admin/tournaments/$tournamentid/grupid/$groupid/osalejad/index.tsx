@@ -5,11 +5,13 @@ import { ErrorResponse } from '@/types/types'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipanForm } from '../../../-components/participants-form'
 import Loader from '@/components/loader'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
 )({
     component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
         let participants
         let tournament_data

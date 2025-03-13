@@ -19,7 +19,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
     let previousTop: number = 0;
 
     return (
-      <div className="" key={"test"}>
+      <div className="mt-6 h-screen" key={"test"}>
         {data.eliminations[bracket].elimination.map((table, index) => {
           if (index !== 0 && index >= 1) {
             previousTop += CalculateSVGHeight(
@@ -83,7 +83,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
                 <TabsTrigger
                   key={index}
                   value={item.elimination[0].name}
-                  className="px-0 text-sm data-[state=active]:underline data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-none bg-transparent"
+                  className="px-0 text-sm data-[state=active]:underline data-[state=active]:bg-transparent data-[state=active]:text-gray-500 data-[state=active]:shadow-none data-[state=active]:border-none bg-transparent"
                   onClick={() => setBracket(index)}
                 >
                   {item.elimination[0].name}

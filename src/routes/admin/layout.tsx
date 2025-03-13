@@ -11,10 +11,12 @@ import { redirect } from '@tanstack/react-router'
 import { ErrorResponse } from '@/types/types'
 import { useUser } from '@/providers/userProvider'
 import { UseGetCurrentUser } from '@/queries/users'
+import ErrorPage from '@/components/error'
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
+  errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient } }) => {
     try {
       await queryClient.ensureQueryData(UseGetCurrentUser())

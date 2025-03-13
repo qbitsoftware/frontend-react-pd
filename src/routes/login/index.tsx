@@ -19,8 +19,8 @@ import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/login/')({
     component: RouteComponent,
-    errorComponent: ({ error, reset }) => {
-        return <ErrorPage error={error} reset={reset} />
+    errorComponent: () => {
+        return <ErrorPage />
 
     },
     loader: async ({ context: { queryClient } }) => {

@@ -5,8 +5,10 @@ import { useState } from 'react'
 import TournamentSchedule from './-components/tournament-schedule'
 import { UseGetTournamentTables } from '@/queries/tables'
 import {ErrorResponse} from "@/types/types"
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     try { 
       const matchesData = await queryClient.ensureQueryData(

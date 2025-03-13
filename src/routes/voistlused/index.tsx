@@ -6,8 +6,8 @@ import { XCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/voistlused/')({
-  errorComponent: ({ error, reset }) => {
-    return <ErrorPage error={error} reset={reset} />
+  errorComponent: () => {
+    return <ErrorPage />
   },
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {

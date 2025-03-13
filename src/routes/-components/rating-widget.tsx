@@ -35,7 +35,7 @@ const RatingWidget = ({ users }: Props) => {
 
   return (
     <div className='h-full flex flex-col relative space-y-1 border rounded-t-[12px]'>
-      <div className="w-full border-b border-stone-200 p-1 mb-1 bg-[#EBEFF5]">
+      <div className="w-full border-b border-stone-200 p-1 mb-1 rounded-t-[12px] bg-[#EBEFF5]">
         <Tabs
           defaultValue="men"
           value={activeTab}

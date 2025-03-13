@@ -13,12 +13,12 @@ import { useTranslation } from "react-i18next"
 
 
 export const Route = createFileRoute("/admin/dashboard/")({
-  errorComponent: ErrorPage,
   loader: async ({ context: { queryClient } }) => {
     const tournaments_data = await queryClient.ensureQueryData(UseGetTournaments())
     return { tournaments_data }
   },
   component: RouteComponent,
+  errorComponent: () => <ErrorPage />,
 })
 
 export default function RouteComponent() {

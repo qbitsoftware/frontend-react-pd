@@ -6,9 +6,11 @@ import { UseGetTournamentTable } from "@/queries/tables"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTranslation } from "react-i18next"
+import ErrorPage from "@/components/error"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/grupid/$groupid")({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     let table_data
 

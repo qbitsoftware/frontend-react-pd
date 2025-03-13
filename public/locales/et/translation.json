@@ -425,5 +425,37 @@
       "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
       "refresh": "Uuenda lehte"
     }
+  },
+  "protocol": {
+    "loading": "Laadimine...",
+    "error": "Viga",
+    "date": "Kuupäev",
+    "time": "Kellaaeg",
+    "table": {
+      "game": "Mäng",
+      "sets": "Setid",
+      "score": "Skoor",
+      "total": "Kokku",
+      "doubles": "Paar"
+    },
+    "notes": "Märkused",
+    "notes_missing": "Märkused puuduvad",
+    "table_referee": "Lauakohtunik",
+    "head_referee": "Peakohtunik",
+    "final_score": "Lõpp skoor"
+  },
+  "errors": {
+    "not_found": {
+      "title": "Lehte ei leitud",
+      "description": "Vabandame, kuid lehte ei leitud. Palun kontrollige, kas URL on õige.",
+      "back": "Tagasi",
+      "home": "Kodulehele"
+    },
+    "general": {
+      "title": "Midagi läks valesti",
+      "description": "Vabandame, kuid midagi läks valesti. Palun proovige uuesti.",
+      "retry": "Proovi uuesti",
+      "home": "Kodulehele"
+    }
   }
 }

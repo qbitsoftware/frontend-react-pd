@@ -425,5 +425,37 @@
       "load_failed_description": "An error occurred while fetching blogs. Please try again.",
       "refresh": "Refresh the page"
     }
+  },
+  "protocol": {
+    "loading": "Loading...",
+    "error": "Error",
+    "date": "Date",
+    "time": "Time",
+    "table": {
+      "game": "Game",
+      "sets": "Sets",
+      "score": "Score",
+      "total": "Total",
+      "doubles": "Doubles"
+    },
+    "notes": "Notes",
+    "notes_missing": "No notes available",
+    "table_referee": "Table referee",
+    "head_referee": "Head referee",
+    "final_score": "Final score"
+  },
+  "errors": {
+    "not_found": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for does not exist.",
+      "back": "Back",
+      "home": "Home"
+    },
+    "general": {
+      "title": "Something went wrong",
+      "description": "An error occurred while fetching the page.",
+      "retry": "Retry",
+      "home": "Home"
+    }
   }
 }

@@ -7,6 +7,7 @@ import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { TournamentTable } from './-components/tournaments'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute('/admin/tournaments/')({
     loader: async ({ context: { queryClient } }) => {
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/admin/tournaments/')({
             return { tournaments_data: null, error }
         }
     },
+    errorComponent: () => <ErrorPage />,
     component: RouteComponent,
 })
 

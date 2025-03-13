@@ -18,7 +18,6 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Separator } from "./ui/separator";
 import { Score, Match, MatchWrapper } from "@/types/types";
 import { UsePatchMatch } from "@/queries/match";
 import { useLocation, useRouter } from "@tanstack/react-router";
@@ -146,18 +145,15 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
+      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
         <DialogHeader className="py-10 pb-2 rounded-t-lg text-2xl font-bold text-center mx-auto">
           <DialogTitle>Match Details</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
-            <ScrollArea className="h-[calc(80vh-170px)]">
+            <ScrollArea className="h-[60vh]">
               <div className="p-6 space-y-6">
-                <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
-                  <CardHeader className="bg-secondary rounded-t-lg"></CardHeader>
-                  <CardContent className="grid gap-4 pt-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-center items-center gap-4">
                       <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Round:
                       </span>
@@ -165,26 +161,19 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                         {match.match.round + 1}
                       </span>
                     </div>
-                    <Separator className="my-2" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Mängija 1
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {match.p1.name}
-                      </span>
+                    <div className="grid grid-cols-3 items-center py-4">
+                      <div className="text-right pr-4">
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {match.p1.name}
+                        </span>
+                      </div>
+                      <div className="text-center font-bold text-lg">VS</div>
+                      <div className="text-left pl-4">
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {match.p2.name}
+                        </span>
+                      </div>
                     </div>
-                    <Separator className="my-2" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Mängija 2
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {match.p2.name}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
                 <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                   <CardHeader className="bg-gray-50 dark:bg-gray-900 rounded-t-lg">
                     <CardTitle className="text-lg text-gray-900 dark:text-white">

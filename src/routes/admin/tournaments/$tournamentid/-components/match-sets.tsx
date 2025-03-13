@@ -74,7 +74,7 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                             type="number"
                             value={set.p1_score === null ? '' : match.match.forfeit ? 0 : set.p1_score}
                             onChange={(e) => handleScoreChange(set.number, 'p1_score', e.target.value)}
-                            className="w-[60px] text-center"
+                            className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}
                         />
@@ -83,7 +83,7 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                             type="number"
                             value={set.p2_score === null ? '' : match.match.forfeit ? 0 : set.p2_score}
                             onChange={(e) => handleScoreChange(set.number, 'p2_score', e.target.value)}
-                            className="w-[60px] text-center"
+                            className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}
                         />

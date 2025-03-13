@@ -19,7 +19,6 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
 
   const params = useParams({ strict: false })
   const { data: tournament_data, isLoading: isTournamentLoading } = UseGetTournamentQuery(Number(params.tournamentid))
-  // const { data: match_data, isLoading: isMatchLoading } = UseGetMatchesQuery(Number(params.tournamentid), match.tournament_table_id)
   const matchMutation = UsePatchMatch(Number(params.tournamentid), match.tournament_table_id, match.id)
 
   const handleChange = async (value: string) => {
@@ -44,10 +43,6 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
   }
 
   const totalTables = tournament_data.data.total_tables || 20
-
-  // const occupiedTables = match_data?.data
-  //   .map((match) => match.match.extra_data.table)
-  //   .filter((table) => table !== null) as number[]
 
   const allTables = Array.from({ length: totalTables }, (_, i) => i + 1)
 

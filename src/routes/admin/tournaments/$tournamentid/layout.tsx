@@ -7,9 +7,11 @@ import { Link } from "@tanstack/react-router"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTranslation } from "react-i18next"
+import ErrorPage from "@/components/error"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid")({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     let tournament_data = undefined
     try {

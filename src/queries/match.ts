@@ -8,6 +8,17 @@ export interface MatchesResponse {
     error: string | null
 }
 
+interface Protocol {
+    match: MatchWrapper
+    parent_matches: MatchWrapper[]
+}
+
+export interface MatchResponse {
+    data: Protocol | null
+    message: string
+    error: string | null
+}
+
 export const UsePatchMatch = (id: number, group_id: number, match_id: string) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -22,6 +33,18 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
             // queryClient.resetQueries({ queryKey: ['matches', group_id] })
+        }
+    })
+}
+
+export const UseGetMatch = (tournament_id: number, group_id: number, match_id: string) => {
+    return useQuery<MatchResponse>({
+        queryKey: ['match', group_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/match/${match_id}`, {
+                withCredentials: true
+            })
+            return data;
         }
     })
 }

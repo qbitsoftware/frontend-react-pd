@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import { Reiting } from './-components/reiting';
 import { motion } from 'framer-motion'
 import { UseGetUsers } from '@/queries/users';
+import ErrorPage from '@/components/error';
 
 export const Route = createFileRoute('/reiting/')({
   component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient } }) => {
     const users = await queryClient.ensureQueryData(UseGetUsers())
     return { users }

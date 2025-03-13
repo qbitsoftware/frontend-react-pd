@@ -2,11 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import TournamentTableForm from '../-components/table-form'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ErrorResponse } from '@/types/types'
+import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/',
 )({
     component: RouteComponent,
+    errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
 
         let table_data
