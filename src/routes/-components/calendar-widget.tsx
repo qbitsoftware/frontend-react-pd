@@ -45,7 +45,7 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
     <SfumatoBackground>
       <div
         key={tournament.id}
-        className={cn(`relative rounded-tl-[2px] rounded-tr-[6px] rounded-br-[6px] rounded-bl-[2px] border-l-4 border-[#90D3FF] group flex flex-col  hover:bg-[#white] py-4 px-6 shadow-eventCard cursor-pointer text-stone-800 ${hasEnded && "shadow-sm bg-[#EEEFF2] px-4 border-none rounded-[6px]"} transition-shadow`)}
+        className={cn(`relative rounded-tl-[16px] rounded-tr-[6px] rounded-br-[6px] rounded-bl-[2px] border-l-4 border-[#90D3FF] group flex flex-col  hover:bg-[#white] py-4 px-6 shadow-eventCard cursor-pointer text-stone-800 ${hasEnded && "shadow-sm bg-[#EEEFF2] px-4 border-none rounded-[6px]"} transition-shadow`)}
         onClick={() => router.navigate({ to: "/voistlused/" + tournament.id })}
       >
 

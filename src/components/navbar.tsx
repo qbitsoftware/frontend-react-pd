@@ -67,13 +67,13 @@ export default function Navbar() {
                                 <img className="h-10 lg:h-8 xl:h-8 w-auto" src="/RLogo.png" alt="ELTA Logo" />
                             </Link>
                         </div>
-                        <NavigationMenu className="hidden lg:flex z-50">
+                        <NavigationMenu className="hidden lg:flex z-50 items-center">
                             <NavigationMenuList className="flex space-x-4 z-50">
                                 {menuItems.map((item) => (
                                     <NavigationMenuItem key={item.name}>
                                         {item.dropdownItems ? (
                                             <NavigationMenuTrigger className={cn(
-                                                " text-sm font-medium transition-colors hover:text-primary bg-transparent",
+                                                "mt-[2px] text-sm font-medium transition-colors hover:text-primary bg-transparent",
                                                 activeItem === item.name
                                                     ? "text-blue-600"
                                                     : "text-gray-700 hover:text-blue-600"
@@ -84,7 +84,7 @@ export default function Navbar() {
                                             <NavigationMenuLink
                                                 href={item.href}
                                                 className={cn(
-                                                    " text-sm font-medium px-2 transition-colors hover:text-primary",
+                                                    "text-sm font-medium px-2 transition-colors hover:text-primary",
                                                     activeItem === item.name
                                                         ? "text-blue-600"
                                                         : "text-gray-700 hover:text-blue-600"

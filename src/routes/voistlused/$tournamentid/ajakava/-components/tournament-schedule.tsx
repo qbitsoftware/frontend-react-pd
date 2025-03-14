@@ -106,7 +106,7 @@ export const TournamentSchedule = ({
       {tables.length > 0 && timeSlots.length > 0 ? (
         <div className="w-full pr-4 overflow-auto my-4">
           <div className="">
-            <Table className="border-separate">
+            <Table className="border-separate table-fixed">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-32 text-[#212121] text-center font-medium">{formattedDate}</TableHead>
@@ -143,7 +143,7 @@ export const TournamentSchedule = ({
           </div>
         </div>
       ) : (
-        <div className="text-center p-8 border rounded-md bg-slate-50">
+        <div className="text-center p-8 mt-2 border rounded-md bg-slate-50">
           <p className="text-gray-500">Mänge pole selles klassis sel päeval</p>
         </div>
       )}
@@ -260,37 +260,33 @@ const MatchList = ({ matches }: MatchListProps) => {
   return (
     <div className="space-y-3">
       {matches.map((match) => (
-        <div key={match.match.id} className={`relative p-4 border-y border-stone-300 hover:bg-slate-50 transition-colors ${match.match.winner_id ? "bg-stone-100" : "bg-transparent"}`}>
+        <div key={match.match.id} className={`relative px-4 py-6 border-y border-gray-300 hover:bg-slate-50 transition-colors ${match.match.winner_id ? "bg-gray-200" : "bg-transparent"}`}>
           <div className='absolute right-1 top-1'>
             {match.class &&
               <span className="text-xs bg-slate-100 px-1 rounded">{match.class}</span>
             }
           </div>
+
           <div className={` flex flex-col`}>
 
             <div className="flex justify-start space-x-4 items-center">
-              <span className="font-medium text-sm text-stone-700">
+              <span className={`text-sm text-stone-700 ${match.match.winner_id === match.p1?.id ? "font-bold" : "font-medium"}`}>
                 {match.p1?.name || 'TBD'}
               </span>
-              {match.match.winner_id && match.match.winner_id === match.p1?.id && (
-                <span className="text-xs font-bold text-stone-800">Winner</span>
-              )}
             </div>
+
             <div className="flex justify-between items-center w-full">
               <span className="text-xs">R{match.match.round || '?'}</span>
-
               {match.match.type === "winner" && match.match.bracket !== `1-2` && <div className="text-xs text-orange-600">Playoffs</div>}
               {match.match.type === "winner" && match.match.bracket === `1-2` && <div className='text-xs text-orange-600'>Final</div>}
-
             </div>
+
             <div className="flex justify-between items-center">
-              <span className="font-medium text-sm text-stone-700">
+              <span className={`text-sm text-stone-700 ${match.match.winner_id === match.p2?.id ? "font-bold" : "font-medium"}`}>
                 {match.p2?.name || 'TBD'}
               </span>
-              {match.match.winner_id && match.match.winner_id === match.p2?.id && (
-                <span className="text-xs font-bold text-green-600">W</span>
-              )}
             </div>
+
           </div>
         </div>
       ))}

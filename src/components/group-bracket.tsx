@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from '@/lib/utils'
@@ -55,6 +53,7 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
 
         return (
             <div className="flex flex-col space-y-2">
+                <h4>{}</h4>
                 {[0, 1].map((_, index) => (
                     <div
                         // onClick={() => handleClick(matches[index])} 
