@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import React from 'react'
+import placeholderImg from "./placheolderImg.svg"
 
 interface SoloTableProps {
   participants: Participant[] | null
@@ -31,7 +32,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src='/test/placeholder-player-profilepic.png' className='rounded-full'></img></AvatarFallback>
+                      <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>
@@ -46,12 +47,15 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
           </Table>
         </div>
       ) : (
-        <div className="bg-white shadow-lg rounded-lg p-8 text-center h-full flex items-center justify-center">
-          <p className="text-gray-500 text-lg">No participants found</p>
+        <div className=" rounded-lg p-8 text-center h-full flex items-center justify-center">
+          <p className="text-gray-800 text-lg">No participants found</p>
         </div>
       )}
     </div>
   )
 }
+
+
+
 
 export default SoloTable

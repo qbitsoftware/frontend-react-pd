@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RoundRobins, RoundRobinBracket } from '@/types/types'
+import { RoundRobins, RoundRobinBracket, MatchWrapper } from '@/types/types'
 
 interface GroupBracketProps {
-    brackets: RoundRobins
+    brackets: RoundRobins;
+    onMatchSelect?: (match: MatchWrapper) => void;
 }
 
-export default function GroupBracket({ brackets }: GroupBracketProps) {
+export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketProps) {
 
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-    const [isOpen] = useState<boolean>(false)
     // const [selectedProtocol, setSelectedProtocol] = useState<MatchWithTeamAndSets | null>(null)
 
     const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
@@ -32,11 +32,11 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
         ).sort((a) => a.match.round >= 8 ? 1 : -1);
     };
 
-    useEffect(() => {
-        if (!isOpen) {
-            // setSelectedProtocol(null)
+    const handleMatchClick = (match: MatchWrapper | null): void => {
+        if (onMatchSelect && match) {
+            onMatchSelect(match)
         }
-    }, [isOpen])
+    }
 
     // const handleClick = (match: MatchWithSets) => {
     //     setIsOpen(true)
@@ -53,10 +53,11 @@ export default function GroupBracket({ brackets }: GroupBracketProps) {
 
         return (
             <div className="flex flex-col space-y-2">
-                <h4>{}</h4>
+                <h4>{ }</h4>
                 {[0, 1].map((_, index) => (
                     <div
-                        // onClick={() => handleClick(matches[index])} 
+                        onClick={() => find_matches[index] ? handleMatchClick(find_matches[index]) : null}
+
                         key={index} className="flex flex-col items-center justify-center cursor-pointer">
                         {find_matches[index] ? (
                             <>

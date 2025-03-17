@@ -49,10 +49,11 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
         onClick={() => router.navigate({ to: "/voistlused/" + tournament.id })}
       >
 
-        <span className="font-medium">{formatDate(tournament.start_date)}</span>
         <h6 className={`font-bold flex flex-col text-stone-800 ${hasEnded && "font-medium"}`}>
           <span className="group-hover:underline">{tournament.name}</span>
         </h6>
+        <span className="font-medium">{formatDate(tournament.start_date)}</span>
+
 
       </div>
     </SfumatoBackground>

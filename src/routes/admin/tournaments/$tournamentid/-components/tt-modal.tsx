@@ -169,7 +169,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   );
 
   useEffect(() => {
-    console.log("Useffect firsst one");
     const me = match.match.extra_data;
     setTeam1SelectedPlayers(createEmptyPlayers(5, 1, match.match.extra_data));
     setTeam2SelectedPlayers(createEmptyPlayers(5, 2, match.match.extra_data));
@@ -190,7 +189,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   }, [isOpen, match.match.extra_data]);
 
   useEffect(() => {
-    console.log("Useffect second one");
     const hasChanges = {
       captain_a:
         captainTeam1 !== prevValuesRef.current.captainTeam1
@@ -226,16 +224,16 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           head_referee,
           table,
           parent_match_id: "",
-          player_a_id: team1SelectedPlayers[0].id,
-          player_b_id: team1SelectedPlayers[1].id,
-          player_c_id: team1SelectedPlayers[2].id,
-          player_d_id: team1SelectedPlayers[3].id,
-          player_e_id: team1SelectedPlayers[4].id,
-          player_x_id: team2SelectedPlayers[0].id,
-          player_y_id: team2SelectedPlayers[1].id,
-          player_z_id: team2SelectedPlayers[2].id,
-          player_v_id: team2SelectedPlayers[3].id,
-          player_w_id: team2SelectedPlayers[4].id,
+          player_a_id: team1SelectedPlayers[0]?.id,
+          player_b_id: team1SelectedPlayers[1]?.id,
+          player_c_id: team1SelectedPlayers[2]?.id,
+          player_d_id: team1SelectedPlayers[3]?.id,
+          player_e_id: team1SelectedPlayers[4]?.id,
+          player_x_id: team2SelectedPlayers[0]?.id,
+          player_y_id: team2SelectedPlayers[1]?.id,
+          player_z_id: team2SelectedPlayers[2]?.id,
+          player_v_id: team2SelectedPlayers[3]?.id,
+          player_w_id: team2SelectedPlayers[4]?.id,
           ...Object.fromEntries(
             Object.entries(hasChanges).filter(
               ([, value]) => value !== undefined,
@@ -266,7 +264,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     table,
     match.match.extra_data,
   ]);
-  console.log("JOU");
 
   const usePatchMatch = UsePatchMatch(
     tournament_id,

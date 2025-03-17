@@ -53,7 +53,7 @@ export function NotFoundPage() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.5, delay: 0.2 }}
-                                fill="#f97316"
+                                fill="#9C0D0D"
                             />
                         </motion.g>
 

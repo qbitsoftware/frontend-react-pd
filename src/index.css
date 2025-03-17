@@ -109,7 +109,7 @@ h5 {
 }
 
 h6 {
-  @apply text-[14px] xl:text-[16px];
+  @apply text-[16px];
 }
 
 /* ::-webkit-scrollbar {

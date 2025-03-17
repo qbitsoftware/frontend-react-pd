@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, FileWarning } from "lucide-react"
 import { Link, useRouter } from "@tanstack/react-router"
 import { useQueryErrorResetBoundary } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -15,105 +15,82 @@ export default function ErrorPage() {
         queryErrorResetBoundary.reset()
     }, [queryErrorResetBoundary])
 
+    // Animation variants for the container
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.3,
+                delayChildren: 0.1
+            }
+        }
+    }
+
+    // Animation variants for the children
+    const itemVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: { 
+                duration: 0.2
+            }
+        }
+    }
+
     return (
         <div className="w-full max-w-[1440px] mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[70vh]">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-md text-center"
+                className="w-full max-w-md"
             >
-                <div className="mb-8">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 200 200"
-                        className="w-32 h-32 mx-auto text-primary"
-                        fill="currentColor"
+                <motion.div 
+                    className="flex flex-col items-start gap-2"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <motion.div variants={itemVariants}>
+                        <FileWarning className="w-20 h-20 text-stone-800" />
+                    </motion.div>
+                    
+                    <motion.h2
+                        className="font-bold text-stone-900"
+                        variants={itemVariants}
                     >
-                        <motion.g
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.5 }}
+                        {t('errors.general.title') || 'Oih! Midagi läks valesti'}
+                    </motion.h2>
+                    
+                    <motion.p
+                        className="text-xl mb-6 text-gray-600"
+                        variants={itemVariants}
+                    >
+                        {t('errors.general.description') || 'Vabandame ebamugavuste pärast. Tegeleme probleemi lahendamisega.'}
+                    </motion.p>
+                    
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col sm:flex-row justify-start space-y-3 sm:space-y-0 sm:space-x-4"
+                    >
+                        <Button
+                            variant="default"
+                            onClick={() => router.invalidate()}
+                            className="flex items-center gap-2"
                         >
-                            <motion.path
-                                d="M100 40L30 160H170L100 40Z"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="8"
-                                initial={{ pathLength: 0 }}
-                                animate={{ pathLength: 1 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                            />
-                            <motion.path
-                                d="M100 140V140.5"
-                                stroke="currentColor"
-                                strokeWidth="12"
-                                strokeLinecap="round"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 0.8 }}
-                            />
-                            <motion.path
-                                d="M100 80V120"
-                                stroke="currentColor"
-                                strokeWidth="12"
-                                strokeLinecap="round"
-                                initial={{ scaleY: 0 }}
-                                animate={{ scaleY: 1 }}
-                                transition={{ duration: 0.5, delay: 1 }}
-                            />
-                        </motion.g>
-                    </svg>
-                </div>
+                            {t('errors.general.retry') || 'Proovi uuesti'}
+                        </Button>
 
-                <motion.h1
-                    className="text-5xl font-bold mb-4 text-gray-900"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    {t('errors.general.title') || 'Oih! Midagi läks valesti'}
-                </motion.h1>
-
-                <motion.p
-                    className="text-xl mb-8 text-gray-600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                >
-                    {t('errors.general.description') || 'Vabandame ebamugavuste pärast. Tegeleme probleemi lahendamisega.'}
-                </motion.p>
-
-                {/* <motion.div
-                    className="mb-8 text-gray-600 flex items-center justify-center space-x-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
-                >
-                    <AlertTriangle className="w-4 h-4" />
-                    <span className="text-sm">Error: {error.message || "Unknown server error"}</span>
-                </motion.div> */}
-
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 }}
-                    className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4"
-                >
-                    <Button
-                        variant="default"
-                        onClick={() => router.invalidate()}
-                        className="flex items-center gap-2"
-                    >
-                        {t('errors.general.retry') || 'Proovi uuesti'}
-                    </Button>
-
-                    <Button asChild variant="outline">
-                        <Link to="/">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            {t('errors.general.home') || 'Mine kodulehele'}
-                        </Link>
-                    </Button>
+                        <Button asChild variant="outline">
+                            <Link to="/">
+                                <ArrowLeft className="h-4 w-4 mr-2" />
+                                {t('errors.general.home') || 'Mine kodulehele'}
+                            </Link>
+                        </Button>
+                    </motion.div>
                 </motion.div>
             </motion.div>
         </div>

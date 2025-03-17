@@ -74,13 +74,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
         </Select>
         {tournament_table.type == "champions_league" && (
           <div className="flex gap-4">
-            <Button className="text-white bg-secondary" onClick={() => {
+            <Button className="text-white bg-primary" onClick={() => {
               setInitialTab("regrouping")
               setIsRegroupingModalOpen(true)
             }}
             >Regrupeeri</Button>
-            <Button className="text-white bg-secondary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
-            <Button className="text-white bg-secondary" onClick={() => setIsTimeEditingModalOpen(true)}>Muuda aegu</Button>
+            <Button className="text-white bg-primary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
+            <Button className="text-white bg-primary" onClick={() => setIsTimeEditingModalOpen(true)}>Muuda aegu</Button>
           </div>
         )
         }
@@ -88,6 +88,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
       <div className="rounded-md border my-2">
         <Table>
           <TableHeader>
+
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -110,10 +111,27 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
                     || row.original.match.winner_id != ""
                   )
                   && "bg-white")}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell className="py-0 !h-auto" key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
-                  <TableCell><Button disabled={row.original.p1.id == "" && row.original.p2.id == ""} variant={"ghost"} onClick={() => handleRowClick(row.original)}>Muuda</Button></TableCell>
+                  {row.getVisibleCells().map((cell, cellIndex) => {
+                    if (cell.column.id === "actions") {
+                      return (
+                        <TableCell key={cellIndex}>
+                          <Button
+                            disabled={row.original.p1.id == "" && row.original.p2.id == ""}
+                            variant="outline"
+                            onClick={() => handleRowClick(row.original)}
+                          >
+                            Muuda
+                          </Button>
+                        </TableCell>
+                      );
+                    }
+
+                    return (
+                      <TableCell className="py-0 !h-auto" key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (

@@ -1,4 +1,4 @@
-import { UserLogin, UserNew } from "@/types/types"
+import { RegisterFormData, UserLogin, UserNew } from "@/types/types"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { LoginFormData } from "@/routes/login"
 import { axiosInstance } from "./axiosconf"
@@ -131,4 +131,15 @@ export const fetchUserByName = async (name: string): Promise<UserNew | null> => 
         console.error("Error fetching user by name:", error)
         return null
     }
+}
+
+export const useCreateUser = () => {
+    return useMutation({
+        mutationFn: async (formData: RegisterFormData) => {
+            const { data } = await axiosInstance.post("/auth/register", formData, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
 }

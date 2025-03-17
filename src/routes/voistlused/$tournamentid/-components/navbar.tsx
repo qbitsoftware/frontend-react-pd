@@ -56,7 +56,7 @@ const Navbar = ({ tournament_tables }: Props) => {
         </div>
       </div>
       <div className="px-2 md:px-12 ">
-        <Tabs value={activeTab} className="w-full flex justify-start">
+        <Tabs value={activeTab} className="w-full flex justify-center md:justify-start">
           <TabsList className="flex-wrap space-x-2">
             {filteredNavLinks.map((link) => (
               <Link

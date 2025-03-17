@@ -1,14 +1,6 @@
 import { Search, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { MatchWrapper } from '@/types/types';
 import {
   DropdownMenu,
@@ -16,7 +8,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import React, { useState, useEffect } from "react";
 import {
   distributeMatchesByTable,
   generateTimeSlotsForGameday,
@@ -46,7 +45,6 @@ export const TournamentSchedule = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const safeMatches = Array.isArray(matches) ? getUniqueMatches(matches) : [];
-
   const uniqueClasses = getUniqueClasses(safeMatches);
 
   // Filter by class
@@ -62,8 +60,7 @@ export const TournamentSchedule = ({
   const totalDays = uniqueGamedays.length || 1;
   const safeDayIndex = activeDay >= 0 && activeDay < uniqueGamedays.length ? activeDay : 0;
 
-
-  let filteredMatches = filterMatchesByGameday(classFilteredMatches, uniqueGamedays[safeDayIndex])
+  let filteredMatches = filterMatchesByGameday(classFilteredMatches, uniqueGamedays[safeDayIndex]);
 
   if (searchTerm) {
     const term = searchTerm.toLowerCase();
@@ -89,6 +86,25 @@ export const TournamentSchedule = ({
   // Get the formatted date for display
   const formattedDate = getFormattedDate(uniqueGamedays[safeDayIndex] || '');
 
+  // Calculate grid template columns based on number of timeslots
+  const calculateGridColumns = () => {
+    // Fixed width for the Laud column
+    const labelColumn = "10rem";
+
+    if (timeSlots.length === 1) {
+      // For single timeslot, set a maximum width to prevent excessive stretching
+      return `${labelColumn} minmax(16rem, 24rem)`;
+    } else if (timeSlots.length === 2) {
+      return `${labelColumn} repeat(${timeSlots.length}, minmax(14rem, 18rem))`;
+    } else if (timeSlots.length <= 4) {
+      // For 3-4 timeslots, balance width
+      return `${labelColumn} repeat(${timeSlots.length}, minmax(12rem, 1fr))`;
+    } else {
+      // For many timeslots, make them narrower
+      return `${labelColumn} repeat(${timeSlots.length}, minmax(12rem, 1fr))`;
+    }
+  };
+
   return (
     <>
       <ScheduleFilters
@@ -104,42 +120,45 @@ export const TournamentSchedule = ({
       />
 
       {tables.length > 0 && timeSlots.length > 0 ? (
-        <div className="w-full pr-4 overflow-auto my-4">
-          <div className="">
-            <Table className="border-separate table-fixed">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-32 text-[#212121] text-center font-medium">{formattedDate}</TableHead>
-                  {timeSlots.map((timeSlot, index) => (
-                    <TableHead
-                      key={timeSlot.displayTime}
-                      className={`w-40 font-medium ${index !== 0 ? 'border-l border-stone-200' : ''}`}
-                    >
-                      {timeSlot.displayTime}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tables.map(tableId => (
-                  <TableRow key={tableId}>
-                    <TableCell className="bg-[#3E6156] font-medium text-center text-[#ececec] rounded-[2px]">
-                      Laud {tableId}
-                    </TableCell>
-                    {timeSlots.map((timeSlot, index) => (
-                      <TableCell
-                        key={`${tableId}-${timeSlot.displayTime}`}
-                        className={`p-2 ${index !== 0 ? 'border-l border-stone-100' : ''}`}
-                      >
-                        <MatchList
-                          matches={matchesByTableAndTime[tableId]?.[timeSlot.key] || []}
-                        />
-                      </TableCell>
-                    ))}
-                  </TableRow>
+        <div className="w-full pr-4 overflow-auto my-8">
+          <div
+            className="grid max-w-fit"
+            style={{
+              gridTemplateColumns: calculateGridColumns(),
+              gap: "12px"
+            }}
+          >
+            <div className="p-3 text-[#212121] text-center font-medium whitespace-nowrap">{formattedDate}</div>
+
+            {timeSlots.map((timeSlot) => (
+              <div
+                key={timeSlot.displayTime}
+                className="p-3"
+              >
+                {timeSlot.displayTime}
+
+              </div>
+            ))}
+
+            {tables.map(tableId => (
+              <React.Fragment key={tableId}>
+                <div className="bg-[#3E6156] font-medium text-[#ececec] rounded-[2px] flex items-center justify-center p-3">
+                  Laud {tableId}
+                </div>
+
+                {/* Match cells for each timeslot */}
+                {timeSlots.map((timeSlot) => (
+                  <div
+                    key={`${tableId}-${timeSlot.displayTime}`}
+                    className="p-2 flex items-center justify-center"
+                  >
+                    <MatchList
+                      matches={matchesByTableAndTime[tableId]?.[timeSlot.key] || []}
+                    />
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       ) : (
@@ -242,8 +261,6 @@ const ScheduleFilters = ({
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-
-
     </div>
   );
 };
@@ -252,45 +269,132 @@ interface MatchListProps {
   matches: MatchWrapper[];
 }
 
+// Helper function to truncate text with ellipsis
+const truncateText = (text: string, maxLength: number) => {
+  if (!text) return '';
+  return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+};
+
 const MatchList = ({ matches }: MatchListProps) => {
   if (!matches || !matches.length) {
     return null;
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full" style={{}}>
       {matches.map((match) => (
-        <div key={match.match.id} className={`relative px-4 py-6 border-y border-gray-300 hover:bg-slate-50 transition-colors ${match.match.winner_id ? "bg-gray-200" : "bg-transparent"}`}>
-          <div className='absolute right-1 top-1'>
+        <MatchCard key={match.match.id} match={match} />
+      ))}
+    </div>
+  );
+};
+
+interface MatchCardProps {
+  match: MatchWrapper;
+}
+
+const MatchCard = ({ match }: MatchCardProps) => {
+  // Define a fixed height for all cards (adjust as needed)
+  const cardHeight = "7rem";
+  const maxNameLength = 20; // Maximum characters to show before truncating
+
+  // Check if either name needs truncation
+  const p1NameTruncated = truncateText(match.p1?.name || 'TBD', maxNameLength);
+  const p2NameTruncated = truncateText(match.p2?.name || 'TBD', maxNameLength);
+
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div
+          className={`relative mx-auto px-4 py-6 border-y border-gray-300 hover:bg-slate-100 transition-colors cursor-pointer ${match.match.winner_id ? "bg-gray-100" : "bg-transparent"} w-full`}
+          style={{ height: cardHeight }}
+        >
+          <div className='absolute right-1 top-0'>
             {match.class &&
-              <span className="text-xs bg-slate-100 px-1 rounded">{match.class}</span>
+              <span className="text-xs bg-[#EEEFF2] px-1 rounded">{match.class}</span>
             }
+
           </div>
 
-          <div className={` flex flex-col`}>
-
+          <div className={`flex flex-col h-full justify-around`}>
             <div className="flex justify-start space-x-4 items-center">
               <span className={`text-sm text-stone-700 ${match.match.winner_id === match.p1?.id ? "font-bold" : "font-medium"}`}>
-                {match.p1?.name || 'TBD'}
+                {p1NameTruncated}
               </span>
             </div>
 
-            <div className="flex justify-between items-center w-full">
-              <span className="text-xs">R{match.match.round || '?'}</span>
-              {match.match.type === "winner" && match.match.bracket !== `1-2` && <div className="text-xs text-orange-600">Playoffs</div>}
-              {match.match.type === "winner" && match.match.bracket === `1-2` && <div className='text-xs text-orange-600'>Final</div>}
-            </div>
+
 
             <div className="flex justify-between items-center">
               <span className={`text-sm text-stone-700 ${match.match.winner_id === match.p2?.id ? "font-bold" : "font-medium"}`}>
-                {match.p2?.name || 'TBD'}
+                {p2NameTruncated}
               </span>
             </div>
-
           </div>
         </div>
-      ))}
-    </div>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Match Details</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          {/* Player 1 Information */}
+          <div className="border-b pb-3">
+            <p className="font-medium text-sm text-gray-500 mb-1">Player 1:</p>
+            <p className={`text-lg ${match.match.winner_id === match.p1?.id ? "font-bold" : ""}`}>
+              {match.p1?.name || 'TBD'}
+            </p>
+          </div>
+
+          {/* Player 2 Information */}
+          <div className="border-b pb-3">
+            <p className="font-medium text-sm text-gray-500 mb-1">Player 2:</p>
+            <p className={`text-lg ${match.match.winner_id === match.p2?.id ? "font-bold" : ""}`}>
+              {match.p2?.name || 'TBD'}
+            </p>
+          </div>
+
+          {/* Match Details */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="font-medium text-sm text-gray-500 mb-1">Class:</p>
+              <p>{match.class || 'N/A'}</p>
+            </div>
+            <div>
+              <p className="font-medium text-sm text-gray-500 mb-1">Round:</p>
+              <p>Round {match.match.round || '?'}</p>
+            </div>
+            <div>
+              <p className="font-medium text-sm text-gray-500 mb-1">Type:</p>
+              <p>{match.match.type === "winner" ? "Playoffs" : "Table match"}</p>
+            </div>
+            <div>
+              <p className="font-medium text-sm text-gray-500 mb-1">Status:</p>
+              <p>{match.match.winner_id ? "Completed" : "Pending"}</p>
+            </div>
+            {match.match.bracket && (
+              <div>
+                <p className="font-medium text-sm text-gray-500 mb-1">Bracket:</p>
+                <p>{match.match.bracket === "1-2" ? "Final" : match.match.bracket}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Winner Information (if available) */}
+          {match.match.winner_id && (
+            <div className="mt-3 pt-3 border-t">
+              <p className="font-medium text-sm text-gray-500 mb-1">Winner:</p>
+              <p className="font-bold">
+                {match.match.winner_id === match.p1?.id ? match.p1?.name :
+                  match.match.winner_id === match.p2?.id ? match.p2?.name : 'Unknown'}
+              </p>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

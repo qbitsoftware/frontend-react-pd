@@ -1,3 +1,6 @@
+import { TFunction } from "i18next"
+import { z } from "zod"
+
 export type TableMatch = {
   match: Match
   participant_1: Participant
@@ -380,3 +383,22 @@ export interface MatchTimeUpdate {
   match_id: string;
   start_date: string;
 }
+
+export const createRegisterSchema = (t: TFunction) => z.object({
+  first_name: z.string().min(1, t('register.form.errors.first_name')),
+  last_name: z.string().min(1, t('register.form.errors.last_name')),
+  email: z.string().email(t('register.form.errors.email')),
+  sex: z.enum(['male', 'female', 'other'], {
+    required_error: t('register.form.errors.sex'),
+  }),
+  birth_date: z.string().min(1, t('register.form.errors.date_of_birth')),
+  username: z.string().min(3, t('register.form.errors.username')),
+  password: z.string().min(8, t('register.form.errors.password')),
+  confirm_password: z.string().min(1, t('register.form.errors.password_confirmation')),
+  create_profile: z.boolean().default(true),
+}).refine((data) => data.password === data.confirm_password, {
+  message: t('register.form.errors.password_confirmation'),
+  path: ["confirmPassword"],
+});
+
+export type RegisterFormData = z.infer<ReturnType<typeof createRegisterSchema>>

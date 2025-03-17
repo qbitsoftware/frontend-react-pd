@@ -54,11 +54,11 @@ function RouteComponent() {
   }
 
   return (
-    <div className="px-4 md:px-12 py-4 md:py-8">
-      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Mängijad</h5>
-      <div className="pb-8">
-        {tables_data && tables_data.data ? (
-          <>
+    <>
+      {tables_data && tables_data.data && tables_data.data.some(table => table.participants && table.participants.length > 0) ? (
+        <div className="px-4 md:px-12 py-4 md:py-8">
+        <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Mängijad</h5>
+          <div className="pb-8">
             <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 space-x-0 md:space-x-4">
               <div className="relative w-full md:w-auto">
                 <Input
@@ -70,20 +70,21 @@ function RouteComponent() {
                 />
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               </div>
-              
             </div>
             <div className="flex flex-col gap-10">
-            {filteredData.length > 0 ? (
-                filteredData.map((table) => <Group key={table.id} group={table}  />)
+              {filteredData.length > 0 ? (
+                filteredData.map((table) => <Group key={table.id} group={table} />)
               ) : (
                 <div className="text-center py-8 text-gray-500">No players found matching "{searchQuery}"</div>
               )}
             </div>
-          </>
-        ) : (
-          <div>No participants</div>
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      ) : (
+        <div className="p-6 text-center rounded-sm">
+          <p className="text-stone-500">No participants yet.</p>
+        </div>
+      )}
+    </>
   )
 }

@@ -60,6 +60,9 @@ function RouteComponent() {
                         <span className="mr-2">/</span>
                         <span className="font-bold">{article.data.title}</span>
                     </div>
+                    <div className="text-sm text-gray-500">
+                        Published on {formatDateString(article.data.created_at)}
+                    </div>
                 </CardHeader>
                 <CardContent className="prose max-w-none overflow-scroll">
                     {/* <p className='blog-content' dangerouslySetInnerHTML={{ __html: article.data.content_html }}></p> */}
@@ -72,10 +75,7 @@ function RouteComponent() {
                     )}
 
                 </CardContent>
-                <CardFooter className="flex justify-between items-center">
-                    <div className="text-sm text-gray-500">
-                        Published on {formatDateString(article.data.created_at)}
-                    </div>
+                <CardFooter className="flex justify-center items-center mt-4">
                     <Button variant="outline" asChild>
                         <Link href="/uudised">Kõik uudised</Link>
                     </Button>

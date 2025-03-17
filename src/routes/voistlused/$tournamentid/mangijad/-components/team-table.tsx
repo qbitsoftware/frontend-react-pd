@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import type { Participant } from "@/types/types"
+import placeholderImg from "./placheolderImg.svg"
 
 interface TeamTableProps {
   participants: Participant[] | null
@@ -21,7 +22,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
     setIsDialogOpen(true)
   }
 
-  console.log("p", participants?.length)
   return (
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
@@ -44,7 +44,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src='/test/clubs/ViimsiPinx 150x150.jpg' className='rounded-full'></img></AvatarFallback>
+                      <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>
@@ -61,7 +61,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl h-[95vh] overflow-scroll">
           <DialogHeader>
             <DialogTitle>{selectedTeam?.name} - Team Players</DialogTitle>
           </DialogHeader>

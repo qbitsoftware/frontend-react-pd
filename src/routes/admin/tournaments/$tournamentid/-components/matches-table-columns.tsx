@@ -7,6 +7,12 @@ export function createColumns(t: TFunction<"translation", undefined>): ColumnDef
 
   return [
     {
+      id: "actions",
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ({ row }) => { void row; null },
+    },
+    {
       accessorKey: "",
       header: t("admin.tournaments.matches.table.serial_number"),
       cell: ({ row }) => {

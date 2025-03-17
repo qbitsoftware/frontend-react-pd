@@ -7,14 +7,14 @@ import { UseGetMatch } from '@/queries/match'
 import Notes from '@/routes/voistlused/-components/notes'
 import { useTranslation } from 'react-i18next'
 
-interface StatsiticProps {
+interface StatisticsProps {
     tournament_id: number
     group_id: number
     match_id: string
     index: number
 }
 
-export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: StatsiticProps) => {
+export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: StatisticsProps) => {
     const { data, isLoading } = UseGetMatch(tournament_id, group_id, match_id)
     const { t } = useTranslation()
 
