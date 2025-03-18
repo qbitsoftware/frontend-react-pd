@@ -26,7 +26,7 @@ const chartConfig = {
 export function PlayerRankingChangeGraph() {
   return (
     <Card className="bg-yellow rounded-lg">
-      <CardContent className="pt-0">
+      <CardContent className="pt-8">
         <ChartContainer config={chartConfig} className="relative">
           <AreaChart
             accessibilityLayer

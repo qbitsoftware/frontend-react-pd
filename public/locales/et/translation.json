@@ -91,13 +91,73 @@
       "results": "Tulemused"
     }
   },
+  "competitions": {
+    "category": "Kategooria",
+    "dates": "Kuupäevad",
+    "location": "Toimumiskoht",
+    "tables": "Laudu kokku",
+    "results": {
+      "finished": "Lõppenud"
+    },
+    "timetable": {
+      "table": "Laud",
+      "search_placeholder": "Otsi nime",
+      "all_groups": "Kõik grupid",
+      "gameday": "Mängu päev",
+      "match_details": "Mängu detailid",
+      "player_1": "Mängija 1",
+      "player_2": "Mängija 2",
+      "group": "Grupp",
+      "round": "Ring",
+      "type": "Tüüp",
+      "play_off": "Play-off",
+      "group_match": "Tiimi matš",
+      "status": "Staatus",
+      "status_completed": "Läbi",
+      "status_pending": "Käimas",
+      "bracket": "Koht",
+      "final": "Finaal",
+      "winner": "Võitja"
+    },
+    "errors": {
+      "info_missing": "Turniiri info puudub",
+      "no_schedule": "Ajakava puudub",
+      "no_games": "Mänge pole selles klassis sel päeval",
+      "winner_unknown": "Teadmata",
+      "no_groups": "Tulemused puuduvad"
+    },
+    "navbar": {
+      "info": "Info",
+      "timetable": "Ajakava",
+      "results": "Tulemused",
+      "participants": "Osalejad",
+      "gallery": "Galerii",
+      "guide": "Juhend",
+      "sponsors": "Sponsorid",
+      "media": "Meedia"
+    }
+  },
   "calendar": {
     "title": "Kalender",
     "all_categories": "Kõik kategooriad",
     "no_tournaments": "Turniirid puuduvad",
     "search_placeholder": "Otsi turniiri...",
     "upcoming": "Tulemas",
-    "finished": "Lõppenud"
+    "finished": "Lõppenud",
+    "months": {
+      "january": "Jaanuar",
+      "february": "Veebruar",
+      "march": "Märts",
+      "april": "Aprill",
+      "may": "Mai",
+      "june": "Juuni",
+      "july": "Juuli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktoober",
+      "november": "November",
+      "december": "Detsember"
+    }
   },
   "tournaments": {
     "header": "Turniirid",

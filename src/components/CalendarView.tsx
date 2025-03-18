@@ -72,12 +72,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
                 tournament => new Date(tournament.start_date).getMonth() === i
             ).sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
 
-            const monthName = new Date(selectedYear, i).toLocaleString('default', { month: 'long' });
+            const monthKey = new Date(selectedYear, i).toLocaleString('en-US', { month: 'long' }).toLowerCase();
+            const monthName = t(`calendar.months.${monthKey}`);
             grouped[monthName] = monthTournaments;
         }
 
         return grouped;
-    }, [filteredTournaments, selectedYear]);
+    }, [filteredTournaments, selectedYear, t]);
 
 
     const months = Object.keys(tournamentsByMonth).map(month => ({
@@ -113,7 +114,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
         <div className="py-4">
             <div className="lg:rounded-lg bg-white px-4 sm:px-6 md:px-12 py-6 space-y-4">
                 <h2 className="font-bold">{t("calendar.title")}</h2>
-                
+
                 <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                     <div className="relative w-full lg:w-1/3">
                         <input

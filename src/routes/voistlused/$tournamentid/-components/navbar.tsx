@@ -5,23 +5,26 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, formatDateRange } from "@/lib/utils";
 import { useTournament } from "./tournament-provider";
 import { TournamentTable } from "@/types/types";
+import { useTranslation } from "react-i18next";
 
-const NavLinks = [
-  { name: "Info", href: "/" },
-  { name: "Ajakava", href: "/ajakava" },
-  { name: "Tulemused", href: "/tulemused" },
-  { name: "Mängijad", href: "/mangijad" },
-  { name: "Galerii", href: "/galerii" },
-  { name: "Juhend", href: "/juhend" },
-  { name: "Sponsorid", href: "/sponsorid" },
-  { name: "Meedia", href: "/meedia" },
-];
+
 
 interface Props {
   tournament_tables: TournamentTable[]
 }
 
 const Navbar = ({ tournament_tables }: Props) => {
+  const { t } = useTranslation()
+  const NavLinks = [
+    { name: t("competitions.navbar.info"), href: "/" },
+    { name: t("competitions.navbar.timetable"), href: "/ajakava" },
+    { name: t("competitions.navbar.results"), href: "/tulemused" },
+    { name: t("competitions.navbar.participants"), href: "/mangijad" },
+    { name: t("competitions.navbar.gallery"), href: "/galerii" },
+    { name: t("competitions.navbar.guide"), href: "/juhend" },
+    { name: t("competitions.navbar.sponsors"), href: "/sponsorid" },
+    { name: t("competitions.navbar.media"), href: "/meedia" },
+  ];
   const params = useParams({ strict: false });
   const location = useLocation();
   const tournament = useTournament();

@@ -26,6 +26,7 @@ import {
   getUniqueClasses,
   filterMatchesByGameday
 } from "./schedule-utils";
+import { useTranslation } from 'react-i18next';
 
 export interface ScheduleProps {
   matches: MatchWrapper[];
@@ -43,6 +44,7 @@ export const TournamentSchedule = ({
   setActiveClass
 }: ScheduleProps) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { t } = useTranslation()
 
   const safeMatches = Array.isArray(matches) ? getUniqueMatches(matches) : [];
   const uniqueClasses = getUniqueClasses(safeMatches);
@@ -143,7 +145,7 @@ export const TournamentSchedule = ({
             {tables.map(tableId => (
               <React.Fragment key={tableId}>
                 <div className="bg-[#3E6156] font-medium text-[#ececec] rounded-[2px] flex items-center justify-center p-3">
-                  Laud {tableId}
+                  {t('competitions.timetable.table')} {tableId}
                 </div>
 
                 {/* Match cells for each timeslot */}
@@ -163,7 +165,7 @@ export const TournamentSchedule = ({
         </div>
       ) : (
         <div className="text-center p-8 mt-2 border rounded-md bg-slate-50">
-          <p className="text-gray-500">Mänge pole selles klassis sel päeval</p>
+          <p className="text-gray-500">{t('competitions.errors.no_games')}</p>
         </div>
       )}
     </>
@@ -193,12 +195,13 @@ const ScheduleFilters = ({
   searchTerm,
   setSearchTerm
 }: ScheduleFiltersProps) => {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-wrap gap-4">
       <div className="relative w-full md:w-auto">
         <Input
           type="text"
-          placeholder="Otsi nime"
+          placeholder={t('competitions.timetable.search_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="h-12 pl-4 pr-10 py-2 text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
@@ -210,7 +213,7 @@ const ScheduleFilters = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
-              <span>{activeClass === 'all' ? 'Kõik grupid' : `${activeClass}`}</span>
+              <span>{activeClass === 'all' ? t('competitions.timetable.all_groups') : `${activeClass}`}</span>
               <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -219,7 +222,7 @@ const ScheduleFilters = ({
               onClick={() => setActiveClass('all')}
               className={activeClass === 'all' ? "bg-slate-100" : ""}
             >
-              Kõik grupid
+              {t('competitions.timetable.all_groups')}
             </DropdownMenuItem>
             {classes.map((classValue) => (
               <DropdownMenuItem
@@ -239,8 +242,8 @@ const ScheduleFilters = ({
           <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
             <span>
               {gamedays[activeDay] ?
-                `Gameday ${activeDay + 1} (${getFormattedDate(gamedays[activeDay])})` :
-                `Gameday ${activeDay + 1}`
+                `${t('competitions.timetable.gameday')} ${activeDay + 1} (${getFormattedDate(gamedays[activeDay])})` :
+                `${t('competitions.timetable.gameday')} ${activeDay + 1}`
               }
             </span>
             <ChevronDown className="h-4 w-4" />
@@ -254,8 +257,8 @@ const ScheduleFilters = ({
               className={activeDay === index ? "bg-slate-100" : ""}
             >
               {gamedays[index] ?
-                `Gameday ${index + 1} (${getFormattedDate(gamedays[index])})` :
-                `Gameday ${index + 1}`
+                `${t('competitions.timetable.gameday')} ${index + 1} (${getFormattedDate(gamedays[index])})` :
+                `${t('competitions.timetable.gameday')} ${index + 1}`
               }
             </DropdownMenuItem>
           ))}
@@ -301,6 +304,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
   // Check if either name needs truncation
   const p1NameTruncated = truncateText(match.p1?.name || 'TBD', maxNameLength);
   const p2NameTruncated = truncateText(match.p2?.name || 'TBD', maxNameLength);
+  const { t } = useTranslation()
 
 
   return (
@@ -337,12 +341,12 @@ const MatchCard = ({ match }: MatchCardProps) => {
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Match Details</DialogTitle>
+          <DialogTitle>{t('competitions.timetable.match_details')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           {/* Player 1 Information */}
           <div className="border-b pb-3">
-            <p className="font-medium text-sm text-gray-500 mb-1">Player 1:</p>
+            <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.player_1')}:</p>
             <p className={`text-lg ${match.match.winner_id === match.p1?.id ? "font-bold" : ""}`}>
               {match.p1?.name || 'TBD'}
             </p>
@@ -350,7 +354,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
 
           {/* Player 2 Information */}
           <div className="border-b pb-3">
-            <p className="font-medium text-sm text-gray-500 mb-1">Player 2:</p>
+            <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.player_2')}:</p>
             <p className={`text-lg ${match.match.winner_id === match.p2?.id ? "font-bold" : ""}`}>
               {match.p2?.name || 'TBD'}
             </p>
@@ -359,25 +363,25 @@ const MatchCard = ({ match }: MatchCardProps) => {
           {/* Match Details */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="font-medium text-sm text-gray-500 mb-1">Class:</p>
+              <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.group')}:</p>
               <p>{match.class || 'N/A'}</p>
             </div>
             <div>
-              <p className="font-medium text-sm text-gray-500 mb-1">Round:</p>
-              <p>Round {match.match.round || '?'}</p>
+              <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.round')}:</p>
+              <p>{match.match.round || '?'}</p>
             </div>
             <div>
-              <p className="font-medium text-sm text-gray-500 mb-1">Type:</p>
-              <p>{match.match.type === "winner" ? "Playoffs" : "Table match"}</p>
+              <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.type')}:</p>
+              <p>{match.match.type === "winner" ? t('competitions.timetable.play_off') : t('competitions.timetable.group_match')}</p>
             </div>
             <div>
-              <p className="font-medium text-sm text-gray-500 mb-1">Status:</p>
-              <p>{match.match.winner_id ? "Completed" : "Pending"}</p>
+              <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.status')}:</p>
+              <p>{match.match.winner_id ? t('competitions.timetable.status_completed') : t('competitions.timetable.status_pending')}</p>
             </div>
             {match.match.bracket && (
               <div>
-                <p className="font-medium text-sm text-gray-500 mb-1">Bracket:</p>
-                <p>{match.match.bracket === "1-2" ? "Final" : match.match.bracket}</p>
+                <p className="font-medium text-sm text-gray-500 mb-1">{t("competitions.timetable.bracket")}:</p>
+                <p>{match.match.bracket === "1-2" ? t('competitions.timetable.final') : match.match.bracket}</p>
               </div>
             )}
           </div>
@@ -385,10 +389,10 @@ const MatchCard = ({ match }: MatchCardProps) => {
           {/* Winner Information (if available) */}
           {match.match.winner_id && (
             <div className="mt-3 pt-3 border-t">
-              <p className="font-medium text-sm text-gray-500 mb-1">Winner:</p>
+              <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.winner')}:</p>
               <p className="font-bold">
                 {match.match.winner_id === match.p1?.id ? match.p1?.name :
-                  match.match.winner_id === match.p2?.id ? match.p2?.name : 'Unknown'}
+                  match.match.winner_id === match.p2?.id ? match.p2?.name : t('competitions.errors.winner_unknown')}
               </p>
             </div>
           )}

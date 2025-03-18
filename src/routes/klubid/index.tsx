@@ -12,14 +12,10 @@ function RouteComponent() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
   return (
-    <div className="w-full h-full flex flex-col mb-20">
-      <header className="w-full py-6 bg-blue-500 text-white text-center">
-        <h1 className="text-3xl font-bold">
-          Eri-teadaanne: Hannes Mets astus pinksi! 🏓
-        </h1>
-      </header>
-
-      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 ">
+    <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
+      <div className="py-4">
+        <div className="lg:rounded-lg bg-white px-4 sm:px-6 md:px-12 py-6 space-y-4">
+          <h2 className="font-bold">Kontakt</h2>
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -28,6 +24,7 @@ function RouteComponent() {
         >
           <ClubGrid clubs={mockClubs} />
         </motion.div>
+      </div>
       </div>
     </div>
   )

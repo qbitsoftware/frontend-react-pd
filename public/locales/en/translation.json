@@ -91,13 +91,73 @@
       "results": "Results"
     }
   },
+  "competitions": {
+    "category": "Category",
+    "dates": "Dates",
+    "location": "Location",
+    "tables": "Total tables",
+    "results": {
+      "finished": "Finished"
+    },
+    "timetable": {
+      "table": "Table",
+      "search_placeholder": "Search by name",
+      "all_groups": "All groups",
+      "gameday": "Gameday",
+      "match_details": "Match Details",
+      "player_1": "Player 1",
+      "player_2": "Player 2",
+      "group": "Group",
+      "round": "Round",
+      "type": "Type",
+      "play_off": "Play-off",
+      "group_match": "Group match",
+      "status": "Status",
+      "status_completed": "Completed",
+      "status_pending": "Ongoing",
+      "bracket": "Bracket",
+      "final": "Final",
+      "winner": "Winner"
+    },
+    "errors": {
+      "info_missing": "No tournament information available",
+      "no_schedule": "No schedule available",
+      "no_games": "No games available for that group",
+      "winner_unknown": "Unknown",
+      "no_groups": "No results available"
+    },
+    "navbar": {
+      "info": "Info",
+      "timetable": "Timetable",
+      "results": "Results",
+      "participants": "Participants",
+      "gallery": "Gallery",
+      "guide": "Guide",
+      "sponsors": "Sponsors",
+      "media": "Media"
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "all_categories": "All categories",
     "no_tournaments": "No tournaments",
     "search_placeholder": "Find a tournament...",
     "upcoming": "Upcoming",
-    "finished": "Finished"
+    "finished": "Finished",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
   },
   "tournaments": {
     "header": "Tournaments",
@@ -172,10 +232,10 @@
           "title": "Latest matches"
         },
         "temp_placeholder": {
-          "title": "Detailed player information"
+          "title": "Player information"
         },
         "rating_change_graph": {
-          "title": "Ranking change graph"
+          "title": "Rank trend"
         }
       }
     }

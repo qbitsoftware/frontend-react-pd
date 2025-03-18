@@ -1,3 +1,4 @@
+import i18n from '@/i18n';
 import { MatchWrapper, MatchTimeUpdate } from '@/types/types';
 
 /**
@@ -82,10 +83,11 @@ export function getUniqueClasses(matches: MatchWrapper[]): string[] {
  */
 export function getFormattedDate(dateString: string): string {
   if (!dateString) return 'TBD';
+  const locale = i18n.language || 'en';
 
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('et-EE', {
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'

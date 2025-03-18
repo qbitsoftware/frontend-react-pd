@@ -7,6 +7,7 @@ import { formatDateTimeNew } from '@/lib/utils'
 import { UsersRound } from 'lucide-react';
 import { Link } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
+import { useTranslation } from 'react-i18next'
 
 
 export const Route = createFileRoute('/voistlused/$tournamentid/tulemused/')({
@@ -32,6 +33,7 @@ export const Route = createFileRoute('/voistlused/$tournamentid/tulemused/')({
 function RouteComponent() {
   const { tournament_tables } = Route.useLoaderData()
   const tournament = useTournament();
+  const { t } = useTranslation()
   const startDate = formatDateTimeNew(tournament.start_date);
 
   const tournamentState = () => {
@@ -61,12 +63,12 @@ function RouteComponent() {
   }
 
   const stateComponents = {
-    finished: <p>Finished</p>,
+    finished: <p>{t('competitions.results.finished')}</p>,
     live: <LiveIndicator />,
     default: <p className='font-medium text-[#26314D]'>{startDate}</p>
   }
 
-  const tablesWithParticipants = tournament_tables?.data?.filter(table => 
+  const tablesWithParticipants = tournament_tables?.data?.filter(table =>
     table.participants && table.participants.length > 0
   ) || [];
 
@@ -77,7 +79,7 @@ function RouteComponent() {
     <>
       {hasTableWithParticipants ? (
         <div className='mx-auto px-4 md:px-12 py-4 md:py-8'>
-        <h5 className='font-bold mb-4 md:mb-8 text-center md:text-left'>Tabelid</h5>
+          <h5 className='font-bold mb-4 md:mb-8 text-center md:text-left'>{t('competitions.navbar.results')}</h5>
           <ul className='pb-8 flex flex-col gap-2'>
             {tablesWithParticipants.map((table) => (
               <Link key={table.id} href={`/voistlused/${tournament.id}/tulemused/${table.id}`}>
@@ -100,63 +102,9 @@ function RouteComponent() {
         </div>
       ) : (
         <div className="p-6 text-center rounded-sm">
-          <p className="text-stone-500">No tables available yet.</p>
+          <p className="text-stone-500">{t('competitions.errors.no_groups')}</p>
         </div>
       )}
     </>
   )
-
-  {/*   return ( 
-    <div className='w-full h-[75vh]'>
-      <div className='h-full w-full mt-[20px] lg:mt-[60px]'>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Tournament Tables</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Grupp</TableHead>
-                  <TableHead>Osalejate arv/Tabeli suurus</TableHead>
-                  <TableHead>Tabeli tüüp</TableHead>
-                  <TableHead>Formaat</TableHead>
-
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tournament_tables && tournament_tables.data ? tournament_tables.data.map((table) => (
-                  <TableRow key={table.id} onClick={() => console.log("GOING")} className="cursor-pointer">
-                    <TableCell className="font-medium">{table.class}</TableCell>
-                    <TableCell><span className="font-semibold">{table.participants.length}</span>/{table.size}</TableCell>
-                    <TableCell>{parseTableType(table.type)}</TableCell>
-                    <TableCell>{table.solo ? 'Üksik' : 'Meeskondadega'}</TableCell>
-
-                  </TableRow>
-                ))
-                  :
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-6">
-                      No tables created yet
-                    </TableCell>
-                  </TableRow>
-                }
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-         {matches_data.data ? (
-          <Window data={matches_data.data} />
-        ) : (
-          <Card className="w-full">
-              <CardContent className="p-6">
-                <p className="text-center text-xl font-semibold">Tabelid Hetkel puuduvad</p>
-              </CardContent>
-            </Card>
-        )} 
-      </div>
-    </div>
-  )
-} */}
 }

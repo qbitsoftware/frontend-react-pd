@@ -7,6 +7,7 @@ import { useTournament } from './-components/tournament-provider'
 import Editor from '@/routes/admin/-components/yooptaeditor'
 import { useState } from 'react'
 import { YooptaContentValue } from '@yoopta/editor'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/')({
   errorComponent: () => {
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/voistlused/$tournamentid/')({
 
 function RouteComponent() {
   const tournament = useTournament()
+  const { t } = useTranslation()
   const [value, setValue] = useState<YooptaContentValue | undefined>(JSON.parse(tournament.information))
 
   return (
@@ -25,35 +27,34 @@ function RouteComponent() {
       <div className="pb-8 overflow-y-auto flex flex-col items-start justify-center md:flex-row md:space-x-12 md:min-h-[75vh]">
         {tournament ? (
           <>
-          {tournament.information &&
+            {tournament.information &&
               <div className="w-full md:w-2/3">
                 <Editor value={value} setValue={setValue} readOnly />
               </div>
             }
             <div className="w-full md:w-1/3 flex flex-col space-y-1 p-3 md:p-6 bg-[#EBEFF5]/20 border-2 border-[#eee] rounded-[10px] mb-4 md:mb-0">
               <p>
-                Kategooria: <strong>{tournament.category}</strong>
+                {t('competitions.category')}: <strong>{tournament.category}</strong>
               </p>
               <p>
-                Kuupäevad:{' '}
+                {t('competitions.dates')}:{' '}
                 <strong>
                   {formatDateString(tournament.start_date)} -{' '}
                   {formatDateString(tournament.end_date)}
                 </strong>
               </p>
               <p>
-                Toimumiskoht: <strong>{tournament.location}</strong>
+                {t('competitions.location')}: <strong>{tournament.location}</strong>
               </p>
               <p>
-                Tabeleid: <strong>{tournament.total_tables}</strong>
+                {t('competitions.tables')}: <strong>{tournament.total_tables}</strong>
               </p>
             </div>
 
-            
 
 
-          </>) : <div>Turniiri info puudub</div>}
 
+          </>) : <div>{t('competitions.errors.info_missing')}</div>}
       </div>
     </div>
   )

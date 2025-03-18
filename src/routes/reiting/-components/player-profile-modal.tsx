@@ -1,9 +1,10 @@
-"use client";
-
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from 'react';
 import { UserNew } from "@/types/types";
 import { PlayerProfileData } from "./player-data-accordion";
+import placeholderImg from "./placheolderImg.svg";
+import clubPlaceholder from "./clubPlaceholder.svg"
 
 interface PlayerProfileModalProps {
   isOpen: boolean;
@@ -13,29 +14,29 @@ interface PlayerProfileModalProps {
 
 export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({ isOpen, onClose, player }) => {
   if (!player) return null;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogTrigger>
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl p-6 bg-white rounded-lg shadow-lg">
+      <DialogContent className="max-w-4xl py-12 px-6 bg-white rounded-lg shadow-lg">
         <div className="flex space-x-8">
-          <div className="flex flex-col items-start space-y-4 w-1/3">
-            <img
-              src="../../../../public/test/placeholder-player-profilepic.png"
-              alt={`${player.first_name} ${player.last_name}'s profile`}
-              className="w-48 h-48 object-cover rounded"
-            />
-
+          <DialogHeader className="flex flex-col items-center space-y-4 w-1/3">
+            <Avatar className="w-48 h-48">
+              <AvatarImage src="" alt={`${player.first_name} ${player.last_name}'s profile`} />
+              <AvatarFallback><img src={placeholderImg} className='rounded-full h-20'></img></AvatarFallback>
+            </Avatar>
             <DialogTitle className="text-2xl font-semibold text-gray-900">
               {player.first_name} {player.last_name}
             </DialogTitle>
-            <div className="mt-4">
-              <img
-                src="../../../../public/test/clubs/ViimsiLTK Blue Logo.png"
-                alt={`${player.first_name} ${player.last_name}'s club`}
-                className="w-24 h-24 object-cover rounded"
-              />
-            </div>
+            <Avatar className="w-24 h-24">
+              <AvatarImage src="" alt={`${player.first_name} ${player.last_name}'s club`} />
+              <AvatarFallback><img src={clubPlaceholder} className='rounded-full h-12'></img></AvatarFallback>
+            </Avatar>
+            <p>{player.first_name} {player.last_name}'s club</p>
+          </DialogHeader>
+
+
+          <div className="mt-4">
+
           </div>
           {PlayerProfileData(player)}
         </div>

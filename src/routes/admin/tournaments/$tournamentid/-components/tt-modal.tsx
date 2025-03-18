@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -467,306 +466,310 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     }
   };
 
+  // Helper function to get available players and filtering them
+  const getAvailablePlayers = (teamNumber: number) => {
+    const playersArray = teamNumber === 1 ? match.p1?.players : match.p2?.players;
+
+    if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+      return [];
+    }
+
+    return playersArray.filter(player =>
+      player && player.id && (player.first_name || player.last_name)
+    );
+  };
+
+  // Player selection component for reuse
+  const PlayerSelector = ({ team, index, label }: { team: number, index: number, label: string }) => {
+    const players = getAvailablePlayers(team);
+    const selectedValue = team === 1
+      ? team1SelectedPlayers[index]?.id?.toString()
+      : team2SelectedPlayers[index]?.id?.toString();
+
+    return (
+      <div className="flex items-center space-x-2">
+        <span className="text-sm font-medium w-8">{label}</span>
+        <Select
+          value={selectedValue}
+          onValueChange={(value) => handlePlayerChange(team, index, value)}
+        >
+          <SelectTrigger className="flex-1 h-8 text-sm">
+            <SelectValue placeholder={`Vali mängija`} />
+          </SelectTrigger>
+          <SelectContent>
+            {players.length > 0 ? (
+              players.map(player => (
+                <SelectItem
+                  key={player.id}
+                  value={player.id.toString()}
+                  className="text-sm"
+                >
+                  {player.first_name + " " + player.last_name || ""}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled value="no-players" className="text-sm">
+                No players available
+              </SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  };
+
+  // Match order mapping
+  const getMatchOrderLabel = (order: number) => {
+    switch (order) {
+      case 1: return "A-Y";
+      case 2: return "B-X";
+      case 3: return "C-Z";
+      case 4: return "DE-VW";
+      case 5: return "A-X";
+      case 6: return "C-Y";
+      case 7: return "B-Z";
+      default: return `${order}`;
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[90vw] md:max-w-[80vw] lg:max-w-[1200px] overflow-auto flex flex-col p-0">
-        <DialogHeader className="z-10 bg-background p-4 md:px-6">
+      <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[90vw] md:max-w-[80vw] overflow-hidden flex flex-col p-0">
+        <DialogHeader className="bg-background p-3 md:px-4 border-b sticky top-0 z-10">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-base md:text-lg">
-              Protokoll: {match.p1.name} vs {match.p2.name}
+            <DialogTitle className="text-base font-medium flex items-center gap-2">
+              <span>Protokoll:</span>
+              <span className="font-bold">{match.p1.name}</span>
+              <span>vs</span>
+              <span className="font-bold">{match.p2.name}</span>
             </DialogTitle>
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm hidden md:inline">Laud:</span>
+              <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
+                <span className="text-xs text-gray-600">Laud:</span>
                 <Input
                   type="number"
                   min="0"
-                  className="w-16 h-8"
+                  className="w-12 h-6 text-sm"
                   onChange={(e) => setTableNumber(Number(e.target.value))}
                   value={!table ? "" : table}
                 />
               </div>
-              <X className="cursor-pointer md:hidden" onClick={onClose} />
+              <X className="cursor-pointer h-5 w-5" onClick={onClose} />
             </div>
           </div>
         </DialogHeader>
 
-        <Tabs defaultValue="players" className="flex-grow flex flex-col" onValueChange={setActiveTab}>
-          <div className="flex flex-row justify-center items-center pb-4">
-            <TabsList className="mx-4 md:mx-6 mt-2 space-x-2 w-[300px]">
-              <TabsTrigger value="players" className="flex-1">Mängijad</TabsTrigger>
-              <TabsTrigger value="scores" className="flex-1">Skoorid</TabsTrigger>
-            </TabsList>
-          </div>
+        <Tabs
+          defaultValue="players"
+          className="flex-grow flex flex-col min-h-0"
+          onValueChange={setActiveTab}
+        >
+          <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
+            <TabsTrigger
+              value="players"
+              className="px-3 py-1.5 text-sm rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
+            >
+              <span>Mängijad</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="scores"
+              className="px-3 py-1.5 text-sm rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
+            >
+              <span>Skoorid</span>
+            </TabsTrigger>
+          </TabsList>
 
-          <ScrollArea className="flex-grow px-4 md:px-6 py-4">
-            <TabsContent value="players" className="mt-0 h-full">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div className="flex-grow overflow-hidden flex flex-col min-h-0">
+            <TabsContent value="players" className="flex-grow p-3 md:p-4 overflow-auto m-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[1, 2].map((team) => (
-                  <div key={team} className="space-y-4">
-                    <h5 className="font-bold">
-                      {team === 1 ? match.p1.name : match.p2.name} Mängijad
-                    </h5>
-                    <div className="space-y-3">
-                      {[0, 1, 2].map((index) => (
-                        <div key={index} className="flex items-center">
-                          <Select
-                            value={
-                              team === 1
-                                ? team1SelectedPlayers[index]?.id?.toString()
-                                : team2SelectedPlayers[index]?.id?.toString()
-                            }
-                            onValueChange={(value) =>
-                              handlePlayerChange(team, index, value)
-                            }
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                placeholder={
-                                  `Mängija ${team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}`
-                                }
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {(() => {
-                                const playersArray = team === 1 ? match.p1?.players : match.p2?.players;
-
-                                if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
-                                  return (
-                                    <SelectItem disabled value="no-players">
-                                      No players available
-                                    </SelectItem>
-                                  );
-                                }
-
-                                const validPlayers = playersArray.filter(player =>
-                                  player &&
-                                  player.id &&
-                                  (player.first_name || player.last_name)
-                                );
-
-                                return validPlayers.length > 0 ? (
-                                  validPlayers.map(player => (
-                                    <SelectItem
-                                      key={player.id}
-                                      value={player.id.toString()}
-                                    >
-                                      {player.first_name + " " + player.last_name || ""}
-                                    </SelectItem>
-                                  ))
-                                ) : (
-                                  <SelectItem disabled value="no-players">
-                                    No players available
-                                  </SelectItem>
-                                );
-                              })()}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      ))}
+                  <div key={team} className="space-y-3 bg-gray-50 p-3 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <h5 className="font-bold text-sm">
+                        {team === 1 ? match.p1.name : match.p2.name}
+                      </h5>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs">Kapten:</span>
+                        <Input
+                          type="text"
+                          value={team === 1 ? captainTeam1 : captainTeam2}
+                          onChange={(e) =>
+                            team === 1
+                              ? setCaptainTeam1(e.target.value)
+                              : setCaptainTeam2(e.target.value)
+                          }
+                          placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
+                          className="h-7 text-xs w-28"
+                        />
+                      </div>
                     </div>
 
-                    <h6 className="font-semibold mt-4">Paarismäng</h6>
-                    <div className="space-y-3">
-                      {[3, 4].map((index) => (
-                        <div key={index} className="flex items-center">
-                          <Select
-                            value={
-                              team === 1
-                                ? team1SelectedPlayers[index]?.id?.toString()
-                                : team2SelectedPlayers[index]?.id?.toString()
-                            }
-                            onValueChange={(value) =>
-                              handlePlayerChange(team, index, value)
-                            }
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                placeholder={
-                                  `Mängija ${team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(80 + index)}`
-                                }
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {(() => {
-                                const playersArray = team === 1
-                                  ? (match.p1?.players || [])
-                                  : (match.p2?.players || []);
-
-                                if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
-                                  return (
-                                    <SelectItem disabled value="no-players">
-                                      No players available
-                                    </SelectItem>
-                                  );
-                                }
-
-                                const validPlayers = playersArray.filter(player =>
-                                  player &&
-                                  player.id &&
-                                  (player.first_name || player.last_name)
-                                );
-
-                                return validPlayers.length > 0 ? (
-                                  validPlayers.map(player => (
-                                    <SelectItem
-                                      key={player.id}
-                                      value={player.id.toString()}
-                                    >
-                                      {player.first_name + " " + player.last_name || ""}
-                                    </SelectItem>
-                                  ))
-                                ) : (
-                                  <SelectItem disabled value="no-players">
-                                    No players available
-                                  </SelectItem>
-                                );
-                              })()}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      ))}
+                    <div className="space-y-2">
+                      <div className="text-xs font-semibold text-gray-500 pl-1">Üksikmäng</div>
+                      <div className="space-y-1.5">
+                        {[0, 1, 2].map((index) => (
+                          <PlayerSelector
+                            key={index}
+                            team={team}
+                            index={index}
+                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}
+                          />
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="mt-4">
-                      <h6 className="font-semibold mb-2">Kapten</h6>
-                      <Input
-                        type="text"
-                        value={team === 1 ? captainTeam1 : captainTeam2}
-                        onChange={(e) =>
-                          team === 1
-                            ? setCaptainTeam1(e.target.value)
-                            : setCaptainTeam2(e.target.value)
-                        }
-                        placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
-                      />
+                    <div className="space-y-2">
+                      <div className="text-xs font-semibold text-gray-500 pl-1">Paarismäng</div>
+                      <div className="space-y-1.5">
+                        {[3, 4].map((index) => (
+                          <PlayerSelector
+                            key={index}
+                            team={team}
+                            index={index}
+                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(team === 1 ? 65 + index : 80 + index)}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6">
-                <h6 className="font-semibold mb-2">Märkmed</h6>
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-1">
+                  <h6 className="font-semibold text-sm">Märkmed</h6>
+                  <Button
+                    onClick={handleMatchStart}
+                    size="sm"
+                    className="h-8 px-3 text-xs"
+                  >
+                    Alusta mängu
+                  </Button>
+                </div>
                 <Textarea
                   placeholder="Märkmed"
                   onChange={(e) => setNotes(e.target.value)}
                   value={notes}
-                  className="w-full min-h-[80px]"
+                  className="w-full min-h-[60px] text-sm"
                 />
               </div>
-
-              <div className="mt-6">
-                <Button onClick={handleMatchStart}>Alusta</Button>
-              </div>
             </TabsContent>
 
-            <TabsContent value="scores" className="mt-0 h-full">
-              <ScrollArea className="w-full overflow-x-auto">
-                <div className="w-full">
-                  <Table className="w-full">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-left w-20">Jarjekord</TableHead>
-                        <TableHead className="text-center w-16">Sett 1</TableHead>
-                        <TableHead className="text-center w-16">Sett 2</TableHead>
-                        <TableHead className="text-center w-16">Sett 3</TableHead>
-                        <TableHead className="text-center w-16">Sett 4</TableHead>
-                        <TableHead className="text-center w-16">Sett 5</TableHead>
-                        <TableHead className="text-center w-20">
-                          {match.p1.name} Skoor
-                        </TableHead>
-                        <TableHead className="text-center w-20">
-                          {match.p2.name} Skoor
-                        </TableHead>
-                        <TableHead className="text-center w-24">Loobumisvõit</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {!isLoading &&
-                        childMathes &&
-                        childMathes.data &&
-                        childMathes.data.map((player_match) => (
-                          <TableRow key={player_match.match.id}>
-                            <TableCell className="text-left py-2">
-                              {player_match.match.order == 1
-                                ? "A-Y"
-                                : player_match.match.order == 2
-                                  ? "B-X"
-                                  : player_match.match.order == 3
-                                    ? "C-Z"
-                                    : player_match.match.order == 4
-                                      ? "DE-VW"
-                                      : player_match.match.order == 5
-                                        ? "A-X"
-                                        : player_match.match.order == 6
-                                          ? "C-Y"
-                                          : "B-Z"}
-                            </TableCell>
-                            <MatchSets
-                              key={player_match.match.id}
-                              match={player_match}
-                            />
-                            <TableCell className="text-center py-2">
-                              {player_match.match.extra_data.team_1_total}
-                            </TableCell>
-                            <TableCell className="text-center py-2">
-                              {player_match.match.extra_data.team_2_total}
-                            </TableCell>
-                            <TableCell className="py-2">
-                              <Button
-                                onClick={() => {
-                                  handleForfeitMatch(player_match);
-                                }}
-                                className="text-xs font-normal h-6 px-1 w-full"
-                                size="sm"
-                              >
-                                Loobumisvõit
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                  <ScrollBar orientation="horizontal" />
+            <TabsContent value="scores" className="flex-grow p-0 overflow-auto m-0 flex flex-col min-h-0">
+              <ScrollArea className="flex-grow overflow-auto">
+                <div className="p-3 md:p-4">
+                  {/* Team Score Summary */}
+                  <div className="flex justify-around items-center mb-4 px-1">
+                    <div className="flex flex-col items-center">
+                      <span className="text-sm font-medium">{match.p1.name}</span>
+                      <span className="text-2xl font-bold">
+                        {!isLoading && childMathes && childMathes.data ?
+                          childMathes.data.reduce((total, match) =>
+                            total + ((match.match.winner_id === match.p1.id) ? 1 : 0), 0) : 0}
+                      </span>
+                    </div>
+
+                    <div className="text-center">
+                      <span className="text-xl font-bold">VS</span>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      <span className="text-sm font-medium">{match.p2.name}</span>
+                      <span className="text-2xl font-bold">
+                        {!isLoading && childMathes && childMathes.data ?
+                          childMathes.data.reduce((total, match) =>
+                            total + ((match.match.winner_id === match.p2.id) ? 1 : 0), 0) : 0}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="overflow-auto border rounded-lg shadow-sm">
+                    <Table className="w-full overflow-auto" style={{ minWidth: "500px" }}>
+                      <TableHeader>
+                        <TableRow className="bg-gray-50 hover:bg-gray-50">
+                          <TableHead className="text-xs font-medium p-2 text-left w-16">Mäng</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">S1</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">S2</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">S3</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">S4</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">S5</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-24">Tegevused</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {!isLoading &&
+                          childMathes &&
+                          childMathes.data &&
+                          childMathes.data.map((player_match) => (
+                            <TableRow key={player_match.match.id} className="hover:bg-gray-50">
+                              <TableCell className="text-xs font-medium p-2">
+                                {getMatchOrderLabel(player_match.match.order)}
+                              </TableCell>
+                              <MatchSets
+                                key={player_match.match.id}
+                                match={player_match}
+                              />
+                              <TableCell className="p-2">
+                                <Button
+                                  onClick={() => handleForfeitMatch(player_match)}
+                                  className="text-xs h-6 px-2 w-full"
+                                  size="sm"
+                                  variant="outline"
+                                >
+                                  Loobumine
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {match.match.winner_id && (
+                    <div className="flex justify-center items-center gap-2 my-4 bg-green-50 p-2 rounded-md">
+                      <span className="font-semibold text-sm">Võitja:</span>
+                      <span className="font-bold text-sm">
+                        {match.match.winner_id === match.p1.id
+                          ? match.p1.name
+                          : match.p2.name}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
-
-              <div className="w-full flex justify-center items-center gap-2 my-4">
-                <h6 className="font-bold">Võitja:</h6>
-                <div>
-                  {match.match.winner_id !== ""
-                    ? match.match.winner_id === match.p1.id
-                      ? match.p1.name
-                      : match.p2.name
-                    : "Siia tuleb võitja"}
-                  <Separator className="bg-black" />
-                </div>
-              </div>
             </TabsContent>
-          </ScrollArea>
+          </div>
         </Tabs>
 
-        <div className="bg-[#EBEFF5] p-4 md:p-6 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <Input
-              className="flex-grow"
-              value={table_referee}
-              placeholder="Lauakohtunik"
-              onChange={(e) => setTableReferee(e.target.value)}
-            />
-            <Input
-              className="flex-grow"
-              value={head_referee}
-              placeholder="Peakohtunik"
-              onChange={(e) => setMainReferee(e.target.value)}
-            />
+        <div className="bg-gray-100 p-3 border-t flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col">
+              <label className="text-xs text-gray-600 mb-1">Lauakohtunik</label>
+              <Input
+                className="h-8 text-sm"
+                value={table_referee}
+                placeholder="Lauakohtunik"
+                onChange={(e) => setTableReferee(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-xs text-gray-600 mb-1">Peakohtunik</label>
+              <Input
+                className="h-8 text-sm"
+                value={head_referee}
+                placeholder="Peakohtunik"
+                onChange={(e) => setMainReferee(e.target.value)}
+              />
+            </div>
           </div>
+
           <Button
             disabled={match.match.winner_id !== ""}
-            onClick={() => handleFinish()}
-            className="w-full"
+            onClick={handleFinish}
+            className="w-full h-9 font-medium"
+            variant={match.match.winner_id !== "" ? "outline" : "default"}
           >
-            Lõpeta Mängud
+            {match.match.winner_id !== "" ? "Mäng lõpetatud" : "Lõpeta Mängud"}
           </Button>
         </div>
 
@@ -774,7 +777,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           <Forfeit
             match={forfeitMatch}
             isOpen={isForfeitOpen}
-            onClose={() => handleForfeitMatchClose()}
+            onClose={handleForfeitMatchClose}
             tournament_id={tournament_id}
           />
         )}

@@ -64,6 +64,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         min_team_size: 1,
         max_team_size: 1,
         size: 1,
+
       },
   })
 
