@@ -91,6 +91,12 @@ export interface User {
   img_url?: string;
 }
 
+export interface Profile {
+  user: UserNew,
+  last_games: MatchWrapper[],
+  rating_change: Player[]
+}
+
 export interface Article {
   id: number;
   title: string,
