@@ -130,7 +130,7 @@
     "component": {
       "missing": "Edetabel hetkel puudub"
     },
-    "header": "Reiting",
+    "header": "Organisatsiooni Reiting",
     "header_prefix": {
       "men": "Meeste",
       "senior_men": "Seeniorite Meeste",
@@ -205,6 +205,40 @@
     "password": "Parool",
     "login": "Logi sisse",
     "login_progress": "Sisselogimine..."
+  },
+  "register": {
+    "form": {
+      "heading": "Registreeri kasutaja",
+      "first_name": "Eesnimi",
+      "last_name": "Perenimi",
+      "password": "Parool",
+      "email": "E-posti aadress",
+      "confirm_password": "Kinnita parool",
+      "register": "Registreeri",
+      "register_progress": "Registreerimine...",
+      "date_of_birth": "Sünnikuupäev",
+      "username": "Kasutajanimi",
+      "create_profile": "Loo mängija profiil",
+      "sex": "Sugu",
+      "sex_options": {
+        "male": "Mees",
+        "female": "Naine",
+        "other": "Muu"
+      },
+      "errors": {
+        "first_name": "Eesnimi on kohustuslik",
+        "last_name": "Perekonnanimi on kohustuslik",
+        "email": "E-posti aadress on kohustuslik",
+        "sex": "Sugu on kohustuslik",
+        "date_of_birth": "Sünnikuupäev on kohustuslik",
+        "username": "Kasutajanimi on kohustuslik",
+        "password": "Parool peab olema vähemalt 8 tähemärki pikk",
+        "password_confirmation": "Paroolid peavad kattuma"
+      }
+    },
+    "successful_registration": "Registreerimine oli edukas.",
+    "registration_error": "Registreerimine ebaõnnestus. Palun proovige uuesti.",
+    "already_have_account": "Konto olemas? Logi sisse"
   },
   "admin": {
     "layout": {

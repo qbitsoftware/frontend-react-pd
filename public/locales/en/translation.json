@@ -130,7 +130,7 @@
     "component": {
       "missing": "No data available"
     },
-    "header": "National Ranking",
+    "header": "Organization Ranking",
     "header_prefix": {
       "men": "Men's",
       "senior_men": "Senior Men's",
@@ -198,6 +198,40 @@
     "club_card": {
       "button": "Club profile"
     }
+  },
+  "register": {
+    "form": {
+      "heading": "Register user",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm password",
+      "register": "Register",
+      "register_progress": "Registering...",
+      "date_of_birth": "Date of birth",
+      "username": "Username",
+      "create_profile": "Create profile",
+      "sex": "Sex",
+      "sex_options": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      },
+      "errors": {
+        "first_name": "First name is required",
+        "last_name": "Last name is required",
+        "email": "Email is required",
+        "sex": "Sex is required",
+        "date_of_birth": "Date of birth is required",
+        "username": "Username is required",
+        "password": "Password must be alteast 8 characters long",
+        "password_confirmation": "Passwords must match"
+      }
+    },
+    "successful_registration": "Registration was successful",
+    "registration_error": "Registration failed",
+    "already_have_account": "Already have an account? Login"
   },
   "login": {
     "title": "Welcome back",

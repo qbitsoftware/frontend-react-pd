@@ -16,6 +16,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
 import { Route as ReitingIndexImport } from './routes/reiting/index'
+import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as ReeglidIndexImport } from './routes/reeglid/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as KontaktIndexImport } from './routes/kontakt/index'
@@ -80,6 +81,12 @@ const UudisedIndexRoute = UudisedIndexImport.update({
 const ReitingIndexRoute = ReitingIndexImport.update({
   id: '/reiting/',
   path: '/reiting/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RegisterIndexRoute = RegisterIndexImport.update({
+  id: '/register/',
+  path: '/register/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -373,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/reeglid'
       fullPath: '/reeglid'
       preLoaderRoute: typeof ReeglidIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterIndexImport
       parentRoute: typeof rootRoute
     }
     '/reiting/': {
@@ -717,6 +731,7 @@ export interface FileRoutesByFullPath {
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/reiting': typeof ReitingIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
@@ -758,6 +773,7 @@ export interface FileRoutesByTo {
   '/kontakt': typeof KontaktIndexRoute
   '/login': typeof LoginIndexRoute
   '/reeglid': typeof ReeglidIndexRoute
+  '/register': typeof RegisterIndexRoute
   '/reiting': typeof ReitingIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
@@ -799,6 +815,7 @@ export interface FileRoutesById {
   '/kontakt/': typeof KontaktIndexRoute
   '/login/': typeof LoginIndexRoute
   '/reeglid/': typeof ReeglidIndexRoute
+  '/register/': typeof RegisterIndexRoute
   '/reiting/': typeof ReitingIndexRoute
   '/uudised/': typeof UudisedIndexRoute
   '/voistlused/': typeof VoistlusedIndexRoute
@@ -843,6 +860,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/login'
     | '/reeglid'
+    | '/register'
     | '/reiting'
     | '/uudised'
     | '/voistlused'
@@ -883,6 +901,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/login'
     | '/reeglid'
+    | '/register'
     | '/reiting'
     | '/uudised'
     | '/voistlused'
@@ -922,6 +941,7 @@ export interface FileRouteTypes {
     | '/kontakt/'
     | '/login/'
     | '/reeglid/'
+    | '/register/'
     | '/reiting/'
     | '/uudised/'
     | '/voistlused/'
@@ -965,6 +985,7 @@ export interface RootRouteChildren {
   KontaktIndexRoute: typeof KontaktIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   ReeglidIndexRoute: typeof ReeglidIndexRoute
+  RegisterIndexRoute: typeof RegisterIndexRoute
   ReitingIndexRoute: typeof ReitingIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
@@ -982,6 +1003,7 @@ const rootRouteChildren: RootRouteChildren = {
   KontaktIndexRoute: KontaktIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   ReeglidIndexRoute: ReeglidIndexRoute,
+  RegisterIndexRoute: RegisterIndexRoute,
   ReitingIndexRoute: ReitingIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
@@ -1007,6 +1029,7 @@ export const routeTree = rootRoute
         "/kontakt/",
         "/login/",
         "/reeglid/",
+        "/register/",
         "/reiting/",
         "/uudised/",
         "/voistlused/",
@@ -1059,6 +1082,9 @@ export const routeTree = rootRoute
     },
     "/reeglid/": {
       "filePath": "reeglid/index.tsx"
+    },
+    "/register/": {
+      "filePath": "register/index.tsx"
     },
     "/reiting/": {
       "filePath": "reiting/index.tsx"
