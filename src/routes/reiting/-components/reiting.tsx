@@ -50,7 +50,7 @@ interface UserTableProps {
 export function Reiting({ users }: UserTableProps = { users: [] }) {
   const { t } = useTranslation();
 
-  const [activeTab, setActiveTab] = useState("men");
+  const [activeTab, setActiveTab] = useState("combined");
   const [ageClass, setAgeClass] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [SelectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);

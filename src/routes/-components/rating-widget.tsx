@@ -1,27 +1,31 @@
-import { useState } from 'react'
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { PlayerProfileModal } from '../reiting/-components/player-profile-modal';
+import { useState } from "react";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import { PlayerProfileModal } from "../reiting/-components/player-profile-modal";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserNew } from '@/types/types';
+import { UserNew } from "@/types/types";
 
 interface Props {
-  users: UserNew[] | null
+  users: UserNew[] | null;
 }
 
 const RatingWidget = ({ users }: Props) => {
   const { t } = useTranslation();
-  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null)
-  const selectedPlayer = users && users.find((user) => user.id === selectedPlayerId);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+  const selectedPlayer =
+    users && users.find((user) => user.id === selectedPlayerId);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("men");
-  
+  const [activeTab, setActiveTab] = useState("combined");
+
   if (!users) {
-    return (
-      <div>
-        {t("rating.component.missing")}
-      </div>
-    )
+    return <div>{t("rating.component.missing")}</div>;
   }
 
   const filteredUsers = users
@@ -34,23 +38,23 @@ const RatingWidget = ({ users }: Props) => {
     .sort((a, b) => b.rate_points - a.rate_points);
 
   return (
-    <div className='h-full flex flex-col relative space-y-1 border rounded-t-[12px]'>
+    <div className="h-full flex flex-col relative space-y-1 border rounded-t-[12px]">
       <div className="w-full border-b border-stone-200 p-1 mb-1 rounded-t-[12px] bg-[#EBEFF5]">
         <Tabs
-          defaultValue="men"
+          defaultValue="combined"
           value={activeTab}
           onValueChange={setActiveTab}
           className="w-full "
         >
           <TabsList className="justify-start w-full rounded-[2px] py-2 gap-1 flex flex-col lg:flex-row">
             <TabsTrigger value="women" className="rounded-[4px] flex-1">
-              {t('rating.filtering.buttons.women')}
+              {t("rating.filtering.buttons.women")}
             </TabsTrigger>
             <TabsTrigger value="men" className="rounded-[4px] flex-1">
-              {t('rating.filtering.buttons.men')}
+              {t("rating.filtering.buttons.men")}
             </TabsTrigger>
             <TabsTrigger value="combined" className="rounded-[4px] flex-1">
-              {t('rating.filtering.buttons.combined')}
+              {t("rating.filtering.buttons.combined")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -59,15 +63,20 @@ const RatingWidget = ({ users }: Props) => {
         <Table className="w-full mx-auto border-collapse rounded-t-lg shadow-lg">
           <TableHeader className="rounded-lg">
             <TableRow className=" sticky top-0 z-10">
-              <TableHead className="px-6 py-3 text-left font-medium">NR</TableHead>
-              <TableHead className="px-6 py-3 text-left font-medium">{t('rating.table.head.player')}</TableHead>
-              <TableHead className="px-6 py-3 text-left font-medium">RP</TableHead>
-              <TableHead className="px-6 py-3 text-left font-medium">PP</TableHead>
+              <TableHead className="px-6 py-3 text-left font-medium">
+                NR
+              </TableHead>
+              <TableHead className="px-6 py-3 text-left font-medium">
+                {t("rating.table.head.player")}
+              </TableHead>
+              <TableHead className="px-6 py-3 text-left font-medium">
+                ELO
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
-              <TableRow 
+              <TableRow
                 onClick={() => {
                   setSelectedPlayerId(user.id);
                   setIsModalOpen(true);
@@ -78,13 +87,12 @@ const RatingWidget = ({ users }: Props) => {
                 <TableCell className="px-6 py-3 text-sm font-bold">
                   {user.rate_order}
                 </TableCell>
-                <TableCell 
-                  className="px-6 py-3 text-sm font-semibold group-hover:text-blue-600 group-hover:underline"
-                >
+                <TableCell className="px-6 py-3 text-sm font-semibold group-hover:text-blue-600 group-hover:underline">
                   {`${user.last_name} ${user.first_name}`}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">{user.rate_points}</TableCell>
-                <TableCell className="px-6 py-3 text-sm">{user.rate_pl_points}</TableCell>
+                <TableCell className="px-6 py-3 text-sm">
+                  {user.rate_points}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -96,7 +104,7 @@ const RatingWidget = ({ users }: Props) => {
         player={selectedPlayer || null}
       />
     </div>
-  )
-}
+  );
+};
 
-export default RatingWidget
+export default RatingWidget;
