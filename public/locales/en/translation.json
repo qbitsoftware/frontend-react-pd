@@ -8,6 +8,16 @@
       "english": "English",
       "choose": "🇬🇧 "
     },
+    "tournament": {
+      "information": "Information",
+      "timetable": "Timetable",
+      "results": "Results",
+      "players": "Players",
+      "gallery": "Gallery",
+      "rules": "Rules",
+      "sponsors": "Sponsors",
+      "media": "Media"
+    },
     "menu": {
       "news": {
         "name": "News",
@@ -18,6 +28,7 @@
       },
       "eltl": "ELTL",
       "competition": "Competitions",
+      "calendar": "Calendar",
       "clubs": "Clubs",
       "young_sport": "Youths",
       "ratings": "Top Pipedrivers",
@@ -41,6 +52,9 @@
       "contact": "Contact"
     },
     "links": "Quick links"
+  },
+  "contactpage": {
+    "title": "Points of contact"
   },
   "homepage": {
     "title": "Estonian Table Tennis Association",

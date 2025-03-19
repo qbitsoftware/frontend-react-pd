@@ -3,6 +3,16 @@
     "name": "Eesti lauatenniseliit"
   },
   "navbar": {
+    "tournament": {
+      "information": "Info",
+      "timetable": "Ajakava",
+      "results": "Tulemused",
+      "players": "Mängijad",
+      "gallery": "Galerii",
+      "rules": "Juhend",
+      "sponsors": "Sponsorid",
+      "media": "Meedia"
+    },
     "language": {
       "estonian": "Eesti",
       "english": "Inglise",
@@ -18,6 +28,7 @@
       },
       "eltl": "ELTL",
       "competition": "Võistlused",
+      "calendar": "Kalender",
       "clubs": "Klubid",
       "young_sport": "Noortesport",
       "ratings": "Reiting",
@@ -41,6 +52,9 @@
       "contact": "Kontakt"
     },
     "links": "Menüü"
+  },
+  "contactpage": {
+    "title": "Kontaktisikud"
   },
   "homepage": {
     "title": "Eesti Lauatenniseliit",

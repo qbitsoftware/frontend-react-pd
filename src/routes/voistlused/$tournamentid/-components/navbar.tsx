@@ -5,23 +5,37 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, formatDateRange } from "@/lib/utils";
 import { useTournament } from "./tournament-provider";
 import { TournamentTable } from "@/types/types";
+import { useTranslation } from "react-i18next";
 
-const NavLinks = [
-  { name: "Info", href: "/" },
-  { name: "Ajakava", href: "/ajakava" },
-  { name: "Tulemused", href: "/tulemused" },
-  { name: "Mängijad", href: "/mangijad" },
-  { name: "Galerii", href: "/galerii" },
-  { name: "Juhend", href: "/juhend" },
-  { name: "Sponsorid", href: "/sponsorid" },
-  { name: "Meedia", href: "/meedia" },
-];
+//const NavLinks = [
+//  { name: "Info", href: "/" },
+//  { name: "Ajakava", href: "/ajakava" },
+//  { name: "Tulemused", href: "/tulemused" },
+//  { name: "Mängijad", href: "/mangijad" },
+//  { name: "Galerii", href: "/galerii" },
+//  { name: "Juhend", href: "/juhend" },
+//  { name: "Sponsorid", href: "/sponsorid" },
+//  { name: "Meedia", href: "/meedia" },
+//];
 
 interface Props {
-  tournament_tables: TournamentTable[]
+  tournament_tables: TournamentTable[];
 }
 
 const Navbar = ({ tournament_tables }: Props) => {
+  const { t } = useTranslation();
+
+  const NavLinks = [
+    { name: t("navbar.tournament.information"), href: "/" },
+    { name: t("navbar.tournament.timetable"), href: "/ajakava" },
+    { name: t("navbar.tournament.results"), href: "/tulemused" },
+    { name: t("navbar.tournament.players"), href: "/mangijad" },
+    { name: t("navbar.tournament.gallery"), href: "/galerii" },
+    { name: t("navbar.tournament.rules"), href: "/juhend" },
+    { name: t("navbar.tournament.sponsors"), href: "/sponsorid" },
+    { name: t("navbar.tournament.media"), href: "/meedia" },
+  ];
+
   const params = useParams({ strict: false });
   const location = useLocation();
   const tournament = useTournament();
@@ -31,16 +45,22 @@ const Navbar = ({ tournament_tables }: Props) => {
 
   let activeTab = "/";
 
-  NavLinks.forEach(link => {
+  NavLinks.forEach((link) => {
     if (link.href !== "/" && currentPath.includes(baseUrl + link.href)) {
       activeTab = link.href;
     }
   });
 
   // Filter out "Juhend" if no champions_league table exists
-  const filteredNavLinks = NavLinks.filter(link => {
-    if (link.name === "Juhend" || link.name === "Sponsorid" || link.name === "Galerii") {
-      return tournament_tables.some(table => table.type === "champions_league");
+  const filteredNavLinks = NavLinks.filter((link) => {
+    if (
+      link.href === "/juhend" ||
+      link.href === "/sponsorid" ||
+      link.href === "/galerii"
+    ) {
+      return tournament_tables.some(
+        (table) => table.type === "champions_league",
+      );
     }
     return true;
   });
@@ -69,9 +89,8 @@ const Navbar = ({ tournament_tables }: Props) => {
                   className={cn(
                     "text-sm 2xl:text-base px-3 py-2 w-auto lg:-[100px] xl:w-[125px] 2xl:w-[150px]",
                     activeTab === link.href &&
-                    "bg-white text-[#212121] shadow-selectedFilter",
-                    activeTab !== link.href &&
-                    "hover:bg-white",
+                      "bg-white text-[#212121] shadow-selectedFilter",
+                    activeTab !== link.href && "hover:bg-white",
                   )}
                 >
                   {link.name}

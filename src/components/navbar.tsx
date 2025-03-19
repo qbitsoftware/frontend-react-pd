@@ -45,6 +45,10 @@ export default function Navbar() {
     },
     {
       name: t("navbar.menu.competition"),
+      href: "/voistlused",
+    },
+    {
+      name: t("navbar.menu.calendar"),
       href: "/kalender",
     },
     { name: t("navbar.menu.ratings"), href: "/reiting" },

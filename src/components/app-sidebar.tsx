@@ -40,8 +40,12 @@ export function AppSidebar() {
       ],
     },
     {
-      name: t("navbar.menu.competition"),
+      name: t("navbar.menu.calendar"),
       href: "/kalender",
+    },
+    {
+      name: t("navbar.menu.competition"),
+      href: "/voistlused",
     },
     {
       name: t("navbar.menu.clubs"),

@@ -1,7 +1,7 @@
 const ads = [
   //  { url: "../../../public/pingpongtable.jpg" },
   {
-    url: "../../../public/unicorn.png",
+    url: "/unicorn.png",
   },
 ];
 
