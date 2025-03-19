@@ -1,77 +1,139 @@
 export default function LauatenniseReeglid() {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <h1 className="text-3xl font-bold mb-6 text-center">Lauatennise Reeglid</h1>
-        <div className="space-y-6 mt-10 md:mt-20">
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Mänguvahendid</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Pall, läbimõõduga 40mm, reket ja lauatenniselaud.</li>
-              <li>Lauatenniselaud on jagatud kaheks võrdseks pooleks võrguga.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Punktiarvestus</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Seti võit läheb mängijale kes esimesena kogub 11 punkti välja arvatud juhul kui mõlemal mängijal on 10 punkti, sellisel juhul võidab mängija kes läheb juhtima 2 punktiga.</li>
-              <li>Kohtumine koosneb paaritus arvust settidest.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Servimine</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Kohtumise alguses võetakse loosi. Loosi võitja valib poole või otsustab kes servib.</li>
-              <li>Aseta pall lahtisele peopesale ja viska üles vähemalt 16cm. Palli peab tabama kui viimane on hakanud langema.</li>
-              <li>Servides peab pall kõigepealt tabama servija lauapoolt, seejärel lendama üle või ümber võrgu ja siis tabama vastuvõtja lauapoolt.</li>
-              <li>Servimise alustamisel, enne kui palli lüüakse, peab pall asuma laua mängupinnast kõrgemal ja servija poolse laua otsajoone taga.</li>
-              <li>Iga 2 punkti järel vahetub servija, välja arvatud kui mõlemal mängijal on 10 punkti, siis vahetub servija iga 1 punkti järel.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Tõrjumine</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Mängus ja servi vastuvõtul peab pall puudutama 1 korra mängija lauapoolt ennem kui võib sellel lüüa tagasi.</li>
-              <li>Kui mängija tabab palli laua kohale nnem, kui pall puudutab tema lauapoolt, siis on see "löök lennult" ja ei ole määrustepärane.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Millal on punkt?</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Kui mängija ei suuda sooritada õiget servi.</li>
-              <li>Kui mängija ei suuda sooritada õiget tõrjet.</li>
-              <li>Kui mängija lööb palli lennult, ennem kui pall ületab tema lauapoole.</li>
-              <li>Kui mängija lööb meelega kaks või enam korda palli.</li>
-              <li>Kui mängija liigutab lauapinda.</li>
-              <li>Kui mängija käsi mis ei hoia reketit, puudutab lauapinda.</li>
-              <li>Kui mängija puudutab võrku. Võrkku ei tohi puudutada mängija riided või reket.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Millal ei ole punkt?</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Kui servi ajal pall riivab võrkku või võrgu hoidjat, kuid maandub seejärel vastuvõtja poolel, siis punkti ei loeta ja serv läheb kordamisele.</li>
-              <li>Kui vastuvõtja püüab või lööb palli ennem kui see puudutab tema lauapoolt servi ajal peale võrgu puudet.</li>
-              <li>Kui mängijat segab keegi või miski sooritamast määrustepärast lööki.</li>
-            </ul>
-          </section>
-  
-          <section>
-            <h2 className="text-xl font-semibold mb-2">Para lauatennis</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              <li>Kargu või kepiga ei tohi mängu lauda puudutada.</li>
-              <li>Ratastoolismängija vastu servides ei tohi pall vastuvõtja poolel tõusta vertikaalselt või liikuda võrgu poole tagasi. Samas ei tohi pall vastuvõtja poolel väljuda külgjoonest. See tähendab uut servi.</li>
-              <li>Ratastoolismängija istmik ja jalad ei tohi mängu ajal toelt tõusta. Punkt vastasele.</li>
-              <li>Paarismängus ratastoolismängija poolel võib vastu võtta kes iganes, mitte vaheldumisi.</li>
-            </ul>
-          </section>
-        </div>
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Table Tennis Rules
+      </h1>
+      <div className="space-y-6 mt-10 md:mt-20">
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Equipment</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              Ball with a diameter of 40mm, racket, and table tennis table.
+            </li>
+            <li>
+              The table tennis table is divided into two equal halves by a net.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Scoring</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              The set is won by the player who first scores 11 points, except
+              when both players have 10 points, in which case the player who
+              leads by 2 points wins.
+            </li>
+            <li>The match consists of an odd number of sets.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Serving</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              A coin toss is conducted at the beginning of the match. The winner
+              of the toss chooses the side or decides who serves.
+            </li>
+            <li>
+              Place the ball on an open palm and throw it up at least 16cm. The
+              ball must be hit as it starts to fall.
+            </li>
+            <li>
+              When serving, the ball must first hit the server's side of the
+              table, then go over or around the net, and then hit the receiver's
+              side of the table.
+            </li>
+            <li>
+              At the start of the serve, before hitting the ball, the ball must
+              be above the playing surface and behind the server's end line.
+            </li>
+            <li>
+              The server changes every 2 points, except when both players have
+              10 points, then the server changes every 1 point.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Returning</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              In play and when receiving a serve, the ball must touch the
+              player's side of the table once before it can be hit back.
+            </li>
+            <li>
+              If a player hits the ball over the table before it touches their
+              side, it is a "volley" and is not allowed.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            When is a point scored?
+          </h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>If a player fails to make a correct serve.</li>
+            <li>If a player fails to make a correct return.</li>
+            <li>
+              If a player volleys the ball before it crosses their side of the
+              table.
+            </li>
+            <li>If a player intentionally hits the ball two or more times.</li>
+            <li>If a player moves the table surface.</li>
+            <li>If a player's free hand touches the table surface.</li>
+            <li>
+              If a player touches the net. The net must not be touched by the
+              player's clothing or racket.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            When is a point not scored?
+          </h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              If during a serve the ball touches the net or net holder but then
+              lands on the receiver's side, the point is not counted and the
+              serve is repeated.
+            </li>
+            <li>
+              If the receiver catches or hits the ball before it touches their
+              side of the table during a serve after touching the net.
+            </li>
+            <li>
+              If a player is disturbed by someone or something while making a
+              legal shot.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Para Table Tennis</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>A crutch or cane must not touch the table.</li>
+            <li>
+              When serving against a wheelchair player, the ball must not rise
+              vertically or move back towards the net on the receiver's side.
+              Also, the ball must not exit the receiver's side from the
+              sideline. This means a new serve.
+            </li>
+            <li>
+              The wheelchair player's buttocks and legs must not rise from the
+              support during play. Point to the opponent.
+            </li>
+            <li>
+              In doubles, on the wheelchair player's side, anyone can receive,
+              not alternately.
+            </li>
+          </ul>
+        </section>
       </div>
-    )
-  }
-  
-  
+    </div>
+  );
+}
+

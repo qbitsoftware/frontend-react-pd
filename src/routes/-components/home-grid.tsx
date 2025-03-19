@@ -1,17 +1,16 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 import WidgetWrapper from "./widget-wrapper";
 import NewsWidget from "./news-widget";
 import CalendarWidget from "./calendar-widget";
 import RatingWidget from "./rating-widget";
 import Adboard from "./adboard";
-import { Blog, Tournament, UserNew } from '@/types/types';
-import { useTranslation } from 'react-i18next';
-
+import { Blog, Tournament, UserNew } from "@/types/types";
+import { useTranslation } from "react-i18next";
 
 interface Props {
-  tournaments: Tournament[] | null
-  users: UserNew[] | null
-  articles: Blog[] | null
+  tournaments: Tournament[] | null;
+  users: UserNew[] | null;
+  articles: Blog[] | null;
 }
 
 const HomePageGrid = ({ tournaments, users, articles }: Props) => {
@@ -23,7 +22,6 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
 
   return (
     <div className="max-w-[1440px] min-h-screen mx-auto md:px-4 lg:px-6">
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 my-8 mb-16 space-y-8 md:space-y-0">
         <div className="sm:col-span-2 md:col-span-7 flex flex-col ">
           <WidgetWrapper heading={t("homepage.calendar.name")} addr="kalender">
@@ -33,15 +31,16 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
           </WidgetWrapper>
         </div>
         <div className="sm:col-span-2 md:col-span-5 flex flex-col">
-          <WidgetWrapper heading={t("homepage.news.name")} addr="uudised">
+          <WidgetWrapper
+            heading={t("homepage.latest_matches.name")}
+            addr="uudised"
+          >
             <div className="py-2 px-4 flex-grow" ref={calendarRef}>
               <NewsWidget blogs={articles} />
             </div>
           </WidgetWrapper>
         </div>
       </div>
-
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 my-8">
         <div className="sm:col-span-1 md:col-span-7 flex flex-col">
@@ -60,12 +59,10 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
         </div>
       </div>
 
-      <div className="w-full flex flex-row">
-
-      </div>
-
+      <div className="w-full flex flex-row"></div>
     </div>
   );
 };
 
 export default HomePageGrid;
+

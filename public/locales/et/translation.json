@@ -54,9 +54,8 @@
       "date": "Kuupäev",
       "location": "Asukoht"
     },
-    "news": {
-      "name": "Uudised",
-      "view_all": "Kõik uudised",
+    "latest_matches": {
+      "name": "Viimased kohtumised",
       "read_more": "Loe lähemalt"
     },
     "calendar": {
@@ -64,7 +63,7 @@
       "view_all": "Vaata kõiki"
     },
     "ranking": {
-      "name": "Edetabel",
+      "name": "Parimad Pipedriverid",
       "view_all": "Kogu edetabel"
     },
     "best_performers": {

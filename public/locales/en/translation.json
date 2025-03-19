@@ -20,7 +20,7 @@
       "competition": "Competitions",
       "clubs": "Clubs",
       "young_sport": "Youths",
-      "ratings": "Ranking",
+      "ratings": "Top Pipedrivers",
       "rules": "Rules",
       "contact": "Contact",
       "admin": "Admin Panel"
@@ -54,17 +54,16 @@
       "date": "Date",
       "location": "Location"
     },
-    "news": {
-      "name": "News",
-      "view_all": "View all",
-      "read_more": "Read more"
+    "latest_matches": {
+      "name": "Latest matches",
+      "view_all": "View all"
     },
     "calendar": {
       "name": "Calendar",
       "view_all": "View all"
     },
     "ranking": {
-      "name": "Ranking",
+      "name": "Top Pipedrivers",
       "view_all": "View all"
     },
     "best_performers": {
