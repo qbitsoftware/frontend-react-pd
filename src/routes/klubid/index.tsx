@@ -2,15 +2,22 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { ClubGrid } from './-components/club-grid'
 import { motion } from 'framer-motion'
-import { mockClubs } from '@/lib/mock_data/club_mocks'
+import { UseGetClubsOption } from '@/queries/clubs'
 
 export const Route = createFileRoute('/klubid/')({
+ loader: async ({ context: { queryClient } }) => {
+    const clubData = await queryClient.ensureQueryData(UseGetClubsOption());
+    return {clubData}
+ },
   component: RouteComponent,
 })
 function RouteComponent() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
+  const { clubData } = Route.useLoaderData()
+  
+  if (clubData && clubData.data) {
   return (
     <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
       <div className="py-4">
@@ -22,10 +29,13 @@ function RouteComponent() {
           transition={{ duration: 0.2, delay: 0 }}
           className=""
         >
-          <ClubGrid clubs={mockClubs} />
+          <ClubGrid clubs={clubData.data} />
         </motion.div>
       </div>
       </div>
     </div>
   )
+
+  }
+
 }

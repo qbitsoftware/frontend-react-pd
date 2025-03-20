@@ -15,6 +15,8 @@ function RouteComponent() {
     const [activeTab, setActiveTab] = React.useState("1")
     const tournament = useTournament();
 
+    console.log(tournament)
+
     const startDate = tournament?.start_date ? new Date(tournament.start_date) : new Date();
     const endDate = tournament?.end_date ? new Date(tournament.end_date) : new Date();
 

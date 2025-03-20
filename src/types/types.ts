@@ -292,11 +292,11 @@ export interface Blog {
 
 //GET RID OR CHANGE LATER
 
-export interface Club {
-  id: number
-  logoPath: string;
-  name: string
-}
+// export interface Club {
+//   id: number
+//   logoPath: string;
+//   name: string
+// }
 
 export interface PlayerProfile {
   id: number;
@@ -388,6 +388,18 @@ export interface RoundTime {
 export interface MatchTimeUpdate {
   match_id: string;
   start_date: string;
+}
+
+export interface Club {
+  id: number 
+  name: string
+  contact_person : string
+  email: string
+  phone: string
+  address: string
+  website: string
+  created_at: string
+  image_url: string
 }
 
 export const createRegisterSchema = (t: TFunction) => z.object({

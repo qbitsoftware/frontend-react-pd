@@ -1,5 +1,5 @@
 import { useNavigate, useRouter } from "@tanstack/react-router"
-import { MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { MoreHorizontal, Pencil, PlusCircle, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useState, useEffect, useCallback } from "react"
@@ -305,8 +305,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
 
     if (tournament_data) {
         return (
-            <div className="container mx-auto py-6 space-y-6 overflow-x-auto w-full">
-                <Card className="overflow-x-auto container border-[#F0F3F3]">
+            <div className=" mx-auto py-6 space-y-6  w-full">
+                <Card className=" border-[#F0F3F3]">
                     <CardHeader className="">
                         <div className="flex w-[250px] gap-4">
                             <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
@@ -325,53 +325,54 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                         </div>
                     </CardHeader>
                     <CardContent className="">
-                        <div className="min-h-[60vh] flex flex-col">
-                            <Table className="">
-                                <TableHeader className="">
-                                    <TableRow className="">
-                                        {table_data && table_data.solo ? (
-                                            <>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.position")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.name")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.club")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.class")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.position")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.team")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.name")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.club")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
-                                                <TableHead>{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
-                                            </>
-                                        )}
-                                    </TableRow>
-                                </TableHeader>
+                    <div className="min-h-[60vh] flex flex-col">
+                    <div className="overflow-x-auto w-full">
+                        <Table className="w-full">
+                            <TableHeader>
+                                <TableRow>
+                                    {table_data && table_data.solo ? (
+                                        <>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.position")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.name")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.club")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.class")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.position")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.team")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.name")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.club")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
+                                            <TableHead className="">{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
+                                        </>
+                                    )}
+                                </TableRow>
+                            </TableHeader>
                                 <TableBody className="">
                                     {participants?.map((participant, idx) =>
                                         table_data.solo ? (
                                             <TableRow key={participant.id}>
                                                 <TableCell>{idx + 1}</TableCell>
                                                 <TableCell>{participant.order}</TableCell>
-                                                <TableCell>
+                                                <TableCell className="">
                                                     {editingParticipant?.id === participant.id ?
-                                                        <div className="relative">
+                                                        <div >
                                                             <Input
                                                                 type="text"
                                                                 value={activeTeamForPlayer == participant.id ? searchTerm : ""}
                                                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                                                className="min-w-[200px]"
+                                                                
                                                                 placeholder="Lisa mängija"
                                                                 autoComplete="off"
                                                                 onFocus={(e) => {
@@ -681,14 +682,14 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                             </>
                                         )
                                     )}
-                                    <TableRow className="">
+                                    <TableRow className="relative">
                                         {table_data && table_data.solo ? (
                                             <>
                                                 <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
                                                 <TableCell>
-                                                    <Input disabled className="min-w-[100px] border-none" type="text" />
+                                                    <Input disabled className=" border-none" type="text" />
                                                 </TableCell>
-                                                <TableCell className="">
+                                                <TableCell className="min-w-[200px]">
                                                     <div className="relative">
                                                         <Input
                                                             type="text"
@@ -700,7 +701,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                     form.setValue("name", e.target.value)
                                                                 }
                                                             }}
-                                                            className="min-w-[100px] text-sm md:text-base"
+                                                            className=" text-sm md:text-base"
                                                             autoComplete="off"
                                                             onFocus={(e) => {
                                                                 setFocusedField("name");
@@ -759,7 +760,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 </TableCell>
                                                 <TableCell>
                                                     <Input
-                                                        className="min-w-[100px]"
+                                                        className="w-[100px]"
                                                         type="number"
                                                         {...form.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
                                                         placeholder="Rank"
@@ -767,7 +768,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 </TableCell>
                                                 <TableCell>
                                                     <Input
-                                                        className="min-w-[100px]"
+                                                        className="w-[100px]"
                                                         type="text"
                                                         {...form.register("players.0.sex")}
                                                         placeholder="Sugu"
@@ -775,7 +776,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 </TableCell>
                                                 <TableCell>
                                                     <Input
-                                                        className="min-w-[100px]"
+                                                        className="w-[100px]"
                                                         type="text"
                                                         {...form.register("players.0.extra_data.club")}
                                                         placeholder="Klubi"
@@ -784,7 +785,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 <TableCell>
                                                     <Input
                                                         disabled
-                                                        className="min-w-[100px] border-none"
+                                                        className="w-[100px] border-none"
                                                         type="number"
                                                         {...form.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
                                                         placeholder="ELTL ID"
@@ -793,7 +794,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                 <TableCell>
                                                     <Input
                                                         disabled
-                                                        className="border-none"
+                                                        className=" border-none"
                                                         type="number"
                                                         {...form.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
                                                         placeholder="Koht Reitingus"
@@ -807,9 +808,10 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         placeholder="Klass"
                                                     />
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="sticky right-0 p-3">
+                                                    <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
                                                     <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
-                                                        Add Participant
+                                                        Add <PlusCircle/>
                                                     </Button>
                                                 </TableCell>
                                             </>
@@ -817,9 +819,9 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                             <>
                                                 <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
                                                 <TableCell>
-                                                    <Input disabled className="min-w-[100px] border-none" type="text" />
+                                                    <Input disabled className=" border-none" type="text" />
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="min-w-[200px]">
                                                     <Input
                                                         type="text"
                                                         {...form.register("name", {
@@ -831,9 +833,10 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     />
                                                 </TableCell>
                                                 <TableCell colSpan={6}></TableCell>
-                                                <TableCell>
-                                                    <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))} >
-                                                        Add Team
+                                                <TableCell className="sticky right-0 p-3">
+                                                    <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
+                                                    <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
+                                                        Add <PlusCircle/>
                                                     </Button>
                                                 </TableCell>
                                             </>
@@ -841,6 +844,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                     </TableRow>
                                 </TableBody>
                             </Table>
+                        </div>
                         </div>
                     </CardContent>
                 </Card>

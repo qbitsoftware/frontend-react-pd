@@ -51,10 +51,10 @@ function RouteComponent() {
 
 
   return (
-    <div className="px-2 sm:px-10">
+    <div className="px-2 sm:px-8">
       <div className="flex flex-col py-6 lg:flex-row justify-between items-center gap-2 sticky top-0 bg-white transition-all duration-200  border-b border-gray-200 lg:h-[4rem] z-10">
         <div>
-          <h3 className="text-lg font-semibold">{table_data.data.class}</h3>
+          <h4 className="font-semibold">{table_data.data.class}</h4>
         </div>
         <Tabs value={currentTab}>
           <TabsList className="grid grid-cols-4 w-full">

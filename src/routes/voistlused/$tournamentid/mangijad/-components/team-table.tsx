@@ -1,13 +1,11 @@
-"use client"
-
 import type React from "react"
-
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import type { Participant } from "@/types/types"
-import placeholderImg from "./placheolderImg.svg"
+import placeholderImg from "@/assets/placheolderImg.svg"
+import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 
 interface TeamTableProps {
   participants: Participant[] | null
@@ -44,7 +42,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                   <TableCell>
                     <Avatar>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
+                      <AvatarFallback><img src={clubPlaceholder} className='rounded-full'></img></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>
@@ -84,7 +82,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                     <TableCell>
                       <Avatar>
                         <AvatarImage src={player.extra_data.image_url}></AvatarImage>
-                        <AvatarFallback><img src='/avatar-fallback.png' className='rounded-full'></img></AvatarFallback>
+                        <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
                       </Avatar>
                     </TableCell>
                     <TableCell>{`${player.first_name} ${player.last_name}`}</TableCell>

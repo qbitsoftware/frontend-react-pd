@@ -142,7 +142,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Card className="w-full border-[#F0F3F3]">
+      <Card className="w-full border-none">
         <CardHeader>
           <CardTitle className="text-base">
             {initial_data ? t("admin.tournaments.create_tournament.edit_group") : t("admin.tournaments.create_tournament.create_group")}

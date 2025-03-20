@@ -3,6 +3,7 @@ import {
   LayoutDashboard,
   Trophy,
   FileText,
+  PersonStanding,
 } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
@@ -71,16 +72,16 @@ function RouteComponent() {
       icon: <FileText className="w-4 h-4 sm:mr-2" />,
       to: '/admin/blog',
     },
-    // {
-    //   id: 'settings',
-    //   label: t('admin.layout.sidebar.settings'),
-    //   icon: <Settings className="w-4 h-4 sm:mr-2" />,
-    //   to: '/admin/settings',
-    // },
+    {
+      id: 'settings',
+      label: "Klubid",
+      icon: <PersonStanding className="w-4 h-4 sm:mr-2" />,
+      to: '/admin/clubs',
+    },
   ]
 
   return (
-    <div className="flex flex-col sm:flex-row max-w-[1440px] mx-auto  bg-[#F8F9F9]">
+    <div className="flex flex-col sm:flex-row max-w-[1440px] mx-auto bg-[#F8F9F9]">
       {/* Sidebar */}
       <div className="w-16 md:w-56">
         <div className=" p-2 sm:p-4 md:p-6">
@@ -109,7 +110,7 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-white overflow-hidden sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 sm:h-[calc(100vh-5.5rem)]">
+      <div className="flex-1 bg-white sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 overflow-x-scroll">
         <Outlet />
       </div>
     </div>

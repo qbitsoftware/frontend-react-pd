@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import React from 'react'
-import placeholderImg from "./placheolderImg.svg"
+import placeholderImg from "@/assets/placheolderImg.svg"
 
 interface SoloTableProps {
   participants: Participant[] | null

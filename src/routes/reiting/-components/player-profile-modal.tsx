@@ -1,12 +1,11 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React from 'react';
-import { UserNew } from "@/types/types";
 import { PlayerProfileData } from "./player-profile-data";
-import placeholderImg from "./placheolderImg.svg";
-import clubPlaceholder from "./clubPlaceholder.svg"
+import placeholderImg from "@/assets/placheolderImg.svg";
+import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 import { UseGetUserProfile } from "@/queries/players";
 import { mockClubs } from "@/lib/mock_data/club_mocks";
+import { UserNew } from "@/types/types";
 
 interface PlayerProfileModalProps {
   isOpen: boolean;

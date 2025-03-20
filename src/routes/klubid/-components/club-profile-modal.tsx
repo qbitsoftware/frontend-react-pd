@@ -4,34 +4,31 @@ import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import React from 'react';
 import { Club } from "@/types/types";
+import { UseGetClubPlayers } from "@/queries/clubs";
 
 interface ClubProfileModal {
   isOpen: boolean;
   onClose: () => void;
-  club: Club | null;
+  club: Club;
 }
 
 export const ClubProfileModal: React.FC<ClubProfileModal> = ({ isOpen, onClose, club }) => {
   const { t } = useTranslation();
-  if (!club) return null;
 
-  const players = [
-    { first_name: "Toomas", last_name: "Tibu", birthYear: 1995, ranking: 1, sex: "Male" },
-    { first_name: "Kolmasnahk", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Rahapesukaruu", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Ahmed", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Kreutzwald", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Tigu", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Tigu", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-    { first_name: "Tigu", last_name: "Panija", birthYear: 1998, ranking: 2, sex: "Female" },
-  ];
+
+  const {data: playerData, isLoading } = UseGetClubPlayers(club.name) 
+
+  if (!club) return null;
+  if (isLoading) return <div>Loading...</div>;
+  if (!playerData) return <div>Error</div>;
+  const players = playerData.data
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-8 bg-white rounded-2xl shadow-xl max-h-[90vh] overflow-y-scroll">
         <div className="flex flex-col items-center space-y-4 mb-8">
           <img
-            src={club.logoPath}
+            src={club.image_url}
             alt={`${club.name}'s logo`}
             className="w-32 h-32 object-cover"
           />
@@ -58,8 +55,8 @@ export const ClubProfileModal: React.FC<ClubProfileModal> = ({ isOpen, onClose, 
                     <td className="px-4 py-2 text-gray-800">{index + 1}</td>
                     <td className="px-4 py-2 text-gray-800">{player.last_name}</td>
                     <td className="px-4 py-2 text-gray-800">{player.first_name}</td>
-                    <td className="px-4 py-2 text-gray-800">{player.ranking}</td>
-                    <td className="px-4 py-2 text-gray-800">{player.birthYear}</td>
+                    <td className="px-4 py-2 text-gray-800">{player.rate_points}</td>
+                    <td className="px-4 py-2 text-gray-800">{player.birth_date}</td>
                     <td className="px-4 py-2 text-gray-800">{player.sex}</td>
                   </tr>
                 ))}

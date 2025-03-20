@@ -13,9 +13,9 @@ interface ClubTableProps {
 export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [SelectedClubId, setSelectedClubId] = useState<number | null>(null)
-  const selectedClub = clubs.find((club) => club.id === SelectedClubId);
+  // const [SelectedClubId, setSelectedClubId] = useState<number | null>(null)
+  const [selectedClub, setSelectedClub] = useState<Club>(clubs[0])
+  // const selectedClub = clubs.find((club) => club.id === SelectedClubId);
   return (
     <div className="rounded-t-lg bg-white p-6">
       <h2 className="text-3xl font-semibold text-gray-900 mb-10">
@@ -27,7 +27,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
             <CardHeader className="flex-grow">
               <div className="relative mb-4 flex justify-center">
                 <img
-                  src={club.logoPath}
+                  src={club.image_url}
                   alt={`logo`}
                   className="rounded-md"
                 />
@@ -41,7 +41,8 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
                   size="sm"
                   className="px-4 py-2"
                   onClick={() => {
-                    setSelectedClubId(club.id);
+                    // setSelectedClubId(club.id);
+                    setSelectedClub(club)
                     setIsModalOpen(true);
                   }}
                 >
@@ -55,7 +56,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
       <ClubProfileModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        club={selectedClub || null}
+        club={selectedClub}
       />
 
     </div>

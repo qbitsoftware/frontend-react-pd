@@ -174,12 +174,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       </AlertDialog>
 
 
-      <Card className="w-full border-none shadow-none px-10 overflow-y-scroll">
+      <Card className="w-full border-none shadow-none">
         <CardHeader className="px-0">
-          <Button variant="ghost" className="hover:bg-transparent" size="icon" onClick={() => navigate({ to: ".." })}>
-            <ChevronLeft className="w-5 h-5" />
-            {t("admin.tournaments.create_tournament.back")}
-          </Button>
+          
           <CardTitle className="text-lg">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")

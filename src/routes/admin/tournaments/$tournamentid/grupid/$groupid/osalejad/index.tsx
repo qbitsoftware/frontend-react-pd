@@ -59,7 +59,7 @@ function RouteComponent() {
 
     if (tournament_data && tournament_data.data && table_data && table_data.data) {
         return (
-            <div>
+            <div className=''>
                 {tournament_data && table_data && participants &&
                     <ParticipanForm
                         participants={participants.data}
