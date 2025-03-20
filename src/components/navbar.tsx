@@ -51,6 +51,11 @@ export default function Navbar() {
       name: t("navbar.menu.calendar"),
       href: "/kalender",
     },
+    {
+      name: t("navbar.menu.calendar"),
+      href: "/kalender",
+    },
+    { name: t("navbar.menu.register"), href: "/register" },
     { name: t("navbar.menu.ratings"), href: "/reiting" },
     { name: t("navbar.menu.rules"), href: "/reeglid" },
     { name: t("navbar.menu.contact"), href: "/kontakt" },
