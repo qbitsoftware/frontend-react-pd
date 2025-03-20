@@ -1,59 +1,56 @@
-import { Blog } from "@/types/types"
-import { Link } from "@tanstack/react-router"
+import { Blog } from "@/types/types";
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('et-EE', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  })
-}
+  const date = new Date(dateString);
+  return date.toLocaleDateString("et-EE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};
 
 interface Props {
-  blogs: Blog[] | null
+  blogs: Blog[] | null;
+  isEmpty: boolean;
 }
 
-const NewsWidget = ({ blogs }: Props) => {
+const NewsWidget = ({ blogs, isEmpty }: Props) => {
+  const { t } = useTranslation();
 
-  if (!blogs) {
+  if (isEmpty) {
     return (
-      <div className="flex items-center justify-center p-6 bg-gray-100 rounded-sm">
-        <p className="text-lg text-gray-600">Error retrieving news. Please try again later.</p>
+      <div className="border-2 border-dashed rounded-md py-12 px-8">
+        <p className="pb-1 text-center font-medium text-stone-700">
+          {t("homepage.news.missing")}
+        </p>
       </div>
-    )
+    );
   }
 
-  if (blogs.length === 0) {
+  if (blogs) {
     return (
-      <div className="flex items-center justify-center p-6 bg-gray-100 rounded-sm">
-        <p className="text-lg text-gray-600">There are currently no news to display.</p>
-      </div>
-    )
-  }
-
-  return (
-    <div>
-      <ul className="space-y-6">
-      {blogs.slice(0, 5).map((post) => (
-
-        <li key={post.id} className="px-2 group border-b pb-2">
-                  <Link href={`/uudised/${post.id}`} className="group">
-
-          <p>{formatDate(post.created_at)}</p>
-          <h6 className="font-medium group-hover:underline">{post.title}</h6>
-          </Link>
-        </li>
-      ))}
-
-        
+      <div>
+        <ul className="space-y-6">
+          {blogs.slice(0, 5).map((post) => (
+            <li key={post.id} className="px-2 group border-b pb-2">
+              <Link href={`/uudised/${post.id}`} className="group">
+                <p>{formatDate(post.created_at)}</p>
+                <h6 className="font-medium group-hover:underline">
+                  {post.title}
+                </h6>
+              </Link>
+            </li>
+          ))}
         </ul>
-    </div>
-  )
+      </div>
+    );
+  }
+};
 
-}
-  
-  {/*}
+{
+  /*}
   const secondaryNews = blogs.slice(1, 6);
   const placeholdersNeeded = Math.max(0, 4 - secondaryNews.length);
 
@@ -109,7 +106,7 @@ const NewsWidget = ({ blogs }: Props) => {
     </div>
   )
 
-    */}
+    */
+}
 
-
-export default NewsWidget
+export default NewsWidget;

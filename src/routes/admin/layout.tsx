@@ -109,7 +109,7 @@ function RouteComponent() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-white overflow-hidden sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3">
+      <div className="flex-1 bg-white overflow-hidden sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 sm:h-[calc(100vh-5.5rem)]">
         <Outlet />
       </div>
     </div>

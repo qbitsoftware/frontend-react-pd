@@ -52,7 +52,7 @@ function RouteComponent() {
         const err = error as ErrorResponse
         if (err.response.status == 404) {
             return (
-                <div className="flex flex-col items-center justify-center min-h-[400px] bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <div className="flex flex-col items-center justify-center min-h-[400px] m-8 space-y-2  rounded-lg border-2 border-dashed border-gray-200">
                     <Trophy className="w-16 h-16 text-gray-300 mb-4" />
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('admin.tournaments.errors.not_found.title')}</h3>
                     <p className="text-gray-500 text-center max-w-md">

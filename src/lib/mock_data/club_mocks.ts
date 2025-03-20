@@ -21,7 +21,7 @@ export const mockClubs = [
   },
   {
     id: 5,
-    name: "Taltech",
+    name: "TalTech Spordiklubi",
     logoPath: "/test/clubs/5.jpg"
   },
   {

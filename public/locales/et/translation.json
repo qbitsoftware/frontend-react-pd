@@ -56,6 +56,7 @@
     },
     "news": {
       "name": "Uudised",
+      "missing": "Blogi postitused puuduvad",
       "view_all": "Kõik uudised",
       "read_more": "Loe lähemalt"
     },
@@ -83,6 +84,8 @@
     "search_category": "Otsi kategooria järgi:",
     "search_content": "Otsi sisu järgi",
     "no_image": "Pilt pole saadaval",
+    "no_news": "Blogi postitused puuduvad",
+    "no_news_subtitle": "Hetkel ei ole ühtegi blogi postitust.",
     "categories": {
       "all": "Kõik",
       "news": "Teadaanded",
@@ -141,6 +144,7 @@
     "title": "Kalender",
     "all_categories": "Kõik kategooriad",
     "no_tournaments": "Turniirid puuduvad",
+    "no_tournaments_subtitle": "Hetkel ei ole kalendris ühtki turniiri.",
     "search_placeholder": "Otsi turniiri...",
     "upcoming": "Tulemas",
     "finished": "Lõppenud",
@@ -229,13 +233,13 @@
       },
       "menus": {
         "latest_matches": {
-          "title": "Hiljutised kohtumised"
+          "title": "Viimased mängud"
         },
-        "temp_placeholder": {
-          "title": "Temp asendaja"
+        "player_profile": {
+          "title": "Mängija Profiil"
         },
         "rating_change_graph": {
-          "title": "Reitingu muutuse graafik"
+          "title": "Vorm"
         }
       }
     }
@@ -304,6 +308,8 @@
     },
     "dashboard": {
       "name": "Töölaud",
+      "missing": "Töölaud puudub",
+      "missing_subtitle": "Töölauda pole. Loo ja vii läbi turniire, et töölauda näha.",
       "total_tournaments": "Turniire kokku",
       "active_tournaments": "Aktiivseid turniire",
       "upcoming_tournaments": "Tulevased turniirid",
@@ -321,7 +327,7 @@
     "tournaments": {
       "title": "Turniirid",
       "description": "Halda turniire siit",
-      "add_new": "Lisa Uus",
+      "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
         "back": "Tagasi",
@@ -456,7 +462,7 @@
       },
       "errors": {
         "not_found": {
-          "title": "Turniiri ei leitud",
+          "title": "Turniire pole",
           "description": "Hetkel ei ole turniire, mida kuvada. Alustamiseks lisage uus turniir."
         },
         "network": {
@@ -498,7 +504,7 @@
     "blogs": {
       "title": "Blogid",
       "description": "Halda blogisid siit",
-      "add_new": "Lisa Uus",
+      "add_new": "Uus Postitus",
       "delete": "Kustuta blogi",
       "text": "Alusta esimese blogiga",
       "search": "Otsi blogisid...",
@@ -515,6 +521,7 @@
         "actions": "Tegevused"
       },
       "not_found": "Blogisid ei leitud",
+      "not_found_subtitle": "Ühtegi blogi postitust ei ole. Loo esimene postitus.",
       "load_failed": "Blogisid ei õnnestunud laadida",
       "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
       "refresh": "Uuenda lehte"

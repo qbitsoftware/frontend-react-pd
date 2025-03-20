@@ -174,7 +174,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       </AlertDialog>
 
 
-      <Card className="w-full border-none shadow-none px-10">
+      <Card className="w-full border-none shadow-none px-10 overflow-y-scroll">
         <CardHeader className="px-0">
           <Button variant="ghost" className="hover:bg-transparent" size="icon" onClick={() => navigate({ to: ".." })}>
             <ChevronLeft className="w-5 h-5" />

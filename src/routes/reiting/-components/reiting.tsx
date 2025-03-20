@@ -96,7 +96,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
       user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.club_name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSex && matchesAgeClass && matchesSearchQuery;
-  }).sort((a, b) => b.rate_points - a.rate_points);
+  }).sort((a, b) => a.rate_order - b.rate_order);
 
   const selectedPlayer = users.find((user) => user.id === SelectedPlayerId);
 

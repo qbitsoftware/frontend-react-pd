@@ -7,12 +7,14 @@ import { useTranslation } from 'react-i18next';
 
 
 interface Props {
-  tournaments: Tournament[] | null
+  tournaments: Tournament[] | null;
+  isEmpty: boolean;
 }
 
-const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
+const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty  }) => {
   const router = useRouter()
   const { t } = useTranslation()
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -59,12 +61,10 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
     </SfumatoBackground>
   );
 
-  if (!tournaments || (!upcomingTournaments.length && !pastTournaments.length)) {
+  if (isEmpty) {
     return (
-      <div className="flex flex-col space-y-2 h-full">
-        <div className="flex flex-col bg-[#F0F4F7]/60 py-2 px-4 rounded-sm text-stone-800">
-          <p className="font-bold pb-1 text-center">{t("calendar.no_tournaments")}</p>
-        </div>
+      <div className='border-2 border-dashed rounded-md py-12 px-8'>
+          <p className="pb-1 text-center font-medium text-stone-700">{t("calendar.no_tournaments")}</p>
       </div>
     )
   }

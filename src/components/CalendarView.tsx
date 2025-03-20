@@ -109,7 +109,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
         return now > tournamentEndDate;
     };
 
-
+    
+    if (tournaments) {
     return (
         <div className="py-4">
             <div className="lg:rounded-lg bg-white px-4 sm:px-6 md:px-12 py-6 space-y-4">
@@ -206,6 +207,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tournaments }) => {
             </div>
         </div>
     );
+}
 };
 
 export default CalendarView;

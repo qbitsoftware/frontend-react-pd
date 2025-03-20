@@ -22,6 +22,11 @@ export const Route = createFileRoute('/register/')({
     },
 })
 
+type RegisterError = {
+    message: string;
+    statusCode?: number;
+  };
+
 function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -30,13 +35,18 @@ function RouteComponent() {
     const { successToast } = useToastNotification(toast)
     const userMutation = useCreateUser()
 
-    const registerMutation = {
-        mutate: (data: RegisterFormData, options: any) => {
-            console.log('Registering with data:', data);
-            options.onSuccess();
-        },
-        isPending: false
-    };
+    type MutationOptions = {
+        onSuccess: () => void;
+        onError?: (error: Error) => void;
+      };
+      
+      const registerMutation = {
+          mutate: (data: RegisterFormData, options: MutationOptions) => {
+              console.log('Registering with data:', data);
+              options.onSuccess();
+          },
+          isPending: false
+      };
 
     const registerSchema = createRegisterSchema(t);
 
@@ -58,7 +68,7 @@ function RouteComponent() {
                 successToast(t('register.successful_registration'));
                 navigate({ to: '/login' });
             },
-            onError: (error: any) => {
+            onError: (error: RegisterError) => {
                 setServerError(error?.message || t('register.registration_error'));
             },
 

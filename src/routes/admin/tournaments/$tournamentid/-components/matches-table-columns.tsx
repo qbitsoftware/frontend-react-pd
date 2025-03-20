@@ -10,7 +10,9 @@ export function createColumns(t: TFunction<"translation", undefined>): ColumnDef
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
-      cell: ({ row }) => { void row; null },
+      cell: ({ row }) => {
+        return null;
+      },
     },
     {
       accessorKey: "",

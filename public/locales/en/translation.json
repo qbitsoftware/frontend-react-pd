@@ -56,6 +56,7 @@
     },
     "news": {
       "name": "News",
+      "missing": "No blog posts yet",
       "view_all": "View all",
       "read_more": "Read more"
     },
@@ -83,6 +84,8 @@
     "search_category": "Search by category:",
     "search_content": "Search by content",
     "no_image": "No image available",
+    "no_news": "No blog posts created",
+    "no_news_subtitle": "There are currently no blog posts created.",
     "categories": {
       "all": "All",
       "competitions": "Competitions",
@@ -140,7 +143,8 @@
   "calendar": {
     "title": "Calendar",
     "all_categories": "All categories",
-    "no_tournaments": "No tournaments",
+    "no_tournaments": "No tournaments scheduled",
+    "no_tournaments_subtitle": "There are currently no tournaments scheduled in the calendar.",
     "search_placeholder": "Find a tournament...",
     "upcoming": "Upcoming",
     "finished": "Finished",
@@ -175,7 +179,7 @@
   },
   "rating": {
     "component": {
-      "missing": "No data available"
+      "missing": "No players to display"
     },
     "header": "National Ranking",
     "header_prefix": {
@@ -304,6 +308,8 @@
     },
     "dashboard": {
       "name": "Dashboard",
+      "missing": "Dashboard unavailable",
+      "missing_subtitle": "Dashboard unavailable. Create and manage tournaments to view the dashboard.",
       "total_tournaments": "Total tournaments",
       "active_tournaments": "Active tournaments",
       "upcoming_tournaments": "Upcoming tournaments",
@@ -498,7 +504,7 @@
     "blogs": {
       "title": "Blogs",
       "description": "Manage blogs",
-      "add_new": "Add new",
+      "add_new": "New Post",
       "delete": "Delete a blog",
       "text": "Start writing a blog",
       "search": "Search for blogs...",
@@ -515,6 +521,7 @@
         "actions": "Actions"
       },
       "not_found": "No blogs found",
+      "not_found_subtitle": "No blog posts created. Create the first blog post.",
       "load_failed": "Failed to load blogs. Please try again.",
       "load_failed_description": "An error occurred while fetching blogs. Please try again.",
       "refresh": "Refresh the page"

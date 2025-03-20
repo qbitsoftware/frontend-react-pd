@@ -3,15 +3,20 @@ import { useState, useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { UseGetBlogsOption } from '@/queries/blogs'
+import { UseGetBlogsOption, type BlogsResponseUser } from '@/queries/blogs'
 import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { useTranslation } from 'react-i18next'
-
-
+import ErrorPage from '@/components/error'
+import { ArrowLeft, FileX } from 'lucide-react'
+import axios from 'axios'
+import { motion } from 'framer-motion'
 
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
+    errorComponent: () => {
+        return <ErrorPage />
+    },
     validateSearch: z.object({
         category: z.string().optional(),
         page: z.number().optional(),
@@ -23,15 +28,37 @@ export const Route = createFileRoute('/uudised/')({
         search: search.search,
     }),
     loader: async ({ context: { queryClient }, deps }) => {
-        const articles_data = await queryClient.ensureQueryData(
-            UseGetBlogsOption(deps.page, deps.category, deps.search)
-        )
-        return articles_data
+        let articles_data: BlogsResponseUser = { 
+            data: {
+              blogs: [],
+              total_pages: 0
+            },
+            message: "Default empty state",
+            error: null 
+          };
+
+        try {
+            articles_data = await queryClient.ensureQueryData(
+                UseGetBlogsOption(deps.page, deps.category, deps.search)
+            )
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 404) {
+                console.warn("Blogs API returned 404")
+            } else {
+                throw error
+            }
+        }
+
+        const dataStatus = {
+            blogsEmpty: !articles_data?.data?.blogs?.length
+        }
+
+        return { articles_data, dataStatus }
     }
 })
 
 export default function RouteComponent() {
-    const articles_data = Route.useLoaderData()
+    const { articles_data, dataStatus } = Route.useLoaderData()
     const { category, page, search } = Route.useSearch()
     const navigate = Route.useNavigate()
 
@@ -56,10 +83,8 @@ export default function RouteComponent() {
 
     const displayCategories = categories.map(cat => cat.label);
 
-
     const [searchInput, setSearchInput] = useState(search || '')
     const [currentPage, setCurrentPage] = useState(page || 1)
-
 
     useEffect(() => {
         setSearchInput(search || '')
@@ -129,6 +154,32 @@ export default function RouteComponent() {
         window.scrollTo(0, 0)
     }, [])
 
+    if (dataStatus.blogsEmpty) {
+        return (
+            <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: 0 }}
+                >
+                    <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed rounded-md m-8 space-y-2">
+                        <FileX className="h-12 w-12 text-stone-600" />
+                        <h2 className="font-semibold">{t("news.no_news") || "No articles available"}</h2>
+                        <p className="text-stone-500 pb-2">
+                            {t("news.no_news_subtitle") || "There are currently no articles that match your criteria."}
+                        </p>
+                        <Button asChild variant="outline">
+                            <Link to="/">
+                                <ArrowLeft className="h-4 w-4 mr-2" />
+                                {t("errors.general.home") || "Mine kodulehele"}
+                            </Link>
+                        </Button>
+                    </div>
+                </motion.div>
+            </div>
+        )
+    }
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="space-y-3">
@@ -168,7 +219,6 @@ export default function RouteComponent() {
                             onChange={(e) => setSearchInput(e.target.value)}
                             className=""
                         />
-
                     </div>
                 </div>
             </div>

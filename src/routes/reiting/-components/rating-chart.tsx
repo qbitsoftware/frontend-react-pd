@@ -1,6 +1,5 @@
-"use client"
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
 
 import {
   Card,
@@ -15,7 +14,6 @@ import {
 
 import { mockRatingChartData } from "@/lib/mock_data/rating_mocks"
 
-
 const chartConfig = {
   NR: {
     label: "NR",
@@ -25,40 +23,49 @@ const chartConfig = {
 
 export function PlayerRankingChangeGraph() {
   return (
-    <Card className="bg-yellow rounded-lg">
-      <CardContent className="pt-8">
-        <ChartContainer config={chartConfig} className="relative">
-          <AreaChart
-            accessibilityLayer
-            data={mockRatingChartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-              tick={{ fill: "#777" }}  
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
-            />
-            <Area
-              dataKey="NR"
-              type="natural"
-              fill="var(--blue-light)"
-              fillOpacity={0.4}
-              stroke="var(--blue-light)"
-              strokeWidth={2}  
-              stackId="a"
-            />
-          </AreaChart>
+    <Card className="border-0 shadow-none">
+      <CardContent className="p-0 pt-4">
+        <ChartContainer config={chartConfig} className="relative h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={mockRatingChartData}
+              margin={{
+                top: 10,
+                right: 15,
+                left: 5,
+                bottom: 20,
+              }}
+            >
+              <CartesianGrid vertical={false} stroke="#f0f0f0" />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => value.slice(0, 3)}
+                tick={{ fill: "#777" }}
+              />
+              <YAxis 
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: "#777" }}
+                width={30}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dot" />}
+              />
+              <Area
+                dataKey="NR"
+                type="natural"
+                fill="var(--blue-light)"
+                fillOpacity={0.4}
+                stroke="var(--blue-light)"
+                strokeWidth={2}
+                stackId="a"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>

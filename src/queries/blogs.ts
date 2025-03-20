@@ -2,13 +2,13 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import { Blog } from "@/types/types";
 import { axiosInstance } from "./axiosconf";
 
-interface BlogsResponse {
+export interface BlogsResponse {
     data: Blog[]
     message: string
     error: string | null
 }
 
-interface BlogsResponseUser {
+export interface BlogsResponseUser {
     data: {
         blogs: Blog[],
         total_pages: number,

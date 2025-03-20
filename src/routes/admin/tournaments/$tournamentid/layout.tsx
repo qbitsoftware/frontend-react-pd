@@ -70,7 +70,7 @@ function RouteComponent() {
         </div>
 
         <div className="">
-          <ScrollArea className="sm:h-[calc(100vh-5.5rem)]">
+          <ScrollArea className="">
             <Outlet />
           </ScrollArea>
         </div>

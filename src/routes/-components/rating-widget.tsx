@@ -7,23 +7,26 @@ import { UserNew } from '@/types/types';
 
 interface Props {
   users: UserNew[] | null
+  isEmpty: boolean;
 }
 
-const RatingWidget = ({ users }: Props) => {
+const RatingWidget = ({ users, isEmpty }: Props) => {
   const { t } = useTranslation();
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null)
   const selectedPlayer = users && users.find((user) => user.id === selectedPlayerId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("men");
   
-  if (!users) {
+  if (isEmpty) {
     return (
-      <div>
-        {t("rating.component.missing")}
+      <div className='border-2 border-dashed rounded-md py-12 px-8'>
+        <p className="pb-1 text-center font-medium text-stone-700">{t("rating.component.missing")}</p>
       </div>
     )
   }
 
+
+  if (users) {
   const filteredUsers = users
     .filter((user) => {
       if (activeTab === "combined") return true;
@@ -31,7 +34,7 @@ const RatingWidget = ({ users }: Props) => {
       if (activeTab === "women") return user.sex === "N";
       return true;
     })
-    .sort((a, b) => b.rate_points - a.rate_points);
+    .sort((a, b) => a.rate_order - b.rate_order);
 
   return (
     <div className='h-full flex flex-col relative space-y-1 border rounded-t-[12px]'>
@@ -93,10 +96,11 @@ const RatingWidget = ({ users }: Props) => {
       <PlayerProfileModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        player={selectedPlayer || null}
+        user={selectedPlayer || null}
       />
     </div>
   )
+}
 }
 
 export default RatingWidget

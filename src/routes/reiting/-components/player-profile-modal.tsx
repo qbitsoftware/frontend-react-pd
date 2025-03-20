@@ -1,11 +1,12 @@
-import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from 'react';
 import { UserNew } from "@/types/types";
-import { PlayerProfileData } from "./player-data-accordion";
+import { PlayerProfileData } from "./player-profile-data";
 import placeholderImg from "./placheolderImg.svg";
 import clubPlaceholder from "./clubPlaceholder.svg"
 import { UseGetUserProfile } from "@/queries/players";
+import { mockClubs } from "@/lib/mock_data/club_mocks";
 
 interface PlayerProfileModalProps {
   isOpen: boolean;
@@ -13,35 +14,63 @@ interface PlayerProfileModalProps {
   user: UserNew | null;
 }
 
-export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({ isOpen, onClose, user }) => {
+export const PlayerProfileModal= ({ isOpen, onClose, user }: PlayerProfileModalProps) => {
   if (!user) return null;
-  const profile = UseGetUserProfile(user.id)
-  console.log("profile", profile)
+  const { data: profileResponse, isLoading, error } = UseGetUserProfile(user.id);
+
+  const clubMatch = mockClubs.find(club => club.name === user.club_name);
+  const clubLogo = clubMatch ? clubMatch.logoPath : clubPlaceholder;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl py-12 px-6 bg-white rounded-lg shadow-lg">
-        <div className="flex space-x-8">
-          <DialogHeader className="flex flex-col items-center space-y-4 w-1/3">
-            <Avatar className="w-48 h-48">
-              <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s profile`} />
-              <AvatarFallback><img src={placeholderImg} className='rounded-full h-20'></img></AvatarFallback>
-            </Avatar>
-            <DialogTitle className="text-2xl font-semibold text-gray-900">
+      <DialogContent className="max-w-5xl py-8 px-8 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl border border-gray-100">
+        <div className="flex flex-col md:flex-row md:space-x-10">
+          <div className="flex flex-col items-center space-y-6 w-full md:w-1/3 pb-6 md:pb-0 border-b md:border-b-0 md:border-x border-gray-100">
+              <Avatar className="w-48 h-48 shadow-lg">
+                <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s profile`} />
+                <AvatarFallback>
+                  <img src={placeholderImg} className="rounded-full h-full w-full object-cover" alt="Profile" />
+                </AvatarFallback>
+              </Avatar>
+            
+            <h2 className="font-bold text-2xl text-gray-900 text-center">
               {user.first_name} {user.last_name}
-            </DialogTitle>
-            <Avatar className="w-24 h-24">
-              <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s club`} />
-              <AvatarFallback><img src={clubPlaceholder} className='rounded-full h-12'></img></AvatarFallback>
-            </Avatar>
-            <p>{user.first_name} {user.last_name}'s club</p>
-          </DialogHeader>
-
-
-          <div className="mt-4">
-
+            </h2>
+            
+            <div className="flex flex-col items-center gap-3 mt-2">
+              <p className="text-gray-600 font-medium">{user.club_name}</p>
+              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                <Avatar className="w-20 h-20 rounded-md">
+                  <AvatarImage src={clubLogo} alt={`${user.club_name} logo`} />
+                  <AvatarFallback className="bg-gray-100">
+                    {user.club_name?.substring(0, 2).toUpperCase() || "CL"}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            </div>
           </div>
-          {PlayerProfileData(user)}
+
+          <div className="w-full md:w-2/3 mt-6 md:mt-0">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="animate-pulse flex space-x-4">
+                  <div className="flex-1 space-y-4 py-1">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="text-red-500 p-4 bg-red-50 rounded-lg">Error loading profile data</div>
+            ) : profileResponse?.data ? (
+              <PlayerProfileData profile={profileResponse.data} />
+            ) : (
+              <div className="text-gray-500 p-4 bg-gray-50 rounded-lg">No profile data available</div>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
