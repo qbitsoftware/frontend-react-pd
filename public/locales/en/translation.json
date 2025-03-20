@@ -127,7 +127,8 @@
       "no_schedule": "No schedule available",
       "no_games": "No games available for that group",
       "winner_unknown": "Unknown",
-      "no_groups": "No results available"
+      "no_groups": "No results available",
+      "no_table": "Table not available yet"
     },
     "navbar": {
       "info": "Info",
@@ -380,7 +381,7 @@
         },
         "table": {
           "group": "Group",
-          "number_and_team_size": "Participants / Tabel size",
+          "number_and_team_size": "Participants / Table size",
           "type": "Table type",
           "format": "Format"
         },

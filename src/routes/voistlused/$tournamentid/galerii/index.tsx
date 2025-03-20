@@ -1,33 +1,39 @@
-import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Images } from '../../-components/images'
-import { useTournament } from '../-components/tournament-provider'
+import { createFileRoute } from "@tanstack/react-router";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { Images } from "../../-components/images";
 
-
-export const Route = createFileRoute('/voistlused/$tournamentid/galerii/')({
-    component: RouteComponent,
-})
-
+export const Route = createFileRoute("/voistlused/$tournamentid/galerii/")({
+  component: RouteComponent,
+});
 
 function RouteComponent() {
-    const tournament_id = Route.useParams().tournamentid
-    const [activeTab, setActiveTab] = React.useState("1")
-    const tournament = useTournament();
-
-    console.log(tournament)
-
-    const startDate = tournament?.start_date ? new Date(tournament.start_date) : new Date();
-    const endDate = tournament?.end_date ? new Date(tournament.end_date) : new Date();
-
-    const diffTime = Math.abs(Number(endDate) - Number(startDate));
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-    const gameDaysArray = Array.from({ length: Math.max(diffDays, 1) }, (_, index) => index + 1);
+  // const tournament_id = Route.useParams().tournamentid;
+  // const [activeTab, setActiveTab] = React.useState("1");
 
 
+  //const startDate = tournament?.start_date
+  //  ? new Date(tournament.start_date)
+  //  : new Date();
+  //const endDate = tournament?.end_date
+  //  ? new Date(tournament.end_date)
+  //  : new Date();
 
-    return (
+  //const diffTime = Math.abs(Number(endDate) - Number(startDate));
+  //const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+  //const gameDaysArray = Array.from(
+  //  { length: Math.max(diffDays, 1) },
+  //  (_, index) => index + 1
+  //);
+
+  return (
+    <div className="p-6 text-center rounded-sm">
+      <p className="text-stone-500">No gallery content available yet.</p>
+    </div>
+  );
+}
+{
+  /* 
         <div className="px-12 py-8">
             <h5 className="font-bold mb-8">Galerii</h5>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -51,5 +57,5 @@ function RouteComponent() {
                 ))}
             </Tabs>
         </div>
-    )
+        */
 }

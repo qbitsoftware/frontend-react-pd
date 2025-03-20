@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournamentTables } from '@/queries/tables'
 import { ErrorResponse } from '@/types/types'
-import { parseTableType } from '@/lib/utils'
+import { formatDate, parseTableType } from '@/lib/utils'
 import { useTournament } from '../-components/tournament-provider'
-import { formatDateTimeNew } from '@/lib/utils'
+import { formatDateTimeNew, formatDateString } from '@/lib/utils'
 import { UsersRound } from 'lucide-react';
 import { Link } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
@@ -34,7 +34,7 @@ function RouteComponent() {
   const { tournament_tables } = Route.useLoaderData()
   const tournament = useTournament();
   const { t } = useTranslation()
-  const startDate = formatDateTimeNew(tournament.start_date);
+  const startDate = formatDateString(tournament.start_date);
 
   const tournamentState = () => {
     const now = new Date()

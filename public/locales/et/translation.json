@@ -127,7 +127,9 @@
       "no_schedule": "Ajakava puudub",
       "no_games": "Mänge pole selles klassis sel päeval",
       "winner_unknown": "Teadmata",
-      "no_groups": "Tulemused puuduvad"
+      "no_groups": "Tulemused puuduvad",
+      "no_table": "Tabel pole veel saadaval"
+
     },
     "navbar": {
       "info": "Info",

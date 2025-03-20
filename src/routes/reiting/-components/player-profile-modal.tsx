@@ -2,7 +2,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlayerProfileData } from "./player-profile-data";
 import placeholderImg from "@/assets/placheolderImg.svg";
-import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 import { UseGetUserProfile } from "@/queries/players";
 import { mockClubs } from "@/lib/mock_data/club_mocks";
 import { UserNew } from "@/types/types";
@@ -17,8 +16,6 @@ export const PlayerProfileModal= ({ isOpen, onClose, user }: PlayerProfileModalP
   if (!user) return null;
   const { data: profileResponse, isLoading, error } = UseGetUserProfile(user.id);
 
-  const clubMatch = mockClubs.find(club => club.name === user.club_name);
-  const clubLogo = clubMatch ? clubMatch.logoPath : clubPlaceholder;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -38,14 +35,7 @@ export const PlayerProfileModal= ({ isOpen, onClose, user }: PlayerProfileModalP
             
             <div className="flex flex-col items-center gap-3 mt-2">
               <p className="text-gray-600 font-medium">{user.club_name}</p>
-              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <Avatar className="w-20 h-20 rounded-md">
-                  <AvatarImage src={clubLogo} alt={`${user.club_name} logo`} />
-                  <AvatarFallback className="bg-gray-100">
-                    {user.club_name?.substring(0, 2).toUpperCase() || "CL"}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
+              
             </div>
           </div>
 

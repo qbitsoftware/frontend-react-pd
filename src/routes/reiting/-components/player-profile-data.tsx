@@ -11,7 +11,7 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
   const { t } = useTranslation();
 
   return (
-    <Tabs defaultValue="latest-matches" className="w-full">
+    <Tabs defaultValue="latest-matches" className="w-full min-h-64">
       <TabsList className="w-full grid grid-cols-3 bg-gray-50 p-1 rounded-lg">
         <TabsTrigger
           value="latest-matches"
@@ -33,7 +33,6 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
         </TabsTrigger>
       </TabsList>
 
-      {/* Latest Matches Tab */}
       <TabsContent value="latest-matches" className="mt-4">
         <div className="bg-white p-4 rounded-lg shadow-sm">
           <h3 className="font-medium text-lg text-gray-800 mb-4">
@@ -76,7 +75,6 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
         </div>
       </TabsContent>
 
-      {/* Player Profile Tab */}
       <TabsContent value="temp-placeholder" className="mt-4">
         <div className="bg-white p-4 rounded-lg shadow-sm">
           <h3 className="font-medium text-lg text-gray-800 mb-4">
@@ -124,7 +122,6 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
         </div>
       </TabsContent>
 
-      {/* Rating Change Tab */}
       <TabsContent value="rating-change" className="mt-4">
         <div className="bg-white p-4 rounded-lg shadow-sm">
           <h3 className="font-medium text-lg text-gray-800 mb-4">

@@ -45,7 +45,6 @@ const DoubleElimBracket = ({
                 (firstMatch.match.topCoord + secondMatch.match.topCoord) / 2;
             } else {
               topCoord = match.match.order * (HEIGHT + VERTICAL_GAP);
-              console.log("we are never getting her");
             }
           } else {
             if (match.match.round == 0) {

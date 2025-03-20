@@ -223,7 +223,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     }
 
     const handleAddOrUpdateParticipant = async (values: ParticipantFormValues, participantId?: string) => {
-        console.log("Values", values)
         try {
             if (participantId) {
                 await updateParticipant.mutateAsync({ formData: values, participantId })
@@ -244,7 +243,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                 players: [{ name: "", user_id: 0, first_name: "", last_name: "", sport_type: "tabletennis", sex: "", extra_data: { rate_order: 0, club: "", rate_points: 0, eltl_id: 0, class: "" } }],
             }, { keepValues: false })
 
-            console.log(form.getValues())
 
             router.navigate({
                 to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,

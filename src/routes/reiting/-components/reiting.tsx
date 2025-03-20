@@ -69,7 +69,6 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
       if (windowScrollRef.current !== undefined) {
         const restoreScroll = () => {
           window.scrollTo(0, windowScrollRef.current);
-          console.log(`Modal closed: Restored window scroll to ${windowScrollRef.current}px`);
         };
         
         window.requestAnimationFrame(() => {

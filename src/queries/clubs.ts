@@ -66,8 +66,8 @@ export const useUpdateClub = () => {
 }
 
 export const useDeleteClub = () => {
-    return useMutation<ClubResponse>({
-        mutationFn: async (clubName) => {
+    return useMutation<ClubResponse, Error, string>({
+        mutationFn: async (clubName: string) => {
             const { data } = await axiosInstance.delete(`/api/v1/clubs/${clubName}`)
             return data
         }

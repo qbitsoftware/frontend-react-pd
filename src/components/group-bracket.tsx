@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RoundRobins, RoundRobinBracket, MatchWrapper } from '@/types/types'
+import { useTranslation } from 'react-i18next'
 
 interface GroupBracketProps {
     brackets: RoundRobins;
@@ -13,6 +14,15 @@ interface GroupBracketProps {
 }
 
 export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketProps) {
+    const {t} = useTranslation()
+    
+    if (!brackets.round_robin || brackets.round_robin.length !== 8) {
+        return (
+            <div className="flex items-center justify-center h-64 w-full">
+                <p className="text-lg font-medium text-gray-500">{t("competitions.errors.no_table")}</p>
+            </div>
+        );
+    }
 
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
     // const [selectedProtocol, setSelectedProtocol] = useState<MatchWithTeamAndSets | null>(null)

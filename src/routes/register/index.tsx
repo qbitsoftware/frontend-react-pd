@@ -42,7 +42,6 @@ function RouteComponent() {
       
       const registerMutation = {
           mutate: (data: RegisterFormData, options: MutationOptions) => {
-              console.log('Registering with data:', data);
               options.onSuccess();
           },
           isPending: false

@@ -48,11 +48,6 @@ export const ClubProfileModal: React.FC<ClubProfileModal> = ({ isOpen, onClose, 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-8 bg-white rounded-2xl shadow-xl max-h-[90vh] overflow-y-scroll">
         <div className="flex flex-col items-center space-y-4 mb-8">
-          <img
-            src={club.image_url}
-            alt={`${club.name}'s logo`}
-            className="w-32 h-32 object-cover"
-          />
           <DialogTitle className="text-3xl font-bold text-gray-900">{club.name}</DialogTitle>
         </div>
 

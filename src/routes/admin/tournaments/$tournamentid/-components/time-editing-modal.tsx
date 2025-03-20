@@ -164,7 +164,6 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                         <div className="flex justify-center">Laadin...</div>
                     ) : (
                         rounds.map(round => {
-                            console.log("round date", round.time)
                             return (
                                 <div key={round.id} className="grid grid-cols-3 items-center gap-4">
                                     <Label htmlFor={`round-${round.id}`} className="text-right">
