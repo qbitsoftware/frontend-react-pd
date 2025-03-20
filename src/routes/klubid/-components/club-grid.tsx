@@ -13,9 +13,7 @@ interface ClubTableProps {
 export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [SelectedClubId, setSelectedClubId] = useState<number | null>(null)
-  const [selectedClub, setSelectedClub] = useState<Club>(clubs[0])
-  // const selectedClub = clubs.find((club) => club.id === SelectedClubId);
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   return (
     <div className="rounded-t-lg bg-white p-6">
       <h2 className="text-3xl font-semibold text-gray-900 mb-10">

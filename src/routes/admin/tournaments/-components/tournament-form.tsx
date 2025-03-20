@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, ChevronLeft, Loader2 } from "lucide-react"
+import { CalendarIcon, Loader2 } from "lucide-react"
 import { useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
-import { useNavigate } from "@tanstack/react-router"
 import { t } from "i18next"
 
 const formSchema = z.object({
@@ -84,7 +83,6 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       },
   })
 
-  const navigate = useNavigate()
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
   const deleteMutation = UseDeleteTournament(initial_data?.id)
   const { data: tournament_categories } = UseGetTournamentCategories()
