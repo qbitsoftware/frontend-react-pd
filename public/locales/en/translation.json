@@ -81,6 +81,9 @@
   },
   "news": {
     "title": "News",
+    "all_news": "All news",
+    "published": "Published on",
+    "loading": "Loading...",
     "search_category": "Search by category:",
     "search_content": "Search by content",
     "no_image": "No image available",
@@ -221,7 +224,8 @@
         "birthyear": "YOB",
         "profile": "Profile",
         "club": "Club",
-        "player": "Player"
+        "player": "Player",
+        "sex": "Sex"
       },
       "body": {
         "profile_button": "Player profile"
@@ -247,6 +251,10 @@
   },
   "clubs": {
     "header": "Active Estonian Clubs",
+    "search_placeholder": "Search club by name",
+    "loading_club_data": "Loading club data...",
+    "no_players": "No players found for this club",
+    "club_players": "Club players",
     "club_card": {
       "button": "Club profile"
     }
@@ -298,7 +306,7 @@
         "dashboard": "Dashboard",
         "tournaments": "Tournaments",
         "blogs": "Blogs",
-        "settings": "Settings"
+        "clubs": "Clubs"
       },
       "info": "Info",
       "groups": "Groups",
@@ -526,6 +534,49 @@
       "load_failed": "Failed to load blogs. Please try again.",
       "load_failed_description": "An error occurred while fetching blogs. Please try again.",
       "refresh": "Refresh the page"
+    },
+    "clubs": {
+      "toast": {
+        "club_created": "Club created successfully",
+        "club_updated": "Club updated successfully",
+        "club_deleted": "Club deleted successfully",
+        "club_created_error": "Failed to create club. Please try again",
+        "club_updated_error": "Failed to update club. Please try again",
+        "club_deleted_error": "Failed to delete club. Please try again"
+      },
+      "loading": "Loading...",
+      "error": "No club data available",
+      "title": "Club management",
+      "add_new": "Add new club",
+      "add_new_details": "Enter the details for the new club",
+      "edit": "Edit Club",
+      "edit_details": "Update the club details",
+      "clubs": "clubs",
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "contact_person": "Contact person",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "website": "Website",
+        "actions": "Actions"
+      },
+      "dropdown": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "cancel": "Cancel",
+      "creating": "Creating...",
+      "create": "Create Club",
+      "updating": "Updating...",
+      "update": "Update Club",
+      "delete": "Delete Club",
+      "deleting": "Deleting...",
+      "alert_dialog": {
+        "confirmation": "Are you sure?",
+        "description": "This action cannot be undone. This will permanently delete the club"
+      }
     }
   },
   "protocol": {

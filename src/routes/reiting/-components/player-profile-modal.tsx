@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlayerProfileData } from "./player-profile-data";
 import placeholderImg from "@/assets/placheolderImg.svg";
 import { UseGetUserProfile } from "@/queries/players";
-import { mockClubs } from "@/lib/mock_data/club_mocks";
 import { UserNew } from "@/types/types";
 
 interface PlayerProfileModalProps {
@@ -12,7 +11,7 @@ interface PlayerProfileModalProps {
   user: UserNew | null;
 }
 
-export const PlayerProfileModal= ({ isOpen, onClose, user }: PlayerProfileModalProps) => {
+export const PlayerProfileModal = ({ isOpen, onClose, user }: PlayerProfileModalProps) => {
   if (!user) return null;
   const { data: profileResponse, isLoading, error } = UseGetUserProfile(user.id);
 
@@ -22,20 +21,20 @@ export const PlayerProfileModal= ({ isOpen, onClose, user }: PlayerProfileModalP
       <DialogContent className="max-w-5xl py-8 px-8 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl border border-gray-100">
         <div className="flex flex-col md:flex-row md:space-x-10">
           <div className="flex flex-col items-center space-y-6 w-full md:w-1/3 pb-6 md:pb-0 border-b md:border-b-0 md:border-x border-gray-100">
-              <Avatar className="w-48 h-48 shadow-lg">
-                <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s profile`} />
-                <AvatarFallback>
-                  <img src={placeholderImg} className="rounded-full h-full w-full object-cover" alt="Profile" />
-                </AvatarFallback>
-              </Avatar>
-            
+            <Avatar className="w-48 h-48 shadow-lg">
+              <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s profile`} />
+              <AvatarFallback>
+                <img src={placeholderImg} className="rounded-full h-full w-full object-cover" alt="Profile" />
+              </AvatarFallback>
+            </Avatar>
+
             <h2 className="font-bold text-2xl text-gray-900 text-center">
               {user.first_name} {user.last_name}
             </h2>
-            
+
             <div className="flex flex-col items-center gap-3 mt-2">
               <p className="text-gray-600 font-medium">{user.club_name}</p>
-              
+
             </div>
           </div>
 

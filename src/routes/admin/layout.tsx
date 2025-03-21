@@ -74,7 +74,7 @@ function RouteComponent() {
     },
     {
       id: 'settings',
-      label: "Klubid",
+      label: t('admin.layout.sidebar.clubs'),
       icon: <PersonStanding className="w-4 h-4 sm:mr-2" />,
       to: '/admin/clubs',
     },

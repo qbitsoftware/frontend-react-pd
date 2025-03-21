@@ -27,7 +27,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [SelectedPlayerId, setSelectedPlayerId] = useState<number | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const windowScrollRef = useRef(0);
 
   const getSexAndCombined = (tab: string) => {
@@ -70,7 +70,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
         const restoreScroll = () => {
           window.scrollTo(0, windowScrollRef.current);
         };
-        
+
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(restoreScroll);
         });
@@ -90,11 +90,12 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
   const filteredUsers = users.filter((user) => {
     const matchesSex = showCombined || sex === "" || user.sex === sex;
     const matchesAgeClass = showCombined || filterByAgeClass(user, ageClass);
+    const hasELTLId = user.eltl_id != 0
     const matchesSearchQuery =
       user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.club_name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSex && matchesAgeClass && matchesSearchQuery;
+    return matchesSex && matchesAgeClass && matchesSearchQuery && hasELTLId;
   }).sort((a, b) => a.rate_order - b.rate_order);
 
   const selectedPlayer = users.find((user) => user.id === SelectedPlayerId);
@@ -109,7 +110,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
           <p className="font-medium pb-1">{t('rating.last_updated')}: <span className="bg-[#FBFBFB] px-3 py-1 rounded-full border border-[#EAEAEA]">11.01.2025, 9:00</span></p>
           <p className="pb-8">Lühendid: NR = koht reitingus, PP = paigutuspunktid, RP = reitingupunktid, KL = kaalud, ID = ELTLID, SA = sünniaasta</p>
         </div>
-        
+
         <div className="border rounded-t-[12px]">
           <div className="border-b border-stone-200 bg-[#EBEFF5] rounded-t-[12px] grid grid-cols-1 lg:grid-cols-12 gap-4 items-center w-full p-1 mb-1">
             <div className="relative w-full md:col-span-3">
@@ -205,7 +206,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
             </Table>
           </div>
         </div>
-        
+
         <div style={{ position: 'fixed', top: 0, left: 0, zIndex: 50 }}>
           <PlayerProfileModal
             isOpen={isModalOpen}

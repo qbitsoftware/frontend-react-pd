@@ -81,6 +81,9 @@
   },
   "news": {
     "title": "Uudised",
+    "all_news": "Kõik uudised",
+    "published": "Avaldatud",
+    "loading": "Laadimine...",
     "search_category": "Otsi kategooria järgi:",
     "search_content": "Otsi sisu järgi",
     "no_image": "Pilt pole saadaval",
@@ -129,7 +132,6 @@
       "winner_unknown": "Teadmata",
       "no_groups": "Tulemused puuduvad",
       "no_table": "Tabel pole veel saadaval"
-
     },
     "navbar": {
       "info": "Info",
@@ -222,7 +224,8 @@
         "birthyear": "SA",
         "profile": "Profiil",
         "club": "Klubi",
-        "player": "Mängija"
+        "player": "Mängija",
+        "sex": "Sugu"
       },
       "body": {
         "profile_button": "Mängija profiil"
@@ -248,6 +251,10 @@
   },
   "clubs": {
     "header": "Aktiivsed Eesti Klubid",
+    "search_placeholder": "Otsi klubi",
+    "loading_club_data": "Klubi andmed laadimisel...",
+    "no_players": "Mängijaid pole",
+    "club_players": "Klubi mängijad",
     "club_card": {
       "button": "Klubi profiil"
     }
@@ -299,7 +306,7 @@
         "dashboard": "Töölaud",
         "tournaments": "Turniirid",
         "blogs": "Blogid",
-        "settings": "Sätted"
+        "clubs": "Klubid"
       },
       "info": "Info",
       "groups": "Grupid",
@@ -527,6 +534,49 @@
       "load_failed": "Blogisid ei õnnestunud laadida",
       "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
       "refresh": "Uuenda lehte"
+    },
+    "clubs": {
+      "toast": {
+        "club_created": "Klubi loodud edukalt",
+        "club_updated": "Klubi uuendatud edukalt",
+        "club_deleted": "Klubi kustutatud edukalt",
+        "club_created_error": "Klubi loomine ebaõnnestus. Palun proovige uuesti",
+        "club_updated_error": "Klubi uuendamine ebaõnnestus. Palun proovige uuesti",
+        "club_deleted_error": "Klubi kustutamine ebaõnnestus. Palun proovige uuesti"
+      },
+      "loading": "Laadimine...",
+      "error": "Viga",
+      "title": "Klubide manageerimine",
+      "add_new": "Lisa uus klubi",
+      "add_new_details": "Sisestage uue klubi andmed",
+      "edit": "Muuda klubi",
+      "edit_details": "Muuda klubi andmeid",
+      "clubs": "klubi",
+      "table": {
+        "image": "Pilt",
+        "name": "Nimi",
+        "contact_person": "Kontakt isik",
+        "phone": "Tel nr",
+        "email": "E-mail",
+        "address": "Aadress",
+        "website": "Veebileht",
+        "actions": "Tegevused"
+      },
+      "dropdown": {
+        "edit": "Muuda",
+        "delete": "Kustuta"
+      },
+      "cancel": "Katkesta",
+      "creating": "Loomine...",
+      "create": "Loo klubi",
+      "updating": "Uuendamine...",
+      "update": "Uuenda klubi",
+      "delete": "Kustuta klubi",
+      "deleting": "Kustutamine...",
+      "alert_dialog": {
+        "confirmation": "Oled kindel?",
+        "description": "Peale toimingut on klubi kustutatud ja seda ei saa tagasi võtta. Kustutamisele kuulub "
+      }
     }
   },
   "protocol": {

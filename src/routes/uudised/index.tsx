@@ -12,6 +12,15 @@ import { ArrowLeft, FileX } from 'lucide-react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 
+// Define loader data type to include categoryCount
+type LoaderData = {
+  articles_data: BlogsResponseUser;
+  dataStatus: {
+    blogsEmpty: boolean;
+  };
+  categoryCount: Record<string, number>;
+};
+
 export const Route = createFileRoute('/uudised/')({
     component: RouteComponent,
     errorComponent: () => {
@@ -35,11 +44,27 @@ export const Route = createFileRoute('/uudised/')({
             },
             message: "Default empty state",
             error: null 
-          };
+        };
+        
+        // Get all articles to determine which categories have content
+        let allArticles: BlogsResponseUser = { 
+            data: {
+              blogs: [],
+              total_pages: 0
+            },
+            message: "Default empty state",
+            error: null 
+        };
 
         try {
+            // Get filtered articles based on user's search criteria
             articles_data = await queryClient.ensureQueryData(
                 UseGetBlogsOption(deps.page, deps.category, deps.search)
+            )
+            
+            // Get all articles to determine available categories
+            allArticles = await queryClient.ensureQueryData(
+                UseGetBlogsOption(1, undefined, deps.search)
             )
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -49,16 +74,30 @@ export const Route = createFileRoute('/uudised/')({
             }
         }
 
+        // Count categories from all articles
+        const categoryCount: Record<string, number> = {};
+        if (allArticles?.data?.blogs?.length) {
+            allArticles.data.blogs.forEach(blog => {
+                if (blog.category) {
+                    categoryCount[blog.category] = (categoryCount[blog.category] || 0) + 1;
+                }
+            });
+        }
+
         const dataStatus = {
             blogsEmpty: !articles_data?.data?.blogs?.length
         }
 
-        return { articles_data, dataStatus }
+        return { 
+            articles_data, 
+            dataStatus, 
+            categoryCount 
+        };
     }
 })
 
 export default function RouteComponent() {
-    const { articles_data, dataStatus } = Route.useLoaderData()
+    const { articles_data, dataStatus, categoryCount } = Route.useLoaderData() as LoaderData
     const { category, page, search } = Route.useSearch()
     const navigate = Route.useNavigate()
 
@@ -71,6 +110,13 @@ export default function RouteComponent() {
         { id: "results", label: t("news.categories.results") }
     ];
 
+    // Always filter categories to only show those with content
+    const availableCategories = categories.filter(cat => 
+        categoryCount && categoryCount[cat.id] > 0
+    );
+    
+    const displayCategories = availableCategories.map(cat => cat.label);
+
     const categoryMapping: Record<string, string> = categories.reduce((acc, cat) => ({
         ...acc,
         [cat.label]: cat.id
@@ -80,8 +126,6 @@ export default function RouteComponent() {
         ...acc,
         [cat.id]: cat.label
     }), {});
-
-    const displayCategories = categories.map(cat => cat.label);
 
     const [searchInput, setSearchInput] = useState(search || '')
     const [currentPage, setCurrentPage] = useState(page || 1)

@@ -25,7 +25,6 @@ import { Route as KalenderIndexImport } from './routes/kalender/index'
 import { Route as UudisedBlogidImport } from './routes/uudised/$blogid'
 import { Route as VoistlusedTournamentidLayoutImport } from './routes/voistlused/$tournamentid/layout'
 import { Route as VoistlusedTournamentidIndexImport } from './routes/voistlused/$tournamentid/index'
-import { Route as ProfiilIdIndexImport } from './routes/profiil/$id/index'
 import { Route as AdminTournamentsIndexImport } from './routes/admin/tournaments/index'
 import { Route as AdminDashboardIndexImport } from './routes/admin/dashboard/index'
 import { Route as AdminClubsIndexImport } from './routes/admin/clubs/index'
@@ -140,12 +139,6 @@ const VoistlusedTournamentidIndexRoute =
     path: '/',
     getParentRoute: () => VoistlusedTournamentidLayoutRoute,
   } as any)
-
-const ProfiilIdIndexRoute = ProfiilIdIndexImport.update({
-  id: '/profiil/$id/',
-  path: '/profiil/$id/',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AdminTournamentsIndexRoute = AdminTournamentsIndexImport.update({
   id: '/tournaments/',
@@ -452,13 +445,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTournamentsIndexImport
       parentRoute: typeof AdminLayoutImport
     }
-    '/profiil/$id/': {
-      id: '/profiil/$id/'
-      path: '/profiil/$id'
-      fullPath: '/profiil/$id'
-      preLoaderRoute: typeof ProfiilIdIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/voistlused/$tournamentid/': {
       id: '/voistlused/$tournamentid/'
       path: '/'
@@ -756,7 +742,6 @@ export interface FileRoutesByFullPath {
   '/admin/clubs': typeof AdminClubsIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
-  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/$blogid': typeof AdminBlogBlogidIndexRoute
   '/admin/blog/new': typeof AdminBlogNewIndexRoute
@@ -798,7 +783,6 @@ export interface FileRoutesByTo {
   '/admin/clubs': typeof AdminClubsIndexRoute
   '/admin/dashboard': typeof AdminDashboardIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
-  '/profiil/$id': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/$blogid': typeof AdminBlogBlogidIndexRoute
   '/admin/blog/new': typeof AdminBlogNewIndexRoute
@@ -842,7 +826,6 @@ export interface FileRoutesById {
   '/admin/clubs/': typeof AdminClubsIndexRoute
   '/admin/dashboard/': typeof AdminDashboardIndexRoute
   '/admin/tournaments/': typeof AdminTournamentsIndexRoute
-  '/profiil/$id/': typeof ProfiilIdIndexRoute
   '/voistlused/$tournamentid/': typeof VoistlusedTournamentidIndexRoute
   '/admin/blog/$blogid/': typeof AdminBlogBlogidIndexRoute
   '/admin/blog/new/': typeof AdminBlogNewIndexRoute
@@ -888,7 +871,6 @@ export interface FileRouteTypes {
     | '/admin/clubs'
     | '/admin/dashboard'
     | '/admin/tournaments'
-    | '/profiil/$id'
     | '/voistlused/$tournamentid/'
     | '/admin/blog/$blogid'
     | '/admin/blog/new'
@@ -929,7 +911,6 @@ export interface FileRouteTypes {
     | '/admin/clubs'
     | '/admin/dashboard'
     | '/admin/tournaments'
-    | '/profiil/$id'
     | '/voistlused/$tournamentid'
     | '/admin/blog/$blogid'
     | '/admin/blog/new'
@@ -971,7 +952,6 @@ export interface FileRouteTypes {
     | '/admin/clubs/'
     | '/admin/dashboard/'
     | '/admin/tournaments/'
-    | '/profiil/$id/'
     | '/voistlused/$tournamentid/'
     | '/admin/blog/$blogid/'
     | '/admin/blog/new/'
@@ -1011,7 +991,6 @@ export interface RootRouteChildren {
   ReitingIndexRoute: typeof ReitingIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
-  ProfiilIdIndexRoute: typeof ProfiilIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -1029,7 +1008,6 @@ const rootRouteChildren: RootRouteChildren = {
   ReitingIndexRoute: ReitingIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
-  ProfiilIdIndexRoute: ProfiilIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -1054,8 +1032,7 @@ export const routeTree = rootRoute
         "/register/",
         "/reiting/",
         "/uudised/",
-        "/voistlused/",
-        "/profiil/$id/"
+        "/voistlused/"
       ]
     },
     "/": {
@@ -1145,9 +1122,6 @@ export const routeTree = rootRoute
     "/admin/tournaments/": {
       "filePath": "admin/tournaments/index.tsx",
       "parent": "/admin"
-    },
-    "/profiil/$id/": {
-      "filePath": "profiil/$id/index.tsx"
     },
     "/voistlused/$tournamentid/": {
       "filePath": "voistlused/$tournamentid/index.tsx",

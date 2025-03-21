@@ -1,8 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -31,7 +29,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
       <div className="relative md:w-1/4 md:col-span-3">
         <Input
           type="text"
-          placeholder={t("Otsi klubi")}
+          placeholder={t("clubs.search_placeholder")}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="h-12 w-full pl-4 pr-10 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
         />

@@ -93,7 +93,7 @@ export interface User {
 
 export interface Profile {
   user: UserNew,
-  last_games: MatchWrapper[],
+  matches: MatchWrapper[],
   rating_change: Player[]
 }
 
@@ -178,6 +178,7 @@ export type Tournament = {
   total_tables: number;
   information: string;
   media: string;
+  color?: string;
 };
 
 export type TournamentTable = {
@@ -391,9 +392,9 @@ export interface MatchTimeUpdate {
 }
 
 export interface Club {
-  id: number 
+  id: number
   name: string
-  contact_person : string
+  contact_person: string
   email: string
   phone: string
   address: string

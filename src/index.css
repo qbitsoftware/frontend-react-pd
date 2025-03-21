@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 180 8% 97%;
@@ -28,18 +29,19 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --blue-lightest: #e0f7fa;   
-    --blue-light: #7ac1ff;     
-    --blue-normal: #2e4882;     
-    --sidebar-background: 0 0% 98%;     
-    --sidebar-foreground: 240 5.3% 26.1%;     
-    --sidebar-primary: 240 5.9% 10%;     
-    --sidebar-primary-foreground: 0 0% 98%;     
-    --sidebar-accent: 240 4.8% 95.9%;     
-    --sidebar-accent-foreground: 240 5.9% 10%;     
-    --sidebar-border: 220 13% 91%;     
+    --blue-lightest: #e0f7fa;
+    --blue-light: #7ac1ff;
+    --blue-normal: #2e4882;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -64,8 +66,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
+    --chart-5: 340 75% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -73,12 +74,15 @@
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%
+  }
 }
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -146,10 +150,54 @@ h6 {
   0% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(30px, -20px) scale(1.1);
   }
+
   100% {
     transform: translate(-20px, 30px) scale(0.9);
   }
 }
+
+
+.prose .yoopta-editor img {
+  /* Your custom styles here */
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  padding: 0;
+  /* min-height: 2px !important; */
+  /* height: 4px !important; */
+  overflow: hidden;
+}
+
+.prose .yoopta-editor .yoopta-i .prose .yoopta-editor {
+  overflow: hidden;
+}
+
+.yoopta-image-alt {
+  display: none;
+}
+
+@media screen and (max-width:500px) {
+  .prose .yoopta-editor img {
+    max-width: 380px;
+    max-height: 100%;
+  }
+
+}
+
+/* If you want to target specific image sizes */
+/* .prose .yoopta-editor img[data-size="small"] {
+  max-width: 100px;
+}
+
+.prose .yoopta-editor img[data-size="medium"] {
+  max-width: 300px;
+}
+
+.prose .yoopta-editor img[data-size="large"] {
+  max-width: 500px;
+} */

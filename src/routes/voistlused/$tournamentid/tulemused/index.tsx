@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournamentTables } from '@/queries/tables'
 import { ErrorResponse } from '@/types/types'
-import { formatDate, parseTableType } from '@/lib/utils'
+import { parseTableType } from '@/lib/utils'
 import { useTournament } from '../-components/tournament-provider'
-import { formatDateTimeNew, formatDateString } from '@/lib/utils'
+import { formatDateString } from '@/lib/utils'
 import { UsersRound } from 'lucide-react';
 import { Link } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'

@@ -6,7 +6,8 @@ import { UseGetBlog } from '@/queries/blogs'
 import Editor from '../admin/-components/yooptaeditor'
 import { useState, useEffect } from 'react'
 import { YooptaContentValue } from '@yoopta/editor'
-import { formatDateString } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
+import { getFormattedDate } from '../voistlused/$tournamentid/ajakava/-components/schedule-utils'
 
 export const Route = createFileRoute('/uudised/$blogid')({
     errorComponent: () => {
@@ -22,6 +23,7 @@ export const Route = createFileRoute('/uudised/$blogid')({
 function RouteComponent() {
 
     const article = Route.useLoaderData()
+    const { t } = useTranslation()
 
     const [value, setValue] = useState<YooptaContentValue | undefined>(article.data.full_content ? JSON.parse(article.data.full_content) : undefined);
 
@@ -34,15 +36,15 @@ function RouteComponent() {
 
 
     return (
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-[1440px] mx-auto px-0 sm:px-6 lg:px-8 py-4">
             <Card>
                 <CardHeader className='pb-2 pt-4'>
-                    <div className="text-sm font-medium text-blue-600 mb-2">
+                    <div className="text-sm font-medium text-blue-600 mb-2 flex flex-wrap">
                         <Link
                             href="/uudised/"
                             className="mr-2"
                         >
-                            Kõik uudised
+                            {t('news.all_news')}
                         </Link>
 
                         {category && (
@@ -52,7 +54,7 @@ function RouteComponent() {
                                     href={`/uudised/?category=${category}`}
                                     className="mr-2 capitalize"
                                 >
-                                    {category}
+                                    {t('news.categories.' + category.toLowerCase())}
                                 </Link>
                             </>
                         )}
@@ -61,23 +63,22 @@ function RouteComponent() {
                         <span className="font-bold">{article.data.title}</span>
                     </div>
                     <div className="text-sm text-gray-500">
-                        Published on {formatDateString(article.data.created_at)}
+                        {t('news.published')}{" "}{getFormattedDate(article.data.created_at)}
                     </div>
                 </CardHeader>
-                <CardContent className="prose max-w-none overflow-scroll">
-                    {/* <p className='blog-content' dangerouslySetInnerHTML={{ __html: article.data.content_html }}></p> */}
+                <CardContent className="prose max-w-none mx-auto md:w-2/3 overflow-hidden">
                     {value ? (
                         <Editor value={value} setValue={setValue} readOnly={true} />
                     ) : (
                         <div className="p-8 text-center">
-                            <p>Loading editor...</p>
+                            <p>{t('news.loading')}</p>
                         </div>
                     )}
 
                 </CardContent>
                 <CardFooter className="flex justify-center items-center mt-4">
                     <Button variant="outline" asChild>
-                        <Link href="/uudised">Kõik uudised</Link>
+                        <Link href="/uudised">{t('news.all_news')}</Link>
                     </Button>
                 </CardFooter>
             </Card>

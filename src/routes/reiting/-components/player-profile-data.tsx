@@ -2,6 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlayerRankingChangeGraph } from "./rating-chart";
 import { useTranslation } from "react-i18next";
 import { Profile } from "@/types/types";
+import { LastMatch } from "./last-matches";
+import { formatDateToNumber } from "@/lib/utils";
 
 interface PlayerProfileDataProps {
   profile: Profile;
@@ -9,6 +11,7 @@ interface PlayerProfileDataProps {
 
 export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
   const { t } = useTranslation();
+  console.log("profile", profile);
 
   return (
     <Tabs defaultValue="latest-matches" className="w-full min-h-64">
@@ -38,39 +41,11 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
           <h3 className="font-medium text-lg text-gray-800 mb-4">
             Recent Match History
           </h3>
-          
+
           <div className="space-y-2">
-            <div className="flex items-center justify-between border-l-2 border-gray-300 px-3 py-2 bg-white">
-              <div className="flex items-center space-x-4">
-                <span className="text-xs text-gray-500">08.03</span>
-                <span className="text-sm">
-                  {profile.user.first_name} {profile.user.last_name}
-                </span>
-                <span className="font-bold text-sm">3</span>
-                <span className="text-xs">:</span>
-                <span className="font-bold text-sm">1</span>
-                <span className="text-sm">Another Player</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-500">Tournament name</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between border-l-2 border-gray-300 px-3 py-2 bg-white">
-              <div className="flex items-center space-x-4">
-                <span className="text-xs text-gray-500">05.03</span>
-                <span className="text-sm">
-                  {profile.user.first_name} {profile.user.last_name}
-                </span>
-                <span className="font-bold text-sm">0</span>
-                <span className="text-xs">:</span>
-                <span className="font-bold text-sm">3</span>
-                <span className="text-sm">Opponent Name</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-500">Local Championship</span>
-              </div>
-            </div>
+            {profile.matches && profile.matches.map((game, index) => (
+              <LastMatch key={index} last_game={game} />
+            ))}
           </div>
         </div>
       </TabsContent>
@@ -101,7 +76,7 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
             <div className="flex items-center">
               <p className="w-32 text-gray-500">Year of birth:</p>
               <p className="font-semibold">
-                {profile.user.birth_date ? profile.user.birth_date : "----"}
+                {profile.user.birth_date ? formatDateToNumber(profile.user.birth_date) : "----"}
               </p>
             </div>
 
@@ -128,7 +103,7 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
             Rating Progress
           </h3>
           <div className="h-64">
-            <PlayerRankingChangeGraph />
+            <PlayerRankingChangeGraph stats={profile.rating_change} />
           </div>
         </div>
       </TabsContent>

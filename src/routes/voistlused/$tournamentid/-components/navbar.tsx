@@ -42,7 +42,7 @@ const Navbar = ({ tournament_tables }: Props) => {
 
   // Filter out "Juhend" if no champions_league table exists
   const filteredNavLinks = NavLinks.filter(link => {
-    if (link.name === "Juhend" || link.name === "Sponsorid" || link.name === "Galerii") {
+    if (link.name === t("competitions.navbar.guide") || link.name === t("competitions.navbar.sponsors") || link.name === t("competitions.navbar.gallery")) {
       return tournament_tables.some(table => table.type === "champions_league");
     }
     return true;

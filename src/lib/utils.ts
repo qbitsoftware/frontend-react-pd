@@ -117,6 +117,21 @@ export const formatDateTime = (dateTime: string) => {
   return `${date} ${time}`;
 };
 
+export const formatDateToNumber = (dateString: string) => {
+  if (!dateString) return '';
+
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return dateString;
+    }
+
+    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+  } catch (error) {
+    return dateString;
+  }
+};
+
 export const formatDateTimeNew = (dateTime: string) => {
   const date = new Date(dateTime);
 

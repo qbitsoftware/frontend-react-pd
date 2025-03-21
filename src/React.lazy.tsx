@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const TanStackRouterDevtools =
-    import.meta.env.NODE_ENV === 'production'
+    import.meta.env.PROD
         ? () => null // Render nothing in production
         : React.lazy(() =>
             // Lazy load in development
@@ -16,7 +16,7 @@ export const TanStackRouterDevtools =
 
 
 export const TanStackQueryDevtools =
-    import.meta.env.NODE_ENV === 'production'
+    import.meta.env.PROD
         ? () => null // Render nothing in production
         : React.lazy(() =>
             // Lazy load in development

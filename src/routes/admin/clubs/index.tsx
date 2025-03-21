@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Table, TableCaption, TableHeader, TableHead, TableRow, TableCell, TableBody } from '@/components/ui/table'
+import { Table, TableHeader, TableHead, TableRow, TableCell, TableBody } from '@/components/ui/table'
 import { UseGetClubsQuery, useCreateClub, useUpdateClub, useDeleteClub, CreateClubInput } from '@/queries/clubs'
 import { Button } from '@/components/ui/button'
 import { PlusCircle, MoreHorizontal } from 'lucide-react'
@@ -35,6 +35,7 @@ import { Label } from '@/components/ui/label'
 import { useQueryClient } from '@tanstack/react-query'
 import { Club } from '@/types/types'
 import { useToast } from '@/hooks/use-toast'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/admin/clubs/')({
   component: RouteComponent,
@@ -46,9 +47,10 @@ function RouteComponent() {
   const createClubMutation = useCreateClub()
   const updateClubMutation = useUpdateClub()
   const deleteClubMutation = useDeleteClub()
+  const { t } = useTranslation()
 
-  const {toast} = useToast()
-  
+  const { toast } = useToast()
+
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -91,15 +93,14 @@ function RouteComponent() {
             image_url: ''
           })
           toast({
-            title: "Club created",
-            description: "The club has been created successfully."
+            title: t("admin.clubs.toast.club_created"),
           })
         }
       })
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create club. Please try again.",
+        description: t('admin.clubs.toast.club_created_error'),
         variant: "destructive"
       })
     }
@@ -115,15 +116,14 @@ function RouteComponent() {
           setIsEditDialogOpen(false)
           setSelectedClub(null)
           toast({
-            title: "Club updated",
-            description: "The club has been updated successfully."
+            title: t('admin.clubs.toast.club_updated'),
           })
         }
       })
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update club. Please try again.",
+        description: t("admin.clubs.toast.club_updated_error"),
         variant: "destructive"
       })
     }
@@ -140,52 +140,50 @@ function RouteComponent() {
           setIsDeleteDialogOpen(false)
           setSelectedClub(null)
           toast({
-            title: "Club deleted",
-            description: "The club has been deleted successfully."
+            title: t('admin.clubs.toast.club_deleted'),
           })
         }
       })
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to delete club. Please try again.",
+        description: t('admin.clubs.toast.club_deleted_error'),
         variant: "destructive"
       })
     }
   }
 
-  if (isLoading) return <div>Loading...</div>
-  if (!clubsData || !clubsData.data) return <div>Error: No club data available</div>
-  
+  if (isLoading) return <div>{t('admin.clubs.loading')}</div>
+  if (!clubsData || !clubsData.data) return <div>{t('admin.clubs.error')}</div>
+
   const clubs = clubsData.data
 
   return (
     <div className="container p-10">
       <div className="flex justify-between items-center mb-5">
-        <h1 className="text-2xl font-bold">Club Management</h1>
-        
+        <h1 className="text-2xl font-bold">{t('admin.clubs.title')}</h1>
+
         <Button
           onClick={() => setIsCreateDialogOpen(true)}
           className="flex items-center gap-2"
         >
           <PlusCircle className="h-4 w-4" />
-          Add New Club
+          {t('admin.clubs.add_new')}
         </Button>
       </div>
-      <span className='font-medium text-sm px-2 pb-2'>{clubs.length} clubs</span>
-      
+      <span className='font-medium text-sm px-2 pb-2'>{clubs.length} {t('admin.clubs.clubs')}</span>
+
       <Table>
-        <TableCaption>A list of clubs available for management</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Contact Person</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Address</TableHead>
-            <TableHead>Website</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("admin.clubs.table.image")}</TableHead>
+            <TableHead>{t("admin.clubs.table.name")}</TableHead>
+            <TableHead>{t("admin.clubs.table.contact_person")}</TableHead>
+            <TableHead>{t("admin.clubs.table.email")}</TableHead>
+            <TableHead>{t("admin.clubs.table.phone")}</TableHead>
+            <TableHead>{t("admin.clubs.table.address")}</TableHead>
+            <TableHead>{t("admin.clubs.table.website")}</TableHead>
+            <TableHead className="text-right">{t("admin.clubs.table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -203,9 +201,9 @@ function RouteComponent() {
               <TableCell className="truncate">{club.phone}</TableCell>
               <TableCell className="truncate">{club.address}</TableCell>
               <TableCell>
-                <a 
-                  href={club.website} 
-                  target="_blank" 
+                <a
+                  href={club.website}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 hover:underline"
                 >
@@ -227,7 +225,7 @@ function RouteComponent() {
                         setIsEditDialogOpen(true)
                       }}
                     >
-                      Edit
+                      {t('admin.clubs.dropdown.edit')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
@@ -236,7 +234,8 @@ function RouteComponent() {
                         setIsDeleteDialogOpen(true)
                       }}
                     >
-                      Delete
+
+                      {t('admin.clubs.dropdown.delete')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -250,15 +249,15 @@ function RouteComponent() {
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New Club</DialogTitle>
+            <DialogTitle>{t('admin.clubs.add_new')}</DialogTitle>
             <DialogDescription>
-              Enter the details for the new club.
+              {t('admin.clubs.add_new_details')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Name
+                {t('admin.clubs.table.name')}
               </Label>
               <Input
                 id="name"
@@ -270,7 +269,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="contact_person" className="text-right">
-                Contact Person
+                {t('admin.clubs.table.contact_person')}
               </Label>
               <Input
                 id="contact_person"
@@ -282,7 +281,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
-                Email
+                {t('admin.clubs.table.email')}
               </Label>
               <Input
                 id="email"
@@ -295,7 +294,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="phone" className="text-right">
-                Phone
+                {t('admin.clubs.table.phone')}
               </Label>
               <Input
                 id="phone"
@@ -307,7 +306,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="address" className="text-right">
-                Address
+                {t('admin.clubs.table.address')}
               </Label>
               <Input
                 id="address"
@@ -319,7 +318,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="website" className="text-right">
-                Website
+                {t('admin.clubs.table.website')}
               </Label>
               <Input
                 id="website"
@@ -331,7 +330,7 @@ function RouteComponent() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image_url" className="text-right">
-                Image URL
+                {t('admin.clubs.table.image')}
               </Label>
               <Input
                 id="image_url"
@@ -345,13 +344,13 @@ function RouteComponent() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t('admin.clubs.cancel')}</Button>
             </DialogClose>
             <Button
               onClick={handleCreateClub}
               disabled={createClubMutation.isPending}
             >
-              {createClubMutation.isPending ? "Creating..." : "Create Club"}
+              {createClubMutation.isPending ? t("admin.clubs.creating") : t('admin.clubs.create')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -361,16 +360,16 @@ function RouteComponent() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Club</DialogTitle>
+            <DialogTitle>{t('admin.clubs.edit')}</DialogTitle>
             <DialogDescription>
-              Update the club details.
+              {t('admin.clubs.edit_details')}
             </DialogDescription>
           </DialogHeader>
           {selectedClub && (
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-name" className="text-right">
-                  Name
+                  {t('admin.clubs.table.name')}
                 </Label>
                 <Input
                   id="edit-name"
@@ -382,7 +381,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-contact_person" className="text-right">
-                  Contact Person
+                  {t('admin.clubs.table.contact_person')}
                 </Label>
                 <Input
                   id="edit-contact_person"
@@ -394,7 +393,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-email" className="text-right">
-                  Email
+                  {t('admin.clubs.table.email')}
                 </Label>
                 <Input
                   id="edit-email"
@@ -407,7 +406,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-phone" className="text-right">
-                  Phone
+                  {t('admin.clubs.table.phone')}
                 </Label>
                 <Input
                   id="edit-phone"
@@ -419,7 +418,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-address" className="text-right">
-                  Address
+                  {t('admin.clubs.table.address')}
                 </Label>
                 <Input
                   id="edit-address"
@@ -431,7 +430,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-website" className="text-right">
-                  Website
+                  {t('admin.clubs.table.website')}
                 </Label>
                 <Input
                   id="edit-website"
@@ -443,7 +442,7 @@ function RouteComponent() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-image_url" className="text-right">
-                  Image URL
+                  {t('admin.clubs.table.image')}
                 </Label>
                 <Input
                   id="edit-image_url"
@@ -458,13 +457,13 @@ function RouteComponent() {
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t('admin.clubs.cancel')}</Button>
             </DialogClose>
             <Button
               onClick={handleUpdateClub}
               disabled={updateClubMutation.isPending}
             >
-              {updateClubMutation.isPending ? "Updating..." : "Update Club"}
+              {updateClubMutation.isPending ? t('admin.clubs.updating') : t('admin.clubs.update')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -474,20 +473,20 @@ function RouteComponent() {
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.clubs.alert_dialog.confirmation")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the club{" "}
-              <span className="font-semibold">{selectedClub?.name}</span> and remove all associated data.
+              {t('admin.clubs.alert_dialog.description')}{" "}
+              <span className="font-semibold">{selectedClub?.name}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('admin.clubs.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteClub}
               className="bg-red-600 hover:bg-red-700"
               disabled={deleteClubMutation.isPending}
             >
-              {deleteClubMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteClubMutation.isPending ? t('admin.clubs.deleting') : t('admin.clubs.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

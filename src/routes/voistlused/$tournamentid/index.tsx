@@ -76,7 +76,7 @@ function RouteComponent() {
               <div className="w-full md:w-2/3">
                 <Editor value={value} setValue={setValue} readOnly />
               </div>
-            )}
+            )} 
             <div className="w-full md:w-1/3 flex flex-col space-y-1 p-3 md:p-6 bg-[#EBEFF5]/20 border-2 border-[#eee] rounded-[10px] mb-4 md:mb-0">
               <p>
                 {t('competitions.category')}: <strong>{tournament.category}</strong>

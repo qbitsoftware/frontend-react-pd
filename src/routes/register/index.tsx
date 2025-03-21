@@ -41,7 +41,7 @@ function RouteComponent() {
       };
       
       const registerMutation = {
-          mutate: (data: RegisterFormData, options: MutationOptions) => {
+          mutate: (_: RegisterFormData, options: MutationOptions) => {
               options.onSuccess();
           },
           isPending: false
