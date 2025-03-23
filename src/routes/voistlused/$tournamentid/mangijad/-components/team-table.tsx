@@ -21,7 +21,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
     setIsDialogOpen(true)
   }
 
-  console.log("p", participants?.length)
   return (
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (

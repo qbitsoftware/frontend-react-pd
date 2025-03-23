@@ -219,7 +219,7 @@
       "register_progress": "Registreerimine...",
       "date_of_birth": "Sünnikuupäev",
       "username": "Kasutajanimi",
-      "create_profile": "Loo mängija profiil",
+      "create_profile": "Registreeri turniirile",
       "sex": "Sugu",
       "sex_options": {
         "male": "Mees",
@@ -232,6 +232,7 @@
         "email": "E-posti aadress on kohustuslik",
         "sex": "Sugu on kohustuslik",
         "date_of_birth": "Sünnikuupäev on kohustuslik",
+        "duplicate_username": "Kasutajanimi on juba kasutusel",
         "username": "Kasutajanimi on kohustuslik",
         "password": "Parool peab olema vähemalt 8 tähemärki pikk",
         "password_confirmation": "Paroolid peavad kattuma"

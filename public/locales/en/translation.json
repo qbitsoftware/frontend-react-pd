@@ -212,7 +212,7 @@
       "register_progress": "Registering...",
       "date_of_birth": "Date of birth",
       "username": "Username",
-      "create_profile": "Create profile",
+      "create_profile": "Register to tournament",
       "sex": "Sex",
       "sex_options": {
         "male": "Male",
@@ -225,6 +225,7 @@
         "email": "Email is required",
         "sex": "Sex is required",
         "date_of_birth": "Date of birth is required",
+        "duplicate_username": "Username is already taken",
         "username": "Username is required",
         "password": "Password must be alteast 8 characters long",
         "password_confirmation": "Passwords must match"

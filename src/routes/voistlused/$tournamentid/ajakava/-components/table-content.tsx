@@ -39,7 +39,6 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
     <TableRow
       key={match.match.id}
       className="cursor-pointer hover:bg-secondary/50"
-      onClick={() => console.log("row click")}
     >
       {match.p1.id !== "" ? (
         <TableCell className="font-medium">{match.p1.name}</TableCell>
@@ -53,7 +52,7 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
       )}
       <TableCell className="font-medium">
         {match.match.extra_data.score &&
-        match.match.extra_data.score?.length > 0 ? (
+          match.match.extra_data.score?.length > 0 ? (
           <p>
             <span
               className={cn(

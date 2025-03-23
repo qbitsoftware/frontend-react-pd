@@ -54,7 +54,6 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                     score: newScores,
                 },
             }
-            console.log("UPDATED MATCH",updatedMatch)
             try {
                 const result = await updateMatchMutation.mutateAsync(updatedMatch)
                 successToast(result.message)

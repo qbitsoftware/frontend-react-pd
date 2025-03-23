@@ -13,14 +13,6 @@ import ErrorPage from "@/components/error";
 import { useTranslation } from "react-i18next";
 import { createRegisterSchema, RegisterFormData } from "@/types/types";
 import { useCreateUser } from "@/queries/users";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-  SelectGroup,
-  SelectItem,
-} from "@/components/ui/select";
 
 export const Route = createFileRoute("/register/")({
   component: RouteComponent,
@@ -39,7 +31,7 @@ function RouteComponent() {
 
   const registerMutation = {
     mutate: (data: RegisterFormData, options: any) => {
-      console.log("Registering with data:", data);
+      void data;
       options.onSuccess();
     },
     isPending: false,
@@ -53,9 +45,7 @@ function RouteComponent() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      sex: "male",
-    },
+    defaultValues: {},
   });
 
   const onSubmit = (data: RegisterFormData) => {
@@ -66,7 +56,11 @@ function RouteComponent() {
         navigate({ to: "/login" });
       },
       onError: (error: any) => {
-        setServerError(error?.message || t("register.registration_error"));
+        if (error.response.status === 409) {
+          setServerError(t("register.form.errors.duplicate_username"));
+        } else {
+          setServerError(t("register.registration_error"));
+        }
       },
     });
   };
@@ -112,53 +106,6 @@ function RouteComponent() {
             </div>
 
             <div>
-              <Label htmlFor="sex">{t("register.form.sex")}</Label>
-              <Select
-                onValueChange={(value) => {
-                  const event = { target: { name: "sex", value } };
-                  register("sex").onChange(event);
-                }}
-              >
-                <SelectTrigger className="w-full mt-1">
-                  <SelectValue placeholder={t("register.form.sex")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="male">
-                      {t("register.form.sex_options.male")}
-                    </SelectItem>
-                    <SelectItem value="female">
-                      {t("register.form.sex_options.female")}
-                    </SelectItem>
-                    <SelectItem value="other">
-                      {t("register.form.sex_options.other")}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {errors.sex && (
-                <p className="text-sm text-red-600">{errors.sex.message}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="dateOfBirth">
-                {t("register.form.date_of_birth")}
-              </Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                {...register("birth_date")}
-                className="mt-1"
-              />
-              {errors.birth_date && (
-                <p className="text-sm text-red-600">
-                  {errors.birth_date.message}
-                </p>
-              )}
-            </div>
-
-            <div>
               <Label htmlFor="username">{t("register.form.username")}</Label>
               <Input
                 id="username"
@@ -170,19 +117,6 @@ function RouteComponent() {
                 <p className="text-sm text-red-600">
                   {errors.username.message}
                 </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="email">{t("register.form.email")}</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register("email")}
-                className="mt-1"
-              />
-              {errors.email && (
-                <p className="text-sm text-red-600">{errors.email.message}</p>
               )}
             </div>
 

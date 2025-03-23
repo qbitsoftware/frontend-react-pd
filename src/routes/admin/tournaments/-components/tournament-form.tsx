@@ -101,7 +101,6 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
   useEffect(() => {
     if (initial_data && initial_data.information != "") {
-      console.log("initialdata", initial_data.information)
       setValue(JSON.parse(initial_data.information))
     }
   }, [initial_data])
@@ -142,8 +141,6 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       console.error(error)
     }
   }
-
-  console.log(form.getValues())
 
   return (
     <div className="">

@@ -141,7 +141,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
     }
     handleClose();
   };
-  console.log("MATCHHH");
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>

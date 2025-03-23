@@ -169,7 +169,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   );
 
   useEffect(() => {
-    console.log("Useffect firsst one");
     const me = match.match.extra_data;
     setTeam1SelectedPlayers(createEmptyPlayers(5, 1, match.match.extra_data));
     setTeam2SelectedPlayers(createEmptyPlayers(5, 2, match.match.extra_data));
@@ -190,7 +189,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   }, [isOpen, match.match.extra_data]);
 
   useEffect(() => {
-    console.log("Useffect second one");
     const hasChanges = {
       captain_a:
         captainTeam1 !== prevValuesRef.current.captainTeam1
@@ -266,7 +264,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     table,
     match.match.extra_data,
   ]);
-  console.log("JOU");
 
   const usePatchMatch = UsePatchMatch(
     tournament_id,

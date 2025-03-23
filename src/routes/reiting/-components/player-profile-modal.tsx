@@ -29,7 +29,8 @@ export const PlayerProfileModal = ({ isOpen, onClose, user }: PlayerProfileModal
             </Avatar>
 
             <h2 className="font-bold text-2xl text-gray-900 text-center">
-              {user.first_name} {user.last_name}
+              {/* {user.first_name} {user.last_name} */}
+              {user.username}
             </h2>
 
             <div className="flex flex-col items-center gap-3 mt-2">

@@ -393,11 +393,6 @@ export const createRegisterSchema = (t: TFunction) =>
     .object({
       first_name: z.string().min(1, t("register.form.errors.first_name")),
       last_name: z.string().min(1, t("register.form.errors.last_name")),
-      email: z.string().email(t("register.form.errors.email")),
-      sex: z.enum(["male", "female", "other"], {
-        required_error: t("register.form.errors.sex"),
-      }),
-      birth_date: z.string().min(1, t("register.form.errors.date_of_birth")),
       username: z.string().min(3, t("register.form.errors.username")),
       password: z.string().min(8, t("register.form.errors.password")),
       confirm_password: z

@@ -18,7 +18,6 @@ export const Route = createFileRoute('/voistlused/$tournamentid/')({
 function RouteComponent() {
   const tournament = useTournament()
   const [value, setValue] = useState<YooptaContentValue | undefined>(JSON.parse(tournament.information))
-  console.log(tournament)
 
   return (
     <div className="px-2 md:px-12 py-4 md:py-8">

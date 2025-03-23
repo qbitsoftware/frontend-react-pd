@@ -19,8 +19,8 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [isUploading, setIsUploading] = useState<boolean>(false)
-    console.log(tournament_id, gameDay, isUploading)
 
+    void isUploading, tournament_id, gameDay
     // const postImageMutation = usePostImages(tournament_id, gameDay)
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
