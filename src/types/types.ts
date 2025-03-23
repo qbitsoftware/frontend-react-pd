@@ -91,9 +91,9 @@ export interface User {
 }
 
 export interface Profile {
-  user: UserNew,
-  matches: MatchWrapper[],
-  rating_change: Player[]
+  user: UserNew;
+  matches: MatchWrapper[];
+  rating_change: Player[];
 }
 
 export interface Article {
@@ -112,6 +112,7 @@ export type Round = {
 };
 
 export type Participant = {
+  username: string;
   id: string;
   name: string;
   order: number;

@@ -22,12 +22,6 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
           {t("rating.player_modal.menus.latest_matches.title")}
         </TabsTrigger>
         <TabsTrigger
-          value="temp-placeholder"
-          className="transition-all duration-200"
-        >
-          {t("rating.player_modal.menus.player_profile.title")}
-        </TabsTrigger>
-        <TabsTrigger
           value="rating-change"
           className="transition-all duration-200"
         >
@@ -41,9 +35,10 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
             Recent Match History
           </h3>
           <div className="space-y-2">
-            {profile.matches && profile.matches.map((game, index) => (
-              <LastMatch key={index} last_game={game} />
-            ))}
+            {profile.matches &&
+              profile.matches.map((game, index) => (
+                <LastMatch key={index} last_game={game} />
+              ))}
           </div>
         </div>
       </TabsContent>
@@ -74,7 +69,9 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
             <div className="flex items-center">
               <p className="w-32 text-gray-500">Year of birth:</p>
               <p className="font-semibold">
-                {profile.user.birth_date ? formatDateToNumber(profile.user.birth_date) : "----"}
+                {profile.user.birth_date
+                  ? formatDateToNumber(profile.user.birth_date)
+                  : "----"}
               </p>
             </div>
 
@@ -108,3 +105,4 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
     </Tabs>
   );
 };
+

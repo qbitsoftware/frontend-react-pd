@@ -1,18 +1,22 @@
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
-
 import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"
+  Area,
+  AreaChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+} from "recharts";
+
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
-import { mockRatingChartData } from "@/lib/mock_data/rating_mocks"
-import { Player } from "@/types/types"
+import { mockRatingChartData } from "@/lib/mock_data/rating_mocks";
+import { Player } from "@/types/types";
 
 const chartConfig = {
   ratingPoints: {
@@ -23,19 +27,19 @@ const chartConfig = {
     label: "Weight Points",
     color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 interface Props {
-  stats: Player[]
+  stats: Player[];
 }
 
 export function PlayerRankingChangeGraph({ stats }: Props) {
   const chartData = stats.map((player, index) => ({
     id: index,
-    month: player.created_at ? new Date(player.created_at).toLocaleString('default', { month: 'long' }) : `Tournament ${index + 1}`,
-    ratingPoints: player.extra_data?.rate_points * Math.floor(Math.random() * 5) + 1 || 0,
-    // ratingPoints: player.rank || 0,
-    weightPoints: player.extra_data?.rate_order * Math.floor(Math.random() * 5) + 1 || 0,
+    month: player.created_at
+      ? new Date(player.created_at).toLocaleString("default", { month: "long" })
+      : `Tournament ${index + 1}`,
+    ratingPoints: 30,
   }));
 
   return (
@@ -94,5 +98,6 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
+

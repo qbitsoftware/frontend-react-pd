@@ -1,11 +1,18 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Participant } from '@/types/types'
-import { AvatarImage } from '@radix-ui/react-avatar'
-import React from 'react'
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Participant } from "@/types/types";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import React from "react";
 
 interface SoloTableProps {
-  participants: Participant[] | null
+  participants: Participant[] | null;
 }
 
 const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
@@ -13,9 +20,9 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
         <div className="rounded-md border h-full overflow-y-auto">
-                 <Table className="bg-white h-full ">
-            <TableHeader >
-              <TableRow className='bg-[#F9F9FB]'>
+          <Table className="bg-white h-full ">
+            <TableHeader>
+              <TableRow className="bg-[#F9F9FB]">
                 <TableHead>Pilt</TableHead>
                 <TableHead>Nimi</TableHead>
                 <TableHead>Asetus Reitingus</TableHead>
@@ -27,19 +34,33 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
             </TableHeader>
             <TableBody>
               {participants.map((participant) => (
-                <TableRow key={participant.id} className="bg-white bg-[#F9F9FB]/40 ">
+                <TableRow
+                  key={participant.id}
+                  className="bg-white bg-[#F9F9FB]/40 "
+                >
                   <TableCell>
                     <Avatar>
-                      <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src='/test/placeholder-player-profilepic.png' className='rounded-full'></img></AvatarFallback>
+                      <AvatarImage
+                        src={participant.extra_data.image_url}
+                      ></AvatarImage>
+                      <AvatarFallback>
+                        <img
+                          src="/src/assets/placheolderImg.svg"
+                          className="rounded-full"
+                        ></img>
+                      </AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>
                   <TableCell>{participant.rank}</TableCell>
                   <TableCell>{participant.extra_data.class}</TableCell>
-                  <TableCell>{participant.players[0].extra_data.club}</TableCell>
+                  <TableCell>
+                    {participant.players[0].extra_data.club}
+                  </TableCell>
                   <TableCell>{participant.players[0].sex}</TableCell>
-                  <TableHead>{participant.players[0].extra_data.eltl_id}</TableHead>
+                  <TableHead>
+                    {participant.players[0].extra_data.eltl_id}
+                  </TableHead>
                 </TableRow>
               ))}
             </TableBody>
@@ -51,7 +72,8 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SoloTable
+export default SoloTable;
+
