@@ -75,7 +75,7 @@ const RatingWidget = ({ users }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUsers.map((user) => (
+            {filteredUsers.map((user, index) => (
               <TableRow
                 onClick={() => {
                   setSelectedPlayerId(user.id);
@@ -84,11 +84,24 @@ const RatingWidget = ({ users }: Props) => {
                 key={user.id}
                 className="group cursor-pointer"
               >
-                <TableCell className="px-6 py-3 text-sm font-bold">
-                  {user.rate_order}
+                <TableCell
+                  className={`px-6 py-3 text-sm font-bold ${
+                    index === 0
+                      ? "text-yellow-500" // Gold for 1st place
+                      : index === 1
+                        ? "text-gray-400" // Silver for 2nd place
+                        : index === 2
+                          ? "text-amber-700" // Bronze for 3rd place
+                          : ""
+                  }`}
+                >
+                  {index + 1}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm font-semibold group-hover:text-blue-600 group-hover:underline">
-                  {user.username}
+                  {user.username}{" "}
+                  <span className="font-medium text-gray-500">
+                    ({user.first_name})
+                  </span>
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
                   {user.rate_points}
