@@ -297,11 +297,9 @@ interface MatchCardProps {
 }
 
 const MatchCard = ({ match }: MatchCardProps) => {
-  // Define a fixed height for all cards (adjust as needed)
   const cardHeight = "7rem";
-  const maxNameLength = 20; // Maximum characters to show before truncating
+  const maxNameLength = 20; 
 
-  // Check if either name needs truncation
   const p1NameTruncated = truncateText(match.p1?.name || 'TBD', maxNameLength);
   const p2NameTruncated = truncateText(match.p2?.name || 'TBD', maxNameLength);
   const { t } = useTranslation()
@@ -386,7 +384,6 @@ const MatchCard = ({ match }: MatchCardProps) => {
             )}
           </div>
 
-          {/* Winner Information (if available) */}
           {match.match.winner_id && (
             <div className="mt-3 pt-3 border-t">
               <p className="font-medium text-sm text-gray-500 mb-1">{t('competitions.timetable.winner')}:</p>

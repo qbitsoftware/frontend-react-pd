@@ -4,6 +4,7 @@ import ErrorPage from '@/components/error'
 import { XCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SportsTimetable } from './-components/calendar'
+import { TournamentsCalendar } from './-components/new-calendar'
 
 export const Route = createFileRoute('/voistlused/')({
   errorComponent: () => {
@@ -24,10 +25,10 @@ function RouteComponent() {
       {tournaments.data ? (
         // <TournamentList tournaments={tournaments.data} />
         <div className='py-4'>
-          <div className="lg:rounded-lg bg-white px-4 sm:px-6 md:px-12 py-6 space-y-4">
+          <div className="lg:rounded-lg bg-[#F8F6F6] px-4 sm:px-6 md:px-12 py-6 space-y-4">
 
-            <h2 className="font-bold mb-6">Sports Tournament Calendar</h2>
-            <SportsTimetable tournaments={tournaments.data} />
+            <h2 className="font-bold mb-6">{t("Calendar")}</h2>
+            <TournamentsCalendar tournaments={tournaments.data} />
           </div>
         </div>
       ) : (

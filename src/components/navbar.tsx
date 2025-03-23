@@ -45,7 +45,7 @@ export default function Navbar() {
         },
         {
             name: t('navbar.menu.competition'),
-            href: '/kalender',
+            href: '/voistlused',
         },
         {
             name: t('navbar.menu.clubs'),

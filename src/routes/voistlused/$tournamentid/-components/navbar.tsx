@@ -2,7 +2,7 @@
 
 import { Link, useParams, useLocation } from "@tanstack/react-router";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, formatDateRange } from "@/lib/utils";
+import { cn, formatDateRange, formatDateString } from "@/lib/utils";
 import { useTournament } from "./tournament-provider";
 import { TournamentTable } from "@/types/types";
 import { useTranslation } from "react-i18next";
@@ -55,7 +55,7 @@ const Navbar = ({ tournament_tables }: Props) => {
           <h1 className="text-4xl text-center md:text-left font-semibold mb-4">
             {tournament.name}
           </h1>
-          <p className="text-xl text-center md:text-left">{`${formatDateRange(new Date(tournament.start_date), new Date(tournament.end_date))} • ${tournament.location}`}</p>
+          <p className="text-xl text-center md:text-left">{`${formatDateString(tournament.start_date)} - ${formatDateString(tournament.end_date)} • ${tournament.location}`}</p>
         </div>
       </div>
       <div className="px-2 md:px-12 ">
