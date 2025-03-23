@@ -306,7 +306,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
         <PlayerProfileModal
           isOpen={isModalOpen}
           onClose={handleModalClose}
-          player={selectedPlayer || null}
+          user={selectedPlayer || null}
         />
       </div>
     </div>
