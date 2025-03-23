@@ -88,7 +88,7 @@ const RatingWidget = ({ users }: Props) => {
                   {user.rate_order}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm font-semibold group-hover:text-blue-600 group-hover:underline">
-                  {`${user.last_name} ${user.first_name}`}
+                  {user.username}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
                   {user.rate_points}

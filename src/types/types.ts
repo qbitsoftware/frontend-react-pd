@@ -1,72 +1,71 @@
-import { TFunction } from "i18next"
-import { z } from "zod"
+import { TFunction } from "i18next";
+import { z } from "zod";
 
 export type TableMatch = {
-  match: Match
-  participant_1: Participant
-  participant_2: Participant
-  is_bronze_match: boolean
-}
+  match: Match;
+  participant_1: Participant;
+  participant_2: Participant;
+  is_bronze_match: boolean;
+};
 
 export type Bracket = {
-  eliminations: Eliminations[]
-  round_robins: RoundRobins[]
-}
+  eliminations: Eliminations[];
+  round_robins: RoundRobins[];
+};
 
 export type EliminationBracket = {
-  rounds: Round[],
-  matches: TableMatch[],
+  rounds: Round[];
+  matches: TableMatch[];
   name: string;
-}
+};
 
 export type Eliminations = {
-  elimination: EliminationBracket[]
-}
+  elimination: EliminationBracket[];
+};
 
 export type RoundRobinBracket = {
-  participant: Participant
-  matches: MatchWrapper[]
-  total_points: number
-}
+  participant: Participant;
+  matches: MatchWrapper[];
+  total_points: number;
+};
 
 export type RoundRobins = {
-  round_robin: RoundRobinBracket[]
-}
-
-
+  round_robin: RoundRobinBracket[];
+};
 
 export type ErrorResponse = {
   response: {
-    status: number
-  }
-}
+    status: number;
+  };
+};
 
 export type UserLogin = {
-  id: number,
-  email: string,
-  username: string,
-  role: string,
-}
+  id: number;
+  email: string;
+  username: string;
+  role: string;
+};
 
 export type UserNew = {
-  id: number
-  email: string
-  organization_id: number
-  first_name: string
-  last_name: string
-  created_at: string
-  eltl_id: number
-  birth_date: string
-  sex: string
-  foreigner: number
-  club_name: string
-  rate_order: number
-  rate_pl_points: number
-  rate_points: number
-  rate_weigth: number
-  oragnization_id: number
-  role: number
-}
+  username: string;
+  id: number;
+  email: string;
+  organization_id: number;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+  eltl_id: number;
+  birth_date: string;
+  sex: string;
+  foreigner: number;
+  club_name: string;
+  rate_order: number;
+  rate_pl_points: number;
+  rate_points: number;
+  rate_weigth: number;
+  oragnization_id: number;
+  role: number;
+};
 
 export interface User {
   ID: number;
@@ -92,26 +91,25 @@ export interface User {
 }
 
 export interface Profile {
-  user: UserNew,
-  last_games: MatchWrapper[],
-  rating_change: Player[]
+  user: UserNew;
+  last_games: MatchWrapper[];
+  rating_change: Player[];
 }
 
 export interface Article {
   id: number;
-  title: string,
-  thumbnail: string,
-  user: string,
-  category: string,
-  content_html: string,
-  created_at: string,
-  updated_at: string,
+  title: string;
+  thumbnail: string;
+  user: string;
+  category: string;
+  content_html: string;
+  created_at: string;
+  updated_at: string;
 }
-
 
 export type Round = {
-  name: string,
-}
+  name: string;
+};
 
 export type Participant = {
   id: string;
@@ -126,11 +124,11 @@ export type Participant = {
   players: Player[];
   tournament_table_id: number;
   extra_data: PartipantExtraData;
-}
+};
 
 export type Player = {
   id: string;
-  user_id: number
+  user_id: number;
   name: string;
   first_name: string;
   last_name: string;
@@ -143,7 +141,7 @@ export type Player = {
   deleted_at: string | null;
   updated_at: string;
   // user: UserNew;
-}
+};
 
 export type PlayerExtraData = {
   image_url: string;
@@ -152,14 +150,14 @@ export type PlayerExtraData = {
   rate_order: number;
   eltl_id: number;
   class: string;
-}
+};
 
 export type PartipantExtraData = {
   image_url: string;
-  class: string
-  is_parent: boolean
+  class: string;
+  is_parent: boolean;
   total_points: number;
-}
+};
 
 export type Tournament = {
   created_at: string;
@@ -193,7 +191,7 @@ export type TournamentTable = {
   max_team_size: number;
   size: number;
   participants: Participant[];
-}
+};
 
 export type Category = {
   created_at: string;
@@ -201,52 +199,51 @@ export type Category = {
   updated_at: string;
   id: number;
   category: string;
-}
+};
 
 export type TournamentInformation = {
-  fields: [{ title: string, information: string }]
-}
+  fields: [{ title: string; information: string }];
+};
 
 export type TournamentType = {
-  id: number
+  id: number;
   created_at: string;
   deleted_at: string | null;
   name: string;
-}
+};
 
 export type TournamentSize = {
-  id: number
+  id: number;
   created_at: string;
   deleted_at: string | null;
   size: number;
-}
-
+};
 
 export type Match = {
-  id: string
-  tournament_table_id: number
-  type: string
-  round: number
-  p1_id: string
-  p2_id: string
-  winner_id: string
-  order: number
-  sport_type: string
-  location: string
-  bracket: string
-  forfeit: boolean
-  start_date: string
-  extra_data: TableTennisExtraData
-  topCoord: number // for front end purposes
-  table_type: string
-}
+  id: string;
+  tournament_table_id: number;
+  type: string;
+  round: number;
+  p1_id: string;
+  p2_id: string;
+  winner_id: string;
+  order: number;
+  sport_type: string;
+  location: string;
+  bracket: string;
+  forfeit: boolean;
+  start_date: string;
+  extra_data: TableTennisExtraData;
+  topCoord: number; // for front end purposes
+  table_type: string;
+};
 
 export type MatchWrapper = {
   match: Match;
   p1: Participant;
   p2: Participant;
   class: string;
-}
+};
 
 export type TableTennisExtraData = {
   table: number;
@@ -269,13 +266,13 @@ export type TableTennisExtraData = {
   player_w_id?: string;
   team_1_total?: number;
   team_2_total?: number;
-}
+};
 
 export type Score = {
   number: number;
   p1_score: number;
   p2_score: number;
-}
+};
 
 export interface Blog {
   id: number;
@@ -293,9 +290,9 @@ export interface Blog {
 //GET RID OR CHANGE LATER
 
 export interface Club {
-  id: number
+  id: number;
   logoPath: string;
-  name: string
+  name: string;
 }
 
 export interface PlayerProfile {
@@ -360,7 +357,7 @@ export interface ContentBlockWithText extends ContentBlockBase {
 }
 
 export interface ContentBlockWithImage extends ContentBlockBase {
-  type: 'Image';
+  type: "Image";
   value: ImageValue[];
 }
 
@@ -379,10 +376,10 @@ export interface YooptaContent {
 }
 
 export interface RoundTime {
-  id: string
-  name: string
-  date: string
-  time: string
+  id: string;
+  name: string;
+  date: string;
+  time: string;
 }
 
 export interface MatchTimeUpdate {
@@ -390,21 +387,26 @@ export interface MatchTimeUpdate {
   start_date: string;
 }
 
-export const createRegisterSchema = (t: TFunction) => z.object({
-  first_name: z.string().min(1, t('register.form.errors.first_name')),
-  last_name: z.string().min(1, t('register.form.errors.last_name')),
-  email: z.string().email(t('register.form.errors.email')),
-  sex: z.enum(['male', 'female', 'other'], {
-    required_error: t('register.form.errors.sex'),
-  }),
-  birth_date: z.string().min(1, t('register.form.errors.date_of_birth')),
-  username: z.string().min(3, t('register.form.errors.username')),
-  password: z.string().min(8, t('register.form.errors.password')),
-  confirm_password: z.string().min(1, t('register.form.errors.password_confirmation')),
-  create_profile: z.boolean().default(true),
-}).refine((data) => data.password === data.confirm_password, {
-  message: t('register.form.errors.password_confirmation'),
-  path: ["confirmPassword"],
-});
+export const createRegisterSchema = (t: TFunction) =>
+  z
+    .object({
+      first_name: z.string().min(1, t("register.form.errors.first_name")),
+      last_name: z.string().min(1, t("register.form.errors.last_name")),
+      email: z.string().email(t("register.form.errors.email")),
+      sex: z.enum(["male", "female", "other"], {
+        required_error: t("register.form.errors.sex"),
+      }),
+      birth_date: z.string().min(1, t("register.form.errors.date_of_birth")),
+      username: z.string().min(3, t("register.form.errors.username")),
+      password: z.string().min(8, t("register.form.errors.password")),
+      confirm_password: z
+        .string()
+        .min(1, t("register.form.errors.password_confirmation")),
+      create_profile: z.boolean().default(true),
+    })
+    .refine((data) => data.password === data.confirm_password, {
+      message: t("register.form.errors.password_confirmation"),
+      path: ["confirmPassword"],
+    });
 
-export type RegisterFormData = z.infer<ReturnType<typeof createRegisterSchema>>
+export type RegisterFormData = z.infer<ReturnType<typeof createRegisterSchema>>;
