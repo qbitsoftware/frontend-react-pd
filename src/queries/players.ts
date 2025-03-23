@@ -1,5 +1,5 @@
-import { User } from "@/types/types"
-import { queryOptions} from "@tanstack/react-query"
+import { Profile, User } from "@/types/types"
+import { queryOptions, useQuery} from "@tanstack/react-query"
 import {axiosInstance} from "./axiosconf"
 
 export interface PlayerResponse {
@@ -8,11 +8,28 @@ export interface PlayerResponse {
     message: string
 }
 
+export interface ProfileResponse {
+    error: string
+    data: Profile
+    message: string
+}
+
+
 export const UseGetPlayers = () => {
     return queryOptions<PlayerResponse>({
         queryKey: ["players"],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/users`)
+            return data
+        }
+    })
+}
+
+export const UseGetUserProfile = (id: number) => {
+    return useQuery<ProfileResponse>({
+        queryKey: ["profile", id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/users/${id}`)
             return data
         }
     })

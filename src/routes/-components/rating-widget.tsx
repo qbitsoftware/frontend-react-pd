@@ -112,10 +112,10 @@ const RatingWidget = ({ users }: Props) => {
         </Table>
       </div>
       <PlayerProfileModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        player={selectedPlayer || null}
-      />
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          user={selectedPlayer || null}
+        />
     </div>
   );
 };
