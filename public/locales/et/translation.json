@@ -185,8 +185,8 @@
         "latest_matches": {
           "title": "Hiljutised kohtumised"
         },
-        "temp_placeholder": {
-          "title": "Temp asendaja"
+        "player_profile": {
+          "title": "Mängija profiil"
         },
         "rating_change_graph": {
           "title": "Reitingu muutuse graafik"

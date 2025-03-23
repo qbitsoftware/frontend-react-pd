@@ -91,9 +91,9 @@ export interface User {
 }
 
 export interface Profile {
-  user: UserNew;
-  last_games: MatchWrapper[];
-  rating_change: Player[];
+  user: UserNew,
+  matches: MatchWrapper[],
+  rating_change: Player[]
 }
 
 export interface Article {

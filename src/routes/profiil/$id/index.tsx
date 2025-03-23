@@ -1,7 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { mockPlayers } from "@/lib/mock_data/player_mocks";
-import { PlayerRankingChangeGraph } from "@/routes/reiting/-components/rating-chart";
 
 // Player Profile Type
 export const Route = createFileRoute("/profiil/$id/")({
@@ -132,7 +131,7 @@ function RouteComponent() {
           <h3 className="text-2xl font-semibold mb-4 text-blue-700">
             Reitingu kõikumine (180 päeva)
           </h3>
-          <PlayerRankingChangeGraph />
+          {/* <PlayerRankingChangeGraph stats={profile.rating_change}  /> */}
         </div>
       </div>
 

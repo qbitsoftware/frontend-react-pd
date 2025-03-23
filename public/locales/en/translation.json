@@ -185,8 +185,8 @@
         "latest_matches": {
           "title": "Latest matches"
         },
-        "temp_placeholder": {
-          "title": "Detailed player information"
+        "player_profile": {
+          "title": "Player profile"
         },
         "rating_change_graph": {
           "title": "Ranking change graph"

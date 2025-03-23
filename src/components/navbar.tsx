@@ -51,10 +51,6 @@ export default function Navbar() {
       name: t("navbar.menu.calendar"),
       href: "/kalender",
     },
-    {
-      name: t("navbar.menu.calendar"),
-      href: "/kalender",
-    },
     { name: t("navbar.menu.register"), href: "/register" },
     { name: t("navbar.menu.ratings"), href: "/reiting" },
     { name: t("navbar.menu.rules"), href: "/reeglid" },
@@ -75,7 +71,7 @@ export default function Navbar() {
                 />
               </Link>
             </div>
-            <NavigationMenu className="hidden lg:flex z-50 items-center">
+            <NavigationMenu className="hidden xl:flex z-50 items-center">
               <NavigationMenuList className="flex space-x-4 z-50">
                 {menuItems.map((item) => (
                   <NavigationMenuItem key={item.name}>
@@ -142,12 +138,12 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
 
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden xl:flex items-center gap-2">
             <AuthButton />
             <LanguageDropdown />
           </div>
 
-          <SidebarTrigger className="lg:hidden my-auto text-secondary" />
+          <SidebarTrigger className="xl:hidden my-auto text-secondary" />
         </div>
       </div>
     </header>
