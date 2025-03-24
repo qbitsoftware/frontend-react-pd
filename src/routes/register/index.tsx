@@ -53,7 +53,7 @@ function RouteComponent() {
     userMutation.mutate(data, {
       onSuccess: () => {
         successToast(t("register.successful_registration"));
-        navigate({ to: "/login" });
+        navigate({ to: "/" });
       },
       onError: (error: any) => {
         if (error.response.status === 409) {
@@ -194,7 +194,7 @@ function RouteComponent() {
           <div className="text-center">
             <Button
               variant="link"
-              onClick={() => navigate({ to: "/login" })}
+              onClick={() => navigate({ to: "/" })}
               className="text-sm text-gray-600 hover:text-gray-900"
             >
               {t("register.already_have_account") ||
