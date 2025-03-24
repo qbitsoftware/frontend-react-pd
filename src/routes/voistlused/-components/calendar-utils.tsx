@@ -95,65 +95,80 @@ export const useTournamentEvents = (
     const processEvents = async () => {
       const events: ProcessedEvent[] = [];
 
-      // Process each tournament
       for (const tournament of tournaments) {
-        // Add championship tournaments as gamedays
-        const groupData = await queryClient.ensureQueryData(
-          UseGetTournamentTables(Number(tournament.id))
-        );
-        let counter = 0
-        if (groupData && groupData.data) {
-          groupData.data.forEach((group) => {
-            if (group.type == "champions_league") counter++;
-          });
-        }
-        if (groupData.data && counter == groupData.data.length) {
-          try {
-            const matchesData = await queryClient.ensureQueryData(
-              UseGetTournamentMatches(Number(tournament.id))
-            );
-
-
-            const uniqueGamedays = new Map<string, ProcessedEvent>();
-
-            if (matchesData && matchesData.data) {
-              matchesData.data.forEach((match) => {
-                const matchDate = match.match.start_date
-                  ? new Date(match.match.start_date)
-                  : null;
-                if (matchDate) {
-                  const dateKey = matchDate.toISOString().split("T")[0];
-
-                  if (!uniqueGamedays.has(dateKey)) {
-                    uniqueGamedays.set(dateKey, {
-                      id: `${tournament.id}-${dateKey}`,
-                      name: `${tournament.name} - ${match.class}`,
-                      start_date: dateKey,
-                      end_date: dateKey,
-                      sport: tournament.sport,
-                      category: tournament.category,
-                      class: match.class,
-                      order: match.match.order,
-                      round: match.match.round,
-                      color: getTournamentColor(`${tournament.id}`),
-                      isGameday: true,
-                      parentTournamentId: tournament.id,
-                    });
+        try {
+          // Add championship tournaments as gamedays
+          const groupData = await queryClient.ensureQueryData(
+            UseGetTournamentTables(Number(tournament.id))
+          );
+          let counter = 0;
+          if (groupData && groupData.data) {
+            groupData.data.forEach((group) => {
+              if (group.type == "champions_league") counter++;
+            });
+          }
+          if (groupData.data && counter == groupData.data.length) {
+            try {
+              const matchesData = await queryClient.ensureQueryData(
+                UseGetTournamentMatches(Number(tournament.id))
+              );
+      
+              const uniqueGamedays = new Map<string, ProcessedEvent>();
+      
+              if (matchesData && matchesData.data) {
+                matchesData.data.forEach((match) => {
+                  const matchDate = match.match.start_date
+                    ? new Date(match.match.start_date)
+                    : null;
+                  if (matchDate) {
+                    const dateKey = matchDate.toISOString().split("T")[0];
+      
+                    if (!uniqueGamedays.has(dateKey)) {
+                      uniqueGamedays.set(dateKey, {
+                        id: `${tournament.id}-${dateKey}`,
+                        name: `${tournament.name} - ${match.class}`,
+                        start_date: dateKey,
+                        end_date: dateKey,
+                        sport: tournament.sport,
+                        category: tournament.category,
+                        class: match.class,
+                        order: match.match.order,
+                        round: match.match.round,
+                        color: getTournamentColor(`${tournament.id}`),
+                        isGameday: true,
+                        parentTournamentId: tournament.id,
+                      });
+                    }
                   }
-                }
+                });
+              }
+      
+              // Add each gameday as a separate event
+              events.push(...Array.from(uniqueGamedays.values()));
+            } catch (error) {
+              console.error(
+                `Error fetching matches for tournament ${tournament.id}:`,
+                error
+              );
+              // Still add the tournament as a fallback when match data fails
+              events.push({
+                ...tournament,
+                color: getTournamentColor(tournament.id),
               });
             }
-
-            // Add each gameday as a separate event
-            events.push(...Array.from(uniqueGamedays.values()));
-          } catch (error) {
-            console.error(
-              `Error fetching matches for tournament ${tournament.id}:`,
-              error
-            );
+          } else {
+            // For non-championship tournaments, add them directly
+            events.push({
+              ...tournament,
+              color: getTournamentColor(tournament.id),
+            });
           }
-        } else {
-          // For non-championship tournaments, add them directly
+        } catch (error) {
+          console.error(
+            `Error fetching tables for tournament ${tournament.id}:`,
+            error
+          );
+          // Add the tournament directly as fallback when table data fails
           events.push({
             ...tournament,
             color: getTournamentColor(tournament.id),

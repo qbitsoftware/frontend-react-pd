@@ -552,13 +552,13 @@ export function TournamentsCalendar({ tournaments }: Props) {
             <TabsList className="grid grid-cols-2 gap-1">
               <TabsTrigger
                 value="three-month"
-                className="data-[state=active]:bg-stone-700 rounded-[3px]"
+                className="data-[state=active]:bg-stone-800 bg-[#ececec] text-stone-800 rounded-sm"
               >
                 {t('calendar.3_months')}
               </TabsTrigger>
               <TabsTrigger
                 value="year"
-                className="data-[state=active]:bg-stone-700 rounded-[3px]"
+                className="data-[state=active]:bg-stone-800 bg-[#ececec] text-stone-800 rounded-sm"
               >
                 {t('calendar.full_year')}
               </TabsTrigger>
