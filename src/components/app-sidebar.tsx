@@ -47,10 +47,7 @@ export function AppSidebar() {
       name: t("navbar.menu.competition"),
       href: "/voistlused",
     },
-    {
-      name: t("navbar.menu.clubs"),
-      href: "/klubid",
-    },
+    { name: t("navbar.menu.register"), href: "/register" },
     { name: t("navbar.menu.ratings"), href: "/reiting" },
     { name: t("navbar.menu.rules"), href: "/reeglid" },
     { name: t("navbar.menu.contact"), href: "/kontakt" },
@@ -77,7 +74,7 @@ export function AppSidebar() {
         <div className="flex justify-between items-center">
           <Link href="/">
             <img
-              className="h-8 w-auto"
+              className="h-5 w-auto"
               src="/tournament10_lightblue.png"
               alt="ELTA Logo"
             />

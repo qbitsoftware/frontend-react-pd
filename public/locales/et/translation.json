@@ -37,7 +37,7 @@
       "contact": "Kontakt",
       "admin": "Admin Paneel"
     },
-    "login": "Logi sisse",
+    "login": "Admin Login",
     "logout": "Logi välja"
   },
   "footer": {
@@ -166,7 +166,7 @@
     "table": {
       "head": {
         "first_name": "Eesnimi",
-        "last_name": "Perenimi",
+        "last_name": "Mängijanimi",
         "birthyear": "SA",
         "profile": "Profiil",
         "club": "Klubi",
@@ -209,7 +209,7 @@
   },
   "register": {
     "form": {
-      "heading": "Registreeri kasutaja",
+      "heading": "Registreeri mängijaks",
       "first_name": "Eesnimi",
       "last_name": "Perenimi",
       "password": "Parool",
@@ -219,7 +219,7 @@
       "register_progress": "Registreerimine...",
       "date_of_birth": "Sünnikuupäev",
       "username": "Kasutajanimi",
-      "create_profile": "Registreeri turniirile",
+      "create_profile": "Automaatselt registreeri Pipedrive FFA turniirile",
       "sex": "Sugu",
       "sex_options": {
         "male": "Mees",

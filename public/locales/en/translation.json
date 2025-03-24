@@ -37,7 +37,7 @@
       "contact": "Contact",
       "admin": "Admin Panel"
     },
-    "login": "Log in",
+    "login": "Admin Login",
     "logout": "Log out"
   },
   "footer": {
@@ -166,7 +166,7 @@
     "table": {
       "head": {
         "first_name": "First Name",
-        "last_name": "Surname",
+        "last_name": "Username",
         "birthyear": "YOB",
         "profile": "Profile",
         "club": "Club",
@@ -202,7 +202,7 @@
   },
   "register": {
     "form": {
-      "heading": "Register user",
+      "heading": "Register as a participant",
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",
@@ -212,7 +212,7 @@
       "register_progress": "Registering...",
       "date_of_birth": "Date of birth",
       "username": "Username",
-      "create_profile": "Register to tournament",
+      "create_profile": "Auto-signup for Pipedrive FFA tournament",
       "sex": "Sex",
       "sex_options": {
         "male": "Male",

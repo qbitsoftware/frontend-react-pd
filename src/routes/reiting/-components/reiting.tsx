@@ -12,7 +12,6 @@ import { useState, useEffect } from "react";
 import {
   filterByAgeClass,
   modifyTitleDependingOnFilter,
-  getYear,
 } from "@/lib/rating-utils";
 import { UserNew } from "@/types/types";
 import {
@@ -154,7 +153,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
           <p className="font-medium pb-1">
             {t("rating.last_updated")}:{" "}
             <span className="bg-[#FBFBFB] px-3 py-1 rounded-full border border-[#EAEAEA]">
-              11.01.2025, 9:00
+              Automatically Synced
             </span>
           </p>
           <p className="pb-8">NR = Ranking, RP = Ranking Points</p>
@@ -247,16 +246,10 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                     {t("rating.table.head.first_name")}
                   </TableHead>
                   <TableHead className="md:px-6 py-3 text-left font-medium">
-                    PP
-                  </TableHead>
-                  <TableHead className="md:px-6 py-3 text-left font-medium">
                     RP
                   </TableHead>
                   <TableHead className="md:px-6 py-3 text-left font-medium">
                     ID
-                  </TableHead>
-                  <TableHead className="md:px-6 py-3 text-left font-medium">
-                    {t("rating.table.head.birthyear")}
                   </TableHead>
                   <TableHead className="md:px-6 py-3 text-left font-medium">
                     {t("rating.table.head.club")}
@@ -264,35 +257,36 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user) => (
+                {filteredUsers.map((user, index) => (
                   <TableRow
                     onClick={() => handleModalOpen(user)}
                     key={user.id}
                     className="group cursor-pointer odd:bg-gradient-to-r from-gray-100/50 to-white even:bg-white  transition-colors"
                   >
-                    <TableCell className="md:px-6 py-3 text-sm font-bold">
-                      {user.rate_order}
-                      {/* {user.rank_change > 0 && <span className="text-blue-400 ml-1">▲</span>} */}
-                      {/* {user.rank_change < 0 && <span className="text-gray-600 ml-1">▼</span>} */}
+                    <TableCell
+                      className={`px-6 py-3 text-sm font-bold ${
+                        index === 0
+                          ? "text-yellow-500"
+                          : index === 1
+                            ? "text-gray-400"
+                            : index === 2
+                              ? "text-amber-700"
+                              : ""
+                      }`}
+                    >
+                      {index + 1}
                     </TableCell>
                     <TableCell className="px-1 md:px-6 py-3 text-sm font-semibold group-hover:text-blue-600 group-hover:underline">
-                      {user.last_name}
+                      {user.username}
                     </TableCell>
                     <TableCell className="px-1 md:px-6 py-3 text-sm">
                       {user.first_name}
-                    </TableCell>
-                    <TableCell className="md:px-6 py-3 text-sm">
-                      {user.rate_pl_points}
                     </TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">
                       {user.rate_points}
                     </TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">
                       {user.eltl_id}
-                    </TableCell>
-
-                    <TableCell className="md:px-6 py-3 text-sm">
-                      {getYear(user.birth_date)}
                     </TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">
                       {user.club_name}
