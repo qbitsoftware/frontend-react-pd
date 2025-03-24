@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { Images } from "../../-components/images";
 
@@ -25,10 +26,11 @@ function RouteComponent() {
   //  { length: Math.max(diffDays, 1) },
   //  (_, index) => index + 1
   //);
+  const { t } = useTranslation()
 
   return (
     <div className="p-6 text-center rounded-sm">
-      <p className="text-stone-500">No gallery content available yet.</p>
+      <p className="text-stone-500">{t('gallery.no_images')}</p>
     </div>
   );
 }

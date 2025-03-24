@@ -11,8 +11,7 @@ import { StatisticsCard } from './-components/protocol'
 import { useTournament } from '../../-components/tournament-provider'
 import { MatchWrapper } from "@/types/types"
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-
-
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute(
   '/voistlused/$tournamentid/tulemused/$groupid/',
@@ -27,6 +26,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { params } = Route.useLoaderData()
   const tournament = useTournament()
+  const { t } = useTranslation()
 
   const [activeTab, setActiveTab] = useState('bracket')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -43,15 +43,15 @@ function RouteComponent() {
   })
 
   if (tableQuery.isLoading || bracketQuery.isLoading) {
-    return <div>Loading...</div>
+    return <div>{t('news.loading')}</div>
   }
 
   if (tableQuery.isError || bracketQuery.isError) {
-    return <div>Error loading data: {tableQuery.error?.message || bracketQuery.error?.message}</div>
+    return <div>{t('errors.general.description')}</div>
   }
 
   if (!bracketQuery.data?.data || !tableQuery.data?.data) {
-    return <div>No data available</div>
+    return <div>{t('errors.general.title')}</div>
   }
 
   const groupName = tableQuery.data.data.class
@@ -76,8 +76,8 @@ function RouteComponent() {
             <h4 className="text-center font-medium pt-4 pb-2">{groupName}</h4>
 
             <TabsList className="h-10 space-x-2">
-              <TabsTrigger value="bracket" className="data-[state=active]:bg-stone-800">Bracket</TabsTrigger>
-              <TabsTrigger value="placement" className="data-[state=active]:bg-stone-800">Playoffs</TabsTrigger>
+              <TabsTrigger value="bracket" className="data-[state=active]:bg-stone-800">{t('competitions.bracket')}</TabsTrigger>
+              <TabsTrigger value="placement" className="data-[state=active]:bg-stone-800">{t('competitions.play_off')}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -105,7 +105,7 @@ function RouteComponent() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent aria-describedby={`match-protocol-${selectedMatch?.match.id}`} className="w-[95vw] max-w-[1200px] h-[90vh] p-4 mx-auto flex flex-col">
           <div className="flex justify-between items-center mb-2">
-            <DialogTitle className="text-lg font-semibold">Match Details</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">{t('competitions.timetable.match_details')}</DialogTitle>
 
           </div>
 

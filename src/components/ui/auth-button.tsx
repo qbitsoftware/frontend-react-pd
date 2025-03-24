@@ -18,7 +18,6 @@ export const AuthButton: React.FC<AuthButtonProps> = ({ className }) => {
     const { user, setUser } = useUser()
 
     const handleLogout = async () => {
-        console.log("Logging out")
         try {
             setUser(null)
             router.navigate({

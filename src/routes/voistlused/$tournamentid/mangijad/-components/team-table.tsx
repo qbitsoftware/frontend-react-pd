@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import type { Participant } from "@/types/types"
 import placeholderImg from "@/assets/placheolderImg.svg"
 import clubPlaceholder from "@/assets/clubPlaceholder.svg"
+import { useTranslation } from "react-i18next"
 
 interface TeamTableProps {
   participants: Participant[] | null
@@ -14,6 +15,7 @@ interface TeamTableProps {
 const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
   const [selectedTeam, setSelectedTeam] = useState<Participant | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { t } = useTranslation()
 
   const handleRowClick = (participant: Participant) => {
     setSelectedTeam(participant)
@@ -27,9 +29,9 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
           <Table className="bg-white h-full">
             <TableHeader>
               <TableRow className="bg-[#F9F9FB]">
-                <TableHead>Pilt</TableHead>
-                <TableHead>Meeskond</TableHead>
-                <TableHead>Mängijate arv</TableHead>
+                <TableHead>{t('competitions.participants.table.name')}</TableHead>
+                <TableHead>{t('competitions.participants.table.team')}</TableHead>
+                <TableHead>{t('competitions.participants.table.player_count')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -54,26 +56,26 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
         </div>
       ) : (
         <div className="bg-white shadow-lg rounded-lg p-8 text-center h-full flex items-center justify-center">
-          <p className="text-gray-500 text-lg">No participants found</p>
+          <p className="text-gray-500 text-lg">{t('competitions.participants.no_players')}</p>
         </div>
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-4xl h-[95vh] overflow-scroll">
           <DialogHeader>
-            <DialogTitle>{selectedTeam?.name} - Team Players</DialogTitle>
+            <DialogTitle>{selectedTeam?.name} - {t('competitions.participants.team_players')}</DialogTitle>
           </DialogHeader>
           {selectedTeam?.players && selectedTeam.players.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Pilt</TableHead>
-                  <TableHead>Nimi</TableHead>
-                  <TableHead>Asetus Reitingus</TableHead>
-                  <TableHead>Klass</TableHead>
-                  <TableHead>Klubi</TableHead>
-                  <TableHead>Sugu</TableHead>
-                  <TableHead>ID</TableHead>
+                  <TableHead>{t('competitions.participants.table.image')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.name')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.rating_placement')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.class')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.club')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.sex')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.id')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,7 +99,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
             </Table>
           ) : (
             <div className="p-8 text-center w-full">
-              <p className="text-gray-500 text-lg">No players found for this team</p>
+              <p className="text-gray-500 text-lg">{t('competitions.participants.no_players')}</p>
             </div>
           )}
         </DialogContent>

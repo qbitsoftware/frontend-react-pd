@@ -63,7 +63,6 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
     )
 
     const onSubmit = async () => {
-        console.log("Submitting")
         try {
             if (state == "finals") {
                 const data = await useFinalsMutation.mutateAsync(participants)

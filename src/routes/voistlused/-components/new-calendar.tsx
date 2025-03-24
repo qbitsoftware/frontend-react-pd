@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -20,10 +20,12 @@ import {
   formatDateRange,
   useTournamentEvents,
   formatDate,
+  ProcessedEvent
 } from "./calendar-utils";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 const months = [
   "January",
@@ -45,6 +47,10 @@ interface Props {
 }
 
 export function TournamentsCalendar({ tournaments }: Props) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -58,10 +64,50 @@ export function TournamentsCalendar({ tournaments }: Props) {
 
   const daysInMonthArray = getDaysInMonth(selectedYear);
 
-  const availableYears = useMemo(() => 
-    Array.from({ length: 5 }, (_, i) => currentYear - 2 + i),
-    [currentYear]
-  );
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const monthRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    monthRefs.current = monthRefs.current.slice(0, months.length);
+  }, []);
+
+  useEffect(() => {
+    if (mobileContainerRef.current && monthRefs.current[currentMonth]) {
+      if (selectedYear === currentYear) {
+        setTimeout(() => {
+          const containerTop = mobileContainerRef.current?.offsetTop || 0;
+          const monthTop = monthRefs.current[currentMonth]?.offsetTop || 0;
+
+          mobileContainerRef.current?.scrollTo({
+            top: monthTop - containerTop + 230,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    }
+  }, [selectedYear, currentYear, currentMonth]);
+
+
+  const availableYears = useMemo(() => {
+    const yearsSet = new Set<number>();
+    yearsSet.add(currentYear);
+
+    tournaments.forEach(tournament => {
+      if (tournament.start_date) {
+        const startYear = new Date(tournament.start_date).getFullYear();
+        yearsSet.add(startYear);
+      }
+
+      if (tournament.end_date) {
+        const endYear = new Date(tournament.end_date).getFullYear();
+        yearsSet.add(endYear);
+      }
+    });
+
+    return Array.from(yearsSet).sort((a, b) => a - b);
+  }, [tournaments, currentYear]);
 
   // Get visible months for 3-month view
   const visibleMonths = months
@@ -92,7 +138,7 @@ export function TournamentsCalendar({ tournaments }: Props) {
 
   // Create a map of dates to events
   // "2025-03-24 ===>>> {EventObject}"
-  const eventsByDate = new Map<string, any[]>();
+  const eventsByDate = new Map<string, ProcessedEvent[]>();
 
   events.forEach((event) => {
     const startDate = new Date(event.start_date);
@@ -135,7 +181,7 @@ export function TournamentsCalendar({ tournaments }: Props) {
 
   // Get events for a specific month
   const getEventsForMonth = (year: number, month: number) => {
-    const events: any[] = [];
+    const events: ProcessedEvent[] = [];
     const eventIds = new Set<string>();
 
     // Iterate through each day of the month
@@ -158,114 +204,122 @@ export function TournamentsCalendar({ tournaments }: Props) {
     );
   };
 
-  const isPastEvent = (event: any) => {
-    return new Date(event.end_date) < currentDate;
-  };
 
   const renderYearView = () => {
     return (
       <div className="space-y-2">
-        {/* Month headers */}
-        <div className="grid grid-cols-12 gap-0 border border-b-0">
-          {months.map((month, index) => (
-            <div
-              key={index}
-              className="text-center text-base font-medium py-2 border-r last:border-r-0"
-            >
-              {month}
-            </div>
-          ))}
-        </div>
+        <div className="overflow-x-auto pb-2">
+          <div className="min-w-[1100px] ">
+            {/* Month headers */}
+            <div className="grid grid-cols-12 gap-2 px-1 border justify-center">
+              {months.map((month, monthIndex) => {
+                const daysInMonth = daysInMonthArray[monthIndex];
+                return (
+                  <div
+                    key={monthIndex}
+                    className="text-center text-base font-medium py-2 w-full"
+                  >
+                    <div className="mb-1">
+                      {t('calendar.months.' + month.toLowerCase())}
+                    </div>
+                    <div
+                      key={monthIndex}
+                      className=" "
+                    >
+                      <div className="grid grid-cols-4 gap-0.5">
+                        {/* Generate all cells for this month */}
+                        {Array.from({ length: daysInMonth }, (_, i) => {
+                          const day = i + 1;
+                          const eventsOnDay = getEventsForDate(
+                            selectedYear,
+                            monthIndex,
+                            day
+                          );
+                          const hasEvents = eventsOnDay.length > 0;
 
-        {/* Calendar grid */}
-        <div className="grid grid-cols-12 gap-0">
-          {months.map((month, monthIndex) => {
-            // Get number of days in this month
-            const daysInMonth = daysInMonthArray[monthIndex];
+                          if (hasEvents) {
+                            const cellStyle = {
+                              backgroundColor: eventsOnDay[0].color,
 
-            return (
-              <div
-                key={monthIndex}
-                className="border-r last:border-r-0 border-t border-b px-0.5 py-0.5"
-              >
-                <div className="grid grid-cols-4 gap-0.5">
-                  {/* Generate all cells for this month */}
-                  {Array.from({ length: daysInMonth }, (_, i) => {
-                    const day = i + 1;
-                    const eventsOnDay = getEventsForDate(
-                      selectedYear,
-                      monthIndex,
-                      day
-                    );
-                    const hasEvents = eventsOnDay.length > 0;
+                            };
 
-                    if (hasEvents) {
-                      const cellStyle = {
-                        backgroundColor: eventsOnDay[0].color,
-                        opacity: isPastEvent(eventsOnDay[0]) ? 0.4 : 1,
-                      };
-
-                      const tooltipContent = (
-                        <div className="p-2 space-y-1">
-                          <div className="font-medium">
-                            {formatDate(selectedYear, monthIndex, day)}
-                          </div>
-                          <div className="space-y-1">
-                            {eventsOnDay.map((event) => (
-                              <div
-                                key={event.id}
-                                className="flex items-start gap-1"
-                              >
-                                <div
-                                  className="w-3 h-3 mt-1 rounded-none flex-shrink-0"
-                                  style={{ backgroundColor: event.color }}
-                                />
-                                <div>
-                                  <div className="text-sm font-medium">
-                                    {event.name}
-                                    {event.isGameday && event.order && (
-                                      <p className=" text-xs">
-                                        Voor {event.order}
-                                      </p>
-                                    )}
-                                  </div>
+                            const tooltipContent = (
+                              <div className="p-2 space-y-1">
+                                <div className="font-medium">
+                                  {formatDate(selectedYear, monthIndex, day)}
+                                </div>
+                                <div className="space-y-1">
+                                  {eventsOnDay.map((event) => (
+                                    <Link key={event.id} to={event.isGameday ? `/voistlused/${event.parentTournamentId}` : `/voistlused/${event.id}`}>
+                                      <div className="flex items-start gap-1 hover:bg-gray-100 p-1 rounded-sm">
+                                        <div
+                                          className="w-3 h-3 mt-1 rounded-none flex-shrink-0"
+                                          style={{ backgroundColor: event.color }}
+                                        />
+                                        <div>
+                                          <div className="text-sm font-medium">
+                                            {event.name}
+                                            {event.isGameday && event.order && (
+                                              <p className="text-xs self-start">
+                                                {t('calendar.game_day')} {event.order}
+                                              </p>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Link>
+                                  ))}
                                 </div>
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
+                            );
 
-                      return (
-                        <Tooltip key={`${monthIndex}-${day}`}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className={`w-full h-5 cursor-pointer hover:ring-1 hover:ring-primary ${eventsOnDay.length > 1 ? "ring-1 ring-white" : ""}`}
-                              style={cellStyle}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent sideOffset={5}>
-                            {tooltipContent}
-                          </TooltipContent>
-                        </Tooltip>
-                      );
-                    } else {
-                      return (
-                        <div
-                          key={`${monthIndex}-${day}`}
-                          className="w-full h-5 bg-gray-200"
-                        />
-                      );
-                    }
-                  })}
-                </div>
-              </div>
-            );
-          })}
+                            return (
+                              <Tooltip key={`${monthIndex}-${day}`}>
+                                <TooltipTrigger asChild>
+                                  <div className="aspect-square w-full">
+                                    <div
+                                      className={`flex items-center justify-center relative w-full h-full cursor-pointer hover:ring-1 hover:ring-primary ${eventsOnDay.length > 1 ? "ring-1 ring-white" : ""} `}
+                                      style={eventsOnDay.length > 1 ? {
+                                        backgroundColor: "#D1F9F9",
+                                      } : cellStyle}
+                                    >
+                                      {(eventsOnDay.length > 1) && (
+                                        <div className="flex items-center justify-center text-sm font-medium text-gray-600 rounded-full ">
+                                          +{eventsOnDay.length - 1}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent sideOffset={5}>
+                                  {tooltipContent}
+                                </TooltipContent>
+                              </Tooltip>
+                            );
+                          } else {
+                            return (
+                              <div className="aspect-square w-full"
+                                key={`${monthIndex}-${day}`}
+                              >
+                                <div
+                                  className="w-full h-full bg-gray-200"
+                                />
+                              </div>
+                            );
+                          }
+                        })}
+                      </div>
+                    </div>
+
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Legend */}
-        <div className="border rounded-lg p-4 bg-card">
+        <div className="border rounded-lg p-4 bg-card space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Array.from(new Set(events.map((e) => e.category))).map(
               (category) => {
@@ -286,12 +340,19 @@ export function TournamentsCalendar({ tournaments }: Props) {
               }
             )}
           </div>
+          <div className="flex items-center gap-2">
+            <div
+
+              className="w-3 h-3 rounded-none flex items-center justify-center bg-[#D1F9F9]"
+            ><Plus /></div>
+            <span className="text-sm">{t('calendar.multiple_tournaments_placeholder')}</span>
+          </div>
         </div>
       </div>
     );
   };
 
-  const EventCard = ({ event }: { event: any }) => {
+  const EventCard = ({ event }: { event: ProcessedEvent }) => {
     const linkPath = event.isGameday
       ? `/voistlused/${event.parentTournamentId}`
       : `/voistlused/${event.id}`;
@@ -303,7 +364,7 @@ export function TournamentsCalendar({ tournaments }: Props) {
             <h6 className="px-1 font-semibold">
               {event.name}
               {event.isGameday && event.order && (
-                <p className="font-normal">Voor {event.order}</p>
+                <p className="font-normal">{t('calendar.game_day')} {event.order}</p>
               )}
             </h6>
             <div className="bg-stone-100 border font-medium text-stone-700  inline-block  px-2 py-1 rounded-full text-sm capitalize">
@@ -341,94 +402,133 @@ export function TournamentsCalendar({ tournaments }: Props) {
 
   const renderThreeMonthView = () => {
     return (
-      <div className="space-y-6 ">
-        <div className="flex flex-col items-start justify-around gap-4 mb-8">
-          <div className="flex flex-col items-start gap-4">
-            <h5 className="font-medium">
-              {months[zoomStartMonth]} - {months[zoomStartMonth + 2]}
-            </h5>
-            <div className="flex items-center gap-2 ">
-              <Button
-                size="icon"
-                onClick={handlePrevMonths}
-                disabled={zoomStartMonth === 0}
-                className="bg-[#737373] hover:bg-stone-400 rounded-md disabled:opacity-50 border-2 border-[#5c5c5c]"
-              >
-                <ChevronLeft strokeWidth={2.5} />
-              </Button>
+      <div>
+        {/* Desktop view */}
+        <div className="hidden md:block space-y-6 ">
+          <div className="flex flex-col items-start justify-around gap-4 mb-8 ">
+            <div className="flex flex-col items-start gap-4">
+              <h5 className="font-medium">
+                {t("calendar.months." + months[zoomStartMonth].toLowerCase())} - {t('calendar.months.' + months[zoomStartMonth + 2].toLowerCase())}
+              </h5>
+              <div className="flex items-center gap-2 ">
+                <Button
+                  size="icon"
+                  onClick={handlePrevMonths}
+                  disabled={zoomStartMonth === 0}
+                  className="bg-[#737373] hover:bg-stone-400 rounded-md disabled:opacity-50 border-2 border-[#5c5c5c]"
+                >
+                  <ChevronLeft strokeWidth={2.5} />
+                </Button>
 
-              <Button
-                size="icon"
-                onClick={handleNextMonths}
-                disabled={zoomStartMonth >= 9}
-                className="bg-[#737373] hover:bg-stone-400  p-2 rounded-md disabled:opacity-50 border-2 border-[#5c5c5c]"
-              >
-                <ChevronRight strokeWidth={2.5} />
-              </Button>
+                <Button
+                  size="icon"
+                  onClick={handleNextMonths}
+                  disabled={zoomStartMonth >= 9}
+                  className="bg-[#737373] hover:bg-stone-400  p-2 rounded-md disabled:opacity-50 border-2 border-[#5c5c5c]"
+                >
+                  <ChevronRight strokeWidth={2.5} />
+                </Button>
 
-              <div className="flex-1 flex items-center ml-8 w-[400px]">
-                {months.map((month, index) => (
-                  <React.Fragment key={index}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          className={`h-6 w-6 rounded-full flex items-center justify-center cursor-pointer  ${
-                            index >= zoomStartMonth &&
-                            index < zoomStartMonth + 3
+                <div className="flex-1 flex items-center ml-8 w-[400px]">
+                  {months.map((month, index) => (
+                    <React.Fragment key={index}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={`h-6 w-6 rounded-full flex items-center justify-center cursor-pointer  ${index >= zoomStartMonth &&
+                              index < zoomStartMonth + 3
                               ? "bg-[#90D3FF] border-2 border-[#20B2C0]"
                               : "bg-[#E6E6E6] hover:bg-[#90D3FF] border-2 border-[#CBCBCB]"
-                          }`}
-                          onClick={() => handleMonthCircleClick(index)}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>{month}</TooltipContent>
-                    </Tooltip>
+                              }`}
+                            onClick={() => handleMonthCircleClick(index)}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>{month}</TooltipContent>
+                      </Tooltip>
 
-                    {index < 11 && <div className="h-0.5 flex-1 bg-gray-300" />}
-                  </React.Fragment>
-                ))}
+                      {index < 11 && <div className="h-0.5 flex-1 bg-gray-300" />}
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
+            </div>
+          </div>
+
+          {/* Month columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {visibleMonths.map((monthInfo) => {
+              const monthEvents = getEventsForMonth(
+                selectedYear,
+                monthInfo.index
+              );
+
+              return (
+                <div key={monthInfo.index} className="space-y-4 p-2">
+                  <h2 className="text-xl font-bold">
+                    {t('calendar.months.' + monthInfo.name.toLowerCase())}</h2>
+
+                  {/* Event cards for the month */}
+                  {monthEvents.length > 0 ? (
+                    <div className="space-y-8">
+                      {monthEvents.map((event) => (
+                        <EventCard key={event.id} event={event} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground text-sm p-2 ">
+                      {t('calendar.no_tournaments')}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <div
+            ref={mobileContainerRef}
+            className="px-2 relative min-h-[75vh] overflow-y-auto max-h-[75vh]"
+          >
+            <div className="space-y-6">
+              {months.map((month, index) => {
+                const monthEvents = getEventsForMonth(
+                  selectedYear,
+                  index
+                );
+
+                return (
+                  <div
+                    key={index}
+                    ref={el => monthRefs.current[index] = el}
+                    className={`${index === currentMonth && selectedYear === currentYear ? "scroll-mt-4" : ""}`}
+                  >
+                    <h6 className="font-semibold mb-2">{t('calendar.months.' + month.toLowerCase())}</h6>
+                    {monthEvents.length > 0 ? (
+                      <div className="space-y-8">
+                        {monthEvents.map((event) => (
+                          <EventCard key={event.id} event={event} />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-muted-foreground text-sm p-2">
+                        {t('calendar.no_tournaments')}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        {/* Month columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {visibleMonths.map((monthInfo) => {
-            const monthEvents = getEventsForMonth(
-              selectedYear,
-              monthInfo.index
-            );
-
-            return (
-              <div key={monthInfo.index} className="space-y-4 p-2">
-                <h2 className="text-xl font-bold">{monthInfo.name}</h2>
-
-                {/* Event cards for the month */}
-                {monthEvents.length > 0 ? (
-                  <div className="space-y-8">
-                    {monthEvents.map((event) => (
-                      <EventCard key={event.id} event={event} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-muted-foreground text-sm p-2 ">
-                    No events in {monthInfo.name}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
       </div>
     );
   };
 
   return (
     <div className=" w-full max-w-7xl mx-auto">
-      {/* Header with year selector and tabs */}
       <div className="flex items-center justify-between gap-4">
-        {/* Left side: Title and year selector */}
         <div className="flex items-center">
           <Select
             value={selectedYear.toString()}
@@ -447,7 +547,6 @@ export function TournamentsCalendar({ tournaments }: Props) {
           </Select>
         </div>
 
-        {/* Right side: View tabs */}
         <div>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-2 gap-1">
@@ -455,13 +554,13 @@ export function TournamentsCalendar({ tournaments }: Props) {
                 value="three-month"
                 className="data-[state=active]:bg-stone-700 rounded-[3px]"
               >
-                Kuud
+                {t('calendar.3_months')}
               </TabsTrigger>
               <TabsTrigger
                 value="year"
                 className="data-[state=active]:bg-stone-700 rounded-[3px]"
               >
-                Kogu aasta
+                {t('calendar.full_year')}
               </TabsTrigger>
             </TabsList>
           </Tabs>

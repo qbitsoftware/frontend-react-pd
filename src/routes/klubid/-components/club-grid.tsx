@@ -25,7 +25,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
   });
 
   return (
-    <div className="rounded-t-lg bg-white p-6 space-y-6">
+    <div className="rounded-t-lg p-6 space-y-6">
       <div className="relative md:w-1/4 md:col-span-3">
         <Input
           type="text"
@@ -47,7 +47,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
             className="flex flex-col h-full cursor-pointer"
           >
             <CardHeader className="flex-grow">
-              <CardTitle className="text-lg font-semibold text-center flex flex-row items-center gap-2">
+              <CardTitle className="text-lg font-semibold flex flex-row items-center justify-between gap-2">
                 {club.name}
                 <ChevronRight className="text-stone-700 h-6" />
               </CardTitle>

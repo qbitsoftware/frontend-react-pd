@@ -1,6 +1,6 @@
 export default function LauatenniseReeglid() {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <div className="container bg-white my-4 rounded-md mx-auto px-8 py-8 max-w-3xl">
         <h1 className="text-3xl font-bold mb-6 text-center">Lauatennise Reeglid</h1>
         <div className="space-y-6 mt-10 md:mt-20">
           <section>

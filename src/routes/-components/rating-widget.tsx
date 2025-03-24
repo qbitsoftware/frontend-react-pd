@@ -68,7 +68,7 @@ const RatingWidget = ({ users, isEmpty }: Props) => {
                 <TableHead className="px-6 py-3 text-left font-medium">PP</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="bg-white/60">
               {filteredUsers.map((user) => (
                 <TableRow
                   onClick={() => {

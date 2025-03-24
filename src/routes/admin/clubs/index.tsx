@@ -98,6 +98,7 @@ function RouteComponent() {
         }
       })
     } catch (error) {
+      void error;
       toast({
         title: "Error",
         description: t('admin.clubs.toast.club_created_error'),
@@ -121,6 +122,7 @@ function RouteComponent() {
         }
       })
     } catch (error) {
+      void error;
       toast({
         title: "Error",
         description: t("admin.clubs.toast.club_updated_error"),
@@ -145,6 +147,7 @@ function RouteComponent() {
         }
       })
     } catch (error) {
+      void error;
       toast({
         title: "Error",
         description: t('admin.clubs.toast.club_deleted_error'),

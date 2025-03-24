@@ -34,15 +34,15 @@ export default function Navbar() {
                 { name: t('navbar.menu.news.results'), href: `/uudised?category=results` },
             ]
         },
-        {
-            name: t('navbar.menu.eltl'),
-            href: '/eltl',
-            dropdownItems: [
-                { name: 'About Us', href: '/eltl/about' },
-                { name: 'History', href: '/eltl/history' },
-                { name: 'Board Members', href: '/eltl/board' },
-            ]
-        },
+        // {
+        //     name: t('navbar.menu.eltl'),
+        //     href: '/eltl',
+        //     dropdownItems: [
+        //         { name: 'About Us', href: '/eltl/about' },
+        //         { name: 'History', href: '/eltl/history' },
+        //         { name: 'Board Members', href: '/eltl/board' },
+        //     ]
+        // },
         {
             name: t('navbar.menu.competition'),
             href: '/voistlused',

@@ -31,11 +31,11 @@ const HomePageGrid = ({ tournaments, users, articles, dataStatus }: Props) => {
     <div className="max-w-[1440px] min-h-screen mx-auto md:px-4 lg:px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 my-8 mb-16 space-y-8 md:space-y-0">
         <div className="sm:col-span-2 md:col-span-7 flex flex-col ">
-          <WidgetWrapper heading={t("homepage.calendar.name")} addr="kalender">
+          <WidgetWrapper heading={t("homepage.calendar.name")} addr="voistlused">
             <div className="py-2 px-4 flex-grow" ref={newsRef}>
               <CalendarWidget
-                tournaments={tournaments}
-                isEmpty={dataStatus.tournamentsEmpty}
+                tournaments={tournaments || []}
+                isEmpty={false}
               />
             </div>
           </WidgetWrapper>

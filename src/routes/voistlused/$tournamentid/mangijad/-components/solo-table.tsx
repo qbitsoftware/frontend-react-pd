@@ -4,26 +4,28 @@ import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import React from 'react'
 import placeholderImg from "@/assets/placheolderImg.svg"
+import { useTranslation } from 'react-i18next'
 
 interface SoloTableProps {
   participants: Participant[] | null
 }
 
 const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
+  const { t } = useTranslation()
   return (
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
         <div className="rounded-md border h-full overflow-y-auto">
-                 <Table className="bg-white h-full ">
+          <Table className="bg-white h-full ">
             <TableHeader >
               <TableRow className='bg-[#F9F9FB]'>
-                <TableHead>Pilt</TableHead>
-                <TableHead>Nimi</TableHead>
-                <TableHead>Asetus Reitingus</TableHead>
-                <TableHead>Klass</TableHead>
-                <TableHead>Klubi</TableHead>
-                <TableHead>Sugu</TableHead>
-                <TableHead>ID</TableHead>
+                <TableHead>{t('competitions.participants.table.image')}</TableHead>
+                <TableHead>{t('competitions.participants.table.name')}</TableHead>
+                <TableHead>{t('competitions.participants.table.rating_placement')}</TableHead>
+                <TableHead>{t('competitions.participants.table.class')}</TableHead>
+                <TableHead>{t('competitions.participants.table.club')}</TableHead>
+                <TableHead>{t('competitions.participants.table.sex')}</TableHead>
+                <TableHead>{t('competitions.participants.table.id')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -48,7 +50,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
         </div>
       ) : (
         <div className=" rounded-lg p-8 text-center h-full flex items-center justify-center">
-          <p className="text-gray-800 text-lg">No participants found</p>
+          <p className="text-gray-800 text-lg">{t('competitions.participants.no_players')}</p>
         </div>
       )}
     </div>

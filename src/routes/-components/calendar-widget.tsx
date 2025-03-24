@@ -1,90 +1,200 @@
 import React, { useMemo } from 'react'
 import { Tournament } from '@/types/types';
-import { useRouter } from '@tanstack/react-router';
-import { cn } from "@/lib/utils"
+import { Link } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import SfumatoBackground from '@/components/sfumato/sfumatoBg';
 import { useTranslation } from 'react-i18next';
+import { formatDateRange, useTournamentEvents, ProcessedEvent } from '../voistlused/-components/calendar-utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 interface Props {
-  tournaments: Tournament[] | null;
+  tournaments: Tournament[];
   isEmpty: boolean;
+  isLoading?: boolean;
 }
 
-const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty  }) => {
-  const router = useRouter()
+const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = false }) => {
   const { t } = useTranslation()
+  const queryClient = useQueryClient();
 
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit'
-    }).replace(/\//g, '.')
+  const events = useTournamentEvents(tournaments, queryClient)
+
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    const now = new Date();
+    const upcoming = events
+      .filter(event => new Date(event.start_date) >= now)
+      .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+      .slice(0, 3);
+
+    const past = events
+      .filter(event => new Date(event.start_date) < now)
+      .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
+      .slice(0, 3);
+
+    return { upcomingEvents: upcoming, pastEvents: past };
+  }, [events]);
+
+  const EventCard = ({ event, isUpcoming }: { event: ProcessedEvent, isUpcoming: boolean }) => {
+    const linkPath = event.isGameday
+      ? `/voistlused/${event.parentTournamentId}`
+      : `/voistlused/${event.id}`;
+
+    const getMonthName = (dateString: string) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-GB', { month: 'long' });
+    };
+
+    return (
+      <Link to={linkPath} key={event.id}>
+        <div className="mb-3 relative flex flex-col  rounded-md ">
+          {isUpcoming ? (
+            <SfumatoBackground>
+              <div className="flex flex-row justify-between hover:bg-white/10 bg-white/30 items-center gap-2 p-2">
+                <h6 className="px-1 font-semibold w-2/3">
+                  {event.name}
+                  {event.isGameday && event.order && (
+                    <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
+                  )}
+                </h6>
+
+                <div className="flex items-center gap-2">
+                  <div className="text-sm text-stone-800">
+                    {getMonthName(event.start_date)}
+                    {event.end_date !== event.start_date &&
+                      new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth() &&
+                      ` - ${getMonthName(event.end_date)}`}
+                  </div>
+                  <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
+                    {
+                      formatDateRange(event.start_date, event.end_date).split(
+                        " - "
+                      )[0]
+                    }
+                  </div>
+                  {event.end_date !== event.start_date && (
+                    <>
+                      <span className="font-semibold">-</span>
+                      <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
+                        {
+                          formatDateRange(event.start_date, event.end_date).split(
+                            " - "
+                          )[1]
+                        }
+                      </div>
+                    </>
+                  )}
+
+                </div>
+              </div>
+            </SfumatoBackground>) : (<div className="flex flex-row justify-between bg-gray-200/40 hover:bg-gray-100 rounded-md items-center gap-2 p-2">
+              <h6 className="px-1 font-semibold w-2/3">
+                {event.name}
+                {event.isGameday && event.order && (
+                  <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
+                )}
+              </h6>
+
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-stone-800">
+                  {getMonthName(event.start_date)}
+                  {event.end_date !== event.start_date &&
+                    new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth() &&
+                    ` - ${getMonthName(event.end_date)}`}
+                </div>
+                <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
+                  {
+                    formatDateRange(event.start_date, event.end_date).split(
+                      " - "
+                    )[0]
+                  }
+                </div>
+                {event.end_date !== event.start_date && (
+                  <>
+                    <span className="font-semibold">-</span>
+                    <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
+                      {
+                        formatDateRange(event.start_date, event.end_date).split(
+                          " - "
+                        )[1]
+                      }
+                    </div>
+                  </>
+                )}
+
+              </div>
+            </div>)
+          }
+        </div>
+      </Link>
+    );
   };
 
-  const { upcomingTournaments, pastTournaments } = useMemo(() => {
-    if (!tournaments) return { upcomingTournaments: [], pastTournaments: [] };
-
-    const now = new Date();
-
-    const upcoming = tournaments
-      .filter(tournament => new Date(tournament.start_date) >= now)
-      .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
-      .slice(0, 4);
-
-
-    const past = tournaments
-      .filter(tournament => new Date(tournament.start_date) < now)
-      .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
-      .slice(0, 4);
-
-    return { upcomingTournaments: upcoming, pastTournaments: past };
-  }, [tournaments]);
-
-  const TournamentCard = ({ tournament, hasEnded }: { tournament: Tournament, hasEnded: boolean }) => (
-    <SfumatoBackground>
-      <div
-        key={tournament.id}
-        className={cn(`relative rounded-tl-[16px] rounded-tr-[6px] rounded-br-[6px] rounded-bl-[2px] border-l-4 border-[#90D3FF] group flex flex-col  hover:bg-[#white] py-4 px-6 shadow-eventCard cursor-pointer text-stone-800 ${hasEnded && "shadow-sm bg-[#EEEFF2] px-4 border-none rounded-[6px]"} transition-shadow`)}
-        onClick={() => router.navigate({ to: "/voistlused/" + tournament.id })}
-      >
-
-        <h6 className={`font-bold flex flex-col text-stone-800 ${hasEnded && "font-medium"}`}>
-          <span className="group-hover:underline">{tournament.name}</span>
-        </h6>
-        <span className="font-medium">{formatDate(tournament.start_date)}</span>
-
-
+  // Loading skeleton for event cards
+  const EventCardSkeleton = ({ isUpcoming }: { isUpcoming: boolean }) => (
+    <div className="mb-3 relative flex flex-col shadow-eventCard rounded-md overflow-hidden">
+      <div className={`flex flex-row justify-between items-center gap-2 p-2 ${isUpcoming ? 'bg-white/30' : 'bg-gray-200/40'}`}>
+        <div className="space-y-2 w-2/3">
+          <Skeleton className="h-5 w-4/5" />
+          <Skeleton className="h-4 w-3/5" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-8 w-12" />
+          <Skeleton className="h-8 w-12" />
+        </div>
       </div>
-    </SfumatoBackground>
+    </div>
   );
 
-  if (isEmpty) {
+  // Check loading state first
+  if (isLoading) {
+    return (
+      <div className="grid md:grid-cols-2 gap-8 px-2">
+        <div className="space-y-4">
+          <h6 className="font-medium text-stone-800/80">{t('calendar.upcoming')}</h6>
+          <div className="space-y-2">
+            {[...Array(3)].map((_, index) => (
+              <EventCardSkeleton key={`upcoming-skeleton-${index}`} isUpcoming={true} />
+            ))}
+          </div>
+        </div>
+        <div className="space-y-4">
+          <h6 className="font-medium text-stone-800/80">{t("calendar.finished")}</h6>
+          <div className="space-y-2">
+            {[...Array(3)].map((_, index) => (
+              <EventCardSkeleton key={`past-skeleton-${index}`} isUpcoming={false} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only check isEmpty if not in loading state
+  if (!isLoading && isEmpty) {
     return (
       <div className='border-2 border-dashed rounded-md py-12 px-8'>
-          <p className="pb-1 text-center font-medium text-stone-700">{t("calendar.no_tournaments")}</p>
+        <p className="pb-1 text-center font-medium text-stone-700">{t("calendar.no_tournaments")}</p>
       </div>
     )
   }
 
   return (
-    <div className="grid md:grid-cols-2 gap-4 px-2">
-      <div className="space-y-4 ">
+    <div className="grid md:grid-cols-2 gap-8 px-2">
+      <div className="space-y-4">
         <h6 className="font-medium text-stone-800/80">{t('calendar.upcoming')}</h6>
 
         <div className="space-y-2">
-          {upcomingTournaments.length > 0 ? (
-            upcomingTournaments.map(tournament => (
-
-              <TournamentCard key={tournament.id} tournament={tournament} hasEnded={false} />
-
+          {upcomingEvents.length > 0 ? (
+            upcomingEvents.map(event => (
+              <EventCard key={event.id} event={event} isUpcoming={true} />
             ))
           ) : (
-            <div className="flex flex-col bg-[#F0F4F7]/60 py-2 px-4 rounded-sm text-stone-800">
-              <p className="text-center">Pole</p>
-            </div>
+            [1, 2, 3].map((_, index) => (
+              <EventCardSkeleton key={`past-skeleton-${index}`} isUpcoming />
+            ))
           )}
         </div>
       </div>
@@ -92,14 +202,14 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty  }) => {
       <div className="space-y-4">
         <h6 className="font-medium text-stone-800/80">{t("calendar.finished")}</h6>
         <div className="space-y-2">
-          {pastTournaments.length > 0 ? (
-            pastTournaments.map(tournament => (
-              <TournamentCard key={tournament.id} tournament={tournament} hasEnded={true} />
+          {pastEvents.length > 0 ? (
+            pastEvents.map(event => (
+              <EventCard key={event.id} event={event} isUpcoming={false} />
             ))
           ) : (
-            <div className="flex flex-col bg-[#F0F4F7]/60 py-2 px-4 rounded-sm text-stone-800">
-              <p className="text-center">{t("calendar.no_tournaments")}</p>
-            </div>
+            [1, 2, 3].map((_, index) => (
+              <EventCardSkeleton key={`past-skeleton-${index}`} isUpcoming={false} />
+            ))
           )}
         </div>
       </div>

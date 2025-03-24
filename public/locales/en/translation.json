@@ -17,7 +17,7 @@
         "results": "Results"
       },
       "eltl": "ELTL",
-      "competition": "Competitions",
+      "competition": "Calendar",
       "clubs": "Clubs",
       "young_sport": "Youths",
       "ratings": "Ranking",
@@ -62,7 +62,8 @@
     },
     "calendar": {
       "name": "Calendar",
-      "view_all": "View all"
+      "view_all": "View all",
+      "no_tournaments": "No tournaments scheduled"
     },
     "ranking": {
       "name": "Ranking",
@@ -102,6 +103,26 @@
     "dates": "Dates",
     "location": "Location",
     "tables": "Total tables",
+    "bracket": "Bracket",
+    "play_off": "Play-off",
+    "participants": {
+      "search": "Search",
+      "title": "Participants",
+      "no_players_found_search": "No players found matching ",
+      "no_players": "No participants yet",
+      "team_players": "Team players",
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "team": "Team",
+        "player_count": "Players",
+        "rating_placement": "Placement in rating",
+        "class": "Class",
+        "club": "Club",
+        "sex": "Sex",
+        "id": "ID"
+      }
+    },
     "results": {
       "finished": "Finished"
     },
@@ -152,6 +173,10 @@
     "search_placeholder": "Find a tournament...",
     "upcoming": "Upcoming",
     "finished": "Finished",
+    "3_months": "3M",
+    "full_year": "FY",
+    "game_day": "Gameday",
+    "multiple_tournaments_placeholder": "More than 1 tournament",
     "months": {
       "january": "January",
       "february": "February",
@@ -610,5 +635,18 @@
       "retry": "Retry",
       "home": "Home"
     }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "description": "Check out the latest images from our tournaments",
+    "no_images": "No images",
+    "no_images_subtitle": "Currently there are no images"
+  },
+  "sponsors": {
+    "title": "Sponsors",
+    "description": "Our sponsors"
+  },
+  "media": {
+    "no_content": "No media content available"
   }
 }

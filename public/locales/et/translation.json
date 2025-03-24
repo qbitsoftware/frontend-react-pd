@@ -17,7 +17,7 @@
         "results": "Tulemused"
       },
       "eltl": "ELTL",
-      "competition": "Võistlused",
+      "competition": "Kalender",
       "clubs": "Klubid",
       "young_sport": "Noortesport",
       "ratings": "Reiting",
@@ -62,7 +62,8 @@
     },
     "calendar": {
       "name": "Kalender",
-      "view_all": "Vaata kõiki"
+      "view_all": "Vaata kõiki",
+      "no_tournaments": "Ühtegi võistlust tulemas ei ole"
     },
     "ranking": {
       "name": "Edetabel",
@@ -102,6 +103,26 @@
     "dates": "Kuupäevad",
     "location": "Toimumiskoht",
     "tables": "Laudu kokku",
+    "bracket": "Tabelid",
+    "play_off": "Koha mängud",
+    "participants": {
+      "search": "Otsi",
+      "title": "Mängijad",
+      "no_players_found_search": "Mängijaid ei leitud - ",
+      "no_players": "Mängijaid pole",
+      "team_players": "Tiimi mängijad",
+      "table": {
+        "image": "Pilt",
+        "name": "Nimi",
+        "team": "Meeskond",
+        "player_count": "Mängijate arv",
+        "rating_placement": "Asetus reitingus",
+        "class": "Klass",
+        "club": "Klubi",
+        "sex": "Sugu",
+        "id": "ID"
+      }
+    },
     "results": {
       "finished": "Lõppenud"
     },
@@ -152,6 +173,10 @@
     "search_placeholder": "Otsi turniiri...",
     "upcoming": "Tulemas",
     "finished": "Lõppenud",
+    "3_months": "Kuude lõikes",
+    "game_day": "Mängupäev",
+    "full_year": "Aasta lõikes",
+    "multiple_tournaments_placeholder": "Rohkem kui 1 turniir",
     "months": {
       "january": "Jaanuar",
       "february": "Veebruar",
@@ -610,5 +635,18 @@
       "retry": "Proovi uuesti",
       "home": "Kodulehele"
     }
+  },
+  "gallery": {
+    "title": "Galerii",
+    "description": "Vaadake meie galeriid",
+    "no_images": "Pilte pole",
+    "no_images_subtitle": "Hetkel pole galeriis ühtegi pilti."
+  },
+  "sponsors": {
+    "title": "Sponsors",
+    "description": "Meie sponsorid"
+  },
+  "media": {
+    "no_content": "Meedia puudub"
   }
 }

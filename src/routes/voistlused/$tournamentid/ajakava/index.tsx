@@ -37,7 +37,6 @@ function RouteComponent() {
   const [activeClass, setActiveClass] = useState<string>("Kõik klassid")
   const { t } = useTranslation()
 
-  console.log(matchesData)
 
   return (
     <>

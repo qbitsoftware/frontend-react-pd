@@ -45,7 +45,7 @@ const SfumatoBackground = ({ children, className = '' }: SfumatoBackgroundProps)
   }, []);
 
   return (
-    <div className={`relative w-full h-full overflow-hidden rounded-xl ${className}`}>
+    <div className={`relative w-full h-full overflow-hidden rounded-md shadow-eventCard ${className}`}>
       {/* Sfumato background */}
       <div className="absolute inset-0 w-full h-full bg-gray-50">
         {blobs.map(blob => (

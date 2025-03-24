@@ -9,7 +9,7 @@ interface GroupProps {
 
 const Group: React.FC<GroupProps> = ({ group }) => {
     return (
-        <div className="bg-[#F9F8F8] w-full rounded-md py-6 ">
+        <div className=" w-full rounded-md py-6 ">
             <div className="flex justify-between">
                 <div className="flex gap-6 items-center">
                     <h6 className="px-1 font-semibold">{group.class}</h6>

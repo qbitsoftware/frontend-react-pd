@@ -110,11 +110,11 @@ export function SportsTimetable({ tournaments }: Props) {
             }
 
             // Calculate zoom end days
-            let zoomEndDays = zoomStartDays + zoomTotalDays
+            const zoomEndDays = zoomStartDays + zoomTotalDays
 
             // Adjust positions relative to zoom window
-            let adjustedStartPosition = Math.max(startPosition, zoomStartDays) - zoomStartDays
-            let adjustedEndPosition = Math.min(endPosition, zoomEndDays) - zoomStartDays
+            const adjustedStartPosition = Math.max(startPosition, zoomStartDays) - zoomStartDays
+            const adjustedEndPosition = Math.min(endPosition, zoomEndDays) - zoomStartDays
 
             // Convert to percentage for positioning within zoom window
             const left = (adjustedStartPosition / zoomTotalDays) * 100
@@ -130,7 +130,7 @@ export function SportsTimetable({ tournaments }: Props) {
                     alignItems: 'center',
                 }
             } else {
-                let minWidth = 2
+                const minWidth = 2
                 return {
                     left: `${left}%`,
                     width: `${Math.max(minWidth, width)}%`,

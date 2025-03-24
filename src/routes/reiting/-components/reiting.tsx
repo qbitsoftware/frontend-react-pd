@@ -102,7 +102,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
 
   return (
     <div className="py-4">
-      <div className="lg:rounded-lg bg-white px-4 lg:px-12 py-6">
+      <div className="lg:rounded-lg px-4 lg:px-12 py-6">
         <div className="space-y-4">
           <h2 className="font-bold">
             {modifyTitleDependingOnFilter(t, showCombined, sex, ageClass)}
@@ -184,7 +184,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                   <TableRow
                     onClick={() => handleModalOpen(user)}
                     key={user.id}
-                    className="group cursor-pointer odd:bg-gradient-to-r from-gray-100/50 to-white even:bg-white transition-colors"
+                    className="group cursor-pointer bg-white transition-colors"
                   >
                     <TableCell className="md:px-6 py-3 text-sm font-bold">
                       {user.rate_order}

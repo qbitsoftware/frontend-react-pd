@@ -14,8 +14,9 @@ interface GroupBracketProps {
 }
 
 export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketProps) {
-    const {t} = useTranslation()
-    
+    const { t } = useTranslation()
+    const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+
     if (!brackets.round_robin || brackets.round_robin.length !== 8) {
         return (
             <div className="flex items-center justify-center h-64 w-full">
@@ -24,8 +25,6 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
         );
     }
 
-    const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-    // const [selectedProtocol, setSelectedProtocol] = useState<MatchWithTeamAndSets | null>(null)
 
     const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
 
@@ -47,16 +46,6 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
             onMatchSelect(match)
         }
     }
-
-    // const handleClick = (match: MatchWithSets) => {
-    //     setIsOpen(true)
-    //     if (match && statisticsData && statisticsData.data) {
-    //         const selected = statisticsData.data.filter((protocol) => protocol.team_match.match_id == match.match.ID)
-    //         if (selected) {
-    //             setSelectedProtocol(selected[0])
-    //         }
-    //     }
-    // }
 
     const renderMatchCell = (p1_id: string, p2_id: string) => {
         const find_matches = findMatches(p1_id, p2_id);
@@ -171,9 +160,6 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
                 </div>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
-            {/* {selectedProtocol && players &&
-                <StatisticsDialog index={999} protocol={selectedProtocol} players={players.data} isOpen={isOpen} setIsOpen={setIsOpen} />
-            } */}
         </div>
     )
 }

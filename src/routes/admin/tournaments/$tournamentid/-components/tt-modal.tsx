@@ -79,7 +79,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const [table, setTableNumber] = useState<number>(0);
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
-  const [_, setActiveTab] = useState<string>("players")
+  // const [_, setActiveTab] = useState<string>("players")
 
   const prevValuesRef = useRef({
     captainTeam1: match.match.extra_data.captain_a || "",
@@ -562,7 +562,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
         <Tabs
           defaultValue="players"
           className="flex-grow flex flex-col min-h-0"
-          onValueChange={setActiveTab}
+          // onValueChange={setActiveTab}
         >
           <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
             <TabsTrigger

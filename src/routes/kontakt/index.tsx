@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Home, Link, Mail, Phone } from 'lucide-react'
+import { Home, Mail, Landmark, Phone } from 'lucide-react'
+import {useEffect} from "react"
 
 export const Route = createFileRoute('/kontakt/')({
   component: RouteComponent,
@@ -11,50 +8,49 @@ export const Route = createFileRoute('/kontakt/')({
 })
 
 function RouteComponent() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
   return (
     <div className="w-full mx-auto lg:px-4 max-w-[1440px]">
-      <div className="py-4">
-        <div className="lg:rounded-lg bg-white px-4 sm:px-6 md:px-12 py-6 space-y-4">
-          <h2 className="font-bold">Kontakt</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <Card>
-              <CardHeader>
-                <h4 className="font-normal">Võta ühendust</h4>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                    <Input id="name" placeholder="Your Name" />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                    <Input id="email" type="email" placeholder="your@email.com" />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                    <Textarea id="message" placeholder="Your message here..." />
-                  </div>
-                  <Button type="submit">Send Message</Button>
-                </form>
-              </CardContent>
-            </Card>
+      <div className="py-4 pb-16">
+        <div className="lg:rounded-lg  px-4 sm:px-6 md:px-12 py-6 space-y-4">
+          <h2 className="font-bold mb-8">Kontakt</h2>
+          <div className="flex items-start gap-3">
+            <div className="mt-1">
+              <Home className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">Eesti Lauatenniseliit</p>
+              <p className="text-stone-800">Laki 3</p>
+              <p className="text-stone-800">10621 Tallinn</p>
+              <p className="text-stone-800">Eesti</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Phone className="h-5 w-5 text-primary" />
+            <p>+372 514 3454</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Mail className="h-5 w-5 text-primary" />
+            <a href="mailto:eltl@lauatennis.ee" className="text-primary hover:underline cursor-pointer">
+            eltl@lauatennis.ee            </a>
+          </div>
 
-            <Card>
-              <CardHeader>
-              <h4 className="font-normal">Kontaktandmed</h4>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className='flex gap-2'><strong><Home /></strong> Eesti Lauatenniseliit<br/>
-                  Laki 3<br/>
-                  10621 Tallinn<br/>
-                  Eesti<br/>
-                </p>
-                <p className='flex gap-2'><strong><Phone/></strong> +372 514 3454</p>
-                <p className='flex gap-2'><strong><Mail/></strong> info@estoniantabletennis.ee</p>
-                <p className='flex gap-2'><strong><Link/></strong>www.eltl.ee</p>
-              </CardContent>
-            </Card>
+          <div className="flex items-start -ml-1 justify-start gap-3">
+            <Landmark/>
+            <div>
+              <p>Pank: AS SEB Pank</p>
+              <p>Aadress: Tornimäe 2, 15010 Tallinn, Estonia</p>
+              <p>SWIFT (BIC): EEUHEE2X
+              </p>
+              <p>Account/IBAN: EE4310 10002047681001
+              </p>
+
+            </div>
           </div>
         </div>
       </div>

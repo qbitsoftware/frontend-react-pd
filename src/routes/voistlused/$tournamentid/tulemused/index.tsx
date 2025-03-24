@@ -82,8 +82,8 @@ function RouteComponent() {
           <h5 className='font-bold mb-4 md:mb-8 text-center md:text-left'>{t('competitions.navbar.results')}</h5>
           <ul className='pb-8 flex flex-col gap-2'>
             {tablesWithParticipants.map((table) => (
-              <Link key={table.id} href={`/voistlused/${tournament.id}/tulemused/${table.id}`}>
-                <li className='md:w-2/3 bg-white flex flex-row items-center justify-between border border-stone-100 px-4 md:pr-12 md:pl-6 py-4 rounded-sm shadow-scheduleCard cursor-pointer hover:bg-[#F9F9FB]'>
+              <Link key={table.id} href={`/voistlused/${tournament.id}/tulemused/${table.id}`} className="md:w-2/3">
+                <li className=' bg-white flex flex-row items-center justify-between border border-stone-100 px-4 md:pr-12 md:pl-6 py-4 rounded-sm shadow-scheduleCard cursor-pointer hover:bg-[#F9F9FB]'>
                   <div className='flex flex-row items-center'>
                     <div className='flex flex-row items-center gap-2 border border-stone-100 rounded-sm p-1'>
                       <UsersRound className='h-4 w-4 md:h-6 md:w-6' />

@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Bracket, TournamentTable } from "@/types/types";
 import SingleElimBracket from "./single_elim";
 import DoubleElimBracket from "./double_elim";
-import { CalculateSVGHeight } from "@/lib/utils";
+import { CalculateSVGHeight, parseTableType } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Separator } from "./ui/separator";
 
@@ -71,7 +71,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
             </p>
           </div>
           <div className="z-10">
-            <h2 className="text-xs">{tournament_table.type}</h2>
+            <h2 className="text-xs">{parseTableType(tournament_table.type)}</h2>
           </div>
           <Separator className="my-1 z-10" />
           <Tabs

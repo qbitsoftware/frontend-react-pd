@@ -1,3 +1,4 @@
+import i18n from "@/i18n"
 import { User, TableMatch, ContentNode, TextNode, ComplexNode, YooptaContent, ContentBlock, ContentBlockWithText, ContentBlockWithImage } from "@/types/types"
 import { YooptaContentValue } from "@yoopta/editor"
 import { type ClassValue, clsx } from "clsx"
@@ -128,6 +129,7 @@ export const formatDateToNumber = (dateString: string) => {
 
     return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
   } catch (error) {
+    void error;
     return dateString;
   }
 };
@@ -148,7 +150,7 @@ export const formatDateTimeNew = (dateTime: string) => {
 export const formatDateTimeBracket = (dateTime: string) => {
   const date = new Date(dateTime);
 
-  return date.toLocaleString('en-GB', {
+  return date.toLocaleString(i18n.language, {
     day: 'numeric',
     month: 'long',
     hour: '2-digit',

@@ -2,7 +2,7 @@
 
 import { Link, useParams, useLocation } from "@tanstack/react-router";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, formatDateRange, formatDateString } from "@/lib/utils";
+import { cn, formatDateString } from "@/lib/utils";
 import { useTournament } from "./tournament-provider";
 import { TournamentTable } from "@/types/types";
 import { useTranslation } from "react-i18next";
