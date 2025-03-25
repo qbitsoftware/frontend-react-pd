@@ -62,6 +62,7 @@
     "title_button": "Uuri võistlusi",
     "description": "Eesti lauatennise spordi tugevdamine",
     "upcoming_tournaments": "Tulevased võistlused",
+    "no_upcoming_tournaments": "Ühtegi võistlust tulemas pole",
     "latest_news": "Viimased uudised",
     "details": "Üksikasjad",
     "tournaments": {
@@ -71,7 +72,9 @@
     },
     "latest_matches": {
       "name": "Viimased kohtumised",
-      "read_more": "Loe lähemalt"
+      "read_more": "Loe lähemalt",
+      "error": "Viimaseid kohtumisi ei leitud",
+      "no_matches": "Viimaseid kohtumisi ei leitud"
     },
     "calendar": {
       "name": "Kalender",

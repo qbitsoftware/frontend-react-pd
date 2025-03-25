@@ -1,19 +1,19 @@
 import { useRef } from "react";
 import WidgetWrapper from "./widget-wrapper";
-import NewsWidget from "./news-widget";
 import CalendarWidget from "./calendar-widget";
 import RatingWidget from "./rating-widget";
 import Adboard from "./adboard";
-import { Blog, Tournament, UserNew } from "@/types/types";
+import { Tournament, UserNew } from "@/types/types";
 import { useTranslation } from "react-i18next";
+import LatestMatchWidget from "./matches-widget";
 
 interface Props {
   tournaments: Tournament[] | null;
   users: UserNew[] | null;
-  articles: Blog[] | null;
+  // articles: Blog[] | null;
 }
 
-const HomePageGrid = ({ tournaments, users, articles }: Props) => {
+const HomePageGrid = ({ tournaments, users }: Props) => {
   const { t } = useTranslation();
   const newsRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -33,10 +33,10 @@ const HomePageGrid = ({ tournaments, users, articles }: Props) => {
         <div className="sm:col-span-2 md:col-span-5 flex flex-col">
           <WidgetWrapper
             heading={t("homepage.latest_matches.name")}
-            addr="uudised"
+            addr=""
           >
             <div className="py-2 px-4 flex-grow" ref={calendarRef}>
-              <NewsWidget blogs={articles} />
+              <LatestMatchWidget tournaments={tournaments} />
             </div>
           </WidgetWrapper>
         </div>

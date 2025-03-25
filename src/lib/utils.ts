@@ -1,3 +1,4 @@
+import i18n from "@/i18n"
 import { User, TableMatch, ContentNode, TextNode, ComplexNode, YooptaContent, ContentBlock, ContentBlockWithText, ContentBlockWithImage } from "@/types/types"
 import { YooptaContentValue } from "@yoopta/editor"
 import { type ClassValue, clsx } from "clsx"
@@ -160,7 +161,7 @@ export const formatDateToNumber = (dateString: string) => {
 export const formatDate = (time: string) => {
   const date = new Date(time);
 
-  const formattedDate = date.toLocaleDateString("et-EE", {
+  const formattedDate = date.toLocaleDateString(i18n.language, {
     day: "numeric",
     month: "short"
   });
