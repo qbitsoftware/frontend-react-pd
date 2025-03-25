@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import SfumatoBackground from '@/components/sfumato/sfumatoBg';
 import { useTranslation } from 'react-i18next';
-import { formatDateRange, useTournamentEvents, ProcessedEvent } from '../voistlused/-components/calendar-utils';
+import { formatDateRange, useTournamentEvents, ProcessedEvent, getAbbreviatedMonth } from '../voistlused/-components/calendar-utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
 
@@ -14,7 +14,7 @@ interface Props {
   isLoading?: boolean;
 }
 
-const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = false }) => {
+const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient();
 
@@ -22,6 +22,10 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = fal
   const events = useTournamentEvents(tournaments, queryClient)
 
   const { upcomingEvents, pastEvents } = useMemo(() => {
+    if (isLoading || !events.length) {
+      return { upcomingEvents: [], pastEvents: [] };
+    }
+
     const now = new Date();
     const upcoming = events
       .filter(event => new Date(event.start_date) >= now)
@@ -41,17 +45,12 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = fal
       ? `/voistlused/${event.parentTournamentId}`
       : `/voistlused/${event.id}`;
 
-    const getMonthName = (dateString: string) => {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-GB', { month: 'long' });
-    };
-
     return (
       <Link to={linkPath} key={event.id}>
-        <div className="mb-3 relative flex flex-col  rounded-md ">
+        <div className="mb-3 relative flex flex-col rounded-md ">
           {isUpcoming ? (
             <SfumatoBackground>
-              <div className="flex flex-row justify-between hover:bg-white/10 bg-white/30 items-center gap-2 p-2">
+              <div className="flex flex-row justify-between hover:bg-white/10 bg-white/30 items-start gap-2 p-2">
                 <h6 className="px-1 font-semibold w-2/3">
                   {event.name}
                   {event.isGameday && event.order && (
@@ -60,35 +59,31 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = fal
                 </h6>
 
                 <div className="flex items-center gap-2">
-                  <div className="text-sm text-stone-800">
-                    {getMonthName(event.start_date)}
-                    {event.end_date !== event.start_date &&
-                      new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth() &&
-                      ` - ${getMonthName(event.end_date)}`}
-                  </div>
-                  <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
-                    {
-                      formatDateRange(event.start_date, event.end_date).split(
-                        " - "
-                      )[0]
-                    }
+                  <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
+                    <div className="text-xs text-center ">
+                      {getAbbreviatedMonth(event.start_date)}
+                    </div>
+                    {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
                   </div>
                   {event.end_date !== event.start_date && (
                     <>
                       <span className="font-semibold">-</span>
-                      <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
-                        {
-                          formatDateRange(event.start_date, event.end_date).split(
-                            " - "
-                          )[1]
-                        }
+                      <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
+                        <div className="text-xs text-center">
+                          {event.end_date !== event.start_date &&
+                            new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
+                            ? getAbbreviatedMonth(event.end_date)
+                            : getAbbreviatedMonth(event.start_date)}
+                        </div>
+                        {formatDateRange(event.start_date, event.end_date).split(" - ")[1]}
                       </div>
                     </>
                   )}
-
                 </div>
               </div>
-            </SfumatoBackground>) : (<div className="flex flex-row justify-between bg-gray-200/40 hover:bg-gray-100 rounded-md items-center gap-2 p-2">
+            </SfumatoBackground>
+          ) : (
+            <div className="flex flex-row justify-between bg-gray-200/40 hover:bg-gray-100 rounded-md items-start gap-2 p-2 ">
               <h6 className="px-1 font-semibold w-2/3">
                 {event.name}
                 {event.isGameday && event.order && (
@@ -97,35 +92,29 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = fal
               </h6>
 
               <div className="flex items-center gap-2">
-                <div className="text-sm text-stone-800">
-                  {getMonthName(event.start_date)}
-                  {event.end_date !== event.start_date &&
-                    new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth() &&
-                    ` - ${getMonthName(event.end_date)}`}
-                </div>
-                <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
-                  {
-                    formatDateRange(event.start_date, event.end_date).split(
-                      " - "
-                    )[0]
-                  }
+                <div className="px-2 py-1 bg-white text-center font-bold border-t border-red-600 rounded-t-[2px]  text-stone-800 shadow-sm">
+                  <div className="text-xs text-center text-stone-800">
+                    {getAbbreviatedMonth(event.start_date)}
+                  </div>
+                  {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
                 </div>
                 {event.end_date !== event.start_date && (
                   <>
                     <span className="font-semibold">-</span>
-                    <div className="px-2 py-1 bg-white font-bold border-t border-red-600 rounded-t-[2px]">
-                      {
-                        formatDateRange(event.start_date, event.end_date).split(
-                          " - "
-                        )[1]
-                      }
+                    <div className="px-2 py-1 bg-white text-center font-bold border-t border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
+                      <div className="text-xs text-center text-stone-800">
+                        {event.end_date !== event.start_date &&
+                          new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
+                          ? getAbbreviatedMonth(event.end_date)
+                          : getAbbreviatedMonth(event.start_date)}
+                      </div>
+                      {formatDateRange(event.start_date, event.end_date).split(" - ")[1]}
                     </div>
                   </>
                 )}
-
               </div>
-            </div>)
-          }
+            </div>
+          )}
         </div>
       </Link>
     );
@@ -217,4 +206,4 @@ const CalendarWidget: React.FC<Props> = ({ tournaments, isEmpty, isLoading = fal
   )
 }
 
-export default CalendarWidget
+export default React.memo(CalendarWidget)

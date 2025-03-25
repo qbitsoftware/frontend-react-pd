@@ -49,6 +49,7 @@ const formSchema = z.object({
   location: z.string().min(1, { message: "Location is required" }),
   information: z.any(),
   private: z.boolean(),
+  calc_rating: z.boolean(),
 })
 
 export type TournamentFormValues = z.infer<typeof formSchema>
@@ -80,6 +81,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         category: "",
         information: "",
         private: false,
+        calc_rating: false,
       },
   })
 
@@ -172,7 +174,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
 
       <Card className="w-full border-none shadow-none">
         <CardHeader className="px-0">
-          
+
           <CardTitle className="text-lg">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
@@ -321,6 +323,25 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="calc_rating"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">{t("admin.tournaments.create_tournament.private")}</FormLabel>
+                      <FormDescription>
+                        {t("admin.tournaments.create_tournament.private_description")}
+                        SEE ON RATING JAOKS HETKEL
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="private"

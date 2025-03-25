@@ -69,7 +69,9 @@ export const UseGetTournamentMatches = (tournament_id: number) => {
                 withCredentials: true
             })
             return data;
-        }
+        },
+        staleTime: 5 * 60 * 1000, 
+        gcTime: 30 * 60 * 1000,
     })
 }
 

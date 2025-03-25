@@ -25,6 +25,8 @@ export function UseGetTournamentTables(tournament_id: number) {
             })
             return data;
         },
+        staleTime: 5 * 60 * 1000, 
+        gcTime: 30 * 60 * 1000,
     });
 }
 
@@ -36,7 +38,9 @@ export const UseGetTournamentTable = (tournament_id: number, tournament_table_id
                 withCredentials: true
             })
             return data;
-        }
+        },
+        staleTime: 5 * 60 * 1000, 
+        gcTime: 30 * 60 * 1000,
     })
 }
 

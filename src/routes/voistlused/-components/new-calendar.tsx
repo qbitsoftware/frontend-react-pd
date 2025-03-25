@@ -20,7 +20,8 @@ import {
   formatDateRange,
   useTournamentEvents,
   formatDate,
-  ProcessedEvent
+  ProcessedEvent, 
+  getAbbreviatedMonth
 } from "./calendar-utils";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -359,43 +360,37 @@ export function TournamentsCalendar({ tournaments }: Props) {
 
     return (
       <Link to={linkPath} key={event.id}>
-        <div className="mb-3 bg-white relative flex flex-col shadow-eventCard rounded-sm">
-          <div className="flex flex-col justify-start items-start gap-2 p-2 w-2/3">
-            <h6 className="px-1 font-semibold">
-              {event.name}
-              {event.isGameday && event.order && (
-                <p className="font-normal">{t('calendar.game_day')} {event.order}</p>
-              )}
-            </h6>
-            <div className="bg-stone-100 border font-medium text-stone-700  inline-block  px-2 py-1 rounded-full text-sm capitalize">
-              {event.category}
-            </div>
-          </div>
+        <div className="mb-3 flex flex-row justify-between hover:bg-white/10 bg-white/50 items-start gap-2 p-2">
+                <h6 className="px-1 font-semibold w-2/3">
+                  {event.name}
+                  {event.isGameday && event.order && (
+                    <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
+                  )}
+                </h6>
 
-          <div className="absolute right-2 top-2">
-            <div className="flex items-center gap-2">
-              <div className="px-2 py-1 bg-gray-100 font-bold border-t border-red-600 rounded-t-[2px]">
-                {
-                  formatDateRange(event.start_date, event.end_date).split(
-                    " - "
-                  )[0]
-                }
-              </div>
-              {event.end_date !== event.start_date && (
-                <>
-                  <span className=" font-semibold">-</span>
-                  <div className="px-2 py-1 bg-gray-100 font-bold border-t border-red-600 rounded-t-[2px]">
-                    {
-                      formatDateRange(event.start_date, event.end_date).split(
-                        " - "
-                      )[1]
-                    }
+                <div className="flex items-center gap-2">
+                  <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
+                    <div className="text-xs text-center ">
+                      {getAbbreviatedMonth(event.start_date)}
+                    </div>
+                    {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
                   </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+                  {event.end_date !== event.start_date && (
+                    <>
+                      <span className="font-semibold">-</span>
+                      <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800">
+                        <div className="text-xs text-center">
+                          {event.end_date !== event.start_date &&
+                            new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
+                            ? getAbbreviatedMonth(event.end_date)
+                            : getAbbreviatedMonth(event.start_date)}
+                        </div>
+                        {formatDateRange(event.start_date, event.end_date).split(" - ")[1]}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
       </Link>
     );
   };
