@@ -82,7 +82,7 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
             ))
           ) : (
             <div className="flex flex-col bg-[#F0F4F7]/60 py-2 px-4 rounded-sm text-stone-800">
-              <p className="text-center">Pole</p>
+              <p className="text-center">{t("homepage.no_upcoming_tournaments")}</p>
             </div>
           )}
         </div>
