@@ -207,6 +207,13 @@
     "login": "Logi sisse",
     "login_progress": "Sisselogimine..."
   },
+  "tournament_info": {
+    "category": "Kategooria",
+    "date": "Kuupäev",
+    "location": "Asukoht",
+    "brackets": "Tabeleid",
+    "additional_information": "Additional information"
+  },
   "register": {
     "form": {
       "heading": "Registreeri mängijaks",

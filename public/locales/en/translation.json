@@ -242,6 +242,13 @@
     "login": "Log in",
     "login_progress": "Logging in..."
   },
+  "tournament_info": {
+    "category": "Category",
+    "date": "Date",
+    "location": "Venue",
+    "brackets": "Brackets",
+    "additional_information": "Additional information"
+  },
   "admin": {
     "layout": {
       "sidebar": {
