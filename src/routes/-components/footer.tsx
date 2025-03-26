@@ -34,11 +34,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/klubid" className="text-sm  hover:text-gray-300">
-                  {t("footer.menu.clubs")}
-                </Link>
-              </li>
-              <li>
                 <Link href="/kontakt" className="text-sm  hover:text-gray-300">
                   {t("footer.menu.contact")}
                 </Link>

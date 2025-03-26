@@ -134,24 +134,24 @@
     "component": {
       "missing": "Edetabel hetkel puudub"
     },
-    "header": "Organisatsiooni Reiting",
+    "header": "Pipedrivei Reiting",
     "header_prefix": {
-      "men": "Meeste",
+      "men": "Lissaboni",
       "senior_men": "Seeniorite Meeste",
       "junior_boys": "Juuniorite Noormeeste",
       "cadet_boys": "Kadettide Poiste",
-      "women": "Naiste",
+      "women": "Tartu",
       "senior_women": "Seeniorite Naiste",
       "junior_girls": "Juuniorite Neiude",
       "cadet_girls": "Kadettide Tüdrukute",
-      "combined": "Ühine"
+      "combined": "Tallinna"
     },
     "last_updated": "Viimati uuendatud",
     "filtering": {
       "buttons": {
-        "men": "Mehed",
-        "women": "Naised",
-        "combined": "Kombineeritud"
+        "men": "Lissabon",
+        "women": "Tartu",
+        "combined": "Tallinn"
       },
       "select": {
         "options": {

@@ -50,6 +50,12 @@ const RatingWidget = ({ users }: Props) => {
             <TabsTrigger value="combined" className="rounded-[4px] flex-1">
               {t("rating.filtering.buttons.combined")}
             </TabsTrigger>
+            <TabsTrigger value="women" className="rounded-[4px] flex-1">
+              {t("rating.filtering.buttons.women")}
+            </TabsTrigger>
+            <TabsTrigger value="men" className="rounded-[4px] flex-1">
+              {t("rating.filtering.buttons.men")}
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>

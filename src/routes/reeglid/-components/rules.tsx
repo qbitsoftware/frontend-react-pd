@@ -2,138 +2,170 @@ export default function LauatenniseReeglid() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl">
       <h1 className="text-3xl font-bold mb-6 text-center">
-        Table Tennis Rules
+        Table tennis rules used at Pipedrive's tournaments
       </h1>
       <div className="space-y-6 mt-10 md:mt-20">
         <section>
-          <h2 className="text-xl font-semibold mb-2">Equipment</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              Ball with a diameter of 40mm, racket, and table tennis table.
-            </li>
-            <li>
-              The table tennis table is divided into two equal halves by a net.
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-2">Scoring</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              The set is won by the player who first scores 11 points, except
-              when both players have 10 points, in which case the player who
-              leads by 2 points wins.
-            </li>
-            <li>The match consists of an odd number of sets.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-2">Serving</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              A coin toss is conducted at the beginning of the match. The winner
-              of the toss chooses the side or decides who serves.
-            </li>
-            <li>
-              Place the ball on an open palm and throw it up at least 16cm. The
-              ball must be hit as it starts to fall.
-            </li>
-            <li>
-              When serving, the ball must first hit the server's side of the
-              table, then go over or around the net, and then hit the receiver's
-              side of the table.
-            </li>
-            <li>
-              At the start of the serve, before hitting the ball, the ball must
-              be above the playing surface and behind the server's end line.
-            </li>
-            <li>
-              The server changes every 2 points, except when both players have
-              10 points, then the server changes every 1 point.
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-2">Returning</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              In play and when receiving a serve, the ball must touch the
-              player's side of the table once before it can be hit back.
-            </li>
-            <li>
-              If a player hits the ball over the table before it touches their
-              side, it is a "volley" and is not allowed.
-            </li>
-          </ul>
+          <h2 className="text-xl font-semibold mb-2">
+            1. Games Are Played to 11 Points
+          </h2>
+          <p className="pl-5">
+            A Game is played to 11 points. A Game must be won by two points. A
+            Match is generally the best three of five Games.
+          </p>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold mb-2">
-            When is a point scored?
+            2. Alternate Serves Every Two Points
           </h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>If a player fails to make a correct serve.</li>
-            <li>If a player fails to make a correct return.</li>
-            <li>
-              If a player volleys the ball before it crosses their side of the
-              table.
-            </li>
-            <li>If a player intentionally hits the ball two or more times.</li>
-            <li>If a player moves the table surface.</li>
-            <li>If a player's free hand touches the table surface.</li>
-            <li>
-              If a player touches the net. The net must not be touched by the
-              player's clothing or racket.
-            </li>
-          </ul>
+          <p className="pl-5">
+            Each side of the table alternates serving two points at a time.
+            EXCEPTION: After tied 10-10 ("deuce"), service alternates at every
+            point. Can you lose on a serve in ping pong? Yes! There is no
+            separate rule for serving on Game Point.
+          </p>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold mb-2">
-            When is a point not scored?
+            3. Toss the Ball Straight Up When Serving
           </h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              If during a serve the ball touches the net or net holder but then
-              lands on the receiver's side, the point is not counted and the
-              serve is repeated.
-            </li>
-            <li>
-              If the receiver catches or hits the ball before it touches their
-              side of the table during a serve after touching the net.
-            </li>
-            <li>
-              If a player is disturbed by someone or something while making a
-              legal shot.
-            </li>
-          </ul>
+          <p className="pl-5">
+            Hold the ball in your open palm, behind your end of the table. Toss
+            at least 6" straight up, and strike it on the way down. It must hit
+            your side of the table and then the other side. NOTE: Once the ball
+            leaves the server's hand it is in play, and so counts as the
+            receiver's point if the ball is missed or mis-hit.
+          </p>
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-2">Para Table Tennis</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>A crutch or cane must not touch the table.</li>
-            <li>
-              When serving against a wheelchair player, the ball must not rise
-              vertically or move back towards the net on the receiver's side.
-              Also, the ball must not exit the receiver's side from the
-              sideline. This means a new serve.
-            </li>
-            <li>
-              The wheelchair player's buttocks and legs must not rise from the
-              support during play. Point to the opponent.
-            </li>
-            <li>
-              In doubles, on the wheelchair player's side, anyone can receive,
-              not alternately.
-            </li>
-          </ul>
+          <h2 className="text-xl font-semibold mb-2">
+            4. The Serve Can Land Anywhere in Singles
+          </h2>
+          <p className="pl-5">
+            There is no restriction on where the ball lands on your side or your
+            opponent's side of the table. It can bounce two or more times on
+            your opponent's side (if so, that's your point), bounce over the
+            side, or even hit the edge.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            5. Doubles Serves Must Go Right Court to Right Court
+          </h2>
+          <p className="pl-5">
+            The serve must bounce in the server's right court, and receiver's
+            right court (NOTE: landing on center line is fair). Doubles partners
+            switch places after their team serves twice.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            6. A Serve That Touches the Net on the Way Over is a "Let"
+          </h2>
+          <p className="pl-5">
+            Can the ball hit the net in ping pong? Yes, during a RALLY, if it
+            touches the top of the net and then otherwise lands as a legitimate
+            hit. BUT not when serving. If a served ball hits the net on the way
+            over and otherwise legally bounces in play, it's a "let" serve and
+            is done over. There is no limit on how many times this can happen.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            7. Alternate Hitting in a Doubles Rally
+          </h2>
+          <p className="pl-5">
+            Doubles partners must alternate hitting balls in a rally, no matter
+            where the ball lands on the table.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            8. Volleys are Not Allowed
+          </h2>
+          <p className="pl-5">
+            Can you hit the ball before it bounces in ping pong? No. In regular
+            tennis you may "volley" the ball (hitting the ball before it bounces
+            on your side of the net). But in table tennis, this results in a
+            point for your opponent. NOTE: When your opponent hits a ball that
+            sails over your end of the table without touching it and then hits
+            you or your paddle, that is still your point.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            9. If Your Hit Bounces Back Over the Net by Itself It Is Your Point
+          </h2>
+          <p className="pl-5">
+            If you hit the ball in a rally or on a serve and it bounces back
+            over the net after hitting your opponent's side of the table (due to
+            extreme spin), without your opponent touching it, that is your
+            point.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            10. Touching the Ball with Your Paddle Hand is Allowed
+          </h2>
+          <p className="pl-5">
+            If the ball touches your PADDLE hand and otherwise results in a
+            legal hit, there is no rule violation and play shall continue as
+            normal. Your paddle hand includes all fingers and hand area below
+            the wrist. But what if the ball touches a player's body anywhere
+            else during a ping pong rally? You may not touch the ball with your
+            non-paddle hand for any reason. It will result in a point for your
+            opponent. BUT if your opponent's hit sails over your side of the
+            table without touching it, and hits any part of you or your paddle,
+            that is still your point.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            11. You May Not Touch the Table with Your Non-Paddle Hand
+          </h2>
+          <p className="pl-5">
+            You may touch the ball or the table with your paddle hand (after
+            reaching in to return a short serve, for example), or other parts of
+            your body. NOTE: If the table moves at all from your touching it
+            during a rally, that is your opponent's point.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            12. An "Edge" Ball Bouncing Off the Horizontal Table Top Surface is
+            Good
+          </h2>
+          <p className="pl-5">
+            An otherwise legal serve or hit may contact the top edge of the
+            horizontal table top surface and be counted as valid, even if it
+            bounces sidewise. The vertical sides of the table are NOT part of
+            the legal playing surface.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-2">
+            13. Honor System Applies to Disagreements
+          </h2>
+          <p className="pl-5">
+            If no referee is present during a match and the players disagree on
+            a certain call, the "honor system" applies and the players should
+            find a way to agree, or play the point over. Ping pong carries a
+            tradition of fierce but fair play. Help us keep it that way!
+          </p>
         </section>
       </div>
     </div>
   );
 }
-

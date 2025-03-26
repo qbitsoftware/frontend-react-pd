@@ -134,24 +134,24 @@
     "component": {
       "missing": "No data available"
     },
-    "header": "Organization Ranking",
+    "header": "Pipedrive Ranking",
     "header_prefix": {
-      "men": "Men's",
+      "men": "Lisbon",
       "senior_men": "Senior Men's",
-      "women": "Women's",
+      "women": "Tartu",
       "senior_women": "Senior Women's",
       "junior_boys": "Junior Boys",
       "cadet_boys": "Cadet Boys",
       "junior_girls": "Junior Girls",
       "cadet_girls": "Cadet Girls",
-      "combined": "Combined"
+      "combined": "Tallinn"
     },
     "last_updated": "Last updated",
     "filtering": {
       "buttons": {
-        "men": "Men",
-        "women": "Women",
-        "combined": "Combined"
+        "men": "Lisbon",
+        "women": "Tartu",
+        "combined": "Tallinn"
       },
       "select": {
         "options": {
