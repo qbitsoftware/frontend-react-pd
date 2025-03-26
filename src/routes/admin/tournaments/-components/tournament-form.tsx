@@ -329,10 +329,9 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
-                      <FormLabel className="text-base">{t("admin.tournaments.create_tournament.private")}</FormLabel>
+                      <FormLabel className="text-base">{t("admin.tournaments.create_tournament.ranking")}</FormLabel>
                       <FormDescription>
-                        {t("admin.tournaments.create_tournament.private_description")}
-                        SEE ON RATING JAOKS HETKEL
+                        {t("admin.tournaments.create_tournament.ranking_description")}
                       </FormDescription>
                     </div>
                     <FormControl>

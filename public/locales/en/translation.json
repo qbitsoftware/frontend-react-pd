@@ -402,6 +402,8 @@
         "max_team_size": "Maximum Team Size",
         "private": "Private Tournament",
         "private_description": "Make this tournament private (only seen to admins)",
+        "ranking": "Include ranking",
+        "ranking_description": "Enable ranking for this tournament",
         "team": "Tournament with teams",
         "team_description": "Enable tournament with teams"
       },

@@ -402,6 +402,8 @@
         "max_team_size": "Maksimaalne tiimi suurus",
         "private": "Privaatne turniir",
         "private_description": "Muuda turniir ainult adminitele nähtavaks",
+        "ranking": "Reitinguga turniir",
+        "ranking_description": "Reiting arvutatakse iga esmaspäeva hommikul",
         "team": "Meeskondadega turniir",
         "team_description": "Luba meeskondadega turniir"
       },

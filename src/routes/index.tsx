@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import HomePageGrid from "./-components/home-grid";
-import { UseGetTournaments, type TournamentsResponse } from "@/queries/tournaments";
-import { UseGetUsers, type UsersResponse } from "@/queries/users";
-import { UseGetBlogsOption, type BlogsResponseUser } from "@/queries/blogs";
+import { UseGetTournaments } from "@/queries/tournaments";
+import { UseGetUsers } from "@/queries/users";
+import { UseGetBlogsOption } from "@/queries/blogs";
 import ErrorPage from "@/components/error";
-import axios from "axios";
-import { Suspense } from "react";
 
 export const Route = createFileRoute("/")({
   component: Index,
