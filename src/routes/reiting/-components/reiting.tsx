@@ -195,6 +195,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                       {user.last_name}
                     </TableCell>
                     <TableCell className="px-1 md:px-6 py-3 text-sm">{user.first_name}</TableCell>
+
                     <TableCell className="md:px-6 py-3 text-sm">{user.rate_pl_points}</TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">{user.rate_points}</TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">{user.eltl_id}</TableCell>

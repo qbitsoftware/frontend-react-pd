@@ -15,7 +15,7 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
 
   return (
     <Tabs defaultValue="latest-matches" className="w-full min-h-64">
-      <TabsList className="w-full grid grid-cols-3 bg-gray-50 p-1 rounded-lg">
+      <TabsList className="w-full grid grid-cols-1 md:grid-cols-3 bg-gray-50 p-1 rounded-lg">
         <TabsTrigger
           value="latest-matches"
           className="transition-all duration-200"

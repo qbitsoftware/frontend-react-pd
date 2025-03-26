@@ -60,7 +60,7 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
 
                 <div className="flex items-center gap-2">
                   <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
-                    <div className="text-xs text-center ">
+                    <div className="text-xs text-center font-medium">
                       {getAbbreviatedMonth(event.start_date)}
                     </div>
                     {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
@@ -69,7 +69,7 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
                     <>
                       <span className="font-semibold">-</span>
                       <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
-                        <div className="text-xs text-center">
+                        <div className="text-xs text-center font-medium">
                           {event.end_date !== event.start_date &&
                             new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
                             ? getAbbreviatedMonth(event.end_date)
@@ -93,7 +93,7 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
 
               <div className="flex items-center gap-2">
                 <div className="px-2 py-1 bg-white text-center font-bold border-t border-red-600 rounded-t-[2px]  text-stone-800 shadow-sm">
-                  <div className="text-xs text-center text-stone-800">
+                  <div className="text-xs text-center  font-medium">
                     {getAbbreviatedMonth(event.start_date)}
                   </div>
                   {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
@@ -102,7 +102,7 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
                   <>
                     <span className="font-semibold">-</span>
                     <div className="px-2 py-1 bg-white text-center font-bold border-t border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
-                      <div className="text-xs text-center text-stone-800">
+                      <div className="text-xs text-center font-medium">
                         {event.end_date !== event.start_date &&
                           new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
                           ? getAbbreviatedMonth(event.end_date)

@@ -5,82 +5,51 @@ import { UseGetUsers, type UsersResponse } from "@/queries/users";
 import { UseGetBlogsOption, type BlogsResponseUser } from "@/queries/blogs";
 import ErrorPage from "@/components/error";
 import axios from "axios";
+import { Suspense } from "react";
 
 export const Route = createFileRoute("/")({
   component: Index,
   loader: async ({ context: { queryClient } }) => {
-    let tournaments: TournamentsResponse = {
-      data: [],
-      message: "Default empty state",
-      error: null
-    };
+    const tournamentsPromise = queryClient.ensureQueryData(UseGetTournaments());
+    const usersPromise = queryClient.ensureQueryData(UseGetUsers());
+    const blogsPromise = queryClient.ensureQueryData(UseGetBlogsOption());
 
-    let users: UsersResponse = {
-      data: [],
-      message: "Default empty state",
-      error: null
-    };
+    const [tournaments, users, articles_data] = await Promise.allSettled([
+      tournamentsPromise,
+      usersPromise,
+      blogsPromise,
+    ]);
 
-    let articles_data: BlogsResponseUser = {
-      data: {
-        blogs: [],
-        total_pages: 0
-      },
-      message: "Default empty state",
-      error: null
-    };
-
-    try {
-      tournaments = await queryClient.ensureQueryData(UseGetTournaments());
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        console.warn("Tournaments API returned 404");
-      } else {
-        throw error;
-      }
-    }
-
-    try {
-      users = await queryClient.ensureQueryData(UseGetUsers());
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        console.warn("Users API returned 404");
-      } else {
-        throw error;
-      }
-    }
-
-    try {
-      articles_data = await queryClient.ensureQueryData(UseGetBlogsOption()) as BlogsResponseUser;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        console.warn("Blogs API returned 404");
-      } else {
-        throw error;
-      }
-    }
+    const resolvedTournaments = tournaments.status === "fulfilled" ? tournaments.value : { data: [], message: "Error", error: true };
+    const resolvedUsers = users.status === "fulfilled" ? users.value : { data: [], message: "Error", error: true };
+    const resolvedArticles = articles_data.status === "fulfilled" ? articles_data.value : { data: { blogs: [], total_pages: 0 }, message: "Error", error: true };
 
     const dataStatus = {
-      tournamentsEmpty: !tournaments?.data?.length,
-      usersEmpty: !users?.data?.length,
-      articlesEmpty: !articles_data?.data?.blogs?.length
+      tournamentsEmpty: !resolvedTournaments?.data?.length,
+      usersEmpty: !resolvedUsers?.data?.length,
+      articlesEmpty: !resolvedArticles?.data?.blogs?.length
     };
 
-    return { tournaments, users, articles_data, dataStatus };
+    return { tournaments: resolvedTournaments, users: resolvedUsers, articles_data: resolvedArticles, dataStatus };
   },
-  
   errorComponent: () => <ErrorPage />
 });
+
+
+
 
 function Index() {
   const { tournaments, users, articles_data, dataStatus } = Route.useLoaderData();
 
   return (
-    <HomePageGrid
-      tournaments={tournaments?.data}
-      users={users?.data}
-      articles={articles_data?.data?.blogs}
-      dataStatus={dataStatus}
-    />
+    <div className="flex flex-col min-h-screen">
+      <HomePageGrid
+        tournaments={tournaments?.data}
+        users={users?.data}
+        articles={articles_data?.data?.blogs}
+        dataStatus={dataStatus}
+      />
+    </div>
   );
 }
+

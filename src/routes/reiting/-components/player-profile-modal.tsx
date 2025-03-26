@@ -38,7 +38,7 @@ export const PlayerProfileModal = ({ isOpen, onClose, user }: PlayerProfileModal
             </div>
           </div>
 
-          <div className="w-full md:w-2/3 mt-6 md:mt-0">
+          <div className="w-full  md:w-2/3 mt-6 md:mt-0">
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
                 <div className="animate-pulse flex space-x-4">

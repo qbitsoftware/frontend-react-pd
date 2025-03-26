@@ -39,7 +39,7 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
   }));
 
   return (
-    <Card className="border-0 shadow-none">
+    <Card className="border-0 shadow-none ">
       <CardContent className="p-0 pt-4">
         <ChartContainer config={chartConfig} className="relative h-64">
           <ResponsiveContainer width="100%" height="100%">
