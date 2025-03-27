@@ -55,7 +55,7 @@ function RouteComponent() {
   }
 
   const groupName = tableQuery.data.data.class
-  const isMeistrikad = tournament?.category == "Meistrikad"
+  const isMeistrikad = tableQuery.data.data.type === "champions_league"
 
   if (!isMeistrikad && activeTab === "bracket") {
     setActiveTab('placement')
