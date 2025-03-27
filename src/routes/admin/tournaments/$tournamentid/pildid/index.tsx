@@ -69,7 +69,7 @@ function RouteComponent() {
 
   return (
     <div className="px-10 pt-4 flex flex-col items-center justify-center min-h-[60vh]">
-      <div className="text-center max-w-md mx-auto">
+      <div className="text-center max-w-md mx-auto flex flex-col items-center">
         <div className="mb-6 bg-primary/10 p-8 rounded-full inline-flex">
           <Camera className="h-16 w-16 text-primary" />
         </div>

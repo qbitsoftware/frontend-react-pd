@@ -423,13 +423,28 @@
         "add_new": "Lisa uus",
         "no_tables": "Gruppe pole veel lisatud",
         "title": "Turniiri grupid",
+        "order": {
+          "title": "Järjesta",
+          "placeholder": "Järjestus",
+          "random": "Suvaline",
+          "by_rating": "Reitingu järgi",
+          "by_order": "Järjekorra järgi"
+        },
         "participants": {
+          "actions": {
+            "save": "Salvesta",
+            "edit": "Muuda",
+            "delete": "Kustuta",
+            "edit_team": "Muuda meeskonda",
+            "delete_team": "Kustuta meeskond",
+            "submit": "Lisa"
+          },
           "table": {
             "serial_number": "JKNR.",
             "position": "Pos.",
             "team": "Meeskond",
             "name": "Nimi",
-            "rank": "Koht",
+            "rank": "RP",
             "sex": "Sugu",
             "club": "Klubi",
             "class": "Klass",

@@ -423,13 +423,28 @@
         "add_new": "Add new",
         "no_tables": "No groups created yet",
         "title": "Tournament Groups",
+        "order": {
+          "title": "Order",
+          "placeholder": "Sort by",
+          "random": "Random",
+          "by_rating": "By rating",
+          "by_order": "By order"
+        },
         "participants": {
+          "actions": {
+            "save": "Save",
+            "edit": "Edit",
+            "delete": "Delete",
+            "edit_team": "Edit team",
+            "delete_team": "Delete team",
+            "submit": "Submit"
+          },
           "table": {
             "serial_number": "SN",
             "position": "Pos.",
             "team": "Team",
             "name": "Name",
-            "rank": "Placement",
+            "rank": "RP",
             "sex": "Sex",
             "club": "Club",
             "class": "Class",
