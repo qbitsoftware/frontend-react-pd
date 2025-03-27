@@ -8,7 +8,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StatisticsCard } from './-components/protocol'
-import { useTournament } from '../../-components/tournament-provider'
 import { MatchWrapper } from "@/types/types"
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +24,6 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { params } = Route.useLoaderData()
-  const tournament = useTournament()
   const { t } = useTranslation()
 
   const [activeTab, setActiveTab] = useState('bracket')
