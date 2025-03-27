@@ -215,7 +215,10 @@
     "date": "Kuupäev",
     "location": "Asukoht",
     "brackets": "Tabeleid",
-    "additional_information": "Additional information"
+    "additional_information": "Additional information",
+    "timetable": "Ajakava",
+    "timetable_missing": "Ajakava puudub",
+    "players": "Mängijad"
   },
   "register": {
     "form": {

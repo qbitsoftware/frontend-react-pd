@@ -250,7 +250,10 @@
     "date": "Date",
     "location": "Venue",
     "brackets": "Brackets",
-    "additional_information": "Additional information"
+    "additional_information": "Additional information",
+    "timetable": "Timetable",
+    "timetable_missing": "Timetable missing",
+    "players": "Players"
   },
   "admin": {
     "layout": {

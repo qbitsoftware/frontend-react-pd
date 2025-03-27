@@ -14,13 +14,6 @@ import {
   modifyTitleDependingOnFilter,
 } from "@/lib/rating-utils";
 import { UserNew } from "@/types/types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,20 +64,6 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
   };
 
   const { sex, showCombined } = getSexAndCombined(activeTab);
-
-  const handleAgeClassChange = (value: string) => {
-    setAgeClass(value);
-
-    if (["cadet_boys", "junior_boys", "senior_men"].includes(value)) {
-      setActiveTab("men");
-    } else if (
-      ["cadet_girls", "junior_girls", "senior_women"].includes(value)
-    ) {
-      setActiveTab("women");
-    } else {
-      setActiveTab("combined");
-    }
-  };
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -156,7 +135,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
               Automatically Synced
             </span>
           </p>
-          <p className="pb-8">NR = Ranking, RP = Ranking Points</p>
+          <p className="pb-8">NR = Ranking, ELO = ELO Points</p>
         </div>
         <div className="border rounded-t-[12px]">
           <div className="border-b border-stone-200 bg-[#EBEFF5] rounded-t-[12px] grid grid-cols-1 lg:grid-cols-12 gap-4 items-center w-full p-1 mb-1">
@@ -168,39 +147,6 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                 className="h-12 w-full pl-4 pr-10 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
               />
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            </div>
-
-            <div className="md:col-span-3">
-              <Select value={ageClass} onValueChange={handleAgeClassChange}>
-                <SelectTrigger className="w-full h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
-                  <SelectValue
-                    placeholder={t("rating.filtering.select.options.all")}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">
-                    {t("rating.filtering.select.options.all")}
-                  </SelectItem>
-                  <SelectItem value="cadet_boys">
-                    {t("rating.filtering.select.options.cadets_boys")}
-                  </SelectItem>
-                  <SelectItem value="cadet_girls">
-                    {t("rating.filtering.select.options.cadets_girls")}
-                  </SelectItem>
-                  <SelectItem value="junior_boys">
-                    {t("rating.filtering.select.options.juniors_boys")}
-                  </SelectItem>
-                  <SelectItem value="junior_girls">
-                    {t("rating.filtering.select.options.juniors_girls")}
-                  </SelectItem>
-                  <SelectItem value="senior_men">
-                    {t("rating.filtering.select.options.seniors_men")}
-                  </SelectItem>
-                  <SelectItem value="senior_women">
-                    {t("rating.filtering.select.options.seniors_women")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="md:col-span-4">
@@ -246,13 +192,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                     {t("rating.table.head.first_name")}
                   </TableHead>
                   <TableHead className="md:px-6 py-3 text-left font-medium">
-                    RP
-                  </TableHead>
-                  <TableHead className="md:px-6 py-3 text-left font-medium">
-                    ID
-                  </TableHead>
-                  <TableHead className="md:px-6 py-3 text-left font-medium">
-                    {t("rating.table.head.club")}
+                    ELO
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -284,12 +224,6 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                     </TableCell>
                     <TableCell className="md:px-6 py-3 text-sm">
                       {user.rate_points}
-                    </TableCell>
-                    <TableCell className="md:px-6 py-3 text-sm">
-                      {user.eltl_id}
-                    </TableCell>
-                    <TableCell className="md:px-6 py-3 text-sm">
-                      {user.club_name}
                     </TableCell>
                   </TableRow>
                 ))}

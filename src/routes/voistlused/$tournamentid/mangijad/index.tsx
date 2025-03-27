@@ -1,61 +1,66 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { UseGetTournamentTables } from '@/queries/tables'
-import Group from './-components/group'
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { ErrorResponse } from "@/types/types"
-import ErrorPage from '@/components/error'
-import {useState} from 'react'
+import { createFileRoute } from "@tanstack/react-router";
+import { UseGetTournamentTables } from "@/queries/tables";
+import Group from "./-components/group";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ErrorResponse } from "@/types/types";
+import ErrorPage from "@/components/error";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-export const Route = createFileRoute('/voistlused/$tournamentid/mangijad/')({
+export const Route = createFileRoute("/voistlused/$tournamentid/mangijad/")({
   component: RouteComponent,
-    errorComponent: () => <ErrorPage />,
+  errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     try {
       const tables_data = await queryClient.ensureQueryData(
         UseGetTournamentTables(Number(params.tournamentid)),
-      )
-      return { tables_data }
+      );
+      return { tables_data };
     } catch (error) {
-      const err = error as ErrorResponse
+      const err = error as ErrorResponse;
       if (err.response?.status === 404) {
-        return { tables_data: null }
+        return { tables_data: null };
       }
-      throw error
+      throw error;
     }
   },
-})
+});
 
 function RouteComponent() {
-  const { tables_data } = Route.useLoaderData()
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const { t } = useTranslation();
 
-  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  } 
+  const { tables_data } = Route.useLoaderData();
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const originalData = tables_data?.data || []
-  
-  let filteredData = originalData
-  
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const originalData = tables_data?.data || [];
+
+  let filteredData = originalData;
+
   if (searchQuery && originalData.length > 0) {
-    const searchBy = searchQuery.toLowerCase()
-    
-    filteredData = originalData.map(table => {
-        const filteredParticipants = table.participants.filter(player =>
-        player.name?.toLowerCase().includes(searchBy)
-      )
-      
+    const searchBy = searchQuery.toLowerCase();
+
+    filteredData = originalData.map((table) => {
+      const filteredParticipants = table.participants.filter((player) =>
+        player.name?.toLowerCase().includes(searchBy),
+      );
+
       return {
         ...table,
-        participants: filteredParticipants
-      }
-    })
+        participants: filteredParticipants,
+      };
+    });
   }
 
   return (
     <div className="px-4 md:px-12 py-4 md:py-8">
-      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Mängijad</h5>
+      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">
+        {t("tournament_info.players")}
+      </h5>
       <div className="pb-8">
         {tables_data && tables_data.data ? (
           <>
@@ -70,13 +75,16 @@ function RouteComponent() {
                 />
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               </div>
-              
             </div>
             <div className="flex flex-col gap-10">
-            {filteredData.length > 0 ? (
-                filteredData.map((table) => <Group key={table.id} group={table}  />)
+              {filteredData.length > 0 ? (
+                filteredData.map((table) => (
+                  <Group key={table.id} group={table} />
+                ))
               ) : (
-                <div className="text-center py-8 text-gray-500">No players found matching "{searchQuery}"</div>
+                <div className="text-center py-8 text-gray-500">
+                  No players found matching "{searchQuery}"
+                </div>
               )}
             </div>
           </>
@@ -85,5 +93,5 @@ function RouteComponent() {
         )}
       </div>
     </div>
-  )
+  );
 }
