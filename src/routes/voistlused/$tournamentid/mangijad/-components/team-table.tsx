@@ -7,6 +7,7 @@ import type { Participant } from "@/types/types"
 import placeholderImg from "@/assets/placheolderImg.svg"
 import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 import { useTranslation } from "react-i18next"
+import { ImageModal } from "./image-modal"
 
 interface TeamTableProps {
   participants: Participant[] | null
@@ -16,6 +17,20 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
   const [selectedTeam, setSelectedTeam] = useState<Participant | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { t } = useTranslation()
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false)
+  
+  const openImageModal = (imageUrl: string, event: React.MouseEvent) => {
+    event.stopPropagation() // Prevent the row click event from triggering
+    setSelectedImage(imageUrl)
+    setIsImageModalOpen(true)
+  }
+  
+  const closeImageModal = () => {
+    setIsImageModalOpen(false)
+    setSelectedImage(null)
+  }
 
   const handleRowClick = (participant: Participant) => {
     setSelectedTeam(participant)
@@ -43,8 +58,12 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                 >
                   <TableCell>
                     <Avatar>
-                      <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
-                      <AvatarFallback><img src={clubPlaceholder} className='rounded-full'></img></AvatarFallback>
+                      <AvatarImage 
+                        src={participant.extra_data.image_url}
+                        className="cursor-pointer" 
+                        onClick={(e) => participant.extra_data.image_url && openImageModal(participant.extra_data.image_url, e)}
+                      />
+                      <AvatarFallback><img src={clubPlaceholder} className='rounded-full' alt="Club" /></AvatarFallback>
                     </Avatar>
                   </TableCell>
                   <TableCell>{participant.name}</TableCell>
@@ -58,6 +77,15 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
         <div className="bg-white shadow-lg rounded-lg p-8 text-center h-full flex items-center justify-center">
           <p className="text-gray-500 text-lg">{t('competitions.participants.no_players')}</p>
         </div>
+      )}
+
+      {/* Image Modal using shadcn Dialog */}
+      {selectedImage && (
+        <ImageModal 
+          imageUrl={selectedImage} 
+          onClose={closeImageModal}
+          isOpen={isImageModalOpen}
+        />
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -83,8 +111,12 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                   <TableRow key={player.id}>
                     <TableCell>
                       <Avatar>
-                        <AvatarImage src={player.extra_data.image_url}></AvatarImage>
-                        <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
+                        <AvatarImage 
+                          src={player.extra_data.image_url}
+                          className="cursor-pointer" 
+                          onClick={(e) => player.extra_data.image_url && openImageModal(player.extra_data.image_url, e)}
+                        />
+                        <AvatarFallback><img src={placeholderImg} className='rounded-full' alt="Player" /></AvatarFallback>
                       </Avatar>
                     </TableCell>
                     <TableCell>{`${player.first_name} ${player.last_name}`}</TableCell>
@@ -109,4 +141,3 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
 }
 
 export default TeamTable
-

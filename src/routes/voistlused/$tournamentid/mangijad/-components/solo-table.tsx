@@ -2,9 +2,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
-import React from 'react'
+import React, {useState} from 'react'
 import placeholderImg from "@/assets/placheolderImg.svg"
 import { useTranslation } from 'react-i18next'
+import {ImageModal} from "./image-modal"
 
 interface SoloTableProps {
   participants: Participant[] | null
@@ -12,6 +13,17 @@ interface SoloTableProps {
 
 const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
   const { t } = useTranslation()
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  
+  const openModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl)
+  }
+  
+  const closeModal = () => {
+    setSelectedImage(null)
+  }
+
   return (
     <div className="h-full bg-white rounded-md">
       {participants && participants.length > 0 ? (
@@ -32,7 +44,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
               {participants.map((participant) => (
                 <TableRow key={participant.id} className="bg-white bg-[#F9F9FB]/40 ">
                   <TableCell>
-                    <Avatar>
+                    <Avatar className="cursor-pointer" onClick={() => participant.extra_data.image_url && openModal(participant.extra_data.image_url)}>
                       <AvatarImage src={participant.extra_data.image_url}></AvatarImage>
                       <AvatarFallback><img src={placeholderImg} className='rounded-full'></img></AvatarFallback>
                     </Avatar>
@@ -52,6 +64,12 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
         <div className=" rounded-lg p-8 text-center h-full flex items-center justify-center">
           <p className="text-gray-800 text-lg">{t('competitions.participants.no_players')}</p>
         </div>
+      )}
+      {selectedImage && (
+        <ImageModal 
+          imageUrl={selectedImage} 
+          onClose={closeModal}
+        />
       )}
     </div>
   )

@@ -1,25 +1,22 @@
-'use client'
-
 import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { X, Upload, Trash2, Check } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
+import { usePostGamedayImage, usePostImage } from '@/queries/images'
 
 interface ImageUploadProps {
     tournament_id: number
-    gameDay: string
+    gameDay: number
 }
-
 
 export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps) {
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const [isUploading, setIsUploading] = useState<boolean>(false)
-    void tournament_id, gameDay, isUploading
+    const postImageMutation = usePostGamedayImage(tournament_id, gameDay)
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -48,10 +45,9 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             formData.append("images", file)
         })
         try {
-            setIsUploading(true)
             successToast("Piltide üleslaadimine võib võtta mõne hetke", "Palun ärge sulgege veebilehte")
-            // const result = await postImageMutation.mutateAsync(formData)
-            setIsUploading(false)
+            const result = await postImageMutation.mutateAsync(formData)
+            console.log("result", result)
             successToast("Piltide üleslaadimine oli edukas")
             setImages([])
         } catch (error) {
@@ -65,12 +61,12 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             <div className="flex mb-4 items-center justify-center">
                 <Button
                     onClick={handleAddMoreClick}
-                    className="w-[300px]"
+                    className=""
                 >
                     <Upload className="mr-2 h-4 w-4" /> Lisa pildid
                 </Button>
                 <Input
-                    className="sr-only"
+                    className="opacity-0"
                     type="file"
                     id="fileUpload"
                     multiple
@@ -88,7 +84,7 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
                                 <img
                                     src={URL.createObjectURL(file)}
                                     alt={`Preview ${index}`}
-                                    className="w-full h-auto object-cover rounded-md"
+                                    className=" h-auto object-cover rounded-md"
                                 />
                                 <button
                                     onClick={() => handleRemoveImage(index)}
@@ -105,14 +101,14 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
                             variant="destructive"
                             size="sm"
                             onClick={handleClearAll}
-                            className='w-[300px]'
+                            className=''
                         >
                             <Trash2 className="mr-2 h-4 w-4" /> Eemalda kõik
                         </Button>
                         <Button
                             size="sm"
                             onClick={uploadImages}
-                            className='w-[300px]'
+                            className=''
                         >
                             <Check className="mr-2 h-4 w-4" /> Salvesta
                         </Button>

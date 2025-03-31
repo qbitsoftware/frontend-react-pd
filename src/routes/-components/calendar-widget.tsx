@@ -28,12 +28,12 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
 
     const now = new Date();
     const upcoming = events
-      .filter(event => new Date(event.start_date) >= now)
+      .filter(event => new Date(event.end_date) >= now)
       .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
       .slice(0, 3);
 
     const past = events
-      .filter(event => new Date(event.start_date) < now)
+      .filter(event => new Date(event.end_date) < now)
       .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
       .slice(0, 3);
 

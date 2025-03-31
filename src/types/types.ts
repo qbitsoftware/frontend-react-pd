@@ -421,3 +421,33 @@ export const createRegisterSchema = (t: TFunction) => z.object({
 });
 
 export type RegisterFormData = z.infer<ReturnType<typeof createRegisterSchema>>
+
+
+export interface Gameday {
+  id: number;
+  name: string;
+  images: GamedayImage[]
+  tournament_id: number;
+}
+
+export interface GamedayImage {
+  id: number;
+  gameday_id: number;
+  image_url: string;
+  file_name: string;
+  file_size: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GetGamedaysResponse {
+  data: Gameday[]
+  message: string
+  error: string | null
+}
+
+export interface GetGamedayResponse {
+  data: Gameday
+  message: string
+  error: string | null
+}

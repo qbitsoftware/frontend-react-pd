@@ -2,7 +2,7 @@ import { useNavigate, useRouter } from "@tanstack/react-router"
 import { MoreHorizontal, Pencil, PlusCircle, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import type { Participant, Tournament, TournamentTable, UserNew } from "@/types/types"
 import {
     UseDeleteParticipant,
@@ -23,6 +23,7 @@ import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTranslation } from "react-i18next"
+import EditImgModal from "./edit-img-modal"
 
 interface ParticipantFormProps {
     participants: Participant[] | null
@@ -157,6 +158,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     })
 
     const [editingParticipant, setEditingParticipant] = useState<Participant | null>(null)
+    const [editingPlayerInfo, setEditingPlayerInfo] = useState<{ teamId: string, playerIndex: number } | null>(null);
 
     const handleOrder = async (order: string | undefined) => {
         if (!order) {
@@ -223,6 +225,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     }
 
     const handleAddOrUpdateParticipant = async (values: ParticipantFormValues, participantId?: string) => {
+
         try {
             if (participantId) {
                 await updateParticipant.mutateAsync({ formData: values, participantId })
@@ -299,6 +302,54 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         };
 
         await handleAddOrUpdateParticipant(updatedTeam, teamId);
+    };
+
+    const handleEditPlayer = (teamId: string, playerIndex: number) => {
+        setEditingPlayerInfo({ teamId, playerIndex });
+    };
+
+    const handleSavePlayerEdit = async (teamId: string, playerIndex: number, updatedPlayer: any) => {
+        const team = participants?.find(p => p.id === teamId);
+        if (!team) return;
+
+        const updatedTeam: ParticipantFormValues = {
+            name: team.name,
+            tournament_id: team.tournament_id,
+            sport_type: team.sport_type || "tabletennis",
+            class: team.extra_data?.class,
+            players: team.players.map((player, idx) => {
+                if (idx === playerIndex) {
+                    return {
+                        ...player,
+                        ...updatedPlayer,
+                        name: `${updatedPlayer.first_name || player.first_name} ${updatedPlayer.last_name || player.last_name}`,
+                        extra_data: {
+                            ...player.extra_data,
+                            ...updatedPlayer.extra_data
+                        }
+                    };
+                }
+                return {
+                    id: player.id,
+                    name: `${player.first_name} ${player.last_name}`,
+                    sport_type: player.sport_type || "tabletennis",
+                    first_name: player.first_name,
+                    last_name: player.last_name,
+                    user_id: player.user_id,
+                    sex: player.sex,
+                    extra_data: {
+                        rate_order: player.extra_data.rate_order,
+                        club: player.extra_data.club,
+                        rate_points: player.extra_data.rate_points,
+                        eltl_id: player.extra_data.eltl_id,
+                        class: player.extra_data.class
+                    }
+                };
+            })
+        };
+
+        await handleAddOrUpdateParticipant(updatedTeam, teamId);
+        setEditingPlayerInfo(null);
     };
 
     if (tournament_data) {
@@ -513,8 +564,8 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                     </TableCell>
                                                 </TableRow>
                                             ) : (
-                                                <>
-                                                    <TableRow key={participant.id}>
+                                                <React.Fragment key={participant.id}>
+                                                    <TableRow >
                                                         <TableCell>{idx + 1}</TableCell>
                                                         <TableCell>{participant.order}</TableCell>
                                                         <TableCell className="font-medium">
@@ -550,19 +601,135 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
                                                             <TableCell></TableCell>
                                                             <TableCell></TableCell>
-                                                            <TableCell></TableCell>
+                                                            <TableCell><EditImgModal playerId={player.id} playerName={`${player.first_name} ${player.last_name}`} playerImg={player.extra_data.image_url}/></TableCell>
                                                             <TableCell className="pl-8">
-                                                                {player.first_name} {player.last_name}
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <div className="flex gap-2">
+                                                                        <Input
+                                                                            defaultValue={player.first_name}
+                                                                            onChange={(e) => player.first_name = e.target.value}
+                                                                            placeholder="First name"
+                                                                            className="w-24"
+                                                                        />
+                                                                        <Input
+                                                                            defaultValue={player.last_name}
+                                                                            onChange={(e) => player.last_name = e.target.value}
+                                                                            placeholder="Last name"
+                                                                            className="w-24"
+                                                                        />
+                                                                    </div>
+                                                                ) : (
+                                                                    `${player.first_name} ${player.last_name}`
+                                                                )}
                                                             </TableCell>
-                                                            <TableCell>{player.extra_data.rate_points}</TableCell>
-                                                            <TableCell>{player.sex}</TableCell>
-                                                            <TableCell>{player.extra_data.club}</TableCell>
-                                                            <TableCell>{player.extra_data.eltl_id}</TableCell>
-                                                            <TableCell>{player.extra_data.rate_order}</TableCell>
                                                             <TableCell>
-                                                                <Button variant="ghost" size="sm" onClick={() => handleRemovePlayer(participant.id, playerIdx)}>
-                                                                    <Trash className="w-4 h-4 cursor-pointer" />
-                                                                </Button>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <Input
+                                                                        type="number"
+                                                                        defaultValue={player.extra_data.rate_points}
+                                                                        onChange={(e) => player.extra_data.rate_points = Number(e.target.value)}
+                                                                        className="w-20"
+                                                                    />
+                                                                ) : (
+                                                                    player.extra_data.rate_points
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <Input
+                                                                        defaultValue={player.sex}
+                                                                        onChange={(e) => player.sex = e.target.value}
+                                                                        className="w-16"
+                                                                    />
+                                                                ) : (
+                                                                    player.sex
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <Input
+                                                                        defaultValue={player.extra_data.club}
+                                                                        onChange={(e) => player.extra_data.club = e.target.value}
+                                                                        className="w-24"
+                                                                    />
+                                                                ) : (
+                                                                    player.extra_data.club
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <Input
+                                                                        type="number"
+                                                                        defaultValue={player.extra_data.eltl_id}
+                                                                        onChange={(e) => player.extra_data.eltl_id = Number(e.target.value)}
+                                                                        className="w-20"
+                                                                    />
+                                                                ) : (
+                                                                    player.extra_data.eltl_id
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <Input
+                                                                        type="number"
+                                                                        defaultValue={player.extra_data.rate_order}
+                                                                        onChange={(e) => player.extra_data.rate_order = Number(e.target.value)}
+                                                                        className="w-20"
+                                                                    />
+                                                                ) : (
+                                                                    player.extra_data.rate_order
+                                                                )}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {editingPlayerInfo &&
+                                                                    editingPlayerInfo.teamId === participant.id &&
+                                                                    editingPlayerInfo.playerIndex === playerIdx ? (
+                                                                    <div className="flex gap-1">
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            onClick={() => handleSavePlayerEdit(participant.id, playerIdx, player)}
+                                                                        >
+                                                                            <Pencil className="w-4 h-4 text-green-600" />
+                                                                        </Button>
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            onClick={() => setEditingPlayerInfo(null)}
+                                                                        >
+                                                                            {t("admin.tournaments.groups.participants.actions.cancel")}
+                                                                        </Button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="flex gap-1">
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            onClick={() => handleEditPlayer(participant.id, playerIdx)}
+                                                                        >
+                                                                            <Pencil className="w-4 h-4" />
+                                                                        </Button>
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            onClick={() => handleRemovePlayer(participant.id, playerIdx)}
+                                                                        >
+                                                                            <Trash className="w-4 h-4" />
+                                                                        </Button>
+                                                                    </div>
+                                                                )}
                                                             </TableCell>
                                                         </TableRow>
                                                     ))}
@@ -700,7 +867,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         <TableCell></TableCell>
                                                         <TableCell colSpan={6}></TableCell>
                                                     </TableRow>
-                                                </>
+                                                </React.Fragment>
                                             )
                                         )}
                                         <TableRow className="relative">

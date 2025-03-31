@@ -1,5 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
+import { Gameday, GetGamedayResponse, GetGamedaysResponse } from "@/types/types"
 
 export type ImagesResponse = {
     data: string[],
@@ -18,29 +19,63 @@ export const usePostImage = () => {
             });
             return data;
         },
+
     });
 }
 
-export const useGetGamedayImages = (tournament_id: number, game_day: string) => {
-    return useQuery<ImagesResponse>({
-        queryKey: ["images", tournament_id, game_day],
-        queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/images/${game_day}/get`, {
-                withCredentials: true
-            })
-            return data
+
+export const usePostGameDay = (tournament_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: Gameday) => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/gamedays`, formData, {
+                withCredentials: true,
+            });
+            return data;
         },
-        staleTime: Infinity,
-        retry: false,
-        refetchOnWindowFocus: true,
+        onSuccess: (data: GetGamedayResponse) => {
+            queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
+                if (!resp) {
+                    return data
+                }
+                resp.data.push(data.data)
+            })
+        }
     })
 }
 
-export function usePostImages(tournament_id: number, gameday: string) {
+export const usePatchGameDay = (tournament_id: number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async ({ formData, gameday_id }: { formData: Gameday, gameday_id: number }) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/gamedays/${gameday_id}`, formData, {
+                withCredentials: true,
+            });
+            return data;
+        },
+        onSuccess: (data: GetGamedayResponse) => {
+            queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
+                if (!resp) {
+                    return data
+                }
+                if (data && data.data) {
+                    //update the gameday
+                    const index = resp.data.findIndex((gameday: Gameday) => gameday.id === data.data.id)
+                    if (index !== -1) {
+                        resp.data[index] = data.data
+                    }
+                    resp.data[index] = data.data
+                }
+            })
+        }
+    })
+}
+
+export const usePostGamedayImage = (tournament_id: number, gameday_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (formData: FormData) => {
-            const { data } = await axiosInstance.post(`/api/v1/auth/${tournament_id}/image/${gameday}/upload`, formData, {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/gamedays/${gameday_id}/images`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -48,19 +83,77 @@ export function usePostImages(tournament_id: number, gameday: string) {
             });
             return data;
         },
-        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["images", tournament_id, gameday] }) }
-    });
+        onSuccess: (data: GetGamedayResponse) => {
+            // queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
+            //     if (!resp) {
+            //         return data
+            //     }
+            //     if (data && data.data) {
+            //         //update the gameday
+            //         const index = resp.data.findIndex((gameday: Gameday) => gameday.id === data.data.id)
+            //         if (index !== -1) {
+            //             resp.data[index] = data.data
+            //         }
+            //     }
+            // })
+        }
+    })
 }
 
-
-export function useDeleteImage(tournament_id: number, gameday: string) {
+export const useDeleteGameday = (tournament_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (file_key: string) => {
-            await axiosInstance.post('/api/v1/auth/image', { image_key: file_key }, {
+        mutationFn: async (gameday_id: number) => {
+            const { data } = await axiosInstance.delete(`/api/v1/tournaments/${tournament_id}/gamedays/${gameday_id}`, {
                 withCredentials: true,
-            })
+            });
+            return data;
         },
-        onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["images", tournament_id, gameday] }) }
+        onSuccess: (data: GetGamedayResponse) => {
+            queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
+                if (!resp) {
+                    return data
+                }
+                if (data && data.data) {
+                    const index = resp.data.findIndex((gameday: Gameday) => gameday.id === data.data.id)
+                    if (index !== -1) {
+                        resp.data.splice(index, 1)
+                    }
+                }
+                return resp
+            })
+        }
+    })
+}
+
+export const useGetGamedaysOptions = (tournament_id: number) => {
+    return queryOptions<GetGamedaysResponse>({
+        queryKey: ["images_options", tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/gamedays`, {
+                withCredentials: true
+            })
+            return data
+        },
+    })
+}
+
+export function addPlayerImage() {
+    return useMutation({
+        mutationFn: async ({ player_id, image_file }: { player_id: string, image_file: File }) => {
+
+            const formData = new FormData()
+
+            formData.append('image', image_file)
+            formData.append('player_id', player_id)
+
+            const { data } = await axiosInstance.post('/api/v1/image/participants', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true,
+            });
+            return data;
+        }
     })
 }
