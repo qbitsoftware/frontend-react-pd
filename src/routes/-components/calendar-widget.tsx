@@ -28,7 +28,7 @@ const CalendarWidget: React.FC<Props> = ({ tournaments }) => {
     const now = new Date();
 
     const upcoming = tournaments
-      .filter(tournament => new Date(tournament.start_date) >= now)
+      .filter(tournament => new Date(tournament.end_date) >= now)
       .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
       .slice(0, 4);
 
