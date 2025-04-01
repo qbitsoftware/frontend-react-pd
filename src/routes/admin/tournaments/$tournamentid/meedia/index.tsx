@@ -49,9 +49,9 @@ function RouteComponent() {
     }
 
     return (
-        <div className="container py-4 px-10">
-            <div className="flex justify-between items-center mb-4">
-                <p className="font-bold">Media Editor</p>
+        <div className='px-6 md:px-10 py-6 w-full'>
+      <div className="flex justify-between items-center mb-6">
+        <h5 className="font-bold">Meedia</h5>
                 <Button
                     onClick={handleSave}
                     disabled={mediaMutation.isPending}

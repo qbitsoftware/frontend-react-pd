@@ -1,12 +1,6 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Gameday, GetGamedayResponse, GetGamedaysResponse } from "@/types/types"
-
-export type ImagesResponse = {
-    data: string[],
-    message: string,
-    error: string | null,
-}
+import { Gameday, GamedayImage, GamedayImageResponse, GamedayImagesResponse, GetGamedayResponse, GetGamedaysResponse } from "@/types/types"
 
 export const usePostImage = () => {
     return useMutation({
@@ -83,19 +77,21 @@ export const usePostGamedayImage = (tournament_id: number, gameday_id: number) =
             });
             return data;
         },
-        onSuccess: (data: GetGamedayResponse) => {
-            // queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
-            //     if (!resp) {
-            //         return data
-            //     }
-            //     if (data && data.data) {
-            //         //update the gameday
-            //         const index = resp.data.findIndex((gameday: Gameday) => gameday.id === data.data.id)
-            //         if (index !== -1) {
-            //             resp.data[index] = data.data
-            //         }
-            //     }
-            // })
+        onSuccess: (data: GamedayImagesResponse) => {
+            queryClient.setQueryData(["images_options", tournament_id], (resp: GetGamedaysResponse) => {
+                if (!resp) {
+                    return data
+                }
+                if (data && data.data) {
+                    //update the gameday
+                    data.data.map((img: GamedayImage) => {
+                        const index = resp.data.findIndex((gameday: Gameday) => gameday.id === img.gameday_id)
+                        if (index !== -1) {
+                            resp.data[index].images.push(img)
+                        }
+                    })
+                }
+            })
         }
     })
 }
@@ -126,6 +122,32 @@ export const useDeleteGameday = (tournament_id: number) => {
     })
 }
 
+export const useDeleteGamedayImage = (tournament_id: number, getGamedayId: () => number) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (image_id: number) => {
+            const gameday_id = getGamedayId();
+            const { data } = await axiosInstance.delete(
+                `/api/v1/tournaments/${tournament_id}/gamedays/${gameday_id}/images/${image_id}`,
+                {
+                    withCredentials: true,
+                }
+            );
+            return data;
+        },
+        onSuccess: (data: GamedayImageResponse) => {
+            queryClient.setQueryData(["images_options", tournament_id], (oldData: GetGamedaysResponse) => {
+                oldData.data.map((gameday: Gameday) => {
+                    if (gameday.id === data.data.gameday_id) {
+                        gameday.images = gameday.images.filter((image: GamedayImage) => image.id !== data.data.id)
+                    }
+                })
+                return data;
+            });
+
+        }
+    });
+};
 export const useGetGamedaysOptions = (tournament_id: number) => {
     return queryOptions<GetGamedaysResponse>({
         queryKey: ["images_options", tournament_id],

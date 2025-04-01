@@ -428,6 +428,7 @@ export interface Gameday {
   name: string;
   images: GamedayImage[]
   tournament_id: number;
+  created_at?: string;
 }
 
 export interface GamedayImage {
@@ -448,6 +449,18 @@ export interface GetGamedaysResponse {
 
 export interface GetGamedayResponse {
   data: Gameday
+  message: string
+  error: string | null
+}
+
+export interface GamedayImagesResponse {
+  data: GamedayImage[]
+  message: string
+  error: string | null
+}
+
+export interface GamedayImageResponse {
+  data: GamedayImage
   message: string
   error: string | null
 }

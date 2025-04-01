@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { X, Upload, Trash2, Check } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
-import { usePostGamedayImage, usePostImage } from '@/queries/images'
+import { usePostGamedayImage } from '@/queries/images'
 
 interface ImageUploadProps {
     tournament_id: number
@@ -17,6 +17,7 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
     const postImageMutation = usePostGamedayImage(tournament_id, gameDay)
+    
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -58,15 +59,15 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
 
     return (
         <div className="w-full flex flex-col justify-center mx-auto p-4">
-            <div className="flex mb-4 items-center justify-center">
+            <div className="relative flex flex-col items-center justify-center mb-4 border border-dashed py-8 text-center">
                 <Button
                     onClick={handleAddMoreClick}
-                    className=""
+                    variant="outline"
                 >
-                    <Upload className="mr-2 h-4 w-4" /> Lisa pildid
+                    <Upload className="mr-2 h-4 w-4" /> Lisa pilte
                 </Button>
                 <Input
-                    className="opacity-0"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     type="file"
                     id="fileUpload"
                     multiple

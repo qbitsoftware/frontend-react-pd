@@ -2,10 +2,10 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Participant } from '@/types/types'
 import { AvatarImage } from '@radix-ui/react-avatar'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import placeholderImg from "@/assets/placheolderImg.svg"
 import { useTranslation } from 'react-i18next'
-import {ImageModal} from "./image-modal"
+import { ImageModal } from "./image-modal"
 
 interface SoloTableProps {
   participants: Participant[] | null
@@ -15,11 +15,11 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
   const { t } = useTranslation()
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  
+
   const openModal = (imageUrl: string) => {
     setSelectedImage(imageUrl)
   }
-  
+
   const closeModal = () => {
     setSelectedImage(null)
   }
@@ -66,8 +66,9 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
         </div>
       )}
       {selectedImage && (
-        <ImageModal 
-          imageUrl={selectedImage} 
+        <ImageModal
+        isOpen={!!selectedImage}
+          imageUrl={selectedImage}
           onClose={closeModal}
         />
       )}

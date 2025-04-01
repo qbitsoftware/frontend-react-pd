@@ -1,11 +1,7 @@
-import React from 'react'
 import {
   Dialog,
   DialogContent,
-  DialogClose
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { X } from 'lucide-react'
 
 export const ImageModal = ({ imageUrl, onClose, isOpen }: { 
   imageUrl: string, 
@@ -16,7 +12,7 @@ export const ImageModal = ({ imageUrl, onClose, isOpen }: {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent 
         className="max-w-[90vw] max-h-[90vh] p-1 bg-white border border-gray-200 rounded-lg shadow-xl sm:p-2"
-        modal={true}
+        // modal={true}
       >
         <div className="relative w-full flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
           
