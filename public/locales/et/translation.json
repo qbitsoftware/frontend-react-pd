@@ -414,6 +414,40 @@
           "matches": "Matšid",
           "tables": "Tabelid"
         },
+        "images": {
+          "title": "Mängupäevad",
+          "new": "Uus mängupäev",
+          "dialog": {
+            "confirmation": "Oled kindel",
+            "description": "Peale toimingut kustutatakse mängupäev ja seda ei saa tagasi võtta",
+            "cancel": "Katkesta",
+            "delete": "Kustuta"
+          },
+          "no_gamedays": "Mängupäevi pole",
+          "no_gamedays_description": "Loo uus mängupäev, et alustada piltide haldamist",
+          "no_images": "Pilte pole",
+          "edit": "Muuda",
+          "delete": "Kustuta",
+          "add_image": "Lisa pildid",
+          "remove_all": "Eemalda kõik",
+          "save": "Salvesta",
+          "toasts": {
+            "success_add": "Mängupäev loodud edukalt",
+            "error_add": "Mängupäeva loomine nurjus",
+            "success_remove": "Mängupäev eemaldatud edukalt",
+            "error_remove": "Mängupäeva eemaldamine nurjus",
+            "success_edit": "Mängupäev muudetud edukalt",
+            "error_edit": "Mängupäeva muutmine nurjus",
+            "success_remove_image": "Pilt eemaldatud edukalt",
+            "error_remove_image": "Pildi eemaldamine nurjus",
+            "uploading_images": "Piltide laadimine võib võtta mõne hetke. Ärge sulgege veebilehte.",
+            "upload_success": "Piltide üleslaadimine õnnestus",
+            "upload_error": "Piltide üleslaadimine nurjus"
+          },
+          "loading": {
+            "games": "Laadimine..."
+          }
+        },
         "table": {
           "group": "Grupp",
           "number_and_team_size": "Osalejate arv / Tabeli suurus",
@@ -430,11 +464,34 @@
           "by_rating": "Reitingu järgi",
           "by_order": "Järjekorra järgi"
         },
+        "img_modal": {
+          "title": "Muuda pilti",
+          "description": "Vali või muuda pilti. Vajuta salvesta, et salvestada muudatused.",
+          "choose_img": "Vali pilt",
+          "file_types": "Sobivad formaadid: JPG, JPEG, PNG, WebP, GIF (max 10MB)",
+          "cancel": "Katkesta",
+          "save": "Salvesta",
+          "sentence_1": {
+            "1": "Muuda",
+            "2": " pilti"
+          },
+          "errors": {
+            "invalid_type": "Faili formaat ei sobi! Sobivad formaadid: JPG, JPEG, PNG, WebP, GIF",
+            "file_too_large": "Fail on liiga suur. Maksimaalne suurus on 10MB",
+            "upload_failed": "Pildi üleslaadimine nurjus. Proovige uuesti.",
+            "no_image": "Pilt puudub"
+          },
+          "notifications": {
+            "upload_success": "Pildi üleslaadimine õnnestus",
+            "uploading": "Pildi üleslaadimine..."
+          }
+        },
         "participants": {
           "actions": {
             "save": "Salvesta",
             "edit": "Muuda",
             "delete": "Kustuta",
+            "cancel": "Katkesta",
             "edit_team": "Muuda meeskonda",
             "delete_team": "Kustuta meeskond",
             "submit": "Lisa"

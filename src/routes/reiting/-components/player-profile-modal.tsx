@@ -18,10 +18,10 @@ export const PlayerProfileModal = ({ isOpen, onClose, user }: PlayerProfileModal
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl py-8 px-8 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl border border-gray-100">
+      <DialogContent className="md:max-w-5xl py-8 px-8 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl border border-gray-100">
         <div className="flex flex-col md:flex-row md:space-x-10">
           <div className="flex flex-col items-center space-y-6 w-full md:w-1/3 pb-6 md:pb-0 border-b md:border-b-0 md:border-x border-gray-100">
-            <Avatar className="w-48 h-48 shadow-lg">
+            <Avatar className="md:w-48 md:h-48 shadow-lg">
               <AvatarImage src="" alt={`${user.first_name} ${user.last_name}'s profile`} />
               <AvatarFallback>
                 <img src={placeholderImg} className="rounded-full h-full w-full object-cover" alt="Profile" />

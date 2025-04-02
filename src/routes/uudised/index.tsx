@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect, useMemo } from 'react'
+import { useState } from 'react'
 import { UseGetBlogsOption } from '@/queries/blogs'
 import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,7 @@ import {
   FileX,
 } from 'lucide-react'
 import { Blog } from '@/types/types'
+import { formatDate } from '@/lib/utils'
 
 // Define interfaces
 interface LoaderData {
@@ -47,7 +48,6 @@ const searchParamsSchema = z.object({
 
 type SearchParams = z.infer<typeof searchParamsSchema>
 
-// Create the route
 export const Route = createFileRoute('/uudised/')({
   component: BlogPage,
   validateSearch: searchParamsSchema,
@@ -92,27 +92,15 @@ function BlogPage(): JSX.Element {
   const { category, search } = searchParams
   const navigate = Route.useNavigate()
 
-  // Local state for search input
   const [searchQuery, setSearchQuery] = useState(search || '')
 
   const availableCategories = [
-    { id: "competitions", label: "Competitions" },
-    { id: "news", label: "News" },
-    { id: "good_read", label: "Good Read" },
-    { id: "results", label: "Results" }
+    { id: "competitions", label: t("news.categories.competitions", "Competitions") },
+    { id: "news", label: t("news.categories.news", "News") },
+    { id: "good_read", label: t("news.categories.good_read", "Good Read") },
+    { id: "results", label: t("news.categories.results", "Results") }
   ];
 
-  // Format date function
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
-
-  // Truncate text function
   const truncateText = (
     text: string | undefined,
     maxLength: number = 150,
@@ -121,7 +109,6 @@ function BlogPage(): JSX.Element {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text
   }
 
-  // Handle category change
   const handleCategoryChange = (newCategory: string): void => {
     navigate({
       search: (prev: SearchParams) => ({
@@ -132,7 +119,6 @@ function BlogPage(): JSX.Element {
     })
   }
 
-  // Handle search submit
   const handleSearchSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
     navigate({
@@ -144,7 +130,6 @@ function BlogPage(): JSX.Element {
     })
   }
 
-  // Handle page change
   const handlePageChange = (newPage: number): void => {
     navigate({
       search: (prev: SearchParams) => ({
@@ -156,7 +141,6 @@ function BlogPage(): JSX.Element {
     window.scrollTo(0, 0)
   }
 
-  // Clear filters
   const clearFilters = (): void => {
     setSearchQuery('')
     navigate({
@@ -166,7 +150,6 @@ function BlogPage(): JSX.Element {
     })
   }
 
-  // Empty state component
   const EmptyState = (): JSX.Element => (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <FileX size={48} className="text-gray-400 mb-4" />
@@ -185,7 +168,6 @@ function BlogPage(): JSX.Element {
     </div>
   )
 
-  // If we have an error, display error message
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -212,15 +194,9 @@ function BlogPage(): JSX.Element {
     <div className="max-w-7xl mx-auto px-4 py-12">
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold mb-4">
-          {t('blog.title', 'Our Blog')}
-        </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          {t(
-            'blog.description',
-            'Discover our latest news, tutorials, and insights',
-          )}
-        </p>
+        <h2 className=" font-bold mb-4">
+          {t('news.title')}
+        </h2>
       </div>
 
       {/* Filters */}
@@ -231,19 +207,19 @@ function BlogPage(): JSX.Element {
           className="w-full"
           onValueChange={(value) => handleCategoryChange(value)}
         >
-          <div className="flex justify-center mb-2">
-            <TabsList className="bg-gray-100 p-1 rounded-full">
-              <TabsTrigger value="all" className="px-4 py-2 rounded-full">
-                {t('blog.categories.all', 'All')}
+          <div className="flex justify-start md:justify-center mb-2 overflow-x-auto pb-1">
+            <TabsList className="bg-gray-100 p-1 rounded-full flex-wrap whitespace-nowrap">
+              <TabsTrigger value="all" className="px-3 sm:px-4 py-2 rounded-full text-sm">
+                {t('news.categories.all', 'All')}
               </TabsTrigger>
 
               {availableCategories.map((cat) => (
                 <TabsTrigger
                   key={cat.id}
                   value={cat.id}
-                  className="px-4 py-2 rounded-full"
+                  className="px-3 sm:px-4 py-2 rounded-full text-sm"
                 >
-                  {t(`blog.categories.${cat.id}`, cat.label)}
+                  {t(`news.categories.${cat.id}`, cat.label)}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -256,16 +232,15 @@ function BlogPage(): JSX.Element {
             <div className="relative">
               <Input
                 type="text"
-                placeholder={t('blog.search_placeholder', 'Search posts...')}
+                placeholder={t('news.search_content', 'Search posts...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pr-10 rounded-full"
+                className="h-12 w-full pl-4 pr-12 py-2 border rounded-lg text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
               />
               <Button
                 type="submit"
                 variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-10 w-10"
+                className="absolute right-2 top-1 bottom-1 h-auto px-3 m-0"
               >
                 <Search size={18} />
               </Button>
@@ -280,11 +255,10 @@ function BlogPage(): JSX.Element {
           {blogs.map((post) => (
             <Link
               key={post.id}
-              to={`/blog/${post.id}`}
+              to={`/uudised/${post.id}`}
               className="focus:outline-none focus:ring-2 focus:ring-primary rounded-lg"
             >
               <Card className="h-full flex flex-col hover:shadow-md transition-shadow">
-                {/* Featured Image */}
                 <div className="aspect-video w-full overflow-hidden rounded-t-lg">
                   {post.has_image && post.image_url ? (
                     <img
@@ -304,23 +278,20 @@ function BlogPage(): JSX.Element {
                   {post.category && (
                     <div className="mb-2">
                       <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-800">
-                        {categories.find((c) => c.id === post.category)
+                        {availableCategories.find((c) => c.id === post.category)
                           ?.label || post.category}
                       </span>
                     </div>
                   )}
 
-                  {/* Title */}
                   <CardTitle className="mb-3 text-xl">{post.title}</CardTitle>
 
-                  {/* Excerpt */}
                   <CardContent className="p-0 flex-grow">
                     <p className="text-gray-600 text-sm">
                       {truncateText(post.description)}
                     </p>
                   </CardContent>
 
-                  {/* Footer */}
                   <CardFooter className="px-0 pt-4 pb-0 mt-auto flex items-center text-sm text-gray-500">
                     <Calendar size={14} className="mr-1" />
                     <time dateTime={post.created_at}>

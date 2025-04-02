@@ -70,8 +70,8 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
                       className="cursor-pointer"
                       onClick={() =>
                         participant.extra_data.image_url
-                          ? openModal(participant.extra_data.image_url)
-                          : openModal(placeholderImg)
+                          && openModal(participant.extra_data.image_url)
+                          
                       }
                     >
                       <AvatarImage

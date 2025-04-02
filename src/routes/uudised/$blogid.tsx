@@ -36,7 +36,7 @@ function RouteComponent() {
 
 
     return (
-        <div className="max-w-[1440px] mx-auto px-0 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-[1440px] mx-auto px-1 sm:px-6 lg:px-8 py-4">
             <Card>
                 <CardHeader className='pb-2 pt-4'>
                     <div className="text-sm font-medium text-blue-600 mb-2 flex flex-wrap">

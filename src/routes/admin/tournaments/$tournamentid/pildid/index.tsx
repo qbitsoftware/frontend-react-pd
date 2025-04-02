@@ -1,10 +1,7 @@
-"use client"
-
 import type React from "react"
-
 import { createFileRoute, useParams } from "@tanstack/react-router"
 import { useState } from "react"
-import { Calendar, Edit2, Plus, Trash2, Upload } from "lucide-react"
+import { Calendar, Edit2, Plus, Trash2 } from "lucide-react"
 import {
   usePostGameDay,
   useGetGamedaysOptions,
@@ -32,6 +29,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useTranslation } from "react-i18next"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/pildid/")({
   loader: async ({ context: { queryClient }, params }) => {
@@ -43,7 +41,7 @@ export const Route = createFileRoute("/admin/tournaments/$tournamentid/pildid/")
       const gamedaysOptions = useGetGamedaysOptions(tournamentId)
       gamedaysData = await queryClient.ensureQueryData(gamedaysOptions)
     } catch (error) {
-      console.error("Error fetching game days:", error)
+      void error;
     }
     return { gamedaysData }
   },
@@ -71,6 +69,7 @@ function RouteComponent() {
   const [editName, setEditName] = useState("")
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [gamedayToDelete, setGamedayToDelete] = useState<number | null>(null)
+  const { t } = useTranslation()
 
   // Mutations
   const postGamedayMutation = usePostGameDay(tournamentId)
@@ -97,10 +96,10 @@ function RouteComponent() {
       }
 
       postGamedayMutation.mutateAsync(gameday)
-      successToast("Mängupäev edukalt lisatud")
+      successToast(t('admin.tournaments.groups.images.toasts.success_add'))
     } catch (error) {
       console.error("Error adding game day:", error)
-      errorToast("Mängupäeva lisamine ebaõnnestus")
+      errorToast(t('admin.tournaments.groups.images.toasts.error_add'))
     }
   }
 
@@ -115,10 +114,10 @@ function RouteComponent() {
 
     try {
       removeGameDayMutation.mutateAsync(gamedayToDelete)
-      successToast("Mängupäev edukalt eemaldatud")
+      successToast(t('admin.tournaments.groups.images.toasts.success_remove'))
     } catch (error) {
       console.error("Error deleting gameday", error)
-      errorToast("Mängupäeva eemaldamine ebaõnnestus")
+      errorToast(t('admin.tournaments.groups.images.toasts.error_remove'))
     } finally {
       setDeleteConfirmOpen(false)
       setGamedayToDelete(null)
@@ -147,10 +146,10 @@ function RouteComponent() {
           gameday_id: editingGameday.id,
         })
         setEditingGameday(null)
-        successToast("Mängupäeva nimi muudetud")
+        successToast(t('admin.tournaments.groups.images.toasts.success_edit'))
       } catch (error) {
-        console.error("Failed to update", error)
-        errorToast("Mängupäeva nime muutmine ebaõnnestus")
+        void error;
+        errorToast(t('admin.tournaments.groups.images.toasts.error_edit'))
       }
     }
   }
@@ -159,11 +158,11 @@ function RouteComponent() {
   const deleteImage = (imageId: number) => {
     deleteImageMutation.mutate(imageId, {
       onSuccess: () => {
-        successToast("Pilt edukalt eemaldatud")
+        successToast(t('admin.tournaments.groups.images.toasts.success_remove_image'))
       },
       onError: (error) => {
         void error
-        errorToast("Pildi eemaldamine ebaõnnestus")
+        errorToast(t('admin.tournaments.groups.images.toasts.error_remove_image'))
       },
     })
   }
@@ -174,7 +173,7 @@ function RouteComponent() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Laadin mängupäevi...</p>
+          <p className="text-muted-foreground">{t('admin.tournaments.groups.images.loading.games')}</p>
         </div>
       </div>
     )
@@ -189,14 +188,14 @@ function RouteComponent() {
 
   return (
     <div className="container px-10 py-8">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-8">
         <div className="flex items-center gap-2">
-          <h5 className=" font-semibold tracking-tight">Mängupäevad</h5>
+          <h5 className="mb-2 md:mb-0 font-semibold tracking-tight">{t('admin.tournaments.groups.images.title')}</h5>
         </div>
 
         <Button onClick={addGameDay} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
-          Uus mängupäev
+          {t('admin.tournaments.groups.images.new')}
         </Button>
       </div>
 
@@ -206,13 +205,13 @@ function RouteComponent() {
             <div className="rounded-full bg-primary/10 p-3 mb-4">
               <Calendar className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-2">Pole ühtegi mängupäeva</h3>
+            <h3 className="text-xl font-medium mb-2">{t('admin.tournaments.groups.images.no_gamedays')}</h3>
             <p className="text-muted-foreground text-center max-w-md mb-6">
-              Loo uus mängupäev, et saaksid hakata pilte lisama ja haldama.
+              {t('admin.tournaments.groups.images.no_gamedays_description')}
             </p>
             <Button onClick={addGameDay} className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              Loo esimene mängupäev
+              {t('admin.tournaments.groups.images.new')}
             </Button>
           </CardContent>
         </Card>
@@ -259,7 +258,7 @@ function RouteComponent() {
                           title="Muuda"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
-                          <span className="sr-only">Muuda</span>
+                          <span className="sr-only">{t("admin.tournaments.groups.images.edit")}</span>
                         </Button>
                       </div>
                     )}
@@ -272,7 +271,9 @@ function RouteComponent() {
                       onClick={() => confirmDeleteGameDay(day.id)}
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span>Kustuta</span>
+                      <span>
+                        {t("admin.tournaments.groups.images.delete")}
+                      </span>
                     </Button>
                   </div>
                 </CardHeader>
@@ -302,17 +303,17 @@ function RouteComponent() {
                             size="icon"
                             className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => deleteImage(img.id)}
-                            title="Kustuta pilt"
+                            title={t("admin.tournaments.groups.images.delete")}
                           >
                             <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Kustuta pilt</span>
+                            <span className="sr-only">{t("admin.tournaments.groups.images.delete")}</span>
                           </Button>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-12 border border-dashed rounded-lg bg-muted/30">
-                      <p className="text-muted-foreground">Sellele mängupäevale pole veel pilte lisatud</p>
+                      <p className="text-muted-foreground">{t('admin.tournaments.groups.images.no_images')}</p>
                     </div>
                   )}
                 </CardContent>
@@ -325,18 +326,20 @@ function RouteComponent() {
       <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Kas oled kindel?</AlertDialogTitle>
+            <AlertDialogTitle>{t('admin.tournaments.groups.images.dialog.confirmation')}</AlertDialogTitle>
             <AlertDialogDescription>
-              See tegevus kustutab mängupäeva ja kõik sellega seotud pildid. Seda toimingut ei saa tagasi võtta.
+              {t('admin.tournaments.groups.images.dialog.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Loobu</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t('admin.tournaments.groups.images.dialog.cancel')}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={removeGameDay}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Kustuta
+              {t('admin.tournaments.groups.images.dialog.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

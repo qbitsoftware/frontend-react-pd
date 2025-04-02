@@ -65,6 +65,12 @@ function RouteComponent() {
 
   }
 
+  console.log(tableQuery.data)
+  console.log(bracketQuery.data)
+
+
+
+
   return (
     <div className='min-h-screen p-2'>
 
@@ -94,7 +100,9 @@ function RouteComponent() {
               <h4 className="text-center font-medium pt-4 pb-2">{groupName}</h4>
             </div>
             <div className="w-full mt-6">
-              <Window data={bracketQuery.data.data} tournament_table={tableQuery.data.data} />
+              {tableQuery.data.data.type === "free_for_all" ? <div className="text-center text-stone-700">{t('competitions.errors.no_groups')} </div> :
+                <Window data={bracketQuery.data.data} tournament_table={tableQuery.data.data} />
+              }
             </div>
           </div>
         )}

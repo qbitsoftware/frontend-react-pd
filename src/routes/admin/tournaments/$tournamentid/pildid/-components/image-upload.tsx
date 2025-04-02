@@ -5,6 +5,7 @@ import { X, Upload, Trash2, Check } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
 import { usePostGamedayImage } from '@/queries/images'
+import { useTranslation } from 'react-i18next'
 
 interface ImageUploadProps {
     tournament_id: number
@@ -17,7 +18,8 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
     const postImageMutation = usePostGamedayImage(tournament_id, gameDay)
-    
+    const { t } = useTranslation()
+
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -46,14 +48,13 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             formData.append("images", file)
         })
         try {
-            successToast("Piltide üleslaadimine võib võtta mõne hetke", "Palun ärge sulgege veebilehte")
-            const result = await postImageMutation.mutateAsync(formData)
-            console.log("result", result)
-            successToast("Piltide üleslaadimine oli edukas")
+            successToast(t('admin.tournaments.groups.images.toasts.uploading_images'))
+            await postImageMutation.mutateAsync(formData)
+            successToast(t('admin.tournaments.groups.images.toasts.upload_success'))
             setImages([])
         } catch (error) {
             void error;
-            errorToast("Piltide üleslaadimisel tekkis viga")
+            errorToast(t('admin.tournaments.groups.images.toasts.upload_error'))
         }
     }
 
@@ -64,7 +65,7 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
                     onClick={handleAddMoreClick}
                     variant="outline"
                 >
-                    <Upload className="mr-2 h-4 w-4" /> Lisa pilte
+                    <Upload className="mr-2 h-4 w-4" /> {t('admin.tournaments.groups.images.add_image')}
                 </Button>
                 <Input
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -104,14 +105,14 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
                             onClick={handleClearAll}
                             className=''
                         >
-                            <Trash2 className="mr-2 h-4 w-4" /> Eemalda kõik
+                            <Trash2 className="mr-2 h-4 w-4" /> {t('admin.tournaments.groups.images.remove_all')}
                         </Button>
                         <Button
                             size="sm"
                             onClick={uploadImages}
                             className=''
                         >
-                            <Check className="mr-2 h-4 w-4" /> Salvesta
+                            <Check className="mr-2 h-4 w-4" /> {t('admin.tournaments.groups.images.save')}
                         </Button>
                     </div>
                 </div>

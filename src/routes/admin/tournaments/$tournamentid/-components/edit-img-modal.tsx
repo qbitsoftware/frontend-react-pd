@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { addPlayerImage } from '@/queries/images';
 import { useToast } from '@/hooks/use-toast';
 import { useToastNotification } from "@/components/toast-notification"
+import { useTranslation } from 'react-i18next';
 
 
 // Allowed image formats
@@ -12,10 +13,10 @@ const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 interface EditImgModalProps {
-    playerId: string;
-    playerName: string;
-    playerImg?: string;
-    onSuccess?: () => void;
+  playerId: string;
+  playerName: string;
+  playerImg?: string;
+  onSuccess?: () => void;
 }
 
 const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgModalProps) => {
@@ -29,6 +30,7 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
   const { successToast, errorToast } = useToastNotification(toast)
 
   const { mutate: uploadImage } = addPlayerImage();
+  const { t } = useTranslation()
 
   // Set initial preview from playerImg prop when dialog opens
   useEffect(() => {
@@ -42,12 +44,12 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
     setError("");
 
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      setError("Invalid file type. Only JPG, JPEG, PNG, WebP, and GIF are allowed.");
+      setError(t('admin.tournaments.groups.img_modal.errors.invalid_type'));
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setError("File is too large. Maximum size is 10MB.");
+      setError(t("admin.tournaments.groups.img_modal.errors.file_too_large"));
       return false;
     }
 
@@ -93,13 +95,13 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
           setIsOpen(false);
           setIsLoading(false);
           if (onSuccess) onSuccess();
-          successToast("Image uploaded successfully")
+          successToast(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
         },
         onError: (error) => {
-          console.error("Upload failed:", error);
-          setError("Failed to upload image. Please try again.");
+          void error;
+          setError(t("admin.tournaments.groups.img_modal.errors.upload_failed"));
           setIsLoading(false);
-          errorToast("Image upload error")
+          errorToast(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
         }
       }
     );
@@ -128,17 +130,17 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          Edit image
+          {t("admin.tournaments.groups.img_modal.title")}
         </Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Edit {playerName}'s image
+            {t("admin.tournaments.groups.img_modal.sentence_1.1")} {playerName}{t("admin.tournaments.groups.img_modal.sentence_1.2")}
           </DialogTitle>
           <DialogDescription>
-            Add or replace player image here. Click save when done.
+            {t("admin.tournaments.groups.img_modal.description")}
           </DialogDescription>
         </DialogHeader>
         <div>
@@ -159,11 +161,11 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
               className="w-full"
               disabled={isLoading}
             >
-              Choose Image
+              {t('admin.tournaments.groups.img_modal.choose_img')}
             </Button>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Upload JPG, JPEG, PNG, WebP, or GIF (max 10MB)
+            {t('admin.tournaments.groups.img_modal.file_types')}
           </p>
 
           {error && (
@@ -181,7 +183,9 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
               />
             ) : (
               <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
-                <span className="text-gray-400">No image</span>
+                <span className="text-gray-400">
+                  {t('admin.tournaments.groups.img_modal.errors.no_image')}
+                </span>
               </div>
             )}
           </div>
@@ -193,14 +197,18 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
               onClick={() => setIsOpen(false)}
               disabled={isLoading}
             >
-              Cancel
+              {t('admin.tournaments.groups.img_modal.cancel')}
             </Button>
             <Button
               type="button"
               onClick={handleSave}
               disabled={!image || isLoading}
             >
-              {isLoading ? 'Uploading...' : 'Save'}
+              {isLoading ?
+                t('admin.tournaments.groups.img_modal.notifications.uploading')
+                :
+                t('admin.tournaments.groups.img_modal.save')
+              }
             </Button>
           </div>
         </div>

@@ -11,7 +11,6 @@ interface PlayerProfileDataProps {
 
 export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
   const { t } = useTranslation();
-  console.log("profile", profile);
 
   return (
     <Tabs defaultValue="latest-matches" className="w-full min-h-64">
@@ -102,7 +101,7 @@ export const PlayerProfileData = ({ profile }: PlayerProfileDataProps) => {
           <h3 className="font-medium text-lg text-gray-800 mb-4">
             Rating Progress
           </h3>
-          <div className="h-64">
+          <div className="w-full">
             <PlayerRankingChangeGraph stats={profile.rating_change} />
           </div>
         </div>

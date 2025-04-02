@@ -414,6 +414,40 @@
           "matches": "Matches",
           "tables": "Tables"
         },
+        "images": {
+          "title": "Gamedays",
+          "new": "New gameday",
+          "dialog": {
+            "confirmation": "Are you sure?",
+            "description": "This action cannot be undone. This will permanently delete the data.",
+            "cancel": "Cancel",
+            "delete": "Delete"
+          },
+          "no_gamedays": "There are no gamedays",
+          "no_gamedays_description": "Create a new gameday to upload and manage images",
+          "no_images": "There are currently no images",
+          "edit": "Edit",
+          "delete": "Delete",
+          "add_image": "Add images",
+          "remove_all": "Remove all",
+          "save": "Save",
+          "toasts": {
+            "success_add": "Gameday added",
+            "error_add": "Failed to add gameday",
+            "success_remove": "Gameday removed successfully",
+            "error_remove": "Failed to remove gameday",
+            "success_edit": "Gameday edited successfully",
+            "error_edit": "Failed to edit gameday",
+            "success_remove_image": "Image removed successfully",
+            "error_remove_image": "Failed to remove image",
+            "uploading_images": "Uploading images might take some time. Do not close the page.",
+            "upload_success": "Image uploaded successfully.",
+            "upload_error": "Image upload failed. Please try again."
+          },
+          "loading": {
+            "games": "Loading..."
+          }
+        },
         "table": {
           "group": "Group",
           "number_and_team_size": "Participants / Table size",
@@ -430,11 +464,34 @@
           "by_rating": "By rating",
           "by_order": "By order"
         },
+        "img_modal": {
+          "title": "Edit image",
+          "description": "Add or replace player image here. Click save when done",
+          "choose_img": "Choose image",
+          "file_types": "Upload JPG, JPEG, PNG, WebP, or GIF (max 10MB)",
+          "cancel": "Cancel",
+          "save": "Save",
+          "sentence_1": {
+            "1": "Edit",
+            "2": "'s image"
+          },
+          "errors": {
+            "invalid_type": "Invalid file type. Only JPG, JPEG, PNG, WebP, and GIF are allowed.",
+            "file_too_large": "File is too large. Maximum size is 10MB.",
+            "upload_failed": "Image upload failed. Please try again.",
+            "no_image": "No image"
+          },
+          "notifications": {
+            "upload_success": "Image uploaded successfully.",
+            "uploading": "Uploading..."
+          }
+        },
         "participants": {
           "actions": {
             "save": "Save",
             "edit": "Edit",
             "delete": "Delete",
+            "cancel": "Cancel",
             "edit_team": "Edit team",
             "delete_team": "Delete team",
             "submit": "Submit"

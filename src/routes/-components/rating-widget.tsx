@@ -45,14 +45,14 @@ const RatingWidget = ({ users, isEmpty }: Props) => {
             onValueChange={setActiveTab}
             className="w-full "
           >
-            <TabsList className="justify-start w-full rounded-[2px] py-2 gap-1 flex flex-col lg:flex-row">
-              <TabsTrigger value="women" className="rounded-[4px] flex-1">
+            <TabsList className="w-full rounded-[2px] py-2 gap-1 flex flex-col lg:flex-row justify-start">
+              <TabsTrigger value="women" className=" w-full rounded-[4px] flex-1">
                 {t('rating.filtering.buttons.women')}
               </TabsTrigger>
-              <TabsTrigger value="men" className="rounded-[4px] flex-1">
+              <TabsTrigger value="men" className="w-full rounded-[4px] flex-1">
                 {t('rating.filtering.buttons.men')}
               </TabsTrigger>
-              <TabsTrigger value="combined" className="rounded-[4px] flex-1">
+              <TabsTrigger value="combined" className="w-full rounded-[4px] flex-1">
                 {t('rating.filtering.buttons.combined')}
               </TabsTrigger>
             </TabsList>

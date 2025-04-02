@@ -1,10 +1,9 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useGetGamedaysOptions } from "@/queries/images";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar } from "lucide-react";
-import {ImageModal} from "../mangijad/-components/image-modal"
+import { ImageModal } from "../mangijad/-components/image-modal"
 
 export const Route = createFileRoute("/voistlused/$tournamentid/galerii/")({
   loader: async ({ context: { queryClient }, params }) => {
@@ -26,14 +25,14 @@ function RouteComponent() {
   const { t } = useTranslation();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  
-    const openModal = (imageUrl: string) => {
-      setSelectedImage(imageUrl)
-    }
-  
-    const closeModal = () => {
-      setSelectedImage(null)
-    }
+
+  const openModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl)
+  }
+
+  const closeModal = () => {
+    setSelectedImage(null)
+  }
 
   if (!gamedaysData || !gamedaysData.data) {
     return (
@@ -51,7 +50,7 @@ function RouteComponent() {
     const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
     return dateA - dateB;
   });
-  
+
   const [activeTab, setActiveTab] = useState(() => {
     return gamedays.length > 0 ? gamedays[0].id.toString() : "";
   });
@@ -70,67 +69,67 @@ function RouteComponent() {
       <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">{t('gallery.title')}</h5>
       <div className='pb-8 '>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-6">
-        <div className="overflow-x-auto pb-2">
-          <TabsList className="flex justify-start items-center gap-1 h-auto p-1">
-            {gamedays.map((day) => (
-              <TabsTrigger
-                key={day.id}
-                value={day.id.toString()}
-                className="text-sm px-4 py-2 h-9 data-[state=active]:bg-muted data-[state=active]:shadow-sm data-[state=active]:text-stone-800"
-              >
-                {day.name}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-6">
+          <div className="overflow-x-auto pb-2">
+            <TabsList className="flex justify-start items-center gap-1 h-auto p-1">
+              {gamedays.map((day) => (
+                <TabsTrigger
+                  key={day.id}
+                  value={day.id.toString()}
+                  className="text-sm px-4 py-2 h-9 data-[state=active]:bg-muted data-[state=active]:shadow-sm data-[state=active]:text-stone-800"
+                >
+                  {day.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
 
-        {gamedays.map((day) => (
-          <TabsContent
-            key={day.id}
-            value={day.id.toString()}
-            className="rounded-md pt-2"
-          >
-            <div className="rounded-md">
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <h3 className="text-lg font-medium">{day.name}</h3>
+          {gamedays.map((day) => (
+            <TabsContent
+              key={day.id}
+              value={day.id.toString()}
+              className="rounded-md pt-2"
+            >
+              <div className="rounded-md">
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <h3 className="text-lg font-medium">{day.name}</h3>
+                  </div>
                 </div>
+
+                {day.images && day.images.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    {day.images.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="relative rounded-md overflow-hidden border border-muted group"
+                      >
+                        <img
+                          onClick={() => openModal(img.image_url)}
+                          src={img.image_url}
+                          alt={`${day.name} - ${t("gallery.image")} ${idx + 1}`}
+                          className="cursor-pointer w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">
+                    {t("gallery.no_images")}
+                  </p>
+                )}
               </div>
-
-              {day.images && day.images.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                  {day.images.map((img, idx) => (
-                    <div
-                      key={idx}
-                      className="relative rounded-md overflow-hidden border border-muted group"
-                    >
-                      <img
-                        onClick={() => openModal(img.image_url)}
-                        src={img.image_url}
-                        alt={`${day.name} - ${t("gallery.image")} ${idx + 1}`}
-                        className="cursor-pointer w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  {t("gallery.no_images")}
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
       {selectedImage && (
-              <ImageModal
-              isOpen={!!selectedImage}
-                imageUrl={selectedImage}
-                onClose={closeModal}
-              />
+        <ImageModal
+          isOpen={!!selectedImage}
+          imageUrl={selectedImage}
+          onClose={closeModal}
+        />
       )}
     </div>
   );

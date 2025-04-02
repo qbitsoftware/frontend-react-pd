@@ -20,12 +20,12 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
-  
+
   const openModal = (imageUrl: string) => {
     setSelectedImage(imageUrl);
     setIsImageModalOpen(true);
   };
-  
+
   const closeImageModal = () => {
     setIsImageModalOpen(false)
     setSelectedImage(null)
@@ -57,9 +57,9 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                 >
                   <TableCell>
                     <Avatar>
-                      <AvatarImage 
+                      <AvatarImage
                         src={participant.extra_data.image_url}
-                        className="cursor-pointer" 
+                        className="cursor-pointer object-cover"
                       />
                       <AvatarFallback><img src={clubPlaceholder} className='rounded-full' alt="Club" /></AvatarFallback>
                     </Avatar>
@@ -78,8 +78,8 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
       )}
 
       {selectedImage && (
-        <ImageModal 
-          imageUrl={selectedImage} 
+        <ImageModal
+          imageUrl={selectedImage}
           onClose={closeImageModal}
           isOpen={isImageModalOpen}
         />
@@ -109,13 +109,12 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                     <TableCell>
                       <Avatar onClick={(e) => {
                         e.stopPropagation();
-                        player.extra_data.image_url ? 
-                          openModal(player.extra_data.image_url) : 
-                          openModal(placeholderImg);
+                        player.extra_data.image_url &&
+                          openModal(player.extra_data.image_url)
                       }}>
-                        <AvatarImage 
+                        <AvatarImage
                           src={player.extra_data.image_url}
-                          className="cursor-pointer" 
+                          className="cursor-pointer object-cover"
                         />
                         <AvatarFallback><img src={placeholderImg} className='rounded-full' alt="Player" /></AvatarFallback>
                       </Avatar>

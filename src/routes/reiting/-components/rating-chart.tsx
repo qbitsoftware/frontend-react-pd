@@ -4,26 +4,26 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
+// import {
+//   ChartConfig,
+//   ChartContainer,
+//   ChartTooltip,
+//   ChartTooltipContent,
+// } from "@/components/ui/chart"
 
-import { mockRatingChartData } from "@/lib/mock_data/rating_mocks"
+// import { mockRatingChartData } from "@/lib/mock_data/rating_mocks"
 import { Player } from "@/types/types"
 
-const chartConfig = {
-  ratingPoints: {
-    label: "Rating Points",
-    color: "hsl(var(--chart-1))",
-  },
-  weightPoints: {
-    label: "Weight Points",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
+// const chartConfig = {
+//   ratingPoints: {
+//     label: "Rating Points",
+//     color: "hsl(var(--chart-1))",
+//   },
+//   weightPoints: {
+//     label: "Weight Points",
+//     color: "hsl(var(--chart-2))",
+//   },
+// } satisfies ChartConfig
 
 interface Props {
   stats: Player[]
@@ -39,12 +39,12 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
   }));
 
   return (
-    <Card className="border-0 shadow-none ">
+    <Card className="border-0 shadow-none">
       <CardContent className="p-0 pt-4">
-        <ChartContainer config={chartConfig} className="relative h-64">
+        <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={chartData.length > 0 ? chartData : mockRatingChartData}
+              data={chartData}
               margin={{
                 top: 10,
                 right: 15,
@@ -67,10 +67,6 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
                 tick={{ fill: "#777" }}
                 width={30}
               />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dot" />}
-              />
               <Area
                 dataKey="ratingPoints"
                 type="natural"
@@ -91,7 +87,7 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   )
