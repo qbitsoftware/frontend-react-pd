@@ -21,11 +21,10 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   
-  const openImageModal = (imageUrl: string, event: React.MouseEvent) => {
-    event.stopPropagation() // Prevent the row click event from triggering
-    setSelectedImage(imageUrl)
-    setIsImageModalOpen(true)
-  }
+  const openModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setIsImageModalOpen(true);
+  };
   
   const closeImageModal = () => {
     setIsImageModalOpen(false)
@@ -61,7 +60,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                       <AvatarImage 
                         src={participant.extra_data.image_url}
                         className="cursor-pointer" 
-                        onClick={(e) => participant.extra_data.image_url && openImageModal(participant.extra_data.image_url, e)}
                       />
                       <AvatarFallback><img src={clubPlaceholder} className='rounded-full' alt="Club" /></AvatarFallback>
                     </Avatar>
@@ -79,7 +77,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
         </div>
       )}
 
-      {/* Image Modal using shadcn Dialog */}
       {selectedImage && (
         <ImageModal 
           imageUrl={selectedImage} 
@@ -89,7 +86,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl h-[95vh] overflow-scroll">
+        <DialogContent className="max-w-4xl max-h-[95vh] overflow-scroll">
           <DialogHeader>
             <DialogTitle>{selectedTeam?.name} - {t('competitions.participants.team_players')}</DialogTitle>
           </DialogHeader>
@@ -110,11 +107,15 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                 {selectedTeam.players.map((player) => (
                   <TableRow key={player.id}>
                     <TableCell>
-                      <Avatar>
+                      <Avatar onClick={(e) => {
+                        e.stopPropagation();
+                        player.extra_data.image_url ? 
+                          openModal(player.extra_data.image_url) : 
+                          openModal(placeholderImg);
+                      }}>
                         <AvatarImage 
                           src={player.extra_data.image_url}
                           className="cursor-pointer" 
-                          onClick={(e) => player.extra_data.image_url && openImageModal(player.extra_data.image_url, e)}
                         />
                         <AvatarFallback><img src={placeholderImg} className='rounded-full' alt="Player" /></AvatarFallback>
                       </Avatar>

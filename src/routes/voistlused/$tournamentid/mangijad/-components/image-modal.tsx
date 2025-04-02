@@ -9,19 +9,17 @@ export const ImageModal = ({ imageUrl, onClose, isOpen }: {
   isOpen: boolean
 }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog  open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent 
-        className="max-w-[90vw] max-h-[90vh] p-1 bg-white border border-gray-200 rounded-lg shadow-xl sm:p-2"
-        // modal={true}
-      >
-        <div className="relative w-full flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
-          
-          
-          <div className="relative max-w-full max-h-full p-1 sm:p-2 bg-white">
+        className="p-0 w-full max-h-[95vh] mx-auto overflow-hidden border-none bg-transparent shadow-none"
+        >
+        <div className="relative w-full h-full flex items-center justify-center">
+          <div className="flex items-center justify-center w-full h-full">
             <img 
               src={imageUrl} 
               alt="Full view" 
-              className="max-w-full max-h-[80vh] object-contain rounded" 
+              className="max-w-full max-h-[85vh] object-contain rounded"
+              key={imageUrl}
             />
           </div>
         </div>

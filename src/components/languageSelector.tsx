@@ -75,7 +75,7 @@ export function LanguageDropdown() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className="cursor-pointer px-4 py-2 mt-[2px] hover:bg-stone-100 rounded-[6px] flex items-center justify-center gap-2">
+                <div className="cursor-pointer px-4 py-4 mt-[2px] hover:bg-stone-100 rounded-[6px] flex items-center justify-center gap-2">
                     {getCurrentFlag()}
                 </div>
             </DropdownMenuTrigger>
