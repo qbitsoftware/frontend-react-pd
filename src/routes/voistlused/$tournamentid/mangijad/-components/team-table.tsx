@@ -120,11 +120,11 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                       </Avatar>
                     </TableCell>
                     <TableCell>{`${player.first_name} ${player.last_name}`}</TableCell>
-                    <TableCell>{player.extra_data.rate_order}</TableCell>
+                    <TableCell>{player.extra_data.rate_order == 0 ? "-" : player.extra_data.rate_order}</TableCell>
                     <TableCell>{player.extra_data.class}</TableCell>
                     <TableCell>{player.extra_data.club}</TableCell>
                     <TableCell>{player.sex}</TableCell>
-                    <TableCell>{player.extra_data.eltl_id}</TableCell>
+                    <TableCell>{player.extra_data.eltl_id == 0 ? "?" : player.extra_data.eltl_id}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
