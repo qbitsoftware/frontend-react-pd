@@ -36,7 +36,6 @@ import {
   Player,
   TableTennisExtraData,
 } from "@/types/types";
-import { useRouter } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
@@ -58,7 +57,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 }) => {
   const toast = useToast();
   const { successToast, errorToast } = useToastNotification(toast);
-  const router = useRouter();
 
   const { data: childMathes, isLoading } = UseGetChildMatchesQuery(
     tournament_id,
@@ -79,7 +77,6 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const [table, setTableNumber] = useState<number>(0);
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
-  // const [_, setActiveTab] = useState<string>("players")
 
   const prevValuesRef = useRef({
     captainTeam1: match.match.extra_data.captain_a || "",
@@ -274,10 +271,11 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     try {
       await usePatchMatch.mutateAsync(match);
       successToast("Successfully updated assigned player");
-      router.navigate({
-        to: location.pathname,
-        replace: true,
-      });
+      //THE ISSUE WHY ITS CLOSED IS ON THIS router.navigate - needs fixing
+      // router.navigate({
+      //   to: location.pathname,
+      //   replace: true,
+      // });
     } catch (error) {
       void error;
       errorToast("Something went wrong");
@@ -562,7 +560,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
         <Tabs
           defaultValue="players"
           className="flex-grow flex flex-col min-h-0"
-          // onValueChange={setActiveTab}
+        // onValueChange={setActiveTab}
         >
           <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
             <TabsTrigger
