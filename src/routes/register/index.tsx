@@ -13,6 +13,7 @@ import ErrorPage from "@/components/error";
 import { useTranslation } from "react-i18next";
 import { createRegisterSchema, RegisterFormData } from "@/types/types";
 import { useCreateUser } from "@/queries/users";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/register/")({
   component: RouteComponent,
@@ -50,6 +51,7 @@ function RouteComponent() {
 
   const onSubmit = (data: RegisterFormData) => {
     setServerError(null);
+    console.log("data", data)
     userMutation.mutate(data, {
       onSuccess: () => {
         successToast(t("register.successful_registration"));
@@ -151,6 +153,28 @@ function RouteComponent() {
                 </p>
               )}
             </div>
+
+            <div>
+              <Label htmlFor="location">{t("register.form.location")}</Label>
+              <Select onValueChange={(value) => {
+                register("location").onChange({ target: { name: "location", value } });
+              }}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder={t("register.form.select_location")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="tartu">Tartu</SelectItem>
+                  <SelectItem value="tallinn">Tallinn</SelectItem>
+                  <SelectItem value="portugal">Portugal</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.location && (
+                <p className="text-sm text-red-600">
+                  {errors.location.message}
+                </p>
+              )}
+            </div>
+
             <div className="flex items-center">
               <input
                 id="create_profile"

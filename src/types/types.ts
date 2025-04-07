@@ -64,6 +64,7 @@ export type UserNew = {
   rate_points: number;
   rate_weigth: number;
   oragnization_id: number;
+  location: string;
   role: number;
 };
 
@@ -395,6 +396,9 @@ export const createRegisterSchema = (t: TFunction) =>
       last_name: z.string().min(1, t("register.form.errors.last_name")),
       username: z.string().min(3, t("register.form.errors.username")),
       password: z.string().min(8, t("register.form.errors.password")),
+      location: z.enum(["tartu", "tallinn", "portugal"], {
+        errorMap: () => ({ message: t("register.form.errors.location") })
+      }),
       confirm_password: z
         .string()
         .min(1, t("register.form.errors.password_confirmation")),

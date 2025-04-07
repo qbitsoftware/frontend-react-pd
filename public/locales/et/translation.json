@@ -149,9 +149,9 @@
     "last_updated": "Viimati uuendatud",
     "filtering": {
       "buttons": {
-        "men": "Lissabon",
-        "women": "Tartu",
-        "combined": "Tallinn"
+        "portugal": "Lissabon",
+        "tartu": "Tartu",
+        "tallinn": "Tallinn"
       },
       "select": {
         "options": {
@@ -232,6 +232,8 @@
       "register_progress": "Registreerimine...",
       "date_of_birth": "Sünnikuupäev",
       "username": "Kasutajanimi",
+      "location": "Koht",
+      "select_location": "Vali asukoht",
       "create_profile": "Automaatselt registreeri Pipedrive FFA turniirile",
       "sex": "Sugu",
       "sex_options": {
@@ -248,7 +250,8 @@
         "duplicate_username": "Kasutajanimi on juba kasutusel",
         "username": "Kasutajanimi on kohustuslik",
         "password": "Parool peab olema vähemalt 8 tähemärki pikk",
-        "password_confirmation": "Paroolid peavad kattuma"
+        "password_confirmation": "Paroolid peavad kattuma",
+        "location": "Asukoht peab olema valitud"
       }
     },
     "successful_registration": "Registreerimine oli edukas.",

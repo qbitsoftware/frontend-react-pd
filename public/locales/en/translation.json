@@ -149,9 +149,9 @@
     "last_updated": "Last updated",
     "filtering": {
       "buttons": {
-        "men": "Lisbon",
-        "women": "Tartu",
-        "combined": "Tallinn"
+        "portugal": "Lisbon",
+        "tartu": "Tartu",
+        "tallinn": "Tallinn"
       },
       "select": {
         "options": {
@@ -217,6 +217,8 @@
       "username": "Username",
       "create_profile": "Auto-signup for Pipedrive FFA tournament",
       "sex": "Sex",
+      "location": "Location",
+      "select_location": "Select location",
       "sex_options": {
         "male": "Male",
         "female": "Female",
@@ -231,7 +233,8 @@
         "duplicate_username": "Username is already taken",
         "username": "Username is required",
         "password": "Password must be alteast 8 characters long",
-        "password_confirmation": "Passwords must match"
+        "password_confirmation": "Passwords must match",
+        "location": "Location must be selected"
       }
     },
     "successful_registration": "Registration was successful",

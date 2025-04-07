@@ -22,7 +22,7 @@ const RatingWidget = ({ users }: Props) => {
   const selectedPlayer =
     users && users.find((user) => user.id === selectedPlayerId);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("combined");
+  const [activeTab, setActiveTab] = useState("tallinn");
 
   if (!users) {
     return <div>{t("rating.component.missing")}</div>;
@@ -30,9 +30,9 @@ const RatingWidget = ({ users }: Props) => {
 
   const filteredUsers = users
     .filter((user) => {
-      if (activeTab === "combined") return true;
-      if (activeTab === "men") return user.sex === "M";
-      if (activeTab === "women") return user.sex === "N";
+      if (activeTab === "tallinn") return user.location === "tallinn";
+      if (activeTab === "tartu") return user.location === "tartu";
+      if (activeTab === "portugal") return user.location === "portugal";
       return true;
     })
     .sort((a, b) => b.rate_points - a.rate_points);
@@ -41,20 +41,20 @@ const RatingWidget = ({ users }: Props) => {
     <div className="h-full flex flex-col relative space-y-1 border rounded-t-[12px]">
       <div className="w-full border-b border-stone-200 p-1 mb-1 rounded-t-[12px] bg-[#EBEFF5]">
         <Tabs
-          defaultValue="combined"
+          defaultValue="tallinn"
           value={activeTab}
           onValueChange={setActiveTab}
           className="w-full "
         >
           <TabsList className="justify-start w-full rounded-[2px] py-2 gap-1 flex flex-col lg:flex-row">
-            <TabsTrigger value="combined" className="rounded-[4px] flex-1">
-              {t("rating.filtering.buttons.combined")}
+            <TabsTrigger value="tallinn" className="rounded-[4px] flex-1">
+              {t("rating.filtering.buttons.tallinn")}
             </TabsTrigger>
-            <TabsTrigger value="women" className="rounded-[4px] flex-1">
-              {t("rating.filtering.buttons.women")}
+            <TabsTrigger value="tartu" className="rounded-[4px] flex-1">
+              {t("rating.filtering.buttons.tartu")}
             </TabsTrigger>
-            <TabsTrigger value="men" className="rounded-[4px] flex-1">
-              {t("rating.filtering.buttons.men")}
+            <TabsTrigger value="portugal" className="rounded-[4px] flex-1">
+              {t("rating.filtering.buttons.portugal")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -85,15 +85,14 @@ const RatingWidget = ({ users }: Props) => {
                 className="group cursor-pointer"
               >
                 <TableCell
-                  className={`px-6 py-3 text-sm font-bold ${
-                    index === 0
-                      ? "text-yellow-500" // Gold for 1st place
-                      : index === 1
-                        ? "text-gray-400" // Silver for 2nd place
-                        : index === 2
-                          ? "text-amber-700" // Bronze for 3rd place
-                          : ""
-                  }`}
+                  className={`px-6 py-3 text-sm font-bold ${index === 0
+                    ? "text-yellow-500" // Gold for 1st place
+                    : index === 1
+                      ? "text-gray-400" // Silver for 2nd place
+                      : index === 2
+                        ? "text-amber-700" // Bronze for 3rd place
+                        : ""
+                    }`}
                 >
                   {index + 1}
                 </TableCell>
