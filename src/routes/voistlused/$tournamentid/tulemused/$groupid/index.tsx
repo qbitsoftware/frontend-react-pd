@@ -60,16 +60,12 @@ function RouteComponent() {
   }
 
   const handleSelectMatch = (match: MatchWrapper) => {
-    setSelectedMatch(match)
-    setIsModalOpen(true)
+    if (match.match.winner_id != "") {
+      setSelectedMatch(match)
+      setIsModalOpen(true)
+    }
 
   }
-
-  console.log(tableQuery.data)
-  console.log(bracketQuery.data)
-
-
-
 
   return (
     <div className='min-h-screen p-2'>
