@@ -25,7 +25,7 @@ export function UseGetTournamentTables(tournament_id: number) {
             })
             return data;
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 5 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
     });
 }
@@ -39,7 +39,7 @@ export const UseGetTournamentTable = (tournament_id: number, tournament_table_id
             })
             return data;
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 5 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
     })
 }
@@ -66,9 +66,16 @@ export const UsePatchTournamentTable = (tournament_id: number, tournament_table_
             return data;
         },
 
-        onSuccess: () => {
+        onSuccess: (data: TournamentTableResponse) => {
+            queryClient.setQueryData(["tournament_table", tournament_table_id], (oldData: TournamentTableResponse) => {
+                if (oldData) {
+                    oldData.data = data.data
+                    oldData.message = data.message
+                    oldData.error = data.error
+                }
+                return oldData
+            })
             queryClient.resetQueries({ queryKey: ['tournament_tables', tournament_id] })
-            queryClient.resetQueries({ queryKey: ['tournament_table', tournament_table_id] })
             queryClient.resetQueries({ queryKey: ['bracket', tournament_table_id] })
             queryClient.resetQueries({ queryKey: ['matches', tournament_table_id] })
         }

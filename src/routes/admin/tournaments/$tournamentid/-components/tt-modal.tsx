@@ -663,7 +663,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                       <span className="text-2xl font-bold">
                         {!isLoading && childMathes && childMathes.data ?
                           childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p1.id) ? 1 : 0), 0) : 0}
+                            total + ((match.match.winner_id === match.p1.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
                       </span>
                     </div>
 
@@ -676,7 +676,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                       <span className="text-2xl font-bold">
                         {!isLoading && childMathes && childMathes.data ?
                           childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p2.id) ? 1 : 0), 0) : 0}
+                            total + ((match.match.winner_id === match.p2.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
                       </span>
                     </div>
                   </div>
