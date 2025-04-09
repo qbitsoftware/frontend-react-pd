@@ -417,6 +417,7 @@
         "images": {
           "title": "Gamedays",
           "new": "New gameday",
+          "uploading": "Remaining",
           "dialog": {
             "confirmation": "Are you sure?",
             "description": "This action cannot be undone. This will permanently delete the data.",

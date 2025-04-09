@@ -417,6 +417,7 @@
         "images": {
           "title": "Mängupäevad",
           "new": "Uus mängupäev",
+          "uploading": "Lõpuni jäänud",
           "dialog": {
             "confirmation": "Oled kindel",
             "description": "Peale toimingut kustutatakse mängupäev ja seda ei saa tagasi võtta",

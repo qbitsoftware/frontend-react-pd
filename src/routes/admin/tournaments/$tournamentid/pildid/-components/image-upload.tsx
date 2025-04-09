@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
 import { usePostGamedayImage } from '@/queries/images'
 import { useTranslation } from 'react-i18next'
+import { Progress } from '@/components/ui/progress'
 
 interface ImageUploadProps {
     tournament_id: number
@@ -19,6 +20,9 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     const fileInputRef = useRef<HTMLInputElement>(null)
     const postImageMutation = usePostGamedayImage(tournament_id, gameDay)
     const { t } = useTranslation()
+    const [uploadProgress, setUploadProgress] = useState(0)
+    const [isUploading, setIsUploading] = useState(false)
+
 
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,18 +47,28 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
     }
 
     const uploadImages = async () => {
+        setIsUploading(true)
+        setUploadProgress(0)
+
         const formData = new FormData()
         images.map((file) => {
             formData.append("images", file)
         })
         try {
             successToast(t('admin.tournaments.groups.images.toasts.uploading_images'))
-            await postImageMutation.mutateAsync(formData)
+            await postImageMutation.mutateAsync({
+                formData,
+                onProgress: (progress) => {
+                    setUploadProgress(progress);
+                }
+            })
             successToast(t('admin.tournaments.groups.images.toasts.upload_success'))
             setImages([])
         } catch (error) {
             void error;
             errorToast(t('admin.tournaments.groups.images.toasts.upload_error'))
+        } finally {
+            setIsUploading(false);
         }
     }
 
@@ -98,6 +112,13 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
                             </div>
                         ))}
                     </div>
+
+                    {isUploading && (
+                        <div className="my-4">
+                            <p className="text-sm mb-2">{t('admin.tournaments.groups.images.uploading')}: {uploadProgress}%</p>
+                            <Progress value={uploadProgress} className="w-full" />
+                        </div>
+                    )}
                     <div className="flex flex-col items-center justify-center gap-4">
                         <Button
                             variant="destructive"

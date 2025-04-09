@@ -123,6 +123,7 @@ export type Participant = {
   created_at: string;
   updated_at: string;
   deleted_at: string;
+  group: number;
   players: Player[];
   tournament_table_id: number;
   extra_data: PartipantExtraData;

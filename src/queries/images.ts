@@ -68,12 +68,20 @@ export const usePatchGameDay = (tournament_id: number) => {
 export const usePostGamedayImage = (tournament_id: number, gameday_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (formData: FormData) => {
+        mutationFn: async ({ formData, onProgress }: { formData: FormData, onProgress?: (progress: number) => void }) => {
             const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/gamedays/${gameday_id}/images`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
                 withCredentials: true,
+                onUploadProgress: (progressEvent) => {
+                    if (progressEvent.total && onProgress) {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                        onProgress(percentCompleted);
+                    }
+                }
             });
             return data;
         },

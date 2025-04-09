@@ -81,7 +81,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const { t } = useTranslation()
 
 
-    // const [dropdownPositions, setDropdownPositions] = useState<{ [key: string]: { top: number, left: number, position: 'top' | 'bottom' } }>({});
     const [dropdownPositions, setDropdownPositions] = useState<{
         [key: string]: {
             top: number,
@@ -100,7 +99,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         setDropdownPositions(prev => ({
             ...prev,
             [id]: {
-                // If positioned above, align to top of input; if below, align to bottom
                 top: position === 'top' ? rect.top : rect.bottom,
                 left: rect.left,
                 position: position,
@@ -601,7 +599,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                         <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
                                                             <TableCell></TableCell>
                                                             <TableCell></TableCell>
-                                                            <TableCell><EditImgModal playerId={player.id} playerName={`${player.first_name} ${player.last_name}`} playerImg={player.extra_data.image_url}/></TableCell>
+                                                            <TableCell><EditImgModal playerId={player.id} playerName={`${player.first_name} ${player.last_name}`} playerImg={player.extra_data.image_url} /></TableCell>
                                                             <TableCell className="pl-8">
                                                                 {editingPlayerInfo &&
                                                                     editingPlayerInfo.teamId === participant.id &&

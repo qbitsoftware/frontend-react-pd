@@ -40,6 +40,8 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
   const { t } = useTranslation()
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [customSize, setCustomSize] = useState("");
+
 
   const toast = useToast()
   const { successToast, errorToast } = useToastNotification(toast)
@@ -194,40 +196,53 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-
-                {form.getValues().type != "champions_league" && <FormField
-                  control={form.control}
-                  name="size"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number.parseInt(value, 10))}
-                        defaultValue={String(field.value)}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={"Vali turniiri suurus"} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {isLoading && (
-                            <SelectItem className="flex justify-center items-center" value="loading">
-                              <Loader />
-                            </SelectItem>
-                          )}
-                          {tournament_sizes?.data?.map((size) => (
-                            <SelectItem key={size.id} value={String(size.size)}>
-                              {size.size}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                }
+                {form.getValues().type === "round_robin_full" || form.getValues().type === "round_robin_full_placement" ? (
+                <FormItem>
+                  <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number" 
+                      id="tournamentSize" 
+                      placeholder="Enter tournament size" 
+                      value={customSize} 
+                      onChange={(e) => {
+                        const numValue = parseInt(e.target.value, 10) || 0;
+                        setCustomSize(e.target.value);
+                        form.setValue("size", numValue);
+                      }} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              ) : (
+                <FormItem>
+                  <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
+                  <Select
+                    onValueChange={(value) => form.setValue("size", Number.parseInt(value, 10))}
+                    defaultValue={String(form.getValues().size || "")}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={"Vali turniiri suurus"} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {isLoading && (
+                        <SelectItem className="flex justify-center items-center" value="loading">
+                          <Loader />
+                        </SelectItem>
+                      )}
+                      {tournament_sizes?.data?.map((size) => (
+                        <SelectItem key={size.id} value={String(size.size)}>
+                          {size.size}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+  )}
+                
                 <FormField
                   control={form.control}
                   name="solo"
