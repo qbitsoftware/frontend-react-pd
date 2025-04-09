@@ -15,7 +15,7 @@ export type ParticipantsResponse = {
     error: string | null
 }
 
-
+// Praegu ei huvita
 export function UseGetTournamentParticipants(tournament_id: number) {
     return queryOptions<ParticipantsResponse>({
         queryKey: ["participants", tournament_id],
@@ -57,14 +57,26 @@ export function UseGetParticipantsQuery(tournament_id: number, table_id: number,
 export function UseCreateParticipants(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (formData: ParticipantFormValues) => {
+        mutationFn: async (formData: ParticipantFormValues): Promise<ParticipantResponse> => {
             const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants`, formData, {
                 withCredentials: true,
             })
             return data;
         },
-        onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+        onSuccess: (data: ParticipantResponse) => {
+            // Update cache directly instead of refetching
+            queryClient.setQueryData(["participants", table_id], 
+                (oldData: ParticipantsResponse | undefined) => {
+                    if (!oldData) return { data: [data.data], message: data.message, error: null };
+                    
+                    return {
+                        ...oldData,
+                        data: oldData.data ? [...oldData.data, data.data] : [data.data],
+                        message: data.message,
+                        error: null
+                    };
+                }
+            )
         }
     })
 }
@@ -86,12 +98,29 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             )
             return data
         },
-        onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+        onSuccess: (data: ParticipantResponse) => {
+            // Update participants cache
+            queryClient.setQueryData(["participants", table_id], 
+                (oldData: ParticipantsResponse | undefined) => {
+                    if (!oldData || !oldData.data) return oldData;
+                    
+                    return {
+                        ...oldData,
+                        data: oldData.data.map(participant => 
+                            participant.id === data.data?.id ? data.data : participant
+                        ),
+                        message: data.message,
+                        error: null
+                    };
+                }
+            )
+            
+            // Since match data may depend on participant data, still reset the matches query
             queryClient.resetQueries({ queryKey: ["matches", table_id] })
         }
     })
 }
+
 export function UseDeleteParticipant(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
@@ -101,8 +130,20 @@ export function UseDeleteParticipant(tournament_id: number, table_id: number) {
             })
             return data;
         },
-        onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+        onSuccess: (data: ParticipantResponse, variables: string) => {
+            // Update cache by filtering out the deleted participant
+            queryClient.setQueryData(["participants", table_id], 
+                (oldData: ParticipantsResponse | undefined) => {
+                    if (!oldData || !oldData.data) return oldData;
+                    
+                    return {
+                        ...oldData,
+                        data: oldData.data.filter(participant => participant.id !== variables),
+                        message: data.message,
+                        error: null
+                    };
+                }
+            )
         }
     })
 }

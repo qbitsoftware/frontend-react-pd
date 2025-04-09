@@ -1,34 +1,48 @@
-import { useNavigate, useRouter } from "@tanstack/react-router"
-import { MoreHorizontal, Pencil, PlusCircle, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import React, { useState, useEffect, useCallback } from "react"
-import type { Participant, Tournament, TournamentTable, UserNew } from "@/types/types"
+import { z } from "zod";import React, { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { 
+  UseGetTournamentParticipants, 
+  UseCreateParticipants, 
+  UseUpdateParticipant, 
+  UseDeleteParticipant 
+} from "@/queries/participants";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription,
+  DialogFooter
+} from "@/components/ui/dialog";
 import {
-  UseDeleteParticipant,
-  UseCreateParticipants,
-  UseUpdateParticipant,
-  UsePostOrder,
-} from "@/queries/participants"
-import ErrorPage from "@/components/error"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useToast } from "@/hooks/use-toast"
-import { useToastNotification } from "@/components/toast-notification"
-import { capitalize, useDebounce } from "@/lib/utils"
-import { Input } from "@/components/ui/input"
-import { UseGetUsersDebounce } from "@/queries/users"
-import { z } from "zod"
-import { useForm, UseFormReturn } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useTranslation } from "react-i18next"
-
-interface ParticipantFormProps {
-  participants: Participant[] | null
-  tournament_data: Tournament
-  table_data: TournamentTable
-}
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { User, UserPlus, Trash2, Edit2, Plus, UsersRound } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useToastNotification } from "@/components/toast-notification";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { addPlayerImage } from "@/queries/images";
+import { useTournament } from "@/routes/voistlused/$tournamentid/-components/tournament-provider";
+import { Participant, Player, Tournament, TournamentTable } from "@/types/types";
 
 const participantSchema = z.object({
   name: z.string().min(1, "Participant name is required"),
@@ -56,993 +70,809 @@ const participantSchema = z.object({
       }),
     ),
   class: z.string().optional(),
-})
+});
 
-export type ParticipantFormValues = z.infer<typeof participantSchema>
+const playerFormSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  number: z.number().optional().nullable(),
+  sex: z.string().default("M"),
+  extra_data: z.object({
+    rate_order: z.number().default(0).optional(),
+    club: z.string().default("").optional(),
+    rate_points: z.number().default(0),
+    eltl_id: z.number().default(0).optional(),
+    class: z.string().default("").optional(),
+  }).optional(),
+});
 
-export const SubGr: React.FC<ParticipantFormProps> = ({ participants, tournament_data, table_data }) => {
-  const [selectedOrderValue, setSelectedOrderValue] = useState<string | undefined>()
-  const navigate = useNavigate()
-  const router = useRouter()
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
-  const deleteMutation = UseDeleteParticipant(tournament_data.id, table_data.id)
-  const createParticipant = UseCreateParticipants(tournament_data.id, table_data.id)
-  const updateParticipant = UseUpdateParticipant(tournament_data.id, table_data.id)
-  const updateOrdering = UsePostOrder(tournament_data.id, table_data.id)
+export type ParticipantFormValues = z.infer<typeof participantSchema>;
+export type PlayerFormValues = z.infer<typeof playerFormSchema>;
 
-  const [searchTerm, setSearchTerm] = useState("")
-  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+interface ParticipantFormProps {
+  participants: Participant[] | null;
+  tournament_data: Tournament;
+  table_data: TournamentTable;
+}
 
-  const { data: playerSuggestions, refetch } = UseGetUsersDebounce(debouncedSearchTerm)
-  const [focusedField, setFocusedField] = useState<string | null>(null)
+// For file input change event
+interface FileInputEvent extends React.ChangeEvent<HTMLInputElement> {
+  target: HTMLInputElement & {
+    files: FileList;
+  };
+}
 
-  const { t } = useTranslation()
-
-  const size = table_data.size
-  console.log(size)
-
+export default function TournamentParticipantsManager({ 
+  participants,
+  tournament_data,
+  table_data 
+}: ParticipantFormProps): JSX.Element {
+  // Hooks and state
+  const tournamentId = tournament_data.id;
+  const tableId = table_data.id;
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const toast = useToast();
+  const { successToast, errorToast } = useToastNotification(toast);
   
-
-
-  const [dropdownPositions, setDropdownPositions] = useState<{
-    [key: string]: {
-      top: number,
-      left: number,
-      position: 'top' | 'bottom',
-      width: number
-    }
-  }>({});
-
-  const updateDropdownPosition = useCallback((e: React.FocusEvent<HTMLInputElement>, id: string) => {
-    const rect = e.target.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const inputMiddleY = rect.top + rect.height / 2;
-    const position = inputMiddleY > viewportHeight / 2 ? 'top' : 'bottom';
-
-    setDropdownPositions(prev => ({
-      ...prev,
-      [id]: {
-        top: position === 'top' ? rect.top : rect.bottom,
-        left: rect.left,
-        position: position,
-        width: rect.width
-      }
-    }));
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = (e: Event) => {
-      if (focusedField) {
-        const target = e.target as HTMLElement
-        const isSuggestionDropdown = target.classList.contains('suggestion-dropdown') || target.closest('.suggestion-dropdown');
-        if (!isSuggestionDropdown) {
-          setFocusedField(null);
-          setActiveTeamForPlayer(null);
-          setSearchTerm("");
-          const activeElement = document.activeElement;
-          const isInputFocused = activeElement instanceof HTMLInputElement &&
-            (activeElement.getAttribute('placeholder') === 'Lisa mängija' ||
-              activeElement.getAttribute('placeholder') === 'Nimi');
-
-          if (!isInputFocused) {
-            setSearchTerm("");
-          }
-
-          if (isInputFocused) {
-            (activeElement as HTMLElement).blur();
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, true);
-    document.addEventListener('touchmove', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll, true);
-      document.removeEventListener('touchmove', handleScroll);
-    };
-  }, [focusedField]);
-
-
-  const form = useForm<ParticipantFormValues>({
-    resolver: zodResolver(participantSchema),
+  // State management
+  const [isTeamDialogOpen, setIsTeamDialogOpen] = useState<boolean>(false);
+  const [isPlayerDialogOpen, setIsPlayerDialogOpen] = useState<boolean>(false);
+  const [activeTeam, setActiveTeam] = useState<Participant | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [teamToDelete, setTeamToDelete] = useState<Participant | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [playerImage, setPlayerImage] = useState<File | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  
+  // Form setup
+  const teamForm = useForm<ParticipantFormValues>({
     defaultValues: {
       name: "",
-      tournament_id: Number(tournament_data.id),
+      tournament_id: tournamentId,
       sport_type: "tabletennis",
-      players: [],
-    },
-  })
-
-  const editForm = useForm<ParticipantFormValues>({
-    resolver: zodResolver(participantSchema),
-  })
-
-  const [editingParticipant, setEditingParticipant] = useState<Participant | null>(null)
-  const [editingPlayerInfo, setEditingPlayerInfo] = useState<{ teamId: string, playerIndex: number } | null>(null);
-
-  const handleOrder = async (order: string | undefined) => {
-    if (!order) {
-      return
+      order: 0,
+      players: []
     }
-    try {
-      const res = await updateOrdering.mutateAsync({ order })
-      navigate({
-        to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-        replace: true,
-      })
-      successToast(res.message)
-    } catch (error) {
-      void error
-    }
-  }
-
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      refetch()
-    }
-  }, [debouncedSearchTerm, refetch])
-
-  const handleDeleteParticipant = async (participantId: string) => {
-    try {
-      const res = await deleteMutation.mutateAsync(participantId)
-      router.navigate({
-        to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-      })
-      successToast(res.message)
-    } catch (error) {
-      void error
-      errorToast("Osaleja kustutamisel tekkis viga")
-    }
-  }
-
-  const handleEditParticipant = (participant: Participant) => {
-    setEditingParticipant(participant)
-    editForm.reset({
-      name: participant.name,
-      order: participant.order,
-      tournament_id: tournament_data.id,
-      class: participant.extra_data.class,
-      sport_type: participant.sport_type || "tabletennis",
-      players: participant.players.map((player) => ({
-        id: player.id,
-        user_id: player.user_id,
-        first_name: player.first_name,
-        last_name: player.last_name,
-        name: `${player.first_name} ${player.last_name}`,
-        sport_type: player.sport_type || "tabletennis",
-        sex: player.sex,
-        number: player.number,
-        extra_data: {
-          rate_order: player.extra_data.rate_order,
-          club: player.extra_data.club,
-          rate_points: player.extra_data.rate_points,
-          eltl_id: player.extra_data.eltl_id,
-          class: player.extra_data.class,
-        },
-      })),
-    })
-  }
-
-  const handleAddOrUpdateParticipant = async (values: ParticipantFormValues, participantId?: string) => {
-
-    try {
-      if (participantId) {
-        await updateParticipant.mutateAsync({ formData: values, participantId })
-        successToast("Participant updated successfully")
-        setEditingParticipant(null)
-      } else {
-        await createParticipant.mutateAsync(values)
-        successToast("Participant added successfully")
+  });
+  
+  const playerForm = useForm<PlayerFormValues>({
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      number: null,
+      sex: "M",
+      extra_data: {
+        rate_points: 0
       }
-
-      form.resetField("players")
-
-      form.reset({
-        name: "",
-        tournament_id: Number(tournament_data.id),
-        class: "",
-        sport_type: "tabletennis",
-        players: [{ name: "", user_id: 0, first_name: "", last_name: "", sport_type: "tabletennis", sex: "", extra_data: { rate_order: 0, club: "", rate_points: 0, eltl_id: 0, class: "" } }],
-      }, { keepValues: false })
-
-
-      router.navigate({
-        to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-      })
-    } catch (error) {
-      errorToast(`Error ${participantId ? "updating" : "adding"} participant: ${error}`)
     }
-  }
-
-
-  const setFormValues = (user: UserNew, form: UseFormReturn<ParticipantFormValues>) => {
-    form.setValue("players.0.name", `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
-    form.setValue("players.0.first_name", user.first_name)
-    form.setValue("players.0.last_name", user.last_name)
-    form.setValue("players.0.user_id", user.id)
-    form.setValue("players.0.extra_data.rate_order", user.rate_order)
-    form.setValue("players.0.sex", user.sex)
-    form.setValue("players.0.extra_data.club", user.club_name)
-    form.setValue("players.0.extra_data.eltl_id", user.eltl_id)
-    form.setValue("players.0.extra_data.rate_points", user.rate_points)
-    if (table_data.solo) {
-      form.setValue("name", `${user.first_name} ${user.last_name}`)
-    }
-  }
-
-  const [activeTeamForPlayer, setActiveTeamForPlayer] = useState<string | null>(null);
-
-
-  const handleRemovePlayer = async (teamId: string, playerIndex: number) => {
-    const team = participants?.find(p => p.id === teamId);
-    if (!team) return;
-
-    const updatedTeam: ParticipantFormValues = {
-      name: team.name,
-      tournament_id: team.tournament_id,
-      sport_type: team.sport_type || "tabletennis",
-      class: team.extra_data?.class,
-      players: team.players.map((player) => ({
-        id: player.id,
-        name: `${player.first_name} ${player.last_name}`,
-        sport_type: player.sport_type || "tabletennis",
-        first_name: player.first_name,
-        last_name: player.last_name,
-        user_id: player.user_id,
-        sex: player.sex,
-        extra_data: {
-          rate_order: player.extra_data.rate_order,
-          club: player.extra_data.club,
-          rate_points: player.extra_data.rate_points,
-          eltl_id: player.extra_data.eltl_id,
-          class: player.extra_data.class
+  });
+  
+  // Query hooks
+  const createParticipantMutation = UseCreateParticipants(tournamentId, tableId);
+  const updateParticipantMutation = UseUpdateParticipant(tournamentId, tableId);
+  const deleteParticipantMutation = UseDeleteParticipant(tournamentId, tableId);
+  const playerImageMutation = addPlayerImage();
+  
+  // Handle team form submission
+  const onTeamSubmit = (data: ParticipantFormValues): void => {
+    if (isEditing && activeTeam) {
+      // Update existing team
+      updateParticipantMutation.mutate(
+        {
+          formData: data,
+          participantId: activeTeam.id
+        },
+        {
+          onSuccess: () => {
+            successToast(t('toasts.team_updated'));
+            setIsTeamDialogOpen(false);
+            resetTeamForm();
+          },
+          onError: (error) => {
+            console.error("Error updating team:", error);
+            errorToast(t('toasts.error_update_team'));
+          }
         }
-      })).filter((_, index) => index !== playerIndex)
-    };
-
-    await handleAddOrUpdateParticipant(updatedTeam, teamId);
+      );
+    } else {
+      // Create new team
+      createParticipantMutation.mutate(
+        data,
+        {
+          onSuccess: () => {
+            successToast(t('toasts.team_created'));
+            setIsTeamDialogOpen(false);
+            resetTeamForm();
+          },
+          onError: (error) => {
+            console.error("Error creating team:", error);
+            errorToast(t('toasts.error_create_team'));
+          }
+        }
+      );
+    }
   };
-
-  const handleEditPlayer = (teamId: string, playerIndex: number) => {
-    setEditingPlayerInfo({ teamId, playerIndex });
-  };
-
-  const handleSavePlayerEdit = async (teamId: string, playerIndex: number, updatedPlayer: any) => {
-    const team = participants?.find(p => p.id === teamId);
-    if (!team) return;
-
-    const updatedTeam: ParticipantFormValues = {
-      name: team.name,
-      tournament_id: team.tournament_id,
-      sport_type: team.sport_type || "tabletennis",
-      class: team.extra_data?.class,
-      players: team.players.map((player, idx) => {
-        if (idx === playerIndex) {
-          return {
-            ...player,
-            ...updatedPlayer,
-            name: `${updatedPlayer.first_name || player.first_name} ${updatedPlayer.last_name || player.last_name}`,
+  
+  // Handle player form submission
+  const onPlayerSubmit = async (data: PlayerFormValues): Promise<void> => {
+    if (!activeTeam) return;
+    
+    try {
+      // Create a full name for the player
+      const playerName = `${data.first_name} ${data.last_name}`;
+      
+      // Create the updated player array
+      let updatedPlayers: Player[] = [...(activeTeam.players || [])];
+      
+      if (selectedPlayer) {
+        // Update existing player
+        const playerIndex = updatedPlayers.findIndex(p => 
+          p.id === selectedPlayer.id
+        );
+        
+        if (playerIndex !== -1) {
+          updatedPlayers[playerIndex] = {
+            ...updatedPlayers[playerIndex],
+            name: playerName,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            number: data.number || 0,
+            sex: data.sex,
             extra_data: {
-              ...player.extra_data,
-              ...updatedPlayer.extra_data
+              ...updatedPlayers[playerIndex].extra_data,
+              rate_points: data.extra_data?.rate_points || 0,
+              club: data.extra_data?.club || "",
+              rate_order: data.extra_data?.rate_order || 0,
+              eltl_id: data.extra_data?.eltl_id || 0,
+              class: data.extra_data?.class || ""
             }
           };
         }
-        return {
-          id: player.id,
-          name: `${player.first_name} ${player.last_name}`,
-          sport_type: player.sport_type || "tabletennis",
-          first_name: player.first_name,
-          last_name: player.last_name,
-          user_id: player.user_id,
-          sex: player.sex,
+      } else {
+        // Check if we're at max players (5)
+        if (updatedPlayers.length >= 5) {
+          errorToast(t('toasts.max_players'));
+          return;
+        }
+        
+        // Create temporary ID - backend will assign real one
+        const tempId = `temp-${Date.now()}`;
+        
+        // Add new player
+        updatedPlayers.push({
+          id: tempId,
+          user_id: 0,
+          name: playerName,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          number: data.number || 0,
+          sex: data.sex,
           extra_data: {
-            rate_order: player.extra_data.rate_order,
-            club: player.extra_data.club,
-            rate_points: player.extra_data.rate_points,
-            eltl_id: player.extra_data.eltl_id,
-            class: player.extra_data.class
-          }
-        };
-      })
-    };
-
-    await handleAddOrUpdateParticipant(updatedTeam, teamId);
-    setEditingPlayerInfo(null);
+            rate_points: data.extra_data?.rate_points || 0,
+            club: data.extra_data?.club || "",
+            rate_order: data.extra_data?.rate_order || 0,
+            eltl_id: data.extra_data?.eltl_id || 0,
+            class: data.extra_data?.class || ""
+          },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          deleted_at: null,
+          rank: 0,
+          sport_type: activeTeam.sport_type
+        });
+      }
+      
+      // Update the participant with the new players array
+      const formData: ParticipantFormValues = {
+        name: activeTeam.name,
+        tournament_id: tournamentId,
+        sport_type: activeTeam.sport_type,
+        order: activeTeam.order,
+        players: updatedPlayers
+      };
+      
+      await updateParticipantMutation.mutateAsync({
+        formData,
+        participantId: activeTeam.id
+      });
+      
+      // If there's a player image and we have a player ID, upload it
+      if (playerImage && selectedPlayer) {
+        await playerImageMutation.mutateAsync({
+          player_id: selectedPlayer.id,
+          image_file: playerImage
+        });
+      }
+      
+      successToast(
+        selectedPlayer 
+          ? t('toasts.player_updated')
+          : t('toasts.player_added')
+      );
+      
+      setIsPlayerDialogOpen(false);
+      resetPlayerForm();
+    } catch (error) {
+      console.error("Error with player:", error);
+      errorToast(t('toasts.error_player'));
+    }
   };
-
-  if (tournament_data) {
+  
+  // Handle team deletion
+  const confirmDeleteTeam = (team: Participant): void => {
+    setTeamToDelete(team);
+    setIsDeleteDialogOpen(true);
+  };
+  
+  const deleteTeam = (): void => {
+    if (!teamToDelete) return;
+    
+    deleteParticipantMutation.mutate(
+      teamToDelete.id,
+      {
+        onSuccess: () => {
+          successToast(t('toasts.team_deleted'));
+          setIsDeleteDialogOpen(false);
+          setTeamToDelete(null);
+        },
+        onError: (error) => {
+          console.error("Error deleting team:", error);
+          errorToast(t('toasts.error_delete_team'));
+        }
+      }
+    );
+  };
+  
+  // Handle player removal
+  const removePlayer = (player: Player): void => {
+    if (!activeTeam) return;
+    
+    try {
+      // Filter out the player to remove
+      const updatedPlayers = activeTeam.players.filter(
+        p => p.id !== player.id
+      );
+      
+      // Update the participant with the new players array
+      const formData: ParticipantFormValues = {
+        name: activeTeam.name,
+        tournament_id: tournamentId,
+        sport_type: activeTeam.sport_type,
+        order: activeTeam.order,
+        players: updatedPlayers
+      };
+      
+      updateParticipantMutation.mutate(
+        {
+          formData,
+          participantId: activeTeam.id
+        },
+        {
+          onSuccess: () => {
+            successToast(t('toasts.player_removed'));
+          },
+          onError: (error) => {
+            console.error("Error removing player:", error);
+            errorToast(t('toasts.error_remove_player'));
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Error removing player:", error);
+      errorToast(t('toasts.error_remove_player'));
+    }
+  };
+  
+  // Open team dialog for editing
+  const editTeam = (team: Participant): void => {
+    setActiveTeam(team);
+    setIsEditing(true);
+    teamForm.reset({
+      name: team.name,
+      tournament_id: team.tournament_id,
+      sport_type: team.sport_type,
+      order: team.order,
+      players: team.players || []
+    });
+    setIsTeamDialogOpen(true);
+  };
+  
+  // Open player dialog for adding/editing
+  const addPlayerToTeam = (team: Participant): void => {
+    setActiveTeam(team);
+    setSelectedPlayer(null);
+    resetPlayerForm();
+    setIsPlayerDialogOpen(true);
+  };
+  
+  const editPlayer = (team: Participant, player: Player): void => {
+    setActiveTeam(team);
+    setSelectedPlayer(player);
+    
+    // Ensure all expected extra_data fields have default values
+    const extraData = player.extra_data || {};
+    
+    playerForm.reset({
+      first_name: player.first_name || "",
+      last_name: player.last_name || "",
+      number: player.number || null,
+      sex: player.sex || "M",
+      extra_data: {
+        rate_points: extraData.rate_points || 0,
+        club: extraData.club || "",
+        rate_order: extraData.rate_order || 0,
+        eltl_id: extraData.eltl_id || 0,
+        class: extraData.class || ""
+      }
+    });
+    setIsPlayerDialogOpen(true);
+  };
+  
+  // Reset forms
+  const resetTeamForm = (): void => {
+    teamForm.reset({
+      name: "",
+      tournament_id: tournamentId,
+      sport_type: "tabletennis",
+      order: 0,
+      players: []
+    });
+    setIsEditing(false);
+    setActiveTeam(null);
+  };
+  
+  const resetPlayerForm = (): void => {
+    playerForm.reset({
+      first_name: "",
+      last_name: "",
+      number: null,
+      sex: "M",
+      extra_data: {
+        rate_points: 0,
+        club: "",
+        rate_order: 0,
+        eltl_id: 0,
+        class: ""
+      }
+    });
+    setSelectedPlayer(null);
+    setPlayerImage(null);
+  };
+  
+  // Handle image upload for player
+  const handleImageUpload = (e: FileInputEvent): void => {
+    const file = e.target.files[0];
+    if (file) {
+      setPlayerImage(file);
+    }
+  };
+  
+  // Loading state
+  if (!participants) {
     return (
-      <div className=" mx-auto py-6 space-y-6  w-full">
-        <Card className=" border-[#F0F3F3]">
-          <CardHeader className="">
-            <div className="flex w-[250px] gap-4">
-              <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
-                <SelectTrigger className="">
-                  <SelectValue placeholder={t('admin.tournaments.groups.order.placeholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="random">{t('admin.tournaments.groups.order.random')}</SelectItem>
-                  <SelectItem value="rating">{t('admin.tournaments.groups.order.by_rating')}</SelectItem>
-                  <SelectItem value="regular">{t('admin.tournaments.groups.order.by_order')}</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button disabled={!selectedOrderValue} onClick={() => handleOrder(selectedOrderValue)}>
-                {t('admin.tournaments.groups.order.title')}
-              </Button>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-muted-foreground">{t('loading')}</p>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="container px-6 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+        <Button 
+          onClick={() => {
+            resetTeamForm();
+            setIsTeamDialogOpen(true);
+          }}
+          className="flex items-center gap-2"
+        >
+          <Plus className="h-4 w-4" />
+          {t('add_team')}
+        </Button>
+      </div>
+      
+      {participants && participants.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {participants.map((team: Participant) => (
+            <Card key={team.id} className="overflow-hidden">
+              <CardHeader className="bg-muted/30 pb-3">
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-xl">{team.name}</CardTitle>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => editTeam(team)}
+                      title={t('edit_team')}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                      <span className="sr-only">{t('edit_team')}</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => confirmDeleteTeam(team)}
+                      title={t('delete_team')}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">{t('delete_team')}</span>
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-2">
+                    <UsersRound className="h-5 w-5 text-muted-foreground" />
+                    <span>
+                      {t('players', { count: team.players?.length || 0 })}
+                    </span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="flex items-center gap-1"
+                    onClick={() => addPlayerToTeam(team)}
+                    disabled={team.players?.length >= 5}
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    {t('add_player')}
+                  </Button>
+                </div>
+                
+                {team.players && team.players.length > 0 ? (
+                  <div className="space-y-2">
+                    {team.players.map((player: Player) => (
+                      <div 
+                        key={player.id} 
+                        className="flex justify-between items-center p-2 rounded-md bg-muted/20 hover:bg-muted/40 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                              <User className="h-4 w-4 text-blue-500" />
+                            
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{player.last_name} {player.first_name}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => editPlayer(team, player)}
+                          >
+                            <Edit2 className="h-3 w-3" />
+                            <span className="sr-only">{t('edit_player')}</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:text-destructive"
+                            onClick={() => removePlayer(player)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            <span className="sr-only">{t('remove_player')}</span>
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 border border-dashed rounded-lg">
+                    <p className="text-muted-foreground text-sm">
+                      {t('no_players')}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card className="border-dashed bg-muted/50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="rounded-full bg-primary/10 p-3 mb-4">
+              <UsersRound className="h-8 w-8 text-primary" />
             </div>
-          </CardHeader>
-          <CardContent className="">
-            <div className="min-h-[60vh] flex flex-col">
-              <div className="overflow-x-auto w-full">
-                <Table className="w-full">
-                  <TableHeader>
-                    <TableRow>
-                      {table_data && table_data.solo ? (
-                        <>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.position")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.name")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.club")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.class")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
-                        </>
-                      ) : (
-                        <>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.serial_number")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.position")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.team")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.name")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.rank")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.sex")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.club")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.eltl_id")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.rating")}</TableHead>
-                          <TableHead className="">{t("admin.tournaments.groups.participants.table.actions")}</TableHead>
-                        </>
-                      )}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="">
-                    {participants?.map((participant, idx) =>
-                      table_data.solo ? (
-                        <TableRow key={participant.id}>
-                          <TableCell>{idx + 1}</TableCell>
-                          <TableCell>{participant.order}</TableCell>
-                          <TableCell className="">
-                            {editingParticipant?.id === participant.id ?
-                              <div >
-                                <Input
-                                  type="text"
-                                  value={activeTeamForPlayer == participant.id ? searchTerm : ""}
-                                  onChange={(e) => setSearchTerm(e.target.value)}
-
-                                  placeholder="Lisa mängija"
-                                  autoComplete="off"
-                                  onFocus={(e) => {
-                                    setFocusedField("name");
-                                    setActiveTeamForPlayer(participant.id);
-                                    updateDropdownPosition(e, participant.id);
-                                  }}
-                                  onBlur={(e) => {
-                                    const relatedTarget = e.relatedTarget as HTMLElement;
-                                    const isRelatedToDropdown = relatedTarget &&
-                                      (relatedTarget.classList.contains('suggestion-dropdown') ||
-                                        !!relatedTarget.closest('.suggestion-dropdown'));
-
-                                    if (!isRelatedToDropdown) {
-                                      setTimeout(() => {
-                                        setFocusedField(null);
-                                        setActiveTeamForPlayer(null);
-                                        setSearchTerm("");
-                                      }, 200);
-                                    }
-                                  }}
-                                />
-                                {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
-                                  <div className="fixed max-h-[200px] w-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
-                                    style={{
-                                      left: dropdownPositions[participant.id]?.left || 0,
-                                      width: dropdownPositions[participant.id]?.width || 200,
-                                      ...(dropdownPositions[participant.id]?.position === 'top'
-                                        ? {
-                                          bottom: window.innerHeight - dropdownPositions[participant.id]?.top,
-                                          maxHeight: dropdownPositions[participant.id]?.top - 10
-                                        }
-                                        : {
-                                          top: dropdownPositions[participant.id]?.top,
-                                          maxHeight: window.innerHeight - dropdownPositions[participant.id]?.top - 10
-                                        })
-                                    }}>
-                                    {playerSuggestions.data.map((user, i) => (
-                                      <div
-                                        key={i}
-                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                        onClick={() => setFormValues(user, editForm)}
-                                      >
-                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                              : (participant.name)
-                            }
-                          </TableCell>
-
-
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.rate_points}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.rate_points
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.sex")}
-                                defaultValue={participant.players[0].sex}
-                              />
-                            ) : (
-                              participant.players[0].sex
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.club")}
-                                defaultValue={participant.players[0].extra_data.club}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.club
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.eltl_id}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.eltl_id
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
-                                defaultValue={participant.players[0].extra_data.rate_order}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.rate_order
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {editingParticipant?.id === participant.id ? (
-                              <Input
-                                {...editForm.register("players.0.extra_data.class", { valueAsNumber: false })}
-                                defaultValue={participant.players[0].extra_data.class}
-                              />
-                            ) : (
-                              participant.players[0].extra_data.class
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent>
-                                {editingParticipant?.id === participant.id ? (
-                                  <DropdownMenuItem onClick={() => handleAddOrUpdateParticipant(editForm.getValues(), participant.id)}>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    {t("admin.tournaments.groups.participants.actions.save")}
-                                  </DropdownMenuItem>
-                                ) : (
-                                  <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    {t("admin.tournaments.groups.participants.actions.edit")}
-                                  </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
-                                  <Trash className="w-4 h-4 mr-2" />
-                                  {t("admin.tournaments.groups.participants.actions.delete")}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        <React.Fragment key={participant.id}>
-                          <TableRow >
-                            <TableCell>{idx + 1}</TableCell>
-                            <TableCell>{participant.order}</TableCell>
-                            <TableCell className="font-medium">
-                              {editingParticipant?.id === participant.id ? (
-                                <Input {...editForm.register("name")} defaultValue={capitalize(participant.name)} />
-                              ) : (
-                                (participant.name)
-                              )}
-                            </TableCell>
-                            <TableCell colSpan={6}></TableCell>
-                            <TableCell>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <MoreHorizontal className="w-4 h-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                  <DropdownMenuItem onClick={() => handleEditParticipant(participant)}>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    {t("admin.tournaments.groups.participants.actions.edit_team")}
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => handleDeleteParticipant(participant.id)}>
-                                    <Trash className="w-4 h-4 mr-2" />
-                                    {t("admin.tournaments.groups.participants.actions.delete_team")}
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-
-                          {participant.players && participant.players.length > 0 && participant.players.map((player, playerIdx) => (
-                            <TableRow key={`${participant.id}-${playerIdx}`} className="bg-muted/50">
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell className="pl-8">
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <div className="flex gap-2">
-                                    <Input
-                                      defaultValue={player.first_name}
-                                      onChange={(e) => player.first_name = e.target.value}
-                                      placeholder="First name"
-                                      className="w-24"
-                                    />
-                                    <Input
-                                      defaultValue={player.last_name}
-                                      onChange={(e) => player.last_name = e.target.value}
-                                      placeholder="Last name"
-                                      className="w-24"
-                                    />
-                                  </div>
-                                ) : (
-                                  `${player.first_name} ${player.last_name}`
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <Input
-                                    type="number"
-                                    defaultValue={player.extra_data.rate_points}
-                                    onChange={(e) => player.extra_data.rate_points = Number(e.target.value)}
-                                    className="w-20"
-                                  />
-                                ) : (
-                                  player.extra_data.rate_points
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <Input
-                                    defaultValue={player.sex}
-                                    onChange={(e) => player.sex = e.target.value}
-                                    className="w-16"
-                                  />
-                                ) : (
-                                  player.sex
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <Input
-                                    defaultValue={player.extra_data.club}
-                                    onChange={(e) => player.extra_data.club = e.target.value}
-                                    className="w-24"
-                                  />
-                                ) : (
-                                  player.extra_data.club
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <Input
-                                    type="number"
-                                    defaultValue={player.extra_data.eltl_id}
-                                    onChange={(e) => player.extra_data.eltl_id = Number(e.target.value)}
-                                    className="w-20"
-                                  />
-                                ) : (
-                                  player.extra_data.eltl_id
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <Input
-                                    type="number"
-                                    defaultValue={player.extra_data.rate_order}
-                                    onChange={(e) => player.extra_data.rate_order = Number(e.target.value)}
-                                    className="w-20"
-                                  />
-                                ) : (
-                                  player.extra_data.rate_order
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {editingPlayerInfo &&
-                                  editingPlayerInfo.teamId === participant.id &&
-                                  editingPlayerInfo.playerIndex === playerIdx ? (
-                                  <div className="flex gap-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleSavePlayerEdit(participant.id, playerIdx, player)}
-                                    >
-                                      <Pencil className="w-4 h-4 text-green-600" />
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => setEditingPlayerInfo(null)}
-                                    >
-                                      {t("admin.tournaments.groups.participants.actions.cancel")}
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="flex gap-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleEditPlayer(participant.id, playerIdx)}
-                                    >
-                                      <Pencil className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleRemovePlayer(participant.id, playerIdx)}
-                                    >
-                                      <Trash className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                          <TableRow className="bg-muted/30">
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className="pl-8">
-                              <div className="flex relative">
-                                <Input
-                                  type="text"
-                                  value={activeTeamForPlayer == participant.id ? searchTerm : ""}
-                                  onChange={(e) => setSearchTerm(e.target.value)}
-                                  className="min-w-[200px]"
-                                  placeholder="Lisa mängija"
-                                  autoComplete="off"
-                                  onFocus={(e) => {
-                                    setFocusedField("name");
-                                    setActiveTeamForPlayer(participant.id);
-                                    updateDropdownPosition(e, participant.id);
-                                  }}
-                                  onBlur={(e) => {
-                                    const relatedTarget = e.relatedTarget as HTMLElement;
-                                    const isRelatedToDropdown = relatedTarget &&
-                                      (relatedTarget.classList.contains('suggestion-dropdown') ||
-                                        !!relatedTarget.closest('.suggestion-dropdown'));
-
-                                    if (!isRelatedToDropdown) {
-                                      setTimeout(() => {
-                                        setFocusedField(null);
-                                        setActiveTeamForPlayer(null);
-                                        setSearchTerm("");
-                                      }, 200);
-                                    }
-                                  }}
-                                />
-                                <Button
-                                  disabled={(playerSuggestions && playerSuggestions.data && playerSuggestions.data.length !== 0) || searchTerm == ''}
-                                  onClick={() => {
-                                    const first_name = searchTerm.split(" ")[0];
-                                    let last_name = ""
-                                    if (searchTerm.split(" ").length >= 2) {
-                                      last_name = searchTerm.split(" ")[1]
-                                    }
-                                    const updatedTeam: ParticipantFormValues = {
-                                      name: participant.name,
-                                      tournament_id: participant.tournament_id,
-                                      sport_type: participant.sport_type || "tabletennis",
-                                      class: participant.extra_data?.class,
-                                      players: [
-                                        ...participant.players,
-                                        { name: searchTerm, first_name: first_name, last_name: last_name, sport_type: "tabletennis", extra_data: { rate_points: 0 } }
-                                      ]
-                                    }
-
-                                    handleAddOrUpdateParticipant(updatedTeam, participant.id)
-                                  }}>
-                                  {t("admin.tournaments.groups.participants.actions.submit")} <PlusCircle />
-                                </Button>
-                                {focusedField === "name" && playerSuggestions && activeTeamForPlayer == participant.id && playerSuggestions.data.length > 0 && (
-                                  <div className="fixed max-h-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
-                                    style={{
-                                      left: dropdownPositions[participant.id]?.left || 0,
-                                      width: dropdownPositions[participant.id]?.width || 200,
-                                      ...(dropdownPositions[participant.id]?.position === 'top'
-                                        ? {
-                                          bottom: window.innerHeight - dropdownPositions[participant.id]?.top,
-                                          maxHeight: dropdownPositions[participant.id]?.top - 10
-                                        }
-                                        : {
-                                          top: dropdownPositions[participant.id]?.top,
-                                          maxHeight: window.innerHeight - dropdownPositions[participant.id]?.top - 10
-                                        })
-                                    }}>
-                                    {playerSuggestions.data.map((user, i) => (
-                                      <div
-                                        key={i}
-                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                        onClick={() => {
-                                          const team = participants?.find(p => p.id === participant.id);
-                                          if (!team) return;
-                                          const players = team.players || [];
-                                          const updatedTeam: ParticipantFormValues = {
-                                            name: team.name,
-                                            tournament_id: team.tournament_id,
-                                            sport_type: team.sport_type || "tabletennis",
-                                            class: team.extra_data?.class,
-                                            players: [
-                                              ...players.map(player => ({
-                                                id: player.id,
-                                                name: `${player.first_name} ${player.last_name}`,
-                                                sport_type: player.sport_type || "tabletennis",
-                                                first_name: player.first_name,
-                                                last_name: player.last_name,
-                                                user_id: player.user_id,
-                                                sex: player.sex,
-                                                extra_data: {
-                                                  rate_order: player.extra_data.rate_order,
-                                                  club: player.extra_data.club,
-                                                  rate_points: player.extra_data.rate_points,
-                                                  eltl_id: player.extra_data.eltl_id,
-                                                  class: player.extra_data.class
-                                                }
-                                              })),
-                                              {
-                                                name: `${user.first_name} ${user.last_name}`,
-                                                sport_type: "tabletennis",
-                                                first_name: user.first_name,
-                                                last_name: user.last_name,
-                                                user_id: user.id || 0,
-                                                sex: user.sex || "",
-                                                extra_data: {
-                                                  rate_points: user.rate_points || 0,
-                                                  rate_order: user.rate_order,
-                                                  club: user.club_name,
-                                                  eltl_id: user.eltl_id,
-                                                  class: ""
-                                                }
-                                              }
-                                            ]
-                                          };
-
-                                          handleAddOrUpdateParticipant(updatedTeam, participant.id);
-                                          setActiveTeamForPlayer(null);
-                                          setSearchTerm("");
-                                        }}
-                                      >
-                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </TableCell>
-                            <TableCell></TableCell>
-                            <TableCell colSpan={6}></TableCell>
-                          </TableRow>
-                        </React.Fragment>
-                      )
-                    )}
-                    <TableRow className="relative">
-                      {table_data && table_data.solo ? (
-                        <>
-                          <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
-                          <TableCell>
-                            <Input disabled className=" border-none" type="text" />
-                          </TableCell>
-                          <TableCell className="min-w-[200px]">
-                            <div className="relative">
-                              <Input
-                                type="text"
-                                {...form.register("players.0.name")}
-                                onChange={(e) => {
-                                  form.setValue("players.0.name", e.target.value)
-                                  setSearchTerm(e.target.value)
-                                  if (table_data.solo) {
-                                    form.setValue("name", e.target.value)
-                                  }
-                                }}
-                                className=" text-sm md:text-base"
-                                autoComplete="off"
-                                onFocus={(e) => {
-                                  setFocusedField("name");
-                                  updateDropdownPosition(e, "soloInput");
-                                }}
-                                onBlur={(e) => {
-                                  const relatedTarget = e.relatedTarget as HTMLElement;
-                                  const isRelatedToDropdown = relatedTarget &&
-                                    (relatedTarget.classList.contains('suggestion-dropdown') ||
-                                      !!relatedTarget.closest('.suggestion-dropdown'));
-
-                                  if (!isRelatedToDropdown) {
-                                    setTimeout(() => {
-                                      setFocusedField(null);
-                                      setActiveTeamForPlayer(null);
-                                      setSearchTerm("");
-                                    }, 200);
-                                  }
-                                }}
-                                placeholder="Nimi"
-                              />
-                              {focusedField === "name" &&
-                                playerSuggestions &&
-                                !editingParticipant &&
-                                playerSuggestions.data &&
-                                playerSuggestions.data.length > 0 && (
-                                  <div
-                                    className="fixed max-h-[200px] w-[200px] overflow-y-auto py-1 bg-background border rounded-md shadow-lg z-50 suggestion-dropdown"
-                                    style={{
-                                      left: dropdownPositions["soloInput"]?.left || 0,
-                                      width: dropdownPositions["soloInput"]?.width || 200,
-                                      ...(dropdownPositions["soloInput"]?.position === 'top'
-                                        ? {
-                                          bottom: window.innerHeight - dropdownPositions["soloInput"]?.top,
-                                          maxHeight: dropdownPositions["soloInput"]?.top - 10
-                                        }
-                                        : {
-                                          top: dropdownPositions["soloInput"]?.top,
-                                          maxHeight: window.innerHeight - dropdownPositions["soloInput"]?.top - 10
-                                        })
-                                    }}
-                                  >
-                                    {playerSuggestions.data.map((user, i) => (
-                                      <div
-                                        key={i}
-                                        className="px-3 py-2 cursor-pointer hover:bg-accent"
-                                        onClick={() => setFormValues(user, form)}
-                                      >
-                                        {capitalize(user.first_name)} {capitalize(user.last_name)}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )
-                              }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              className="w-[100px]"
-                              type="number"
-                              {...form.register("players.0.extra_data.rate_points", { valueAsNumber: true })}
-                              placeholder="Rank"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              className="w-[100px]"
-                              type="text"
-                              {...form.register("players.0.sex")}
-                              placeholder="Sugu"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              className="w-[100px]"
-                              type="text"
-                              {...form.register("players.0.extra_data.club")}
-                              placeholder="Klubi"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              disabled
-                              className="w-[100px] border-none"
-                              type="number"
-                              {...form.register("players.0.extra_data.eltl_id", { valueAsNumber: true })}
-                              placeholder="ELTL ID"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              disabled
-                              className=" border-none"
-                              type="number"
-                              {...form.register("players.0.extra_data.rate_order", { valueAsNumber: true })}
-                              placeholder="Koht Reitingus"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              className="min-w-[100px]"
-                              type="text"
-                              {...form.register("players.0.extra_data.class")}
-                              placeholder="Klass"
-                            />
-                          </TableCell>
-                          <TableCell className="sticky right-0 p-3">
-                            <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
-                            <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
-                              {t("admin.tournaments.groups.participants.actions.submit")}
-                              <PlusCircle />
-                            </Button>
-                          </TableCell>
-                        </>
-                      ) : (
-                        <>
-                          <TableCell>{(participants && participants.length > 0 ? participants.length : 0) + 1}</TableCell>
-                          <TableCell>
-                            <Input disabled className=" border-none" type="text" />
-                          </TableCell>
-                          <TableCell className="min-w-[200px]">
-                            <Input
-                              type="text"
-                              {...form.register("name", {
-                                onChange: (e) => {
-                                  form.setValue("name", e.target.value);
-                                }
-                              })}
-                              placeholder="Team name"
-                            />
-                          </TableCell>
-                          <TableCell colSpan={6}></TableCell>
-                          <TableCell className="sticky right-0 p-3">
-                            <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
-                            <Button onClick={form.handleSubmit((values) => handleAddOrUpdateParticipant(values))}>
-                              {t("admin.tournaments.groups.participants.actions.submit")} <PlusCircle />
-                            </Button>
-                          </TableCell>
-                        </>
-                      )}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+            <h3 className="text-xl font-medium mb-2">{t('no_teams')}</h3>
+            <p className="text-muted-foreground text-center max-w-md mb-6">
+              {t('no_teams_description')}
+            </p>
+            <Button 
+              onClick={() => {
+                resetTeamForm();
+                setIsTeamDialogOpen(true);
+              }}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              {t('add_team')}
+            </Button>
           </CardContent>
         </Card>
-      </div >
-    )
-  } else {
-    return <ErrorPage />
-  }
+      )}
+      
+      {/* Team Dialog */}
+      <Dialog open={isTeamDialogOpen} onOpenChange={(open: boolean) => {
+        if (!open) {
+          setIsTeamDialogOpen(false);
+          resetTeamForm();
+        }
+      }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {isEditing 
+                ? t('edit_team_title') 
+                : t('add_team_title')}
+            </DialogTitle>
+            <DialogDescription>
+              {t('team_dialog_description')}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...teamForm}>
+            <form onSubmit={teamForm.handleSubmit(onTeamSubmit)} className="space-y-4">
+              <FormField
+                control={teamForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('team_name')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t('team_name_placeholder')} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              {/* Add other team fields as needed */}
+              
+              <DialogFooter className="mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsTeamDialogOpen(false);
+                    resetTeamForm();
+                  }}
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button type="submit">
+                  {isEditing 
+                    ? t('update_team') 
+                    : t('create_team')}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Player Dialog */}
+      <Dialog open={isPlayerDialogOpen} onOpenChange={(open: boolean) => {
+        if (!open) {
+          setIsPlayerDialogOpen(false);
+          resetPlayerForm();
+        }
+      }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedPlayer
+                ? t('edit_player_title')
+                : t('add_player_title')}
+            </DialogTitle>
+            <DialogDescription>
+              {t('player_dialog_description')}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...playerForm}>
+            <form onSubmit={playerForm.handleSubmit(onPlayerSubmit)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={playerForm.control}
+                  name="first_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('first_name')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={playerForm.control}
+                  name="last_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('last_name')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={playerForm.control}
+                  name="number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('number')}</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={playerForm.control}
+                  name="sex"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('sex')}</FormLabel>
+                      <FormControl>
+                        <select
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          {...field}
+                        >
+                          <option value="M">{t('male')}</option>
+                          <option value="F">{t('female')}</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Additional player fields from schema */}
+              <div className="space-y-4">
+                <FormField
+                  control={playerForm.control}
+                  name="extra_data.club"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('club')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={playerForm.control}
+                    name="extra_data.rate_points"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('rating_points')}</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            {...field} 
+                            value={field.value || 0}
+                            onChange={(e) => field.onChange(Number(e.target.value) || 0)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={playerForm.control}
+                    name="extra_data.eltl_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('eltl_id')}</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            {...field} 
+                            value={field.value || 0}
+                            onChange={(e) => field.onChange(Number(e.target.value) || 0)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <FormField
+                  control={playerForm.control}
+                  name="extra_data.class"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('class')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Player Image Upload */}
+              <div>
+                <FormLabel>{t('player_image')}</FormLabel>
+                <div className="mt-1">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                </div>
+              </div>
+              
+              <DialogFooter className="mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsPlayerDialogOpen(false);
+                    resetPlayerForm();
+                  }}
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button type="submit">
+                  {selectedPlayer
+                    ? t('update_player')
+                    : t('add_player')}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('confirm_delete')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('confirm_delete_description')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              {t('common.cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={deleteTeam}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
 }
-

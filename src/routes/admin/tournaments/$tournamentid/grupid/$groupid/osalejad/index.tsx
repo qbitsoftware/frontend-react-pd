@@ -6,7 +6,7 @@ import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipanForm } from '../../../-components/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
-import { SubGr } from '../../-components/subgroup-form'
+import TournamentParticipantsManager from '../../-components/subgroup-form'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -70,7 +70,7 @@ function RouteComponent() {
                     />
                 }
                 {tournament_data && table_data && participants && table_data.data.type === "round_robin_full_placement" &&
-                    <SubGr
+                    <TournamentParticipantsManager
                         participants={participants.data}
                         tournament_data={tournament_data.data}
                         table_data={table_data.data}

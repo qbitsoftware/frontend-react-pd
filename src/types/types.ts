@@ -147,7 +147,7 @@ export type Player = {
 }
 
 export type PlayerExtraData = {
-  image_url: string;
+  image_url?: string;
   club: string;
   rate_points: number;
   rate_order: number;
