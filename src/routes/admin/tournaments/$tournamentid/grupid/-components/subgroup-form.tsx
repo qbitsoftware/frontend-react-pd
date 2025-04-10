@@ -4,6 +4,7 @@ import {
   UseCreateParticipants,
   UseUpdateParticipant,
   UseDeleteParticipant,
+  UsePostOrder,
 } from "@/queries/participants";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,6 +48,9 @@ import {
 } from "@/types/types";
 import { distributeParticipants } from "./subgroup-generator";
 import placeholderImg from "@/assets/placheolderImg.svg";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+import { useNavigate } from "@tanstack/react-router";
 
 const participantSchema = z.object({
   name: z.string().min(1, "Participant name is required"),
@@ -135,7 +139,7 @@ export default function TournamentParticipantsManager({
 
     if (participants && participants.length > 0) {
       participants.forEach((team) => {
-        const groupName = team.group || 1; // Default to group 1 if not assigned
+        const groupName = team.group || 1;
         if (!grouped[groupName]) {
           grouped[groupName] = [];
         }
@@ -470,6 +474,29 @@ export default function TournamentParticipantsManager({
     setSelectedPlayer(null);
   };
 
+  const [selectedOrderValue, setSelectedOrderValue] = useState<
+    string | undefined
+  >();
+  const navigate = useNavigate();
+
+  const updateOrdering = UsePostOrder(tournament_data.id, table_data.id);
+
+  const handleOrder = async (order: string | undefined) => {
+    if (!order) {
+      return;
+    }
+    try {
+      const res = await updateOrdering.mutateAsync({ order });
+      navigate({
+        to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+        replace: true,
+      });
+      successToast(res.message);
+    } catch (error) {
+      void error;
+    }
+  };
+
   // Loading state
   if (!participants) {
     return (
@@ -484,6 +511,36 @@ export default function TournamentParticipantsManager({
 
   return (
     <div className="container px-6 py-6">
+        <div className="flex w-[250px] gap-4">
+          <Select
+            onValueChange={setSelectedOrderValue}
+            defaultValue={selectedOrderValue}
+          >
+            <SelectTrigger className="">
+              <SelectValue
+                placeholder={t("admin.tournaments.groups.order.placeholder")}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="random">
+                {t("admin.tournaments.groups.order.random")}
+              </SelectItem>
+              <SelectItem value="rating">
+                {t("admin.tournaments.groups.order.by_rating")}
+              </SelectItem>
+              <SelectItem value="regular">
+                {t("admin.tournaments.groups.order.by_order")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            disabled={!selectedOrderValue}
+            onClick={() => handleOrder(selectedOrderValue)}
+          >
+            {t("admin.tournaments.groups.order.title")}
+          </Button>
+        </div>
+
       {/* Main Content - Groups and Teams */}
       <div className="space-y-8">
         {teamDistribution.map((groupSize, groupIndex) => {
@@ -763,24 +820,6 @@ export default function TournamentParticipantsManager({
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={playerForm.control}
-                  name="number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("number")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          {...field}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <FormField
                   control={playerForm.control}
                   name="sex"

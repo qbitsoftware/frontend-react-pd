@@ -196,7 +196,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-                {form.getValues().type === "round_robin_full" || form.getValues().type === "round_robin_full_placement" ? (
+                {form.getValues().type === "round_robin_full" || form.getValues().type === "round_robin_full_placement" || form.getValues().type === "champions_league" ? (
                 <FormItem>
                   <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
                   <FormControl>

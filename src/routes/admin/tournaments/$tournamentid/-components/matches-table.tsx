@@ -31,6 +31,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
   const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
   const { t } = useTranslation()
+  
+  console.log(tournament_table)
 
 
   const filteredData = useMemo(() => {
@@ -149,10 +151,10 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
           {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
             <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
           }
-          {selectedMatch && selectedMatch.match.table_type === "round_robin_full_placement" &&
+          {selectedMatch && (selectedMatch.match.table_type === "round_robin_full_placement" || !tournament_table.solo) &&
             <TableTennisProtocolModalTest tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
           }
-          {selectedMatch && selectedMatch.match.table_type != "champions_league" && selectedMatch.match.table_type != "round_robin_full_placement" &&
+          {selectedMatch && selectedMatch.match.table_type != "champions_league" && selectedMatch.match.table_type != "round_robin_full_placement" && tournament_table.solo &&
             <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
           }
         </div>
