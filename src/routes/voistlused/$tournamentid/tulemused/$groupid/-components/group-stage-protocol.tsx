@@ -14,7 +14,7 @@ interface StatisticsProps {
     index: number
 }
 
-export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: StatisticsProps) => {
+export const GroupStatisticsCard = ({ tournament_id, group_id, match_id, index }: StatisticsProps) => {
     const { data, isLoading } = UseGetMatch(tournament_id, group_id, match_id)
     const { t } = useTranslation()
 
@@ -34,6 +34,7 @@ export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: Sta
         return (
             <Card key={index} className="w-full max-w-6xl mx-auto mb-[55px]">
                 <CardHeader>
+                    JOUU
                     <div className="flex flex-col sm:flex-row justify-between items-center mt-2 gap-2 ">
                         <Badge variant="outline" className="text-sm">
                             {t("protocol.date")}: {match.match.start_date ? new Date(match.match.start_date).toLocaleDateString('et-EE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Invalid date'}
@@ -64,26 +65,30 @@ export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: Sta
                                     <TableRow key={index}>
                                         <TableCell className=''>{index + 1}</TableCell>
                                         <TableCell>
-                                            {index <= 2
-                                                ? `${String.fromCharCode(65 + index)}: `
-                                                : index === 3
-                                                    ? `${t("protocol.table.doubles")}: `
-                                                    : index == 4 ? `${String.fromCharCode(65)}: `
-                                                        : index === 5 ? `${String.fromCharCode(67)}: `
-                                                            : `${String.fromCharCode(66)}: `
+                                            {index === 0
+                                                ? `A: `
+                                                : index === 1
+                                                    ? `B: `
+                                                    : index === 2
+                                                        ? `${t("protocol.table.doubles")}: `
+                                                        : index === 3
+                                                            ? `A: `
+                                                            : index === 4 
+                                                                ? `C: `
+                                                                : `B: `
                                             }
 
                                             {parent_match.p1.name}
                                         </TableCell>
                                         <TableCell>
                                             {index === 0
-                                                ? `Y: `
+                                                ? `X: `
                                                 : index === 1
-                                                    ? `X: `
+                                                    ? `Y: `
                                                     : index === 2
-                                                        ? `Z: `
+                                                        ? `${t("protocol.table.doubles")}: `
                                                         : index === 3
-                                                            ? `${t("protocol.table.doubles")}: `
+                                                            ? `Y: `
                                                             : `${String.fromCharCode(84 + index)}: `
                                             }
 

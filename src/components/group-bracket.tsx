@@ -17,7 +17,8 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
     const { t } = useTranslation()
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
-    if (!brackets.round_robin || brackets.round_robin.length !== 8) {
+
+    if (!brackets.round_robin || brackets.round_robin.length !== 1) {
         return (
             <div className="flex items-center justify-center h-64 w-full">
                 <p className="text-lg font-medium text-gray-500">{t("competitions.errors.no_table")}</p>
@@ -26,7 +27,7 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
     }
 
 
-    const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
+    const displayTeams: RoundRobinBracket[] = brackets.round_robin[0] || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
 
     const findMatches = (participant_1_id: string, participant_2_id: string) => {
 

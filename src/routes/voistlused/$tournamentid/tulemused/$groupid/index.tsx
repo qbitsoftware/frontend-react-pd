@@ -8,6 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatisticsCard } from "./-components/protocol";
+import { GroupStatisticsCard } from "./-components/group-stage-protocol";
 import { MatchWrapper } from "@/types/types";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
@@ -73,7 +74,6 @@ function RouteComponent() {
     }
   };
 
-  console.log(bracketQuery.data.data.round_robins)
 
   return (
     <div className="min-h-screen p-2">
@@ -124,6 +124,7 @@ function RouteComponent() {
             <GroupStageBracket
               brackets={bracketQuery.data.data.round_robins[0]}
               onMatchSelect={handleSelectMatch}
+              name={tableQuery.data.data.class}
             />
           
           </>
@@ -160,7 +161,14 @@ function RouteComponent() {
           </div>
 
           <div className="flex-1 overflow-auto">
-            {selectedMatch && (
+            {isRoundRobinFull && selectedMatch && 
+            <GroupStatisticsCard
+            tournament_id={Number(params.tournamentid)}
+            group_id={Number(params.groupid)}
+            match_id={selectedMatch.match.id}
+            index={selectedMatch.match.round}
+          />}
+            {isMeistrikad && selectedMatch && (
               <StatisticsCard
                 tournament_id={Number(params.tournamentid)}
                 group_id={Number(params.groupid)}
