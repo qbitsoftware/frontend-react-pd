@@ -120,7 +120,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
                               variant="outline"
                               onClick={() => handleRowClick(row.original)}
                             >
-                             {t("admin.tournaments.matches.table.modify")}
+                              {t("admin.tournaments.matches.table.modify")}
                             </Button>
                           </TableCell>
                         );
@@ -162,7 +162,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
           {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
             <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
           }
-          {selectedMatch && (selectedMatch.match.table_type === "round_robin_full_placement" || !tournament_table.solo) &&
+          {selectedMatch && (selectedMatch.match.table_type === "round_robin_full_placement" || !tournament_table.solo && selectedMatch.match.table_type != "champions_league") &&
             <TableTennisProtocolModalTest tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
           }
           {selectedMatch && selectedMatch.match.table_type != "champions_league" && selectedMatch.match.table_type != "round_robin_full_placement" && tournament_table.solo &&
