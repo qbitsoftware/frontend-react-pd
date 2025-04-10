@@ -223,7 +223,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     }
 
     const handleAddOrUpdateParticipant = async (values: ParticipantFormValues, participantId?: string) => {
-
         try {
             if (participantId) {
                 await updateParticipant.mutateAsync({ formData: values, participantId })
@@ -767,18 +766,21 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                 <Button
                                                                     disabled={(playerSuggestions && playerSuggestions.data && playerSuggestions.data.length !== 0) || searchTerm == ''}
                                                                     onClick={() => {
+                                                                        console.log("1")
                                                                         const first_name = searchTerm.split(" ")[0];
                                                                         let last_name = ""
                                                                         if (searchTerm.split(" ").length >= 2) {
                                                                             last_name = searchTerm.split(" ")[1]
                                                                         }
+
+                                                                        const existingPlayers = participant.players ?? [];
                                                                         const updatedTeam: ParticipantFormValues = {
                                                                             name: participant.name,
                                                                             tournament_id: participant.tournament_id,
                                                                             sport_type: participant.sport_type || "tabletennis",
                                                                             class: participant.extra_data?.class,
                                                                             players: [
-                                                                                ...participant.players,
+                                                                                ...existingPlayers,
                                                                                 { name: searchTerm, first_name: first_name, last_name: last_name, sport_type: "tabletennis", extra_data: { rate_points: 0 } }
                                                                             ]
                                                                         }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { act, useMemo, useState } from "react";
 import { z } from "zod";
 import {
   UseCreateParticipants,
@@ -50,7 +50,7 @@ import { distributeParticipants } from "./subgroup-generator";
 import placeholderImg from "@/assets/placheolderImg.svg";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 
 const participantSchema = z.object({
   name: z.string().min(1, "Participant name is required"),
@@ -125,6 +125,7 @@ export default function TournamentParticipantsManager({
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [targetGroup, setTargetGroup] = useState<number>(1);
+  const router = useRouter()
 
   // Calculate groups distribution based on table size
   const totalTeams = table_data.size || 0;
@@ -218,8 +219,10 @@ export default function TournamentParticipantsManager({
         },
         {
           onSuccess: () => {
-            successToast(t("toasts.team_updated"));
             setIsTeamDialogOpen(false);
+            router.navigate({
+              to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+            })
             resetTeamForm();
           },
           onError: (error) => {
@@ -232,7 +235,9 @@ export default function TournamentParticipantsManager({
       // Create new team
       createParticipantMutation.mutate(formData, {
         onSuccess: () => {
-          successToast(t("toasts.team_created"));
+          router.navigate({
+            to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+          })
           setIsTeamDialogOpen(false);
           resetTeamForm();
         },
@@ -330,6 +335,9 @@ export default function TournamentParticipantsManager({
         selectedPlayer ? t("toasts.player_updated") : t("toasts.player_added")
       );
 
+      router.navigate({
+        to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+      })
       setIsPlayerDialogOpen(false);
       resetPlayerForm();
     } catch (error) {
@@ -348,7 +356,9 @@ export default function TournamentParticipantsManager({
 
     deleteParticipantMutation.mutate(teamToDelete.id, {
       onSuccess: () => {
-        successToast(t("toasts.team_deleted"));
+        router.navigate({
+          to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+        })
         setIsDeleteDialogOpen(false);
         setTeamToDelete(null);
       },
@@ -359,31 +369,33 @@ export default function TournamentParticipantsManager({
     });
   };
 
-  const removePlayer = (player: Player): void => {
-    if (!activeTeam) return;
+  const removePlayer = (team: Participant, player: Player): void => {
 
     try {
-      const updatedPlayers = activeTeam.players.filter(
+      const updatedPlayers = team.players.filter(
         (p) => p.id !== player.id
       );
 
       // Update the participant with the new players array
       const formData: ParticipantFormValues = {
-        name: activeTeam.name,
+        name: team.name,
         tournament_id: tournamentId,
-        sport_type: activeTeam.sport_type,
-        order: activeTeam.order,
+        sport_type: team.sport_type,
+        order: team.order,
         players: updatedPlayers,
       };
 
       updateParticipantMutation.mutate(
         {
           formData,
-          participantId: activeTeam.id,
+          participantId: team.id,
         },
         {
           onSuccess: () => {
-            successToast(t("toasts.player_removed"));
+            navigate({
+              to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
+              replace: true,
+            });
           },
           onError: (error) => {
             console.error("Error removing player:", error);
@@ -511,35 +523,35 @@ export default function TournamentParticipantsManager({
 
   return (
     <div className="container px-6 py-6">
-        <div className="flex w-[250px] gap-4">
-          <Select
-            onValueChange={setSelectedOrderValue}
-            defaultValue={selectedOrderValue}
-          >
-            <SelectTrigger className="">
-              <SelectValue
-                placeholder={t("admin.tournaments.groups.order.placeholder")}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="random">
-                {t("admin.tournaments.groups.order.random")}
-              </SelectItem>
-              <SelectItem value="rating">
-                {t("admin.tournaments.groups.order.by_rating")}
-              </SelectItem>
-              <SelectItem value="regular">
-                {t("admin.tournaments.groups.order.by_order")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          <Button
-            disabled={!selectedOrderValue}
-            onClick={() => handleOrder(selectedOrderValue)}
-          >
-            {t("admin.tournaments.groups.order.title")}
-          </Button>
-        </div>
+      <div className="flex w-[250px] gap-4">
+        <Select
+          onValueChange={setSelectedOrderValue}
+          defaultValue={selectedOrderValue}
+        >
+          <SelectTrigger className="">
+            <SelectValue
+              placeholder={t("admin.tournaments.groups.order.placeholder")}
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="random">
+              {t("admin.tournaments.groups.order.random")}
+            </SelectItem>
+            <SelectItem value="rating">
+              {t("admin.tournaments.groups.order.by_rating")}
+            </SelectItem>
+            <SelectItem value="regular">
+              {t("admin.tournaments.groups.order.by_order")}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        <Button
+          disabled={!selectedOrderValue}
+          onClick={() => handleOrder(selectedOrderValue)}
+        >
+          {t("admin.tournaments.groups.order.title")}
+        </Button>
+      </div>
 
       {/* Main Content - Groups and Teams */}
       <div className="space-y-8">
@@ -636,7 +648,7 @@ export default function TournamentParticipantsManager({
                                   variant="ghost"
                                   size="icon"
                                   className="h-8 w-8 text-destructive hover:text-destructive"
-                                  onClick={() => removePlayer(player)}
+                                  onClick={() => removePlayer(team, player)}
                                 >
                                   <Trash2 className="h-3 w-3" />
                                   <span className="sr-only">
