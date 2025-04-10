@@ -203,7 +203,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     <Input 
                       type="number" 
                       id="tournamentSize" 
-                      placeholder="Enter tournament size" 
+                      placeholder={initial_data?.size?.toString() || "Enter tournament size"}
                       value={customSize} 
                       onChange={(e) => {
                         const numValue = parseInt(e.target.value, 10) || 0;

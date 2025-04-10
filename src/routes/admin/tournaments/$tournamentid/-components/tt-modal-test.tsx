@@ -40,7 +40,7 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProtocolModalProps {
   isOpen: boolean;
@@ -49,7 +49,7 @@ interface ProtocolModalProps {
   tournament_id: number;
 }
 
-export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
+export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
   isOpen,
   onClose,
   match,
@@ -61,12 +61,12 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const { data: childMathes, isLoading } = UseGetChildMatchesQuery(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
   const useStartMatchMutation = UseStartMatch(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
 
   const [notes, setNotes] = useState<string>("");
@@ -113,7 +113,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const createEmptyPlayers = (
     count: number,
     team_number: number,
-    extraData: TableTennisExtraData,
+    extraData: TableTennisExtraData
   ) => {
     const playerFields1: (keyof TableTennisExtraData)[] = [
       "player_a_id",
@@ -142,8 +142,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
       const selectedPlayer = playerId
         ? (team_number === 1 ? match.p1.players : match.p2.players).find(
-          (player) => player.id === playerId,
-        )
+            (player) => player.id === playerId
+          )
         : null;
       return (
         selectedPlayer || {
@@ -158,10 +158,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   };
 
   const [team1SelectedPlayers, setTeam1SelectedPlayers] = useState<Player[]>(
-    [],
+    []
   );
   const [team2SelectedPlayers, setTeam2SelectedPlayers] = useState<Player[]>(
-    [],
+    []
   );
 
   useEffect(() => {
@@ -222,18 +222,16 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           parent_match_id: "",
           player_a_id: team1SelectedPlayers[0]?.id,
           player_b_id: team1SelectedPlayers[1]?.id,
-          player_c_id: team1SelectedPlayers[2]?.id,
           player_d_id: team1SelectedPlayers[3]?.id,
           player_e_id: team1SelectedPlayers[4]?.id,
           player_x_id: team2SelectedPlayers[0]?.id,
           player_y_id: team2SelectedPlayers[1]?.id,
-          player_z_id: team2SelectedPlayers[2]?.id,
           player_v_id: team2SelectedPlayers[3]?.id,
           player_w_id: team2SelectedPlayers[4]?.id,
           ...Object.fromEntries(
             Object.entries(hasChanges).filter(
-              ([, value]) => value !== undefined,
-            ),
+              ([, value]) => value !== undefined
+            )
           ),
         };
 
@@ -264,7 +262,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const usePatchMatch = UsePatchMatch(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
 
   const handleSubmit = async (match: Match) => {
@@ -313,10 +311,12 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     }
   };
 
+  console.log("WWW", team1SelectedPlayers, team2SelectedPlayers);
+
   const handlePlayerChange = async (
     team: number,
     index: number,
-    playerId: string,
+    playerId: string
   ) => {
     const selectedPlayer = (
       team === 1 ? match.p1.players : match.p2.players
@@ -329,9 +329,9 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     const newTeam2SelectedPlayers = [...team2SelectedPlayers];
 
     if (team == 1) {
-      if (index <= 2) {
+      if (index <= 1) {
         const oldIndex = newTeam1SelectedPlayers.findIndex(
-          (player) => player.id === playerId,
+          (player) => player.id === playerId
         );
         if (oldIndex !== -1) {
           const resetPlayer = {
@@ -355,9 +355,9 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       newTeam1SelectedPlayers[index] = selectedPlayer;
       setTeam1SelectedPlayers(newTeam1SelectedPlayers);
     } else if (team == 2) {
-      if (index <= 2) {
+      if (index <= 1) {
         const oldIndex = newTeam2SelectedPlayers.findIndex(
-          (player) => player.id === playerId,
+          (player) => player.id === playerId
         );
         if (oldIndex !== -1) {
           const resetPlayer = {
@@ -388,12 +388,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       parent_match_id: "",
       player_a_id: newTeam1SelectedPlayers[0].id,
       player_b_id: newTeam1SelectedPlayers[1].id,
-      player_c_id: newTeam1SelectedPlayers[2].id,
       player_d_id: newTeam1SelectedPlayers[3].id,
       player_e_id: newTeam1SelectedPlayers[4].id,
       player_x_id: newTeam2SelectedPlayers[0].id,
       player_y_id: newTeam2SelectedPlayers[1].id,
-      player_z_id: newTeam2SelectedPlayers[2].id,
       player_v_id: newTeam2SelectedPlayers[3].id,
       player_w_id: newTeam2SelectedPlayers[4].id,
     };
@@ -439,12 +437,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           ...match.match.extra_data,
           player_a_id: team1SelectedPlayers[0].id,
           player_b_id: team1SelectedPlayers[1].id,
-          player_c_id: team1SelectedPlayers[2].id,
           player_d_id: team1SelectedPlayers[3].id,
           player_e_id: team1SelectedPlayers[4].id,
           player_x_id: team2SelectedPlayers[0].id,
           player_y_id: team2SelectedPlayers[1].id,
-          player_z_id: team2SelectedPlayers[2].id,
           player_v_id: team2SelectedPlayers[3].id,
           player_w_id: team2SelectedPlayers[4].id,
           table_referee: table_referee,
@@ -465,23 +461,37 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
   // Helper function to get available players and filtering them
   const getAvailablePlayers = (teamNumber: number) => {
-    const playersArray = teamNumber === 1 ? match.p1?.players : match.p2?.players;
+    const playersArray =
+      teamNumber === 1 ? match.p1?.players : match.p2?.players;
 
-    if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+    if (
+      !playersArray ||
+      !Array.isArray(playersArray) ||
+      playersArray.length === 0
+    ) {
       return [];
     }
 
-    return playersArray.filter(player =>
-      player && player.id && (player.first_name || player.last_name)
+    return playersArray.filter(
+      (player) => player && player.id && (player.first_name || player.last_name)
     );
   };
 
   // Player selection component for reuse
-  const PlayerSelector = ({ team, index, label }: { team: number, index: number, label: string }) => {
+  const PlayerSelector = ({
+    team,
+    index,
+    label,
+  }: {
+    team: number;
+    index: number;
+    label: string;
+  }) => {
     const players = getAvailablePlayers(team);
-    const selectedValue = team === 1
-      ? team1SelectedPlayers[index]?.id?.toString()
-      : team2SelectedPlayers[index]?.id?.toString();
+    const selectedValue =
+      team === 1
+        ? team1SelectedPlayers[index]?.id?.toString()
+        : team2SelectedPlayers[index]?.id?.toString();
 
     return (
       <div className="flex items-center space-x-2">
@@ -495,7 +505,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           </SelectTrigger>
           <SelectContent>
             {players.length > 0 ? (
-              players.map(player => (
+              players.map((player) => (
                 <SelectItem
                   key={player.id}
                   value={player.id.toString()}
@@ -518,14 +528,18 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   // Match order mapping
   const getMatchOrderLabel = (order: number) => {
     switch (order) {
-      case 1: return "A-Y";
-      case 2: return "B-X";
-      case 3: return "C-Z";
-      case 4: return "DE-VW";
-      case 5: return "A-X";
-      case 6: return "C-Y";
-      case 7: return "B-Z";
-      default: return `${order}`;
+      case 1:
+        return "A-X";
+      case 2:
+        return "B-Y";
+      case 3:
+        return "DE-VW";
+      case 4:
+        return "A-Y";
+      case 5:
+        return "B-X";
+      default:
+        return `${order}`;
     }
   };
 
@@ -559,7 +573,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
         <Tabs
           defaultValue="players"
           className="flex-grow flex flex-col min-h-0"
-        // onValueChange={setActiveTab}
+          // onValueChange={setActiveTab}
         >
           <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
             <TabsTrigger
@@ -577,10 +591,16 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           </TabsList>
 
           <div className="flex-grow overflow-hidden flex flex-col min-h-0">
-            <TabsContent value="players" className="flex-grow p-3 md:p-4 overflow-auto m-0">
+            <TabsContent
+              value="players"
+              className="flex-grow p-3 md:p-4 overflow-auto m-0"
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[1, 2].map((team) => (
-                  <div key={team} className="space-y-3 bg-gray-50 p-3 rounded-lg">
+                  <div
+                    key={team}
+                    className="space-y-3 bg-gray-50 p-3 rounded-lg"
+                  >
                     <div className="flex justify-between items-center">
                       <h5 className="font-bold text-sm">
                         {team === 1 ? match.p1.name : match.p2.name}
@@ -595,35 +615,49 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                               ? setCaptainTeam1(e.target.value)
                               : setCaptainTeam2(e.target.value)
                           }
-                          placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
+                          placeholder={team === 1 ? "Kapten AB" : "Kapten XY"}
                           className="h-7 text-xs w-28"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-gray-500 pl-1">Üksikmäng</div>
+                      <div className="text-xs font-semibold text-gray-500 pl-1">
+                        Üksikmäng
+                      </div>
                       <div className="space-y-1.5">
-                        {[0, 1, 2].map((index) => (
+                        {[0, 1].map((index) => (
                           <PlayerSelector
                             key={index}
                             team={team}
                             index={index}
-                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}
+                            label={
+                              team === 1
+                                ? String.fromCharCode(65 + index)
+                                : String.fromCharCode(88 + index)
+                            }
                           />
                         ))}
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-gray-500 pl-1">Paarismäng</div>
+                      <div className="text-xs font-semibold text-gray-500 pl-1">
+                        Paarismäng
+                      </div>
                       <div className="space-y-1.5">
                         {[3, 4].map((index) => (
                           <PlayerSelector
                             key={index}
                             team={team}
                             index={index}
-                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(team === 1 ? 65 + index : 80 + index)}
+                            label={
+                              team === 1
+                                ? String.fromCharCode(65 + index)
+                                : String.fromCharCode(
+                                    team === 1 ? 65 + index : 80 + index
+                                  )
+                            }
                           />
                         ))}
                       </div>
@@ -652,17 +686,30 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
               </div>
             </TabsContent>
 
-            <TabsContent value="scores" className="flex-grow p-0 overflow-auto m-0 flex flex-col min-h-0">
+            <TabsContent
+              value="scores"
+              className="flex-grow p-0 overflow-auto m-0 flex flex-col min-h-0"
+            >
               <ScrollArea className="flex-grow overflow-auto">
                 <div className="p-3 md:p-4">
                   {/* Team Score Summary */}
                   <div className="flex justify-around items-center mb-4 px-1">
                     <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium">{match.p1.name}</span>
+                      <span className="text-sm font-medium">
+                        {match.p1.name}
+                      </span>
                       <span className="text-2xl font-bold">
-                        {!isLoading && childMathes && childMathes.data ?
-                          childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p1.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
+                        {!isLoading && childMathes && childMathes.data
+                          ? childMathes.data.reduce(
+                              (total, match) =>
+                                total +
+                                (match.match.winner_id === match.p1.id &&
+                                match.match.winner_id != ""
+                                  ? 1
+                                  : 0),
+                              0
+                            )
+                          : 0}
                       </span>
                     </div>
 
@@ -671,26 +718,53 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                     </div>
 
                     <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium">{match.p2.name}</span>
+                      <span className="text-sm font-medium">
+                        {match.p2.name}
+                      </span>
                       <span className="text-2xl font-bold">
-                        {!isLoading && childMathes && childMathes.data ?
-                          childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p2.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
+                        {!isLoading && childMathes && childMathes.data
+                          ? childMathes.data.reduce(
+                              (total, match) =>
+                                total +
+                                (match.match.winner_id === match.p2.id &&
+                                match.match.winner_id != ""
+                                  ? 1
+                                  : 0),
+                              0
+                            )
+                          : 0}
                       </span>
                     </div>
                   </div>
 
                   <div className="overflow-auto border rounded-lg shadow-sm">
-                    <Table className="w-full overflow-auto" style={{ minWidth: "500px" }}>
+                    <Table
+                      className="w-full overflow-auto"
+                      style={{ minWidth: "500px" }}
+                    >
                       <TableHeader>
                         <TableRow className="bg-gray-50 hover:bg-gray-50">
-                          <TableHead className="text-xs font-medium p-2 text-left w-16">Mäng</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S1</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S2</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S3</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S4</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S5</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-24">Tegevused</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-left w-16">
+                            Mäng
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S1
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S2
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S3
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S4
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S5
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-24">
+                            Tegevused
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -698,7 +772,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                           childMathes &&
                           childMathes.data &&
                           childMathes.data.map((player_match) => (
-                            <TableRow key={player_match.match.id} className="hover:bg-gray-50">
+                            <TableRow
+                              key={player_match.match.id}
+                              className="hover:bg-gray-50"
+                            >
                               <TableCell className="text-xs font-medium p-2">
                                 {getMatchOrderLabel(player_match.match.order)}
                               </TableCell>
@@ -708,7 +785,9 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                               />
                               <TableCell className="p-2">
                                 <Button
-                                  onClick={() => handleForfeitMatch(player_match)}
+                                  onClick={() =>
+                                    handleForfeitMatch(player_match)
+                                  }
                                   className="text-xs h-6 px-2 w-full"
                                   size="sm"
                                   variant="outline"
@@ -782,4 +861,3 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     </Dialog>
   );
 };
-

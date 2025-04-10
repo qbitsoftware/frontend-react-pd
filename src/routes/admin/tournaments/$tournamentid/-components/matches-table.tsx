@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TableTennisProtocolModal } from "./tt-modal"
+import { TableTennisProtocolModalTest } from "./tt-modal-test"
 import ReGrouping from "./regrouping"
 // import TimeEditingModal from "./time-editing-modal"
 import TimeEditingModal from "./time-editing-modal"
@@ -58,113 +59,124 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
     setIsOpen(true)
   }
 
-  return (
-    <div className="py-4">
-      <div className="flex gap-4">
-        <Select value={filterValue} onValueChange={(value: FilterOption) => setFilterValue(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter matches" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("admin.tournaments.filters.all_games")}</SelectItem>
-            <SelectItem value="winner_declared">{t("admin.tournaments.filters.winner_declared")}</SelectItem>
-            <SelectItem value="ongoing">{t("admin.tournaments.filters.ongoing_games")}</SelectItem>
-            <SelectItem value="not_started">{t("admin.tournaments.filters.upcoming_games")}</SelectItem>
-          </SelectContent>
-        </Select>
-        {tournament_table.type == "champions_league" && (
-          <div className="flex gap-4">
-            <Button className="text-white bg-primary" onClick={() => {
-              setInitialTab("regrouping")
-              setIsRegroupingModalOpen(true)
-            }}
-            >Regrupeeri</Button>
-            <Button className="text-white bg-primary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
-            <Button className="text-white bg-primary" onClick={() => setIsTimeEditingModalOpen(true)}>Muuda aegu</Button>
-          </div>
-        )
-        }
-      </div>
-      <div className="rounded-md border my-2">
-        <Table>
-          <TableHeader>
-
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="whitespace-nowrap">
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={cn("!h-auto bg-green-100",
-                  (row.original.p1.id == "" && row.original.p2.id == ""
-                    || row.original.p1.id == "" && row.original.p2.id != ""
-                    || row.original.p1.id != "" && row.original.p2.id == ""
-                    || row.original.match.winner_id != ""
-                  )
-                  && "bg-white")}>
-                  {row.getVisibleCells().map((cell, cellIndex) => {
-                    if (cell.column.id === "actions") {
-                      return (
-                        <TableCell key={cellIndex}>
-                          <Button
-                            disabled={row.original.p1.id == "" && row.original.p2.id == ""}
-                            variant="outline"
-                            onClick={() => handleRowClick(row.original)}
-                          >
-                            Muuda
-                          </Button>
-                        </TableCell>
-                      );
-                    }
-
+  if (data.length > 0) {
+    return (
+      <div className="py-4">
+        <div className="flex gap-4">
+          <Select value={filterValue} onValueChange={(value: FilterOption) => setFilterValue(value)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter matches" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("admin.tournaments.filters.all_games")}</SelectItem>
+              <SelectItem value="winner_declared">{t("admin.tournaments.filters.winner_declared")}</SelectItem>
+              <SelectItem value="ongoing">{t("admin.tournaments.filters.ongoing_games")}</SelectItem>
+              <SelectItem value="not_started">{t("admin.tournaments.filters.upcoming_games")}</SelectItem>
+            </SelectContent>
+          </Select>
+          {tournament_table.type == "champions_league" && (
+            <div className="flex gap-4">
+              <Button className="text-white bg-primary" onClick={() => {
+                setInitialTab("regrouping")
+                setIsRegroupingModalOpen(true)
+              }}
+              >Regrupeeri</Button>
+              <Button className="text-white bg-primary" onClick={() => { setInitialTab("finals"); setIsRegroupingModalOpen(true) }}>Finaalid</Button>
+              <Button className="text-white bg-primary" onClick={() => setIsTimeEditingModalOpen(true)}>Muuda aegu</Button>
+            </div>
+          )
+          }
+        </div>
+        <div className="rounded-md border my-2">
+          <Table>
+            <TableHeader>
+  
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
                     return (
-                      <TableCell className="py-0 !h-auto" key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    );
+                      <TableHead key={header.id} className="whitespace-nowrap">
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    )
                   })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-
-        {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
-          <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        }
-        {selectedMatch && selectedMatch.match.table_type != "champions_league" &&
-          <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
-        }
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={cn("!h-auto bg-green-100",
+                    (row.original.p1.id == "" && row.original.p2.id == ""
+                      || row.original.p1.id == "" && row.original.p2.id != ""
+                      || row.original.p1.id != "" && row.original.p2.id == ""
+                      || row.original.match.winner_id != ""
+                    )
+                    && "bg-white")}>
+                    {row.getVisibleCells().map((cell, cellIndex) => {
+                      if (cell.column.id === "actions") {
+                        return (
+                          <TableCell key={cellIndex}>
+                            <Button
+                              disabled={row.original.p1.id == "" && row.original.p2.id == ""}
+                              variant="outline"
+                              onClick={() => handleRowClick(row.original)}
+                            >
+                              Muuda
+                            </Button>
+                          </TableCell>
+                        );
+                      }
+  
+                      return (
+                        <TableCell className="py-0 !h-auto w-auto whitespace-nowrap" key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+  
+          {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
+            <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          }
+          {selectedMatch && selectedMatch.match.table_type === "round_robin_full_placement" &&
+            <TableTennisProtocolModalTest tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          }
+          {selectedMatch && selectedMatch.match.table_type != "champions_league" && selectedMatch.match.table_type != "round_robin_full_placement" &&
+            <MatchDialog tournament_id={tournament_id} match={selectedMatch} open={isOpen} onClose={() => setIsOpen(false)} />
+          }
+        </div>
+        <ReGrouping
+          tournament_id={tournament_id}
+          isOpen={isRegroupingModalOpen}
+          onClose={() => setIsRegroupingModalOpen(false)}
+          state={initialTab}
+        />
+        <TimeEditingModal
+          matches={data}
+          tournament_table_id={tournament_table.id}
+          tournament_id={tournament_id}
+          isOpen={isTimeEditingModalOpen}
+          onClose={() => setIsTimeEditingModalOpen(false)}
+        />
       </div>
-      <ReGrouping
-        tournament_id={tournament_id}
-        isOpen={isRegroupingModalOpen}
-        onClose={() => setIsRegroupingModalOpen(false)}
-        state={initialTab}
-      />
-      <TimeEditingModal
-        matches={data}
-        tournament_table_id={tournament_table.id}
-        tournament_id={tournament_id}
-        isOpen={isTimeEditingModalOpen}
-        onClose={() => setIsTimeEditingModalOpen(false)}
-      />
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className="p-6 text-center rounded-sm">
+          <p className="text-stone-500">{t("competitions.errors.no_games")}</p>
+      </div>
+    )
+  }
 }
 

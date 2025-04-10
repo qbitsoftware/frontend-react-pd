@@ -55,6 +55,8 @@ function RouteComponent() {
   const groupName = tableQuery.data.data.class
   const isMeistrikad = tableQuery.data.data.type === "champions_league"
 
+  const isRoundRobinFull = tableQuery.data.data.type === "round_robin_full_placement"
+
   if (!isMeistrikad && activeTab === "bracket") {
     setActiveTab('placement')
   }
@@ -90,7 +92,7 @@ function RouteComponent() {
             <Window data={bracketQuery.data.data} tournament_table={tableQuery.data.data} />
           </TabsContent>
         </Tabs>
-        ) : (
+        ) : isRoundRobinFull ? (<div>jou</div>) : (
           <div className="w-full">
             <div className="flex flex-col items-center">
               <h4 className="text-center font-medium pt-4 pb-2">{groupName}</h4>
@@ -103,6 +105,7 @@ function RouteComponent() {
           </div>
         )}
       </div>
+
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent aria-describedby={`match-protocol-${selectedMatch?.match.id}`} className="w-[95vw] max-w-[1200px] h-[90vh] p-4 mx-auto flex flex-col">

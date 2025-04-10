@@ -58,6 +58,10 @@ export const Route = createFileRoute(
 function RouteComponent() {
     const { participants, tournament_data, table_data } = Route.useLoaderData()
 
+    console.log("participants:", participants)
+  console.log("tournament:", tournament_data)
+  console.log("table: ", table_data)
+
 
     if (tournament_data && tournament_data.data && table_data && table_data.data) {
         return (
