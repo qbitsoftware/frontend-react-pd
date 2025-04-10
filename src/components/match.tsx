@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { TableMatch } from '@/types/types'
-import { formatName, getRandomFlag } from '@/lib/utils'
+import { getRandomFlag } from '@/lib/utils'
 import { useLocation, useParams } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
-import { formatDateTimeBracket } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
 interface MatchComponentProps {
@@ -76,7 +75,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     (match.match.table_type == "champions_league" ? setIsOpen2(true) : setIsOpen(true))}
                 className={`absolute flex flex-col z-10 bg-white text-sm`}>
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute top-[-20px] w-[60px] text-left text-[10px]'>{t("admin.tournaments.matches.table.table")} {match.match.extra_data.table}</div>}
-                {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[112px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.start_date ? formatDateTimeBracket(match.match.start_date) : formatDateTimeBracket(new Date().toISOString())}</div>}
+                {/* match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[112px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.start_date ? formatDateTimeBracket(match.match.start_date) : formatDateTimeBracket(new Date().toISOString())}</div>*/}
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.bracket}</div>}
                 <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
                     {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
@@ -92,10 +91,10 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                         <>
                             <div className="text-center px-2">{getRandomFlag()}</div>
                             <div className={cn(
-                                "overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold",
+                                "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold",
                                 match.match.winner_id == match.participant_1.id || match.participant_2.id == "empty" ? "" : "font-medium"
                             )}>
-                                {formatName(match.participant_1.name)}
+                                {match.participant_1.name}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
                             <div className={cn("w-[50px]  items-center flex justify-center h-full font-semibold", p1_sets > p2_sets ? "bg-[#F3F9FC]" : p1_sets < p2_sets ? "" : "")}>{match.participant_2.id == "empty" ? "" : p1_sets}</div>
@@ -118,10 +117,10 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                         <>
                             <div className="text-center px-2">{getRandomFlag()}</div>
                             <div className={cn(
-                                "overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold",
+                                "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold",
                                 match.match.winner_id == match.participant_2.id || match.participant_1.id == "empty" ? "" : "font-medium"
                             )}>
-                                {formatName(match.participant_2.name)}
+                                {match.participant_2.name}
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
                             <div className={cn("w-[50px] items-center flex justify-center h-full font-semibold", p1_sets < p2_sets ? "bg-[#F3F9FC]" : p1_sets > p2_sets ? "" : "")}>{match.participant_1.id == "empty" ? "" : p2_sets}</div>

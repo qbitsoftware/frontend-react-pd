@@ -162,9 +162,9 @@ function RouteComponent() {
   const clubs = clubsData.data
 
   return (
-    <div className="container p-10">
+    <div className="container p-8">
       <div className="flex justify-between items-center mb-5">
-        <h1 className="text-2xl font-bold">{t('admin.clubs.title')}</h1>
+        <h3 className="font-bold">{t('admin.clubs.title')}</h3>
 
         <Button
           onClick={() => setIsCreateDialogOpen(true)}

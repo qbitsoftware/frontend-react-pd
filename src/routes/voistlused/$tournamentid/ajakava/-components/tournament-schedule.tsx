@@ -130,15 +130,13 @@ export const TournamentSchedule = ({
               gap: "12px"
             }}
           >
-            <div className="p-3 text-[#212121] text-center font-medium whitespace-nowrap">{formattedDate}</div>
-
+            <div className="p-3 text-[#212121] text-center font-medium whitespace-nowrap">{matches[0].match.table_type == "champions_league" ? formattedDate : ""}</div>
             {timeSlots.map((timeSlot) => (
               <div
                 key={timeSlot.displayTime}
                 className="p-3"
               >
-                {timeSlot.displayTime}
-
+                {matches[0].match.table_type == "champions_league" ? timeSlot.displayTime : ""}
               </div>
             ))}
 
@@ -241,14 +239,16 @@ const ScheduleFilters = ({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
             <span>
+              {/* (${getFormattedDate(gamedays[activeDay])}) */}
               {gamedays[activeDay] ?
-                `${t('competitions.timetable.gameday')} ${activeDay + 1} (${getFormattedDate(gamedays[activeDay])})` :
+                `${t('competitions.timetable.gameday')} ${activeDay + 1} ` :
                 `${t('competitions.timetable.gameday')} ${activeDay + 1}`
               }
             </span>
             <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent>
           {Array.from({ length: totalDays }).map((_, index) => (
             <DropdownMenuItem
@@ -257,7 +257,8 @@ const ScheduleFilters = ({
               className={activeDay === index ? "bg-slate-100" : ""}
             >
               {gamedays[index] ?
-                `${t('competitions.timetable.gameday')} ${index + 1} (${getFormattedDate(gamedays[index])})` :
+                // (${getFormattedDate(gamedays[index])})
+                `${t('competitions.timetable.gameday')} ${index + 1} ` :
                 `${t('competitions.timetable.gameday')} ${index + 1}`
               }
             </DropdownMenuItem>
@@ -298,7 +299,7 @@ interface MatchCardProps {
 
 const MatchCard = ({ match }: MatchCardProps) => {
   const cardHeight = "7rem";
-  const maxNameLength = 20; 
+  const maxNameLength = 20;
 
   const p1NameTruncated = truncateText(match.p1?.name || 'TBD', maxNameLength);
   const p2NameTruncated = truncateText(match.p2?.name || 'TBD', maxNameLength);

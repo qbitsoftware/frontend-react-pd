@@ -163,7 +163,7 @@ export default function RouteComponent() {
   // Main content when everything is working properly
   return (
     <div className="space-y-6 p-8 overflow-y-scroll h-full">
-      <h1 className="text-3xl font-bold">{t("admin.dashboard.name")}</h1>
+      <h3 className=" font-bold">{t("admin.dashboard.name")}</h3>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -330,5 +330,5 @@ interface TournamentStatusBadgeProps {
 const TournamentStatusBadge: React.FC<TournamentStatusBadgeProps> = ({
   status,
 }) => {
-  return <Badge className={"bg-gray-100 text-gray-800"}>{status}</Badge>;
+  return <Badge className={"bg-gray-100 text-gray-800 hover:bg-stone-200"}>{status}</Badge>;
 };

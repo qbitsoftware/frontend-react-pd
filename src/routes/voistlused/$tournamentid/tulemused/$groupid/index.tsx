@@ -155,13 +155,11 @@ function RouteComponent() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent
           aria-describedby={`match-protocol-${selectedMatch?.match.id}`}
-          className="w-[95vw] max-w-[1200px] h-[90vh] p-4 mx-auto flex flex-col"
+          className=" max-w-[1200px] h-[90vh] px-1 md:p-4 mx-auto flex flex-col"
         >
-          <div className="flex justify-between items-center mb-2">
-            <DialogTitle className="text-lg font-semibold">
+            <DialogTitle className="text-lg text-center  font-semibold">
               {t("competitions.timetable.match_details")}
             </DialogTitle>
-          </div>
 
           <div className="flex-1 overflow-auto">
             {isRoundRobinFull && selectedMatch && 

@@ -18,6 +18,7 @@ import { useToastNotification } from "@/components/toast-notification"
 import { capitalize, useDebounce } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { UseGetUsersDebounce } from "@/queries/users"
+import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match"
 import { z } from "zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -67,10 +68,32 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     const router = useRouter()
     const toast = useToast()
     const { successToast, errorToast } = useToastNotification(toast)
+    const { data: matches_data, isLoading } = UseGetMatchesQuery(tournament_data.id, table_data.id)
     const deleteMutation = UseDeleteParticipant(tournament_data.id, table_data.id)
     const createParticipant = UseCreateParticipants(tournament_data.id, table_data.id)
     const updateParticipant = UseUpdateParticipant(tournament_data.id, table_data.id)
     const updateOrdering = UsePostOrder(tournament_data.id, table_data.id)
+    const [disabled, setDisabled] = useState(false)
+    void isLoading;
+
+    const isDisabled = (data: MatchesResponse | undefined): boolean => {
+        if (!data || !data.data) {
+            return false
+        }
+        let winners = data.data.find((match) => {
+            return match.match.winner_id != ""
+        })
+
+        if (!winners) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    useEffect(() => {
+        setDisabled(isDisabled(matches_data))
+    }, [matches_data])
 
     const [searchTerm, setSearchTerm] = useState("")
     const debouncedSearchTerm = useDebounce(searchTerm, 300)
@@ -355,7 +378,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                 <Card className=" border-[#F0F3F3]">
                     <CardHeader className="">
                         <div className="flex w-[250px] gap-4">
-                            <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue}>
+                            <Select onValueChange={setSelectedOrderValue} defaultValue={selectedOrderValue} disabled={disabled}>
                                 <SelectTrigger className="">
                                     <SelectValue placeholder={t('admin.tournaments.groups.order.placeholder')} />
                                 </SelectTrigger>

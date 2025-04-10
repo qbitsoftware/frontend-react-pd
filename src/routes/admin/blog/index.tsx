@@ -198,24 +198,25 @@ function RouteComponent() {
   );
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-8">
       <div className="">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h3 className="font-bold text-gray-900">
               {t("admin.blogs.title")}
-            </h1>
+            </h3>
             <p className="text-gray-600 mt-1">{t("admin.blogs.description")}</p>
           </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 ">
           <Link href="/admin/blog/new">
-            <Button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
-              <PlusCircle className="w-4 h-4 mr-2" />
+            <Button className="flex items-center text-white w-full sm:w-auto">
+              <PlusCircle className="w-4 h-4 mr-1" />
               {t("admin.blogs.add_new")}
             </Button>
           </Link>
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 ">
+          
 
           <div className="relative w-full sm:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
