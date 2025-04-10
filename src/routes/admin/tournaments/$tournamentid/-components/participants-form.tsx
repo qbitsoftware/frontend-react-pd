@@ -789,10 +789,14 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                 <Button
                                                                     disabled={(playerSuggestions && playerSuggestions.data && playerSuggestions.data.length !== 0) || searchTerm == ''}
                                                                     onClick={() => {
-                                                                        const first_name = searchTerm.split(" ")[0];
-                                                                        let last_name = ""
-                                                                        if (searchTerm.split(" ").length >= 2) {
-                                                                            last_name = searchTerm.split(" ")[1]
+                                                                        const lastSpaceIndex = searchTerm.lastIndexOf(" ");
+
+                                                                        let first_name = searchTerm;
+                                                                        let last_name = "";
+
+                                                                        if (lastSpaceIndex !== -1) {
+                                                                            first_name = searchTerm.substring(0, lastSpaceIndex);
+                                                                            last_name = searchTerm.substring(lastSpaceIndex + 1);
                                                                         }
 
                                                                         const existingPlayers = participant.players ?? [];
