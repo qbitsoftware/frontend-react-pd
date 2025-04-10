@@ -120,10 +120,12 @@ function RouteComponent() {
         ) : isRoundRobinFull ? (
           <>
             {/* Uus tabel */}
+            
             <GroupStageBracket
               brackets={bracketQuery.data.data.round_robins[0]}
               onMatchSelect={handleSelectMatch}
             />
+          
           </>
         ) : (
           <div className="w-full">

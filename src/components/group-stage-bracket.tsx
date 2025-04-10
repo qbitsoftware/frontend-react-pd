@@ -16,7 +16,6 @@ interface GroupStageBracketProps {
 export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStageBracketProps) {
     const { t } = useTranslation()
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-    const [activeBracketIndex, setActiveBracketIndex] = useState(0);
 
     if (!brackets.round_robin || !brackets.round_robin.length) {
         return (
@@ -26,21 +25,19 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
         );
     }
 
-    // Get the active round robin bracket
+    // Get all round robin brackets
     const roundRobins = brackets.round_robin;
-    const currentRoundRobin = roundRobins[activeBracketIndex];
-    const displayTeams = currentRoundRobin || [];
 
-    const findMatches = (participant_1_id: string, participant_2_id: string) => {
-        const team1 = displayTeams.find(t => t.participant.id === participant_1_id);
-        const team2 = displayTeams.find(t => t.participant.id === participant_2_id);
+    const findMatches = (roundRobinBracket: RoundRobinBracket[], participant_1_id: string, participant_2_id: string) => {
+        const team1 = roundRobinBracket.find(t => t.participant.id === participant_1_id);
+        const team2 = roundRobinBracket.find(t => t.participant.id === participant_2_id);
 
         if (!team1 || !team2 || !team1.matches) return [];
 
         return team1.matches.filter(m =>
             (m.match.p1_id === participant_1_id && m.match.p2_id === participant_2_id) ||
             (m.match.p1_id === participant_2_id && m.match.p2_id === participant_1_id)
-        ).sort((a) => a.match.round >= displayTeams.length ? 1 : -1);
+        ).sort((a) => a.match.round >= roundRobinBracket.length ? 1 : -1);
     };
 
     const handleMatchClick = (match: MatchWrapper | null): void => {
@@ -49,17 +46,18 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
         }
     }
 
-    const renderMatchCell = (p1_id: string, p2_id: string) => {
-        const find_matches = findMatches(p1_id, p2_id);
+    const renderMatchCell = (roundRobinBracket: RoundRobinBracket[], p1_id: string, p2_id: string) => {
+        const find_matches = findMatches(roundRobinBracket, p1_id, p2_id);
 
         return (
-            <div className="flex flex-col space-y-2">
+            <div className=" flex flex-col space-y-2">
+                
                 <h4>{ }</h4>
                 {[0].map((_, index) => (
                     <div
                         onClick={() => find_matches[index] ? handleMatchClick(find_matches[index]) : null}
                         key={index}
-                        className="flex flex-col items-center justify-center cursor-pointer"
+                        className=" flex flex-col items-center justify-center cursor-pointer"
                     >
                         {find_matches[index] ? (
                             <>
@@ -86,104 +84,96 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
                                 </div>
                             </>
                         )}
-                        {index === 0 && <Separator className="w-full my-1" />}
                     </div>
                 ))}
             </div>
         )
     }
 
-    return (
-        <div className="container mx-auto">
-            {roundRobins.length > 1 && (
-                <div className="mb-4">
-                    <Select
-                        value={activeBracketIndex.toString()}
-                        onValueChange={(value) => setActiveBracketIndex(parseInt(value))}
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Vali grupp" />
+    // Function to render a single group table
+    const renderGroupTable = (roundRobinBracket: RoundRobinBracket[], groupIndex: number) => {
+        return (
+            <div key={groupIndex} className="my-10 mx-auto flex-col max-w-3xl">
+                <h3 className="font-bold mb-4">Grupp {groupIndex + 1}</h3>
+                
+                <div className="md:hidden mb-4">
+                    <Select onValueChange={(value) => setSelectedTeam(value)}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Vali tiim" />
                         </SelectTrigger>
                         <SelectContent>
-                            {roundRobins.map((_, index) => (
-                                <SelectItem key={index} value={index.toString()}>
-                                    {`Grupp ${index + 1}`}
+                            {roundRobinBracket.map((bracket, index) => (
+                                <SelectItem key={index} value={bracket.participant.id}>
+                                    {bracket.participant.name || `Team ${index + 1}`}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
                 </div>
-            )}
 
-            <div className="md:hidden mb-4">
-                <Select onValueChange={(value) => setSelectedTeam(value)}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Vali tiim" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {displayTeams.map((bracket, index) => (
-                            <SelectItem key={index} value={bracket.participant.id}>
-                                {bracket.participant.name || `Team ${index + 1}`}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <ScrollArea className="w-full">
-                <div className="min-w-[640px]">
-                    <Table className="w-full border-collapse">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">Meeskonnad</TableHead>
-                                {displayTeams.map((team, index) => (
-                                    <TableHead key={index} className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
-                                    </TableHead>
-                                ))}
-                                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {displayTeams.map((team, rowIndex) => (
-                                <TableRow
-                                    key={rowIndex}
-                                    className={cn(
-                                        rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
-                                        selectedTeam === team?.participant.id ? 'bg-blue-100' : ''
-                                    )}
-                                >
-                                    <TableCell className="font-medium border text-center">
-                                        {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
-                                    </TableCell>
-                                    {displayTeams.map((colTeam, colIndex) => (
-                                        <TableCell
-                                            key={colIndex}
-                                            className={cn(
-                                                "p-2 border",
-                                                rowIndex === colIndex ? "bg-gray-200" : ""
-                                            )}
-                                        >
-                                            {rowIndex === colIndex ? (
-                                                <div className="w-full h-full bg-gray-300"></div>
-                                            ) : (
-                                                renderMatchCell(team.participant.id, colTeam.participant.id)
-                                            )}
-                                        </TableCell>
+                <ScrollArea className="w-full">
+                    <div className="min-w-[640px]">
+                        <Table className="w-full border-collapse">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">Meeskonnad</TableHead>
+                                    {roundRobinBracket.map((team, index) => (
+                                        <TableHead key={index} className="w-[120px] text-center bg-primary text-primary-foreground">
+                                            {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
+                                        </TableHead>
                                     ))}
-                                    <TableCell className="font-bold border text-center bg-secondary/30">
-                                        {team?.total_points !== undefined ?
-                                            team.total_points :
-                                            <Skeleton className="h-6 w-12 mx-auto" />
-                                        }
-                                    </TableCell>
+                                    <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+                            </TableHeader>
+                            <TableBody>
+                                {roundRobinBracket.map((team, rowIndex) => (
+                                    <TableRow
+                                        key={rowIndex}
+                                        className={cn(
+                                            rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
+                                            selectedTeam === team?.participant.id ? 'bg-blue-100' : ''
+                                        )}
+                                    >
+                                        <TableCell className="font-medium border text-center">
+                                            {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
+                                        </TableCell>
+                                        {roundRobinBracket.map((colTeam, colIndex) => (
+                                            <TableCell
+                                                key={colIndex}
+                                                className={cn(
+                                                    "p-2 border",
+                                                    rowIndex === colIndex ? "bg-gray-200" : ""
+                                                )}
+                                            >
+                                                {rowIndex === colIndex ? (
+                                                    <div className="w-full h-full bg-gray-300"></div>
+                                                ) : (
+                                                    renderMatchCell(roundRobinBracket, team.participant.id, colTeam.participant.id)
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                        <TableCell className="font-bold border text-center bg-secondary/30">
+                                            {team?.total_points !== undefined ?
+                                                team.total_points :
+                                                <Skeleton className="h-6 w-12 mx-auto" />
+                                            }
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+            </div>
+        );
+    };
+
+    return (
+        <div className="container mx-auto">
+            {roundRobins.map((roundRobinBracket, index) => 
+                renderGroupTable(roundRobinBracket, index)
+            )}
         </div>
     )
 }
