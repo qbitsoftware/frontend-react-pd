@@ -27,6 +27,7 @@ const DoubleElimBracket = ({
 
   // const matches_len = data.matches.reduce((max, item) => item.match.round > max.round ? item.match : max, { round: -Infinity }).round
 
+
   if (data && data.matches) {
     return (
       <div className="relative pr-10" key={index}>

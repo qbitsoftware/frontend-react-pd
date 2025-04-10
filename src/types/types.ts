@@ -124,6 +124,7 @@ export type Participant = {
   updated_at: string;
   deleted_at: string;
   group: number;
+  group_name: string;
   players: Player[];
   tournament_table_id: number;
   extra_data: PartipantExtraData;

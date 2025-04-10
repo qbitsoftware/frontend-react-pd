@@ -16,5 +16,10 @@ export default defineConfig({
     postcss: {
       plugins: [tailwindcss()]
     }
+  },
+  server: {
+    hmr: {
+      overlay: false,
+    }
   }
 })

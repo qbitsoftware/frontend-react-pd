@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TableTennisProtocolModal } from "./tt-modal"
 import { TableTennisProtocolModalTest } from "./tt-modal-test"
 import ReGrouping from "./regrouping"
-// import TimeEditingModal from "./time-editing-modal"
 import TimeEditingModal from "./time-editing-modal"
 import { createColumns } from "./matches-table-columns"
 import { useTranslation } from "react-i18next"
@@ -31,9 +30,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
   const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
   const { t } = useTranslation()
-  
-  console.log(tournament_table)
-
 
   const filteredData = useMemo(() => {
     switch (filterValue) {
@@ -92,7 +88,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
         <div className="rounded-md border my-2">
           <Table>
             <TableHeader>
-  
+
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -120,16 +116,31 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
                         return (
                           <TableCell key={cellIndex}>
                             <Button
-                              disabled={row.original.p1.id == "" && row.original.p2.id == ""}
+                              disabled={row.original.p1.id == "" || row.original.p2.id == ""}
                               variant="outline"
                               onClick={() => handleRowClick(row.original)}
                             >
-                              Muuda
+                             {t("admin.tournaments.matches.table.modify")}
                             </Button>
                           </TableCell>
                         );
                       }
-  
+                      if (cell.column.id === "p1_score") {
+                        return (
+                          <TableCell key={cellIndex} className="text-center">
+                            {row.original.match.extra_data.team_1_total}
+                          </TableCell>
+                        )
+                      }
+
+                      if (cell.column.id === "p2_score") {
+                        return (
+                          <TableCell key={cellIndex} className="text-center">
+                            {row.original.match.extra_data.team_2_total}
+                          </TableCell>
+                        )
+                      }
+
                       return (
                         <TableCell className="py-0 !h-auto w-auto whitespace-nowrap" key={cell.id}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -147,7 +158,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
               )}
             </TableBody>
           </Table>
-  
+
           {selectedMatch && selectedMatch.match.table_type == "champions_league" &&
             <TableTennisProtocolModal tournament_id={tournament_id} match={selectedMatch} isOpen={isOpen} onClose={() => setIsOpen(false)} />
           }
@@ -176,7 +187,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
   } else {
     return (
       <div className="p-6 text-center rounded-sm">
-          <p className="text-stone-500">{t("competitions.errors.no_games")}</p>
+        <p className="text-stone-500">{t("competitions.errors.no_games")}</p>
       </div>
     )
   }

@@ -18,7 +18,6 @@ export const StatisticsCard = ({ tournament_id, group_id, match_id, index }: Sta
     const { data, isLoading } = UseGetMatch(tournament_id, group_id, match_id)
     const { t } = useTranslation()
 
-    console.log("Protocol, ", data)
 
     if (isLoading) {
         return (

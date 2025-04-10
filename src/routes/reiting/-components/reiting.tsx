@@ -100,6 +100,23 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
 
   const selectedPlayer = users.find((user) => user.id === SelectedPlayerId);
 
+  const getMondayOfCurrentWeek = () => {
+    const today = new Date();
+    const day = today.getDay();
+
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+
+    const monday = new Date(today.setDate(diff));
+    monday.setHours(9, 0, 0, 0);
+
+    const dd = String(monday.getDate()).padStart(2, '0');
+    const mm = String(monday.getMonth() + 1).padStart(2, '0');
+    const yyyy = monday.getFullYear();
+    const hours = monday.getHours();
+
+    return `${dd}.${mm}.${yyyy}, ${hours}:00`;
+  };
+
   return (
     <div className="py-4">
       <div className="lg:rounded-lg px-4 lg:px-12 py-6">
@@ -107,7 +124,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
           <h2 className="font-bold">
             {modifyTitleDependingOnFilter(t, showCombined, sex, ageClass)}
           </h2>
-          <p className="font-medium pb-1">{t('rating.last_updated')}: <span className="bg-[#FBFBFB] px-3 py-1 rounded-full border border-[#EAEAEA]">11.01.2025, 9:00</span></p>
+          <p className="font-medium pb-1">{t('rating.last_updated')}: <span className="bg-[#FBFBFB] px-3 py-1 rounded-full border border-[#EAEAEA]">{getMondayOfCurrentWeek()}</span></p>
           <p className="pb-8">Lühendid: NR = koht reitingus, PP = paigutuspunktid, RP = reitingupunktid, KL = kaalud, ID = ELTLID, SA = sünniaasta</p>
         </div>
 

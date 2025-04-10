@@ -130,7 +130,7 @@
       "table": "Laud",
       "search_placeholder": "Otsi nime",
       "all_groups": "Kõik grupid",
-      "gameday": "Mängu päev",
+      "gameday": "Mängupäev",
       "match_details": "Mängu detailid",
       "player_1": "Mängija 1",
       "player_2": "Mängija 2",
@@ -364,6 +364,15 @@
       "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
+        "tournament_tables": {
+          "single_elimination": "Klassikaline Üksikeliminatsioon",
+          "single_elimination_bronze": "Üksikeliminatsioon (kolmanda koha väljamängimisega)",
+          "double_elimination_full_placement": "Klassikaline Kaksikeliminatsioon",
+          "double_elimination_full_placement_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale)",
+          "champions_league": "Võistkondlikud liigad",
+          "free_for_all": "Tänavapinks",
+          "round_robin_full_placement": "Round Robin"
+        },
         "back": "Tagasi",
         "edit_group": "Muuda gruppi",
         "create_group": "Loo grupp",
@@ -386,9 +395,9 @@
         "number_of_tables_placeholder": "Sisestage laudade arv",
         "class": "Klass",
         "class_placeholder": "Sisestage klass",
-        "tournament_size": "Turniiri suurus",
+        "tournament_size": "Tabeli suurus (osalejate/meeskondade arv)",
         "min_team_size": "Minimaalne tiimi suurus",
-        "additional_information": "Lisa informatisoon",
+        "additional_information": "Lisa-informatsioon",
         "sport": "Sport",
         "sport_placeholder": "Vali spordiala",
         "sport_value": {
@@ -459,7 +468,7 @@
         "no_tables": "Gruppe pole veel lisatud",
         "title": "Turniiri grupid",
         "order": {
-          "title": "Järjesta",
+          "title": "Genereeri mängud",
           "placeholder": "Järjestus",
           "random": "Suvaline",
           "by_rating": "Reitingu järgi",
@@ -488,14 +497,57 @@
           }
         },
         "participants": {
+          "teams": "Meeskonnad",
+          "players": "Mängijad",
+          "toasts": {
+            "team_updated": "Klubi loodud edukalt",
+            "team_updated_error": "Meeskonna uuendamisel ilmnes viga",
+            "team_created_error": "Meeskonna loomisel ilmnes viga",
+            "team_deleted_error": "Meeskonna kustutamisel ilmnes viga",
+            "player_updated": "Mängija andmed edukalt uuendatud",
+            "player_updated_error": "Mängija uuendamisel ilmnes viga",
+            "player_removed_error": "Mängija kustutamisel ilmnes viga",
+            "player_added": "Mängija edukalt lisatud",
+            "max_players": "Maksimaalne mängijate arv meeskonnas on täis"
+          },
           "actions": {
             "save": "Salvesta",
             "edit": "Muuda",
             "delete": "Kustuta",
+            "confirm": {
+              "delete": "Kas oled kindel et tahad kustutada?",
+              "reminder": "Seda käsklust ei saa tagasi võtta."
+            },
             "cancel": "Katkesta",
             "edit_team": "Muuda meeskonda",
             "delete_team": "Kustuta meeskond",
-            "submit": "Lisa"
+            "update_team": "Uuenda meeskond",
+            "add_team": "Lisa meeskond",
+            "submit": "Lisa",
+            "unfilled_slot": "Vaba lahter",
+            "add_team_title": "Lisa uus meeskond",
+            "edit_team_title": "Muuda meeskonda",
+            "team_dialog_description": "See meeskond lisatakse antud grupi alla.",
+            "team_name": "Meeskonna nimi",
+            "team_name_placeholder": "Lisa meeskonna nimi",
+            "add_player": {
+              "add": "Lisa mängija",
+              "title": "Lisa meeskonda mängija",
+              "dialog_description": "Mängija lisatakse valitud meeskonda",
+              "first_name": "Eesnimi",
+              "last_name": "Perekonnanimi",
+              "sex": "Sugu",
+              "genders": {
+                "male": "Mees",
+                "female": "Naine"
+              },
+              "club": "Klubi (Valikuline)"
+            },
+            "edit_player": {
+              "edit": "Muuda andmed",
+              "title": "Muuda meeskonna mängija infot",
+              "dialog_description": "Valitud mängija andmed uuendatakse."
+            }
           },
           "table": {
             "serial_number": "JKNR.",
@@ -590,6 +642,7 @@
       },
       "matches": {
         "table": {
+          "modify": "Muuda",
           "serial_number": "JKNR.",
           "round": "Ring",
           "class": "Grupp",

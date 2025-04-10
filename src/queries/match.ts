@@ -37,6 +37,24 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
     })
 }
 
+export const UsePatchMatchSwitch = (id: number, group_id: number, match_id: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: Match) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}/tables/${group_id}/match/${match_id}?rotate=true`, formData, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            // queryClient.resetQueries({ queryKey: ['matches', group_id] })
+        }
+    })
+}
+
 export const UseGetMatch = (tournament_id: number, group_id: number, match_id: string) => {
     return useQuery<MatchResponse>({
         queryKey: ['match', group_id],
@@ -70,7 +88,7 @@ export const UseGetTournamentMatches = (tournament_id: number) => {
             })
             return data;
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 5 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
     })
 }

@@ -75,7 +75,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
           </div>
           <Separator className="my-1 z-10" />
           <Tabs
-            defaultValue={data.eliminations[0].elimination[0].name}
+            defaultValue={data?.eliminations[0]?.elimination[0].name}
             className="z-10"
           >
             <TabsList className="flex w-full justify-start gap-6 px-0 text-black bg-transparent overflow-x-auto">
@@ -94,7 +94,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
         </div>
       </div>
       <div
-        className="w-full h-full p-4 overflow-auto bg-[#F8F9FA] pt-[100px] xl:pt-[0px]"
+        className="w-full h-full p-4 overflow-auto bg-[#F8F9FA] pt-[100px] xl:pt-[60px]"
         ref={bracketRef}
       >
         {renderBracket()}

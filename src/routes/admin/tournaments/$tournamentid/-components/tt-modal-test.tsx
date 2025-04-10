@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   UseGetChildMatchesQuery,
   UsePatchMatch,
+  UsePatchMatchSwitch,
   UseStartMatch,
 } from "@/queries/match";
 import {
@@ -36,7 +37,7 @@ import {
   Player,
   TableTennisExtraData,
 } from "@/types/types";
-import { X } from "lucide-react";
+import { RotateCcw, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
@@ -68,6 +69,8 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
     match.match.tournament_table_id,
     match.match.id
   );
+
+  const usePatchMatchSwitch = UsePatchMatchSwitch(tournament_id, match.match.tournament_table_id, match.match.id)
 
   const [notes, setNotes] = useState<string>("");
   const [table_referee, setTableReferee] = useState<string>("");
@@ -142,8 +145,8 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
 
       const selectedPlayer = playerId
         ? (team_number === 1 ? match.p1.players : match.p2.players).find(
-            (player) => player.id === playerId
-          )
+          (player) => player.id === playerId
+        )
         : null;
       return (
         selectedPlayer || {
@@ -279,6 +282,16 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
     }
   };
 
+  const switchParticipants = async () => {
+    try {
+      await usePatchMatchSwitch.mutateAsync(match.match)
+      onClose()
+    } catch (error) {
+      void error
+      errorToast("Something went wrong")
+    }
+  }
+
   const sendExtraData = async (extra_data: TableTennisExtraData) => {
     const sendMatch: Match = {
       id: match.match.id,
@@ -311,7 +324,6 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
     }
   };
 
-  console.log("WWW", team1SelectedPlayers, team2SelectedPlayers);
 
   const handlePlayerChange = async (
     team: number,
@@ -553,6 +565,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
               <span className="font-bold">{match.p1.name}</span>
               <span>vs</span>
               <span className="font-bold">{match.p2.name}</span>
+              <RotateCcw className="cursor-pointer text-stone-800 border border-stone-200 rounded-sm ml-2 h-8 w-8 p-1" onClick={switchParticipants} />
             </DialogTitle>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
@@ -573,7 +586,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
         <Tabs
           defaultValue="players"
           className="flex-grow flex flex-col min-h-0"
-          // onValueChange={setActiveTab}
+        // onValueChange={setActiveTab}
         >
           <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
             <TabsTrigger
@@ -606,7 +619,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                         {team === 1 ? match.p1.name : match.p2.name}
                       </h5>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs">Kapten:</span>
+                        <span className="text-xs mr-1">Kapten:</span>
                         <Input
                           type="text"
                           value={team === 1 ? captainTeam1 : captainTeam2}
@@ -655,8 +668,8 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                               team === 1
                                 ? String.fromCharCode(65 + index)
                                 : String.fromCharCode(
-                                    team === 1 ? 65 + index : 80 + index
-                                  )
+                                  team === 1 ? 65 + index : 80 + index
+                                )
                             }
                           />
                         ))}
@@ -665,18 +678,22 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                   </div>
                 ))}
               </div>
-
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-1">
-                  <h6 className="font-semibold text-sm">Märkmed</h6>
-                  <Button
+              <div className="flex justify-end mt-1 px-3">
+              <Button
                     onClick={handleMatchStart}
                     size="sm"
-                    className="h-8 px-3 text-xs"
+                    className="h-8 px-3 text-xs mb-2 ml-auto self-end"
                   >
                     Alusta mängu
-                  </Button>
-                </div>
+              </Button>
+              </div>
+             
+              <div className="mt-4">
+                
+                  <h6 className="font-semibold text-sm mb-1">Märkmed</h6>
+                  
+                  
+                  
                 <Textarea
                   placeholder="Märkmed"
                   onChange={(e) => setNotes(e.target.value)}
@@ -701,14 +718,14 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                       <span className="text-2xl font-bold">
                         {!isLoading && childMathes && childMathes.data
                           ? childMathes.data.reduce(
-                              (total, match) =>
-                                total +
-                                (match.match.winner_id === match.p1.id &&
+                            (total, match) =>
+                              total +
+                              (match.match.winner_id === match.p1.id &&
                                 match.match.winner_id != ""
-                                  ? 1
-                                  : 0),
-                              0
-                            )
+                                ? 1
+                                : 0),
+                            0
+                          )
                           : 0}
                       </span>
                     </div>
@@ -724,14 +741,14 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                       <span className="text-2xl font-bold">
                         {!isLoading && childMathes && childMathes.data
                           ? childMathes.data.reduce(
-                              (total, match) =>
-                                total +
-                                (match.match.winner_id === match.p2.id &&
+                            (total, match) =>
+                              total +
+                              (match.match.winner_id === match.p2.id &&
                                 match.match.winner_id != ""
-                                  ? 1
-                                  : 0),
-                              0
-                            )
+                                ? 1
+                                : 0),
+                            0
+                          )
                           : 0}
                       </span>
                     </div>

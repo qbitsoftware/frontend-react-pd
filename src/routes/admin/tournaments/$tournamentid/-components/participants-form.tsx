@@ -740,7 +740,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                     type="text"
                                                                     value={activeTeamForPlayer == participant.id ? searchTerm : ""}
                                                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                                                    className="min-w-[200px]"
+                                                                    className="min-w-[200px] mr-2"
                                                                     placeholder="Lisa mängija"
                                                                     autoComplete="off"
                                                                     onFocus={(e) => {
@@ -766,7 +766,6 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
                                                                 <Button
                                                                     disabled={(playerSuggestions && playerSuggestions.data && playerSuggestions.data.length !== 0) || searchTerm == ''}
                                                                     onClick={() => {
-                                                                        console.log("1")
                                                                         const first_name = searchTerm.split(" ")[0];
                                                                         let last_name = ""
                                                                         if (searchTerm.split(" ").length >= 2) {

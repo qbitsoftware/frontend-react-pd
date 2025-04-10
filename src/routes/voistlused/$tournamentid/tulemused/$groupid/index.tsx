@@ -111,21 +111,22 @@ function RouteComponent() {
             </TabsContent>
 
             <TabsContent value="placement" className="w-full mt-6">
-              <Window
+              {bracketQuery.data?.data && bracketQuery.data?.data.eliminations ? (<Window
                 data={bracketQuery.data.data}
                 tournament_table={tableQuery.data.data}
-              />
+              />) :     <div className="text-center text-stone-700">Loading bracket data...</div>}
+              
             </TabsContent>
           </Tabs>
         ) : isRoundRobinFull ? (
           <>
-            {/* Uus tabel */}
-            
+            {bracketQuery.data?.data?.round_robins?.length > 0 && (
             <GroupStageBracket
               brackets={bracketQuery.data.data.round_robins[0]}
               onMatchSelect={handleSelectMatch}
               name={tableQuery.data.data.class}
             />
+            )}
           
           </>
         ) : (
@@ -134,15 +135,17 @@ function RouteComponent() {
               <h4 className="text-center font-medium pt-4 pb-2">{groupName}</h4>
             </div>
             <div className="w-full mt-6">
-              {tableQuery.data.data.type === "free_for_all" ? (
+              {tableQuery.data?.data?.type === "free_for_all" ? (
                 <div className="text-center text-stone-700">
                   {t("competitions.errors.no_groups")}{" "}
                 </div>
-              ) : (
+              ) : bracketQuery.data?.data && bracketQuery.data?.data.eliminations ? (
                 <Window
                   data={bracketQuery.data.data}
-                  tournament_table={tableQuery.data.data}
+                  tournament_table={tableQuery.data?.data}
                 />
+              ) : (
+                <div className="text-center text-stone-700">No data available yet</div>
               )}
             </div>
           </div>

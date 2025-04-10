@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
-import { UseGetParticipants } from '@/queries/participants'
+import { UseGetParticipants, UseGetParticipantsQuery } from '@/queries/participants'
 import { ErrorResponse } from '@/types/types'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipanForm } from '../../../-components/participants-form'
@@ -58,7 +58,9 @@ export const Route = createFileRoute(
 function RouteComponent() {
     const { participants, tournament_data, table_data } = Route.useLoaderData()
 
-    if (tournament_data && tournament_data.data && table_data && table_data.data) {
+    const { data: participant_data } = UseGetParticipantsQuery(tournament_data?.data?.id!, table_data?.data?.id!, false, participants!)
+
+    if (tournament_data && tournament_data.data && table_data && table_data.data && participant_data) {
         return (
             <div className=''>
                 {tournament_data && table_data && participants && table_data.data.type !== "round_robin_full_placement" &&
@@ -70,7 +72,7 @@ function RouteComponent() {
                 }
                 {tournament_data && table_data && participants && table_data.data.type === "round_robin_full_placement" &&
                     <TournamentParticipantsManager
-                        participants={participants.data}
+                        participants={participant_data.data}
                         tournament_data={tournament_data.data}
                         table_data={table_data.data}
                     />

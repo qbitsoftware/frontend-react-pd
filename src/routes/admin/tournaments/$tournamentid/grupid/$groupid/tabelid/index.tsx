@@ -31,7 +31,7 @@ function RouteComponent() {
                 <Loader />
             </div>
         )
-    } else if (!bracketsData || error || !tournamentTableData) {
+    } else if (!bracketsData?.data || error || !tournamentTableData?.data) {
         return (
             <div className="flex items-center justify-center h-[50vh]">
                 <Card className="w-full md:max-w-3xl shadow-lg p-0">
@@ -57,7 +57,7 @@ function RouteComponent() {
         )
     } else {
         return (
-            <div className='h-[calc(87vh-9.5rem)]'>
+            <div className=''>
                 <BracketComponent bracket={bracketsData} tournament_table={tournamentTableData.data} />
             </div>
         )

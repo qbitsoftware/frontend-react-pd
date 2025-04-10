@@ -18,7 +18,7 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
 
-    if (!brackets.round_robin || brackets.round_robin.length !== 1) {
+    if (!brackets.round_robin || brackets.round_robin.length !== 1 || brackets.round_robin[0].length < 8)  {
         return (
             <div className="flex items-center justify-center h-64 w-full">
                 <p className="text-lg font-medium text-gray-500">{t("competitions.errors.no_table")}</p>

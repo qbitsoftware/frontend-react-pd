@@ -41,9 +41,10 @@ export function UseGetParticipants(tournament_id: number, table_id: number) {
     })
 }
 
-export function UseGetParticipantsQuery(tournament_id: number, table_id: number, regrouped: boolean = false) {
+export function UseGetParticipantsQuery(tournament_id: number, table_id: number, regrouped: boolean = false, initialData?: ParticipantsResponse) {
     return useQuery<ParticipantsResponse>({
         queryKey: ["participants", table_id],
+        initialData,
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants?regrouped=${regrouped}`, {
                 withCredentials: true,
@@ -68,6 +69,30 @@ export function UseCreateParticipants(tournament_id: number, table_id: number) {
                 (oldData: ParticipantsResponse | undefined) => {
                     if (!oldData) return { data: [data.data], message: data.message, error: null };
                     return data
+                }
+            )
+        }
+    })
+}
+
+export function UseChangeSubgroupName(tournament_id: number, table_id: number) {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: { participant_ids: string[], group_name: string }) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/group`, formData, {
+                withCredentials: true,
+            })
+            return data;
+        },
+        onSuccess: (data: ParticipantResponse) => {
+            queryClient.setQueryData(["participants", table_id],
+                (oldData: ParticipantsResponse) => {
+                    if (!oldData || !oldData.data) return oldData;
+                    return {
+                        data: oldData.data,
+                        message: data.message,
+                        error: null
+                    };
                 }
             )
         }

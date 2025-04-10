@@ -16,6 +16,8 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
   const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP);
   const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH);
 
+
+
   if (data && data.matches) {
     return (
       <div className="relative h-full w-full">

@@ -93,7 +93,6 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         })
       }
     } catch (error) {
-      console.log(error)
       if (initial_data) {
         errorToast("Turniiri uuendamisel tekkis viga")
       } else {
@@ -187,7 +186,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                           )}
                           {tournament_types?.data?.map((type) => (
                             <SelectItem key={type.id} value={type.name}>
-                              {type.name}
+                              {t(`admin.tournaments.create_tournament.tournament_tables.${type.name}`)}
                             </SelectItem>
                           ))}
                         </SelectContent>

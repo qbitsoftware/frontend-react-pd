@@ -364,6 +364,15 @@
       "add_new": "New Tournament",
       "delete": "Delete a tournament",
       "create_tournament": {
+        "tournament_tables": {
+          "single_elimination": "Single Elimination (No bronze)",
+          "single_elimination_bronze": "Single Elimination",
+          "double_elimination_full_placement": "Double Elimination Full",
+          "double_elimination_full_placement_top_heavy": "Double Elimination (Semi-final losers for 3rd)",
+          "champions_league": "Team Champions League",
+          "free_for_all": "Solo Free-for-all",
+          "round_robin_full_placement": "Round Robin"
+        },
         "back": "Back",
         "edit_group": "Edit Group",
         "create_group": "Create Group",
@@ -386,7 +395,7 @@
         "number_of_tables_placeholder": "Enter number of tables",
         "class": "Class",
         "class_placeholder": "Type a Class",
-        "tournament_size": "Tournament Size",
+        "tournament_size": "Tournament Size (amount of participants/teams)",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
         "sport": "Sport",
@@ -459,7 +468,7 @@
         "no_tables": "No groups created yet",
         "title": "Tournament Groups",
         "order": {
-          "title": "Order",
+          "title": "Generate matches",
           "placeholder": "Sort by",
           "random": "Random",
           "by_rating": "By rating",
@@ -488,14 +497,57 @@
           }
         },
         "participants": {
+          "teams": "Teams",
+          "players": "Players",
+          "toasts": {
+            "team_updated": "Club successfully created",
+            "team_updated_error": "Issue updating team",
+            "team_created_error": "Issue creating team",
+            "team_deleted_error": "Issue deleting team",
+            "player_updated": "Player data successfully updated",
+            "player_updated_error": "Issue updating player data",
+            "player_removed_error": "Player successfully removed",
+            "player_added": "Player successfully added",
+            "max_players": "Exceeding maximum set team size"
+          },
           "actions": {
             "save": "Save",
             "edit": "Edit",
             "delete": "Delete",
+            "confirm": {
+              "delete": "Are you sure you want to delete?",
+              "reminder": "This action is non-reversible."
+            },
             "cancel": "Cancel",
             "edit_team": "Edit team",
             "delete_team": "Delete team",
-            "submit": "Submit"
+            "update_team": "Update team",
+            "add_team": "Add team",
+            "submit": "Submit",
+            "unfilled_slot": "Unfilled slot",
+            "add_team_title": "Add a new team",
+            "edit_team_title": "Edit team",
+            "team_dialog_description": "This team will be added to the selected group.",
+            "team_name": "Team name",
+            "team_name_placeholder": "Insert team name",
+            "add_player": {
+              "add": "Add player",
+              "title": "Add player to team",
+              "dialog_description": "Player will be added to specified team.",
+              "first_name": "First name",
+              "last_name": "Last name",
+              "sex": "Gender",
+              "genders": {
+                "male": "Male",
+                "female": "Female"
+              },
+              "club": "Club (Optional)"
+            },
+            "edit_player": {
+              "edit": "Edit player info",
+              "title": "Modify player info",
+              "dialog_description": "Valitud mängija andmed uuendatakse."
+            }
           },
           "table": {
             "serial_number": "SN",
@@ -590,6 +642,7 @@
       },
       "matches": {
         "table": {
+          "modify": "Modify",
           "serial_number": "SN.",
           "round": "Round",
           "class": "Class",

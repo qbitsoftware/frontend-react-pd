@@ -67,7 +67,7 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
         // const showDate = index === 0 || match.start_date !== matches[index - 1]?.start_date
 
         return (
-          <TableRow key={match.match.id} className='cursor-pointer hover:bg-secondary/50' onClick={() => console.log("jeu")}>
+          <TableRow key={match.match.id} className='cursor-pointer hover:bg-secondary/50' onClick={() => console.log("")}>
             {/* <TableCell>{showRound ? match.match.round : ''}</TableCell> */}
             <TableCell>{match.p1.name}</TableCell>
             <TableCell>{match.p2.name}</TableCell>

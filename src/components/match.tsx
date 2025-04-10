@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { TableMatch } from '@/types/types'
 import { formatName, getRandomFlag } from '@/lib/utils'
-import MatchDialog from './match-dialog'
 import { useLocation, useParams } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
-import { TableTennisProtocolModal } from '@/routes/admin/tournaments/$tournamentid/-components/tt-modal'
 import { formatDateTimeBracket } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
@@ -59,6 +57,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
 
     const [isOpen, setIsOpen] = useState(false)
     const [isOpen2, setIsOpen2] = useState(false)
+    void isOpen, isOpen2, tournamentid
 
     const { p1_sets, p2_sets } = setScore(match)
 
@@ -130,10 +129,10 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     )}
                 </div>
             </div>
-            {match.match.table_type == "champions_league"
+            {/* {match.match.table_type == "champions_league"
                 ? <TableTennisProtocolModal isOpen={isOpen2} onClose={() => { setIsOpen2(false) }} match={{ match: match.match, p1: match.participant_1, p2: match.participant_2, class: "" }} tournament_id={Number(tournamentid)} />
                 : <MatchDialog match={{ match: match.match, p1: match.participant_1, p2: match.participant_2, class: "" }} tournament_id={Number(tournamentid)} open={isOpen} onClose={() => setIsOpen(false)} />
-            }
+            } */}
         </div>
     )
 }

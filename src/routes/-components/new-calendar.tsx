@@ -214,20 +214,15 @@ export function TournamentsCalendar({ tournaments }: Props) {
     
     // Toggle tooltip visibility with logging
     const handleTooltipToggle = (tooltipId: string) => {
-      console.log("Toggle called with ID:", tooltipId);
-      console.log("Current openTooltipId:", openTooltipId);
       
       if (openTooltipId === tooltipId) {
-        console.log("Closing tooltip because it's already open");
         setOpenTooltipId(""); // Close if already open
       } else {
-        console.log("Opening tooltip:", tooltipId);
         setOpenTooltipId(tooltipId); // Open the clicked tooltip
       }
     };
     
     // Log when component renders
-    console.log("Rendering calendar view, current open tooltip:", openTooltipId);
     
     return (
       <div className="space-y-2">
@@ -297,14 +292,11 @@ export function TournamentsCalendar({ tournaments }: Props) {
                             );
   
                             const isOpen = openTooltipId === tooltipId;
-                            console.log(`Cell ${monthIndex}-${day} isOpen:`, isOpen, "ID:", tooltipId);
-  
                             return (
                               <div key={`${monthIndex}-${day}`} className="relative">
                                 <div 
                                   className="aspect-square w-full"
                                   onClick={() => {
-                                    console.log(`Clicked on cell ${monthIndex}-${day}, ID: ${tooltipId}`);
                                     handleTooltipToggle(tooltipId);
                                   }}
                                 >
@@ -329,7 +321,6 @@ export function TournamentsCalendar({ tournaments }: Props) {
                                     <button 
                                       className="absolute top-1 right-1 text-gray-500 hover:text-gray-700"
                                       onClick={(e) => {
-                                        console.log("Close button clicked");
                                         e.stopPropagation();
                                         setOpenTooltipId("");
                                       }}
@@ -365,7 +356,6 @@ export function TournamentsCalendar({ tournaments }: Props) {
         <div 
           className={openTooltipId ? "fixed inset-0 z-40" : "hidden"} 
           onClick={() => {
-            console.log("Backdrop clicked, closing tooltip");
             setOpenTooltipId("");
           }}
         />

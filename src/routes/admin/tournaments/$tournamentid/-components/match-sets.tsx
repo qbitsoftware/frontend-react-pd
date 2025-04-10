@@ -19,8 +19,8 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
 
     const toast = useToast()
     const { tournamentid } = useParams({ strict: false })
-    const { successToast, errorToast } = useToastNotification(toast)
-    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id ,match.match.id)
+    const { errorToast } = useToastNotification(toast)
+    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id, match.match.id)
 
     useEffect(() => {
         const backendScores = match.match.extra_data.score
@@ -55,7 +55,7 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                 },
             }
             try {
-                const result = await updateMatchMutation.mutateAsync(updatedMatch)
+                await updateMatchMutation.mutateAsync(updatedMatch)
             } catch (error) {
                 void error
                 errorToast("Something went wrong")
