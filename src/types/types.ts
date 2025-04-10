@@ -30,7 +30,7 @@ export type RoundRobinBracket = {
 }
 
 export type RoundRobins = {
-  round_robin: RoundRobinBracket[]
+  round_robin: RoundRobinBracket[][]
 }
 
 

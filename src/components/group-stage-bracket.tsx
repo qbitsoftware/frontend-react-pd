@@ -16,8 +16,9 @@ interface GroupStageBracketProps {
 export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStageBracketProps) {
     const { t } = useTranslation()
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+    const [activeBracketIndex, setActiveBracketIndex] = useState(0);
 
-    if (!brackets.round_robin) {
+    if (!brackets.round_robin || !brackets.round_robin.length) {
         return (
             <div className="flex items-center justify-center h-64 w-full">
                 <p className="text-lg font-medium text-gray-500">{t("competitions.errors.no_table")}</p>
@@ -25,11 +26,12 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
         );
     }
 
-
-    const displayTeams: RoundRobinBracket[] = brackets.round_robin || Array(8).fill({ team: { ID: 0, name: "" }, matches: [], total_points: 0 });
+    // Get the active round robin bracket
+    const roundRobins = brackets.round_robin;
+    const currentRoundRobin = roundRobins[activeBracketIndex];
+    const displayTeams = currentRoundRobin || [];
 
     const findMatches = (participant_1_id: string, participant_2_id: string) => {
-
         const team1 = displayTeams.find(t => t.participant.id === participant_1_id);
         const team2 = displayTeams.find(t => t.participant.id === participant_2_id);
 
@@ -38,7 +40,7 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
         return team1.matches.filter(m =>
             (m.match.p1_id === participant_1_id && m.match.p2_id === participant_2_id) ||
             (m.match.p1_id === participant_2_id && m.match.p2_id === participant_1_id)
-        ).sort((a) => a.match.round >= 8 ? 1 : -1);
+        ).sort((a) => a.match.round >= displayTeams.length ? 1 : -1);
     };
 
     const handleMatchClick = (match: MatchWrapper | null): void => {
@@ -53,11 +55,12 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
         return (
             <div className="flex flex-col space-y-2">
                 <h4>{ }</h4>
-                {[0, 1].map((_, index) => (
+                {[0].map((_, index) => (
                     <div
                         onClick={() => find_matches[index] ? handleMatchClick(find_matches[index]) : null}
-
-                        key={index} className="flex flex-col items-center justify-center cursor-pointer">
+                        key={index}
+                        className="flex flex-col items-center justify-center cursor-pointer"
+                    >
                         {find_matches[index] ? (
                             <>
                                 <span className="font-bold text-sm text-blue-600">
@@ -92,6 +95,26 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
 
     return (
         <div className="container mx-auto">
+            {roundRobins.length > 1 && (
+                <div className="mb-4">
+                    <Select
+                        value={activeBracketIndex.toString()}
+                        onValueChange={(value) => setActiveBracketIndex(parseInt(value))}
+                    >
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Vali grupp" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {roundRobins.map((_, index) => (
+                                <SelectItem key={index} value={index.toString()}>
+                                    {`Grupp ${index + 1}`}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+            )}
+
             <div className="md:hidden mb-4">
                 <Select onValueChange={(value) => setSelectedTeam(value)}>
                     <SelectTrigger className="w-full">
@@ -106,33 +129,34 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
                     </SelectContent>
                 </Select>
             </div>
+
             <ScrollArea className="w-full">
                 <div className="min-w-[640px]">
                     <Table className="w-full border-collapse">
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">Meeskonnad</TableHead>
-                                {Array(8).fill(0).map((_, index) => (
+                                {displayTeams.map((team, index) => (
                                     <TableHead key={index} className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        {displayTeams[index]?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
+                                        {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
                                     </TableHead>
                                 ))}
                                 <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {Array(8).fill(0).map((_, rowIndex) => (
+                            {displayTeams.map((team, rowIndex) => (
                                 <TableRow
                                     key={rowIndex}
                                     className={cn(
                                         rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
-                                        selectedTeam === displayTeams[rowIndex]?.participant.id ? 'bg-blue-100' : ''
+                                        selectedTeam === team?.participant.id ? 'bg-blue-100' : ''
                                     )}
                                 >
                                     <TableCell className="font-medium border text-center">
-                                        {displayTeams[rowIndex]?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
+                                        {team?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
                                     </TableCell>
-                                    {Array(8).fill(0).map((_, colIndex) => (
+                                    {displayTeams.map((colTeam, colIndex) => (
                                         <TableCell
                                             key={colIndex}
                                             className={cn(
@@ -143,13 +167,13 @@ export default function GroupStageBracket({ brackets, onMatchSelect }: GroupStag
                                             {rowIndex === colIndex ? (
                                                 <div className="w-full h-full bg-gray-300"></div>
                                             ) : (
-                                                renderMatchCell(displayTeams[rowIndex].participant.id, displayTeams[colIndex].participant.id)
+                                                renderMatchCell(team.participant.id, colTeam.participant.id)
                                             )}
                                         </TableCell>
                                     ))}
                                     <TableCell className="font-bold border text-center bg-secondary/30">
-                                        {displayTeams[rowIndex]?.total_points !== undefined ?
-                                            displayTeams[rowIndex].total_points :
+                                        {team?.total_points !== undefined ?
+                                            team.total_points :
                                             <Skeleton className="h-6 w-12 mx-auto" />
                                         }
                                     </TableCell>
