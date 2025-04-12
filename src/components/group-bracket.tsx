@@ -119,7 +119,6 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
                                     </TableHead>
                                 ))}
                                 <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
-                                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Asetus</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

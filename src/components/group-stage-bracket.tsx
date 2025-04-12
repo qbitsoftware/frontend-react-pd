@@ -178,9 +178,11 @@ export default function GroupStageBracket({
                                     <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
                                         Punktid kokku
                                     </TableHead>
+
                                     <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        Asetus
+                                       Asetus 
                                     </TableHead>
+
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
