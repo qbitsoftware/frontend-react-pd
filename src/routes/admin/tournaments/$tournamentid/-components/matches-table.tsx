@@ -3,7 +3,7 @@ import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-tabl
 
 import type { MatchWrapper, TournamentTable } from "@/types/types"
 import MatchDialog from "@/components/match-dialog"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -30,6 +30,15 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
   const [filterValue, setFilterValue] = useState<FilterOption>("all")
   const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (selectedMatch) {
+      const updatedMatch = data.find(match => match.match.id === selectedMatch.match.id);
+      if (updatedMatch) {
+        setSelectedMatch(updatedMatch);
+      }
+    }
+  }, [data]);
 
   const filteredData = useMemo(() => {
     switch (filterValue) {
@@ -88,7 +97,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
         <div className="rounded-md border my-2">
           <Table>
             <TableHeader>
-
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {

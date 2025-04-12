@@ -178,50 +178,73 @@ export default function GroupStageBracket({
                                     <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
                                         Punktid kokku
                                     </TableHead>
+                                    <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
+                                        Asetus
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {roundRobinBracket.map((team, rowIndex) => (
-                                    <TableRow
-                                        key={rowIndex}
-                                        className={cn(
-                                            rowIndex % 2 === 0 ? "bg-secondary/20" : "bg-background",
-                                            selectedTeam === team?.participant.id ? "bg-blue-100" : ""
-                                        )}
-                                    >
-                                        <TableCell className="font-medium border text-center">
-                                            {team?.participant.name || (
-                                                <Skeleton className="h-6 w-20 mx-auto" />
+                                {(() => {
+                                    const sortedTeams = [...roundRobinBracket].sort((a, b) =>
+                                        (b?.total_points || 0) - (a?.total_points || 0)
+                                    );
+
+                                    const rankMap: Record<string, number> = {};
+                                    sortedTeams.forEach((team, index) => {
+                                        if (team?.participant?.id) {
+                                            rankMap[team.participant.id] = index + 1;
+                                        }
+                                    });
+
+                                    return roundRobinBracket.map((team, rowIndex) => (
+                                        <TableRow
+                                            key={rowIndex}
+                                            className={cn(
+                                                rowIndex % 2 === 0 ? "bg-secondary/20" : "bg-background",
+                                                selectedTeam === team?.participant.id ? "bg-blue-100" : ""
                                             )}
-                                        </TableCell>
-                                        {roundRobinBracket.map((colTeam, colIndex) => (
-                                            <TableCell
-                                                key={colIndex}
-                                                className={cn(
-                                                    "p-2 border",
-                                                    rowIndex === colIndex ? "bg-gray-200" : ""
-                                                )}
-                                            >
-                                                {rowIndex === colIndex ? (
-                                                    <div className="w-full h-full bg-gray-300"></div>
-                                                ) : (
-                                                    renderMatchCell(
-                                                        roundRobinBracket,
-                                                        team.participant.id,
-                                                        colTeam.participant.id
-                                                    )
+                                        >
+                                            <TableCell className="font-medium border text-center">
+                                                {team?.participant.name || (
+                                                    <Skeleton className="h-6 w-20 mx-auto" />
                                                 )}
                                             </TableCell>
-                                        ))}
-                                        <TableCell className="font-bold border text-center bg-secondary/30">
-                                            {team?.total_points !== undefined ? (
-                                                team.total_points
-                                            ) : (
-                                                <Skeleton className="h-6 w-12 mx-auto" />
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                            {roundRobinBracket.map((colTeam, colIndex) => (
+                                                <TableCell
+                                                    key={colIndex}
+                                                    className={cn(
+                                                        "p-2 border",
+                                                        rowIndex === colIndex ? "bg-gray-200" : ""
+                                                    )}
+                                                >
+                                                    {rowIndex === colIndex ? (
+                                                        <div className="w-full h-full bg-gray-300"></div>
+                                                    ) : (
+                                                        renderMatchCell(
+                                                            roundRobinBracket,
+                                                            team.participant.id,
+                                                            colTeam.participant.id
+                                                        )
+                                                    )}
+                                                </TableCell>
+                                            ))}
+                                            <TableCell className="font-bold border text-center bg-secondary/30">
+                                                {team?.total_points !== undefined ? (
+                                                    team.total_points
+                                                ) : (
+                                                    <Skeleton className="h-6 w-12 mx-auto" />
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="font-bold border text-center bg-secondary/30">
+                                                {team?.total_points !== undefined ? (
+                                                    rankMap[team.participant.id]
+                                                ) : (
+                                                    <Skeleton className="h-6 w-12 mx-auto" />
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ));
+                                })()}
                             </TableBody>
                         </Table>
                     </div>

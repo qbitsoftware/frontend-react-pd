@@ -283,9 +283,24 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
   };
 
   const switchParticipants = async () => {
+    const extra_data: TableTennisExtraData = {
+      ...match.match.extra_data,
+      table_referee,
+      head_referee,
+      notes,
+      table,
+      player_a_id: team1SelectedPlayers[0].id,
+      player_b_id: team1SelectedPlayers[1].id,
+      player_d_id: team1SelectedPlayers[3].id,
+      player_e_id: team1SelectedPlayers[4].id,
+      player_x_id: team2SelectedPlayers[0].id,
+      player_y_id: team2SelectedPlayers[1].id,
+      player_v_id: team2SelectedPlayers[3].id,
+      player_w_id: team2SelectedPlayers[4].id,
+    };
+    match.match.extra_data = extra_data;
     try {
       await usePatchMatchSwitch.mutateAsync(match.match)
-      onClose()
     } catch (error) {
       void error
       errorToast("Something went wrong")
@@ -679,21 +694,21 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                 ))}
               </div>
               <div className="flex justify-end mt-1 px-3">
-              <Button
-                    onClick={handleMatchStart}
-                    size="sm"
-                    className="h-8 px-3 text-xs mb-2 ml-auto self-end"
-                  >
-                    Alusta mängu
-              </Button>
+                <Button
+                  onClick={handleMatchStart}
+                  size="sm"
+                  className="h-8 px-3 text-xs mb-2 ml-auto self-end"
+                >
+                  Alusta mängu
+                </Button>
               </div>
-             
+
               <div className="mt-4">
-                
-                  <h6 className="font-semibold text-sm mb-1">Märkmed</h6>
-                  
-                  
-                  
+
+                <h6 className="font-semibold text-sm mb-1">Märkmed</h6>
+
+
+
                 <Textarea
                   placeholder="Märkmed"
                   onChange={(e) => setNotes(e.target.value)}

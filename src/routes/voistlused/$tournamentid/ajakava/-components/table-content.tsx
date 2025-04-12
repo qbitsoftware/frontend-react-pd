@@ -39,7 +39,6 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
     <TableRow
       key={match.match.id}
       className="cursor-pointer hover:bg-secondary/50"
-      onClick={() => console.log("row click")}
     >
       {match.p1.id !== "" ? (
         <TableCell className="font-medium">{match.p1.name}</TableCell>
