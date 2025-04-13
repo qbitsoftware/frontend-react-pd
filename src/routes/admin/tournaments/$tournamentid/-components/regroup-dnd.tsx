@@ -9,7 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Participant } from '@/types/types'
+import { Participant } from '@/types/participants'
 
 interface Props {
     participant: Participant

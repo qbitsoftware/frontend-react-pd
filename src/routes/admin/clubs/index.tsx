@@ -33,7 +33,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useQueryClient } from '@tanstack/react-query'
-import { Club } from '@/types/types'
+import { Club } from '@/types/clubs'
 import { useToast } from '@/hooks/use-toast'
 import { useTranslation } from 'react-i18next'
 

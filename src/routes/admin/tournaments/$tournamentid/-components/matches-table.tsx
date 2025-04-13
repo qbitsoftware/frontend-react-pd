@@ -1,7 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
-import type { MatchWrapper, TournamentTable } from "@/types/types"
 import MatchDialog from "@/components/match-dialog"
 import { useMemo, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -13,6 +12,8 @@ import ReGrouping from "./regrouping"
 import TimeEditingModal from "./time-editing-modal"
 import { createColumns } from "./matches-table-columns"
 import { useTranslation } from "react-i18next"
+import { MatchState, MatchWrapper } from "@/types/matches"
+import { TournamentTable } from "@/types/groups"
 
 interface MatchesTableProps {
   data: MatchWrapper[] | []
@@ -20,14 +21,14 @@ interface MatchesTableProps {
   tournament_table: TournamentTable
 }
 
-type FilterOption = "all" | "winner_declared" | "ongoing" | "not_started"
+type FilterOptions = MatchState | "all"
 
 export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id, tournament_table }: MatchesTableProps) => {
   const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false)
   const [isTimeEditingModalOpen, setIsTimeEditingModalOpen] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState<MatchWrapper | null>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [filterValue, setFilterValue] = useState<FilterOption>("all")
+  const [filterValue, setFilterValue] = useState<FilterOptions>("all")
   const [initialTab, setInitialTab] = useState<"regrouping" | "finals">("regrouping");
   const { t } = useTranslation()
 
@@ -42,12 +43,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
 
   const filteredData = useMemo(() => {
     switch (filterValue) {
-      case "winner_declared":
-        return data.filter((match) => match.match.winner_id !== "")
-      case "ongoing":
-        return data.filter((match) => match.match.p1_id !== "" && match.match.p2_id !== "" && match.match.winner_id === "" && match.match.p1_id !== "empty" && match.match.p2_id !== "empty")
-      case "not_started":
-        return data.filter((match) => match.match.winner_id === "" && (match.match.p1_id !== "empty" || match.match.p2_id !== "empty"))
+      case MatchState.FINISHED:
+        return data.filter((match) => match.match.state === MatchState.FINISHED)
+      case MatchState.ONGOING:
+        return data.filter((match) => match.match.state === MatchState.ONGOING)
+      case MatchState.CREATED:
+        return data.filter((match) => match.match.state === MatchState.CREATED)
+      case "all":
       default:
         return data
     }
@@ -60,7 +62,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
     getCoreRowModel: getCoreRowModel(),
   })
 
-
   const handleRowClick = (match: MatchWrapper) => {
     setSelectedMatch(match)
     setIsOpen(true)
@@ -70,15 +71,15 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
     return (
       <div className="py-4">
         <div className="flex gap-4">
-          <Select value={filterValue} onValueChange={(value: FilterOption) => setFilterValue(value)}>
+          <Select value={filterValue} onValueChange={(value: FilterOptions) => setFilterValue(value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter matches" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t("admin.tournaments.filters.all_games")}</SelectItem>
-              <SelectItem value="winner_declared">{t("admin.tournaments.filters.winner_declared")}</SelectItem>
-              <SelectItem value="ongoing">{t("admin.tournaments.filters.ongoing_games")}</SelectItem>
-              <SelectItem value="not_started">{t("admin.tournaments.filters.upcoming_games")}</SelectItem>
+              <SelectItem value={MatchState.FINISHED}>{t("admin.tournaments.filters.winner_declared")}</SelectItem>
+              <SelectItem value={MatchState.ONGOING}>{t("admin.tournaments.filters.ongoing_games")}</SelectItem>
+              <SelectItem value={MatchState.CREATED}>{t("admin.tournaments.filters.upcoming_games")}</SelectItem>
             </SelectContent>
           </Select>
           {tournament_table.type == "champions_league" && (
@@ -112,13 +113,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({ data, tournament_id,
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={cn("!h-auto bg-green-100",
-                    (row.original.p1.id == "" && row.original.p2.id == ""
-                      || row.original.p1.id == "" && row.original.p2.id != ""
-                      || row.original.p1.id != "" && row.original.p2.id == ""
-                      || row.original.match.winner_id != ""
-                    )
-                    && "bg-white")}>
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={cn("!h-auto", row.original.match.state === MatchState.ONGOING && "bg-green-100")}>
                     {row.getVisibleCells().map((cell, cellIndex) => {
                       if (cell.column.id === "actions") {
                         return (

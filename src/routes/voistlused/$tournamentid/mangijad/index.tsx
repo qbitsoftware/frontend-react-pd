@@ -3,10 +3,10 @@ import { UseGetTournamentTables } from '@/queries/tables'
 import Group from './-components/group'
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { ErrorResponse } from "@/types/types"
 import ErrorPage from '@/components/error'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/mangijad/')({
   component: RouteComponent,
@@ -44,7 +44,7 @@ function RouteComponent() {
     const searchBy = searchQuery.toLowerCase()
 
     filteredData = originalData.map(table => {
-      const filteredParticipants = table.participants.filter(player =>
+      const filteredParticipants = table.participants.filter((player) =>
         player.name?.toLowerCase().includes(searchBy)
       )
 

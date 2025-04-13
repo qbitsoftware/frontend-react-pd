@@ -1,4 +1,4 @@
-import { Score } from "@/types/types";
+import { Score } from "@/types/matches"; 
 import { axiosInstance } from "./axiosconf";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

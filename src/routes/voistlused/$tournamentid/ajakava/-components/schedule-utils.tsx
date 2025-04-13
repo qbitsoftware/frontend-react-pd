@@ -1,5 +1,5 @@
 import i18n from '@/i18n';
-import { MatchWrapper, MatchTimeUpdate } from '@/types/types';
+import { MatchTimeUpdate, MatchWrapper } from '@/types/matches';
 
 /**
  * Remove duplicate matches based on match ID
@@ -159,22 +159,23 @@ export function generateTimeSlotsForGameday(matches: MatchWrapper[]): {
 /**
  * Get all unique table IDs from matches
  */
-export function getUniqueTables(matches: MatchWrapper[]): number[] {
+export function getUniqueTables(matches: MatchWrapper[]): string[] {
   const tables = matches
     .filter(match => match.match && match.match.extra_data && match.match.extra_data.table)
     .map(match => match.match.extra_data.table)
     .filter(Boolean);
 
-  return [...new Set(tables)].sort((a, b) => a - b);
+  return [...new Set(tables)].sort((a, b) => Number(a) - Number(b));
 }
+//
 
 /**
  * Distribute matches by table and time slot
  */
 export function distributeMatchesByTable(
   matches: MatchWrapper[]
-): Record<number, Record<string, MatchWrapper[]>> {
-  const distribution: Record<number, Record<string, MatchWrapper[]>> = {};
+): Record<string, Record<string, MatchWrapper[]>> {
+  const distribution: Record<string, Record<string, MatchWrapper[]>> = {};
 
   matches.forEach(match => {
     if (!match.match || !match.match.start_date || !match.match.extra_data || !match.match.extra_data.table) {

@@ -1,8 +1,10 @@
 
 import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
-import { Bracket, Category, Tournament, TournamentSize, TournamentType } from "@/types/types";
+import { Tournament, TournamentSize, TournamentType } from "@/types/tournaments";
+import { Bracket } from "@/types/brackets"
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
+import { Category } from "@/types/blogs";
 
 export type TournamentsResponse = {
     data: Tournament[] | null

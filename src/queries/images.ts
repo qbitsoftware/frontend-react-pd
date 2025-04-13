@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Gameday, GamedayImage, GamedayImageResponse, GamedayImagesResponse, GetGamedayResponse, GetGamedaysResponse } from "@/types/types"
+import { Gameday, GamedayImage, GamedayImageResponse, GamedayImagesResponse, GetGamedayResponse, GetGamedaysResponse } from "@/types/gamedays";
 
 export const usePostImage = () => {
     return useMutation({

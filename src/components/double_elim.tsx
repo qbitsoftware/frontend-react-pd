@@ -1,6 +1,6 @@
 import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
-import { EliminationBracket } from "@/types/types";
 import MatchComponent from "./match";
+import { EliminationBracket } from "@/types/brackets";
 
 interface BracketProps {
   starting_x: number;

@@ -9,10 +9,10 @@ import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { redirect } from '@tanstack/react-router'
-import { ErrorResponse } from '@/types/types'
 import { useUser } from '@/providers/userProvider'
 import { UseGetCurrentUser } from '@/queries/users'
 import ErrorPage from '@/components/error'
+import { ErrorResponse } from '@/types/errors'
 
 
 export const Route = createFileRoute('/admin')({

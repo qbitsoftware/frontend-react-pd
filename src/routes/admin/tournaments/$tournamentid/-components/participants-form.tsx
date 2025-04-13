@@ -3,7 +3,6 @@ import { MoreHorizontal, Pencil, PlusCircle, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import React, { useState, useEffect, useCallback } from "react"
-import type { Participant, Tournament, TournamentTable, UserNew } from "@/types/types"
 import {
     UseDeleteParticipant,
     UseCreateParticipants,
@@ -25,6 +24,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTranslation } from "react-i18next"
 import EditImgModal from "./edit-img-modal"
+import { Participant } from "@/types/participants"
+import { TournamentTable } from "@/types/groups"
+import { User } from "@/types/users"
+import { Tournament } from "@/types/tournaments"
 
 interface ParticipantFormProps {
     participants: Participant[] | null
@@ -80,7 +83,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
         if (!data || !data.data) {
             return false
         }
-        let winners = data.data.find((match) => {
+        const winners = data.data.find((match) => {
             return match.match.winner_id != ""
         })
 
@@ -276,7 +279,7 @@ export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, t
     }
 
 
-    const setFormValues = (user: UserNew, form: UseFormReturn<ParticipantFormValues>) => {
+    const setFormValues = (user: User, form: UseFormReturn<ParticipantFormValues>) => {
         form.setValue("players.0.name", `${capitalize(user.first_name)} ${capitalize(user.last_name)}`)
         form.setValue("players.0.first_name", user.first_name)
         form.setValue("players.0.last_name", user.last_name)

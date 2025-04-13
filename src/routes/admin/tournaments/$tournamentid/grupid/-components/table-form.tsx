@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { UseDeleteTournamentTable, UsePatchTournamentTable, UsePostTournamentTable } from '@/queries/tables'
 import { UseGetTournamentSizes, UseGetTournamentTypes } from '@/queries/tournaments'
-import { TournamentTable } from '@/types/types'
+import { TournamentTable } from '@/types/groups'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams, useRouter } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
@@ -65,7 +65,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         solo: false,
         min_team_size: 1,
         max_team_size: 1,
-        size: 1,
+        size: 16,
 
       },
   })

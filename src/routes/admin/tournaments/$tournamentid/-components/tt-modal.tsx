@@ -30,17 +30,13 @@ import {
   UsePatchMatch,
   UseStartMatch,
 } from "@/queries/match";
-import {
-  Match,
-  MatchWrapper,
-  Player,
-  TableTennisExtraData,
-} from "@/types/types";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
+import { Match, MatchWrapper, TableTennisExtraData } from "@/types/matches";
+import { Player } from "@/types/players";
 
 interface ProtocolModalProps {
   isOpen: boolean;
@@ -74,7 +70,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const [head_referee, setMainReferee] = useState<string>("");
   const [captainTeam1, setCaptainTeam1] = useState<string>("");
   const [captainTeam2, setCaptainTeam2] = useState<string>("");
-  const [table, setTableNumber] = useState<number>(0);
+  const [table, setTableNumber] = useState<string>("");
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
 
@@ -84,7 +80,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     table_referee: match.match.extra_data.table_referee || "",
     head_referee: match.match.extra_data.head_referee || "",
     notes: match.match.extra_data.notes || "",
-    table: match.match.extra_data.table || 0,
+    table: match.match.extra_data.table || "",
   });
 
   const EMPTY_PLAYER: Player = {
@@ -174,13 +170,13 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       prevValuesRef.current.captainTeam1 = me.captain_a || "";
       prevValuesRef.current.captainTeam2 = me.captain_b || "";
       prevValuesRef.current.notes = me.notes || "";
-      prevValuesRef.current.table = me.table || 0;
+      prevValuesRef.current.table = me.table || "";
       setTableReferee(me.table_referee || "");
       setMainReferee(me.head_referee || "");
       setCaptainTeam1(me.captain_a || "");
       setCaptainTeam2(me.captain_b || "");
       setNotes(me.notes || "");
-      setTableNumber(me.table || 0);
+      setTableNumber(me.table || "");
     }
   }, [isOpen, match.match.extra_data]);
 
@@ -296,6 +292,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state: match.match.state,
       extra_data,
       topCoord: 0,
       table_type: match.match.table_type,
@@ -409,6 +406,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
+      state: match.match.state,
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
@@ -547,7 +545,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                   type="number"
                   min="0"
                   className="w-12 h-6 text-sm"
-                  onChange={(e) => setTableNumber(Number(e.target.value))}
+                  onChange={(e) => setTableNumber(e.target.value)}
                   value={!table ? "" : table}
                 />
               </div>

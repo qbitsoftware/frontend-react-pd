@@ -5,8 +5,9 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RoundRobins, RoundRobinBracket, MatchWrapper } from '@/types/types'
 import { useTranslation } from 'react-i18next'
+import { RoundRobinBracket, RoundRobins } from '@/types/brackets'
+import { MatchWrapper } from '@/types/matches'
 
 interface GroupBracketProps {
     brackets: RoundRobins;

@@ -3,12 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlayerProfileData } from "./player-profile-data";
 import placeholderImg from "@/assets/placheolderImg.svg";
 import { UseGetUserProfile } from "@/queries/players";
-import { UserNew } from "@/types/types";
+import { User } from "@/types/users";
 
 interface PlayerProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  user: UserNew | null;
+  user: User | null;
 }
 
 export const PlayerProfileModal = ({ isOpen, onClose, user }: PlayerProfileModalProps) => {

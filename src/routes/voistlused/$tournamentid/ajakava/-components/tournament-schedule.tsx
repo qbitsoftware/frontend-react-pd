@@ -1,7 +1,7 @@
 import { Search, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MatchWrapper } from '@/types/types';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +27,7 @@ import {
   filterMatchesByGameday
 } from "./schedule-utils";
 import { useTranslation } from 'react-i18next';
+import { MatchWrapper } from '@/types/matches';
 
 export interface ScheduleProps {
   matches: MatchWrapper[];

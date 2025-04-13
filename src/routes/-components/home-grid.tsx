@@ -4,7 +4,9 @@ import NewsWidget from "./news-widget";
 import CalendarWidget from "./calendar-widget";
 import RatingWidget from "./rating-widget";
 import Adboard from "./adboard";
-import { Blog, Tournament, UserNew } from "@/types/types";
+import { Tournament } from "@/types/tournaments";
+import { User } from "@/types/users";
+import { Blog } from "@/types/blogs"
 import { useTranslation } from "react-i18next";
 
 interface DataStatus {
@@ -15,7 +17,7 @@ interface DataStatus {
 
 interface Props {
   tournaments: Tournament[] | null;
-  users: UserNew[] | null;
+  users: User[] | null;
   articles: Blog[] | null;
   dataStatus: DataStatus;
 }

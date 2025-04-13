@@ -14,13 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tournament } from "@/types/types";
+import { Tournament } from "@/types/tournaments";
 import {
   getDaysInMonth,
   formatDateRange,
   useTournamentEvents,
   formatDate,
-  ProcessedEvent, 
+  ProcessedEvent,
   getAbbreviatedMonth
 } from "./calendar-utils";
 import { Button } from "@/components/ui/button";
@@ -138,7 +138,7 @@ export function TournamentsCalendar({ tournaments }: Props) {
     setZoomStartMonth(newStartMonth);
   };
 
-  
+
   // Create a map of dates to events
   // "2025-03-24 ===>>> {EventObject}"
   const eventsByDate = new Map<string, ProcessedEvent[]>();
@@ -211,19 +211,19 @@ export function TournamentsCalendar({ tournaments }: Props) {
   const renderYearView = () => {
     // State to track which tooltip is currently open (if any)
     const [openTooltipId, setOpenTooltipId] = useState("");
-    
+
     // Toggle tooltip visibility with logging
     const handleTooltipToggle = (tooltipId: string) => {
-      
+
       if (openTooltipId === tooltipId) {
         setOpenTooltipId(""); // Close if already open
       } else {
         setOpenTooltipId(tooltipId); // Open the clicked tooltip
       }
     };
-    
+
     // Log when component renders
-    
+
     return (
       <div className="space-y-2">
         <div className="overflow-x-auto pb-2">
@@ -255,12 +255,12 @@ export function TournamentsCalendar({ tournaments }: Props) {
                           );
                           const hasEvents = eventsOnDay.length > 0;
                           const tooltipId = `tooltip-${monthIndex}-${day}`;
-  
+
                           if (hasEvents) {
                             const cellStyle = {
                               backgroundColor: eventsOnDay[0].color,
                             };
-  
+
                             const tooltipContent = (
                               <div className="p-2 space-y-1">
                                 <div className="font-medium">
@@ -290,11 +290,11 @@ export function TournamentsCalendar({ tournaments }: Props) {
                                 </div>
                               </div>
                             );
-  
+
                             const isOpen = openTooltipId === tooltipId;
                             return (
                               <div key={`${monthIndex}-${day}`} className="relative">
-                                <div 
+                                <div
                                   className="aspect-square w-full"
                                   onClick={() => {
                                     handleTooltipToggle(tooltipId);
@@ -313,12 +313,12 @@ export function TournamentsCalendar({ tournaments }: Props) {
                                     )}
                                   </div>
                                 </div>
-                                
+
                                 {/* Custom tooltip that shows on click for mobile */}
                                 {isOpen && (
                                   <div className="absolute z-50 bg-white shadow-lg rounded-md border p-2 w-64 left-0 top-full mt-1">
                                     {tooltipContent}
-                                    <button 
+                                    <button
                                       className="absolute top-1 right-1 text-gray-500 hover:text-gray-700"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -351,15 +351,15 @@ export function TournamentsCalendar({ tournaments }: Props) {
             </div>
           </div>
         </div>
-  
+
         {/* Add click-away listener to close any open tooltip when clicking elsewhere */}
-        <div 
-          className={openTooltipId ? "fixed inset-0 z-40" : "hidden"} 
+        <div
+          className={openTooltipId ? "fixed inset-0 z-40" : "hidden"}
           onClick={() => {
             setOpenTooltipId("");
           }}
         />
-  
+
         {/* Legend */}
         <div className="border rounded-lg p-4 bg-card space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -369,7 +369,7 @@ export function TournamentsCalendar({ tournaments }: Props) {
                   (e) => e.category === category
                 );
                 if (categories.length === 0) return null;
-  
+
                 return (
                   <div key={category} className="flex items-center gap-2">
                     <div
@@ -401,36 +401,36 @@ export function TournamentsCalendar({ tournaments }: Props) {
     return (
       <Link to={linkPath} key={event.id}>
         <div className="mb-3 flex flex-row justify-between hover:bg-white/10 bg-white/50 items-start gap-2 p-2">
-                <h6 className="px-1 font-semibold w-2/3">
-                  {event.name}
-                  {event.isGameday && event.order && (
-                    <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
-                  )}
-                </h6>
+          <h6 className="px-1 font-semibold w-2/3">
+            {event.name}
+            {event.isGameday && event.order && (
+              <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
+            )}
+          </h6>
 
-                <div className="flex items-center gap-2">
-                  <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
-                    <div className="text-xs text-center ">
-                      {getAbbreviatedMonth(event.start_date)}
-                    </div>
-                    {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
-                  </div>
-                  {event.end_date !== event.start_date && (
-                    <>
-                      <span className="font-semibold">-</span>
-                      <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800">
-                        <div className="text-xs text-center">
-                          {event.end_date !== event.start_date &&
-                            new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
-                            ? getAbbreviatedMonth(event.end_date)
-                            : getAbbreviatedMonth(event.start_date)}
-                        </div>
-                        {formatDateRange(event.start_date, event.end_date).split(" - ")[1]}
-                      </div>
-                    </>
-                  )}
-                </div>
+          <div className="flex items-center gap-2">
+            <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">
+              <div className="text-xs text-center ">
+                {getAbbreviatedMonth(event.start_date)}
               </div>
+              {formatDateRange(event.start_date, event.end_date).split(" - ")[0]}
+            </div>
+            {event.end_date !== event.start_date && (
+              <>
+                <span className="font-semibold">-</span>
+                <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800">
+                  <div className="text-xs text-center">
+                    {event.end_date !== event.start_date &&
+                      new Date(event.start_date).getMonth() !== new Date(event.end_date).getMonth()
+                      ? getAbbreviatedMonth(event.end_date)
+                      : getAbbreviatedMonth(event.start_date)}
+                  </div>
+                  {formatDateRange(event.start_date, event.end_date).split(" - ")[1]}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </Link>
     );
   };

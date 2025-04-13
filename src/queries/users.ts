@@ -1,7 +1,8 @@
-import { RegisterFormData, UserLogin, UserNew } from "@/types/types"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { LoginFormData } from "@/routes/login"
 import { axiosInstance } from "./axiosconf"
+import { User, UserLogin } from "@/types/users"
+import { RegisterFormData } from "@/routes/register"
 
 export interface LoginResponse {
     data: UserLogin
@@ -11,7 +12,7 @@ export interface LoginResponse {
 
 
 export interface UsersResponse {
-    data: UserNew[]
+    data: User[]
     message: string
     error: string | null
 }
@@ -121,7 +122,7 @@ export const UseGetUsers = (searchTerm?: string) => {
     })
 }
 
-export const fetchUserByName = async (name: string): Promise<UserNew | null> => {
+export const fetchUserByName = async (name: string): Promise<User| null> => {
     try {
         const { data } = await axiosInstance.get(`/api/v1/users?search=${name}`, {
             withCredentials: true

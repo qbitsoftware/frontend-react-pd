@@ -126,6 +126,10 @@
     "results": {
       "finished": "Lõppenud"
     },
+    "standings": {
+      "placement": "Koht",
+      "participants": "Osalejad"
+    },
     "timetable": {
       "table": "Laud",
       "search_placeholder": "Otsi nime",
@@ -149,6 +153,7 @@
     "errors": {
       "info_missing": "Turniiri info puudub",
       "no_schedule": "Ajakava puudub",
+      "standings_missing": "Kohad pole veel välja mängitud",
       "no_games": "Mänge pole selles klassis sel päeval",
       "winner_unknown": "Teadmata",
       "no_groups": "Tulemused puuduvad",
@@ -157,6 +162,7 @@
     "navbar": {
       "info": "Info",
       "timetable": "Ajakava",
+      "standings": "Kohad",
       "results": "Tulemused",
       "participants": "Osalejad",
       "gallery": "Galerii",

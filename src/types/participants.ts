@@ -1,0 +1,27 @@
+import { Player } from "./players";
+
+export type Participant = {
+    id: string;
+    name: string;
+    order: number;
+    rank: number;
+    sport_type: string;
+    tournament_id: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    group: number;
+    group_name: string;
+    players: Player[];
+    tournament_table_id: number;
+    extra_data: PartipantExtraData;
+  }
+  
+
+
+export type PartipantExtraData = {
+    image_url: string;
+    class: string
+    is_parent: boolean
+    total_points: number;
+  }

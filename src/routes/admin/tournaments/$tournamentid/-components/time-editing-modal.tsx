@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { MatchTimeUpdate, MatchWrapper, RoundTime } from '@/types/types'
 import { UseUpdateMatchTime } from '@/queries/match'
+import { MatchTimeUpdate, MatchWrapper } from '@/types/matches'
+import { RoundTime } from '@/types/tournaments'
 
 // New interface for the update payload
 

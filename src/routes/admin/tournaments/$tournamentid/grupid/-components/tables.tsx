@@ -3,10 +3,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus } from "lucide-react"
-import type { Tournament, TournamentTable } from "@/types/types"
 import { Link, useNavigate, useParams } from "@tanstack/react-router"
 import { parseTableType } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
+import { TournamentTable } from "@/types/groups"
+import { Tournament } from "@/types/tournaments"
 
 
 interface TournamentTablesProps {

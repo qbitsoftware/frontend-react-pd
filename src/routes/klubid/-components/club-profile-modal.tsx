@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import React, { useEffect } from 'react';
-import { Club } from "@/types/types";
+import { Club } from "@/types/clubs";
 import { UseGetClubPlayers } from "@/queries/clubs";
 import { formatDateToNumber } from "@/lib/utils";
 

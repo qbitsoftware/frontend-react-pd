@@ -126,6 +126,11 @@
     "results": {
       "finished": "Finished"
     },
+    "standings": {
+      "placement": "Placement",
+      "participants": "Participants"
+
+    },
     "timetable": {
       "table": "Table",
       "search_placeholder": "Search by name",
@@ -149,6 +154,8 @@
     "errors": {
       "info_missing": "No tournament information available",
       "no_schedule": "No schedule available",
+      "standings_missing": "No standings data available yet",
+
       "no_games": "No games available for that group",
       "winner_unknown": "Unknown",
       "no_groups": "No results available",
@@ -157,6 +164,7 @@
     "navbar": {
       "info": "Info",
       "timetable": "Timetable",
+      "standings": "Standings",
       "results": "Results",
       "participants": "Participants",
       "gallery": "Gallery",

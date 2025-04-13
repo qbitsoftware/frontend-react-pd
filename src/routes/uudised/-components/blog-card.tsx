@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { replaceSpecialCharacters } from "@/lib/utils";
-import { Blog } from "@/types/types";
+import { Blog } from "@/types/blogs";
 import { Link } from "@tanstack/react-router";
 
 export const BlogCard = ({ blog, className = "" }: { blog: Blog, className?: string }) => {

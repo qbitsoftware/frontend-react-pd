@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
-import type { MatchWrapper } from "@/types/types"
 import { TableNumberForm } from "./table-number-form"
 import { TFunction } from "i18next"
+import { MatchWrapper } from "@/types/matches";
 
 export function createColumns(t: TFunction<"translation", undefined>): ColumnDef<MatchWrapper>[] {
 
@@ -35,7 +35,7 @@ export function createColumns(t: TFunction<"translation", undefined>): ColumnDef
       header: t("admin.tournaments.matches.table.table"),
       cell: ({ row }) => {
         const match = row.original
-        return <TableNumberForm match={match.match} initialTableNumber={match.match.extra_data ? match.match.extra_data.table : 0} />
+        return <TableNumberForm match={match.match} initialTableNumber={match.match.extra_data ? match.match.extra_data.table : "0"} />
       },
     },
     {

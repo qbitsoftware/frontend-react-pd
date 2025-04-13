@@ -2,10 +2,10 @@ import type React from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "@tanstack/react-router"
 import { MapPin, Calendar } from "lucide-react"
-import type { Tournament } from "@/types/types"
 import { formatDateString } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Tournament } from "@/types/tournaments"
 
 interface TournamentTableProps {
   tournaments: Tournament[]

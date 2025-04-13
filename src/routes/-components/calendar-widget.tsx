@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Tournament } from '@/types/types';
+import { Tournament } from '@/types/tournaments';
 import { Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import SfumatoBackground from '@/components/sfumato/sfumatoBg';

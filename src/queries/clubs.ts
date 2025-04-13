@@ -1,7 +1,7 @@
-import { Club } from "@/types/types"
 import { queryOptions, useMutation, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
 import { UsersResponse } from "./users"
+import { Club } from "@/types/clubs"
 
 export interface ClubsResponse {
     data: Club[]

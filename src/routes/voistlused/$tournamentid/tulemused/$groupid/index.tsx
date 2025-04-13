@@ -9,10 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatisticsCard } from "./-components/protocol";
 import { GroupStatisticsCard } from "./-components/group-stage-protocol";
-import { MatchWrapper } from "@/types/types";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
 import GroupStageBracket from "@/components/group-stage-bracket";
+import { MatchWrapper } from "@/types/matches";
 
 export const Route = createFileRoute(
   "/voistlused/$tournamentid/tulemused/$groupid/"

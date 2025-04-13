@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
-import { Participant } from "@/types/types";
 import { ParticipantFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participants-form";
+import { Participant } from "@/types/participants";
 
 export type ParticipantResponse = {
     data: Participant | null

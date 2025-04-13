@@ -1,5 +1,5 @@
 import { formatDateToNumber } from "@/lib/utils"
-import { MatchWrapper, TableTennisExtraData } from "@/types/types"
+import { MatchWrapper, TableTennisExtraData } from "@/types/matches"
 
 interface Props {
     last_game: MatchWrapper

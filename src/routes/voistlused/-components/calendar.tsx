@@ -2,9 +2,9 @@ import { useState } from "react"
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tournament } from "@/types/types"
 import { getDaysInMonth, getTournamentColor } from "./calendar-utils"
 import { getFormattedDate } from "../$tournamentid/ajakava/-components/schedule-utils"
+import { Tournament } from "@/types/tournaments"
 
 const months = [
     "January",

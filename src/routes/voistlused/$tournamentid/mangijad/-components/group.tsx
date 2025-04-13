@@ -1,7 +1,7 @@
-import { TournamentTable } from "@/types/types"
 import { UserRound } from "lucide-react"
 import SoloTable from "./solo-table"
 import TeamTable from "./team-table"
+import { TournamentTable } from "@/types/groups"
 
 interface GroupProps {
     group: TournamentTable

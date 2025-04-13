@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
 import { UseGetParticipants, UseGetParticipantsQuery } from '@/queries/participants'
-import { ErrorResponse } from '@/types/types'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipanForm } from '../../../-components/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import TournamentParticipantsManager from '../../-components/subgroup-form'
+import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',

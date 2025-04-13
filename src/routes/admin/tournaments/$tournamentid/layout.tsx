@@ -1,10 +1,10 @@
 import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router"
 import { UseGetTournament } from "@/queries/tournaments"
-import type { ErrorResponse } from "@/types/types"
 import { Link } from "@tanstack/react-router"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTranslation } from "react-i18next"
 import ErrorPage from "@/components/error"
+import { ErrorResponse } from "@/types/errors"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid")({
   component: RouteComponent,

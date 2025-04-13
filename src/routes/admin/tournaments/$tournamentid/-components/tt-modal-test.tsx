@@ -31,17 +31,14 @@ import {
   UsePatchMatchSwitch,
   UseStartMatch,
 } from "@/queries/match";
-import {
-  Match,
-  MatchWrapper,
-  Player,
-  TableTennisExtraData,
-} from "@/types/types";
+
 import { RotateCcw, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Match, MatchWrapper, TableTennisExtraData } from "@/types/matches";
+import { Player } from "@/types/players";
 
 interface ProtocolModalProps {
   isOpen: boolean;
@@ -77,7 +74,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
   const [head_referee, setMainReferee] = useState<string>("");
   const [captainTeam1, setCaptainTeam1] = useState<string>("");
   const [captainTeam2, setCaptainTeam2] = useState<string>("");
-  const [table, setTableNumber] = useState<number>(0);
+  const [table, setTableNumber] = useState<string>("");
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
 
@@ -183,7 +180,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
       setCaptainTeam1(me.captain_a || "");
       setCaptainTeam2(me.captain_b || "");
       setNotes(me.notes || "");
-      setTableNumber(me.table || 0);
+      setTableNumber(me.table || "");
     }
   }, [isOpen, match.match.extra_data]);
 
@@ -322,6 +319,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state: match.match.state,
       extra_data,
       topCoord: 0,
       table_type: match.match.table_type,
@@ -437,6 +435,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state: match.match.state,
       extra_data,
       topCoord: 0,
       table_type: match.match.table_type,
@@ -589,7 +588,7 @@ export const TableTennisProtocolModalTest: React.FC<ProtocolModalProps> = ({
                   type="number"
                   min="0"
                   className="w-12 h-6 text-sm"
-                  onChange={(e) => setTableNumber(Number(e.target.value))}
+                  onChange={(e) => setTableNumber(e.target.value)}
                   value={!table ? "" : table}
                 />
               </div>

@@ -18,10 +18,10 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Score, Match, MatchWrapper } from "@/types/types";
 import { UsePatchMatch } from "@/queries/match";
 import { useLocation, useRouter } from "@tanstack/react-router";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Match, MatchWrapper, Score } from "@/types/matches";
 
 interface MatchDialogProps {
   open: boolean;
@@ -116,6 +116,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       start_date: new Date().toString(),
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state:match.match.state,
       extra_data: {
         head_referee: data.mainReferee,
         table_referee: data.tableReferee,

@@ -1,4 +1,4 @@
-import { MatchWrapper } from '@/types/types'
+import { MatchWrapper } from '@/types/matches';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'

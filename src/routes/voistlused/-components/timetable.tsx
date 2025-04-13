@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { MatchWrapper } from '@/types/matches'
+import { Tournament } from '@/types/tournaments'
 // import { formatDate } from '@/lib/utils'
-import { MatchWrapper, Tournament } from '@/types/types'
 
 interface TimeTableProps {
   tournament: Tournament
@@ -43,19 +44,19 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
   // }
 
   // const handleRowClick = (match: MatchWrapper) => {
-    //todooooo
-    // if (loginData?.data) {
-    //   setSelectedMatch(match)
-    //   setIsModalOpen(true)
-    // } else if (!loginData?.data && match.winner_id != 0) {
-    //   setIsOpen(true)
-    //   if (match) {
-    //     const selected = statisticsData?.data.filter((protocol) => protocol.team_match.match_id == match.id)
-    //     if (selected) {
-    //       setSelectedProtocol(selected[0])
-    //     }
-    //   }
-    // }
+  //todooooo
+  // if (loginData?.data) {
+  //   setSelectedMatch(match)
+  //   setIsModalOpen(true)
+  // } else if (!loginData?.data && match.winner_id != 0) {
+  //   setIsOpen(true)
+  //   if (match) {
+  //     const selected = statisticsData?.data.filter((protocol) => protocol.team_match.match_id == match.id)
+  //     if (selected) {
+  //       setSelectedProtocol(selected[0])
+  //     }
+  //   }
+  // }
   // }
 
 
@@ -63,27 +64,27 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
     // if (matches.length > 0) {
     //   return matches.map((match, index) => {
     //     const showRound = index === 0 || match.match.round !== matches[index - 1]?.match.round
-        // const startDate = new Date(match.match.start_date);
-        // const showDate = index === 0 || match.start_date !== matches[index - 1]?.start_date
+    // const startDate = new Date(match.match.start_date);
+    // const showDate = index === 0 || match.start_date !== matches[index - 1]?.start_date
 
-        return (
-          <TableRow key={match.match.id} className='cursor-pointer hover:bg-secondary/50'>
-            {/* <TableCell>{showRound ? match.match.round : ''}</TableCell> */}
-            <TableCell>{match.p1.name}</TableCell>
-            <TableCell>{match.p2.name}</TableCell>
-            <TableCell>{match.match.extra_data.table}</TableCell>
-            <TableCell>
-              {/* {showDate ? `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}` : ''} */}
-              {/* {showDate ? `${String(startDate.getUTCHours()).padStart(2, '0')}:${String(startDate.getUTCMinutes()).padStart(2, '0')}` : ''} */}
-              {/* {showDate ? new Date(match.start_date).toLocaleTimeString('et-EE', { hour: '2-digit', minute: '2-digit' }) : ''} */}
+    return (
+      <TableRow key={match.match.id} className='cursor-pointer hover:bg-secondary/50'>
+        {/* <TableCell>{showRound ? match.match.round : ''}</TableCell> */}
+        <TableCell>{match.p1.name}</TableCell>
+        <TableCell>{match.p2.name}</TableCell>
+        <TableCell>{match.match.extra_data.table}</TableCell>
+        <TableCell>
+          {/* {showDate ? `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}` : ''} */}
+          {/* {showDate ? `${String(startDate.getUTCHours()).padStart(2, '0')}:${String(startDate.getUTCMinutes()).padStart(2, '0')}` : ''} */}
+          {/* {showDate ? new Date(match.start_date).toLocaleTimeString('et-EE', { hour: '2-digit', minute: '2-digit' }) : ''} */}
 
-            </TableCell>
-          </TableRow>
-        )
-      // })
+        </TableCell>
+      </TableRow>
+    )
+    // })
     // } else {
-      // return <PlaceholderContent />
-    
+    // return <PlaceholderContent />
+
   }
 
   return (
@@ -119,30 +120,30 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
           </ScrollArea>
           {matches ? matches.map((match, index) => {
 
-return (
-            <TabsContent key={index} value={"1"}>
-              <ScrollArea className="w-full">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-1/12">Voor</TableHead>
-                      <TableHead className="w-2/6">Tiim 1</TableHead>
-                      <TableHead className="w-2/6">Tiim 2</TableHead>
-                      <TableHead className="w-1/12">Laud</TableHead>
-                      <TableHead className="w-1/6">Kell</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {renderTableContent(match)}
-                  </TableBody>
-                </Table>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea>
-            </TabsContent>
+            return (
+              <TabsContent key={index} value={"1"}>
+                <ScrollArea className="w-full">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-1/12">Voor</TableHead>
+                        <TableHead className="w-2/6">Tiim 1</TableHead>
+                        <TableHead className="w-2/6">Tiim 2</TableHead>
+                        <TableHead className="w-1/12">Laud</TableHead>
+                        <TableHead className="w-1/6">Kell</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {renderTableContent(match)}
+                    </TableBody>
+                  </Table>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+              </TabsContent>
 
-)
+            )
 
-          }): <NoMatches />}
+          }) : <NoMatches />}
         </Tabs>
       </CardContent>
     </Card>

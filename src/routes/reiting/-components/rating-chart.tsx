@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
+import { Player } from "@/types/players";
 // import {
 //   ChartConfig,
 //   ChartContainer,
@@ -12,7 +13,6 @@ import {
 // } from "@/components/ui/chart"
 
 // import { mockRatingChartData } from "@/lib/mock_data/rating_mocks"
-import { Player } from "@/types/types"
 
 // const chartConfig = {
 //   ratingPoints: {

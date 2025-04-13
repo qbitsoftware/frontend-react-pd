@@ -41,17 +41,15 @@ import { useToast } from "@/hooks/use-toast";
 import { useToastNotification } from "@/components/toast-notification";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import {
-  Participant,
-  Player,
-  Tournament,
-  TournamentTable,
-} from "@/types/types";
 import { distributeParticipants } from "./subgroup-generator";
 import placeholderImg from "@/assets/placheolderImg.svg";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { useNavigate, useRouter } from "@tanstack/react-router";
+import { Tournament } from "@/types/tournaments";
+import { Participant } from "@/types/participants";
+import { TournamentTable } from "@/types/groups";
+import { Player } from "@/types/players";
 
 const participantSchema = z.object({
   name: z.string().min(1, "Participant name is required"),
@@ -277,7 +275,7 @@ export default function TournamentParticipantsManager({
       const playerName = `${data.first_name} ${data.last_name}`;
 
       // Create the updated player array
-      let updatedPlayers: Player[] = [...(activeTeam.players || [])];
+      const updatedPlayers: Player[] = [...(activeTeam.players || [])];
 
       if (selectedPlayer) {
         // Update existing player

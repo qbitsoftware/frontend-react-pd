@@ -9,7 +9,6 @@ import {
   useDeleteGameday,
   useDeleteGamedayImage,
 } from "@/queries/images"
-import type { Gameday } from "@/types/types"
 import { useToast } from "@/hooks/use-toast"
 import { useToastNotification } from "@/components/toast-notification"
 import ImageUpload from "./-components/image-upload"
@@ -30,6 +29,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useTranslation } from "react-i18next"
+import { Gameday } from "@/types/gamedays"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/pildid/")({
   loader: async ({ context: { queryClient }, params }) => {

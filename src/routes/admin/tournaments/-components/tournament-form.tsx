@@ -14,7 +14,6 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Tournament } from "@/types/types"
 import {
   UsePostTournament,
   UsePatchTournament,
@@ -38,6 +37,7 @@ import {
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
 import { t } from "i18next"
+import { Tournament } from "@/types/tournaments"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),

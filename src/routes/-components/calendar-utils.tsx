@@ -1,7 +1,7 @@
 import { UseGetTournamentMatches } from "@/queries/match";
 import { useEffect, useState } from "react";
 import { QueryClient } from "@tanstack/react-query";
-import { Tournament } from "@/types/types";
+import { Tournament } from "@/types/tournaments";
 import { UseGetTournamentTables } from "@/queries/tables";
 import i18n from "@/i18n";
 

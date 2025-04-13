@@ -1,12 +1,12 @@
 "use client"
 
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router"
-import type { ErrorResponse } from "@/types/types"
 import { UseGetTournamentTable } from "@/queries/tables"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTranslation } from "react-i18next"
 import ErrorPage from "@/components/error"
+import { ErrorResponse } from "@/types/errors"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/grupid/$groupid")({
   component: RouteComponent,

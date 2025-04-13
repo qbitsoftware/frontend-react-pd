@@ -21,9 +21,10 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { UseGetTournaments } from "@/queries/tournaments";
 import ErrorPage from "@/components/error";
 import { formatDateString } from "@/lib/utils";
-import { ErrorResponse, Tournament } from "@/types/types";
+import { ErrorResponse } from "@/types/errors";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { Tournament } from "@/types/tournaments";
 
 export const Route = createFileRoute("/admin/dashboard/")({
   loader: async ({ context: { queryClient } }) => {

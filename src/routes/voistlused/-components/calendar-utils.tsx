@@ -1,9 +1,9 @@
 import { UseGetTournamentMatches } from "@/queries/match";
 import { useEffect, useState } from "react";
 import { QueryClient } from "@tanstack/react-query";
-import { Tournament } from "@/types/types";
 import { UseGetTournamentTables } from "@/queries/tables";
 import i18n from "@/i18n";
+import { Tournament } from "@/types/tournaments";
 
 export const getDaysInMonth = (year: number) => {
   const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;

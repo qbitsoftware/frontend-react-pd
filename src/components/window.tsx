@@ -1,10 +1,11 @@
 import { useState, useRef } from "react";
-import { Bracket, TournamentTable } from "@/types/types";
 import SingleElimBracket from "./single_elim";
 import DoubleElimBracket from "./double_elim";
 import { CalculateSVGHeight, parseTableType } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Separator } from "./ui/separator";
+import { TournamentTable } from "@/types/groups";
+import { Bracket } from "@/types/brackets";
 
 interface WindowProps {
   data: Bracket;

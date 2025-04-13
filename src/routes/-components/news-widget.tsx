@@ -1,4 +1,4 @@
-import { Blog } from "@/types/types";
+import { Blog } from "@/types/blogs";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
