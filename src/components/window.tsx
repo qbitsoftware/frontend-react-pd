@@ -21,6 +21,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
 
     return (
       <div className="mt-6 h-screen" key={"test"}>
+        
         {data.eliminations[bracket].elimination.map((table, index) => {
           if (index !== 0 && index >= 1) {
             previousTop += CalculateSVGHeight(

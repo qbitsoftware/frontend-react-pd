@@ -18,54 +18,18 @@ import { capitalize, useDebounce } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { UseGetUsersDebounce } from "@/queries/users"
 import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match"
-import { z } from "zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTranslation } from "react-i18next"
-import EditImgModal from "./edit-img-modal"
+import EditImgModal from "../edit-img-modal"
 import { Participant } from "@/types/participants"
-import { TournamentTable } from "@/types/groups"
 import { User } from "@/types/users"
-import { Tournament } from "@/types/tournaments"
+import { ParticipantFormProps, ParticipantFormValues, participantSchema } from "./form-utils"
 
-interface ParticipantFormProps {
-    participants: Participant[] | null
-    tournament_data: Tournament
-    table_data: TournamentTable
-}
 
-const participantSchema = z.object({
-    name: z.string().min(1, "Participant name is required"),
-    order: z.number().optional(),
-    tournament_id: z.number().min(1),
-    sport_type: z.string().default("tabletennis"),
-    players: z
-        .array(
-            z.object({
-                id: z.string().optional(),
-                user_id: z.number().optional(),
-                first_name: z.string().optional(),
-                last_name: z.string().optional(),
-                name: z.string(),
-                sport_type: z.string().default("tabletennis"),
-                extra_data: z.object({
-                    rate_order: z.number().min(0, "Rating number is required").optional(),
-                    club: z.string().optional(),
-                    rate_points: z.number(),
-                    eltl_id: z.number().min(0, "eltl id is required").optional(),
-                    class: z.string().optional(),
-                }),
-                sex: z.string().optional(),
-                number: z.number().optional(),
-            }),
-        ),
-    class: z.string().optional(),
-})
 
-export type ParticipantFormValues = z.infer<typeof participantSchema>
-
-export const ParticipanForm: React.FC<ParticipantFormProps> = ({ participants, tournament_data, table_data }) => {
+export const ParticipantsForm: React.FC<ParticipantFormProps> = ({ participants, tournament_data, table_data }) => {
     const [selectedOrderValue, setSelectedOrderValue] = useState<string | undefined>()
     const navigate = useNavigate()
     const router = useRouter()

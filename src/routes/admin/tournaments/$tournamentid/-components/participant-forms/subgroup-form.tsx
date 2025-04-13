@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect } from "react";
-import { z } from "zod";
 import {
   UseCreateParticipants,
   UseUpdateParticipant,
@@ -43,66 +42,24 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { distributeParticipants } from "./subgroup-generator";
 import placeholderImg from "@/assets/placheolderImg.svg";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useNavigate, useRouter } from "@tanstack/react-router";
-import { Tournament } from "@/types/tournaments";
-import { Participant } from "@/types/participants";
-import { TournamentTable } from "@/types/groups";
 import { Player } from "@/types/players";
-
-const participantSchema = z.object({
-  name: z.string().min(1, "Participant name is required"),
-  order: z.number().optional(),
-  tournament_id: z.number().min(1),
-  sport_type: z.string().default("tabletennis"),
-  group: z.number().optional(),
-  players: z.array(
-    z.object({
-      id: z.string().optional(),
-      user_id: z.number().optional(),
-      first_name: z.string().optional(),
-      last_name: z.string().optional(),
-      name: z.string(),
-      sport_type: z.string().default("tabletennis"),
-      extra_data: z.object({
-        rate_order: z.number().min(0, "Rating number is required").optional(),
-        club: z.string().optional(),
-        rate_points: z.number(),
-        eltl_id: z.number().min(0, "eltl id is required").optional(),
-        class: z.string().optional(),
-      }),
-      sex: z.string().optional(),
-      number: z.number().optional(),
-    })
-  ),
-  class: z.string().optional(),
-});
-
-const playerFormSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
-  number: z.number().optional().nullable(),
-  sex: z.string().default("M"),
-  extra_data: z
-    .object({
-      rate_order: z.number().default(0).optional(),
-      club: z.string().default("").optional(),
-      rate_points: z.number().default(0),
-      eltl_id: z.number().default(0).optional(),
-      class: z.string().default("").optional(),
-    })
-    .optional(),
-});
-
-export type ParticipantFormValues = z.infer<typeof participantSchema>;
-export type PlayerFormValues = z.infer<typeof playerFormSchema>;
-
-interface ParticipantFormProps {
-  participants: Participant[] | null;
-  tournament_data: Tournament;
-  table_data: TournamentTable;
-}
+import { useDebounce } from "@/lib/utils";
+import { User } from "@/types/users";
+import {
+  ParticipantFormValues,
+  PlayerFormValues,
+  ParticipantFormProps,
+} from "./form-utils";
+import { Participant } from "@/types/participants";
+import { UseGetUsersDebounce } from "@/queries/users";
 
 export default function TournamentParticipantsManager({
   participants,
@@ -115,7 +72,6 @@ export default function TournamentParticipantsManager({
   const toast = useToast();
   const { successToast, errorToast } = useToastNotification(toast);
 
-  // State for dialogs and selected items
   const [groupNames, setGroupNames] = useState<Record<number, string>>({});
   const [isTeamDialogOpen, setIsTeamDialogOpen] = useState<boolean>(false);
   const [isPlayerDialogOpen, setIsPlayerDialogOpen] = useState<boolean>(false);
@@ -125,7 +81,13 @@ export default function TournamentParticipantsManager({
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [targetGroup, setTargetGroup] = useState<number>(1);
-  const router = useRouter()
+  const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const { data: playerSuggestions } = UseGetUsersDebounce(debouncedSearchTerm);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   useEffect(() => {
     if (participants && participants.length > 0) {
@@ -142,7 +104,11 @@ export default function TournamentParticipantsManager({
       setGroupNames(initialGroupNames);
     }
   }, [participants]);
-  const useChangeSubgroupNameMutation = UseChangeSubgroupName(tournament_data.id, table_data.id)
+
+  const useChangeSubgroupNameMutation = UseChangeSubgroupName(
+    tournament_data.id,
+    table_data.id
+  );
 
   // Calculate groups distribution based on table size
   const totalTeams = table_data.size || 0;
@@ -196,7 +162,6 @@ export default function TournamentParticipantsManager({
     },
   });
 
-  // Query hooks
   const createParticipantMutation = UseCreateParticipants(
     tournamentId,
     tableId
@@ -239,12 +204,16 @@ export default function TournamentParticipantsManager({
             setIsTeamDialogOpen(false);
             router.navigate({
               to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-            })
+            });
             resetTeamForm();
           },
           onError: (error) => {
             console.error("Error updating team:", error);
-            errorToast(t("admin.tournaments.groups.participants.toasts.team_updated_error"));
+            errorToast(
+              t(
+                "admin.tournaments.groups.participants.toasts.team_updated_error"
+              )
+            );
           },
         }
       );
@@ -254,13 +223,15 @@ export default function TournamentParticipantsManager({
         onSuccess: () => {
           router.navigate({
             to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-          })
+          });
           setIsTeamDialogOpen(false);
           resetTeamForm();
         },
         onError: (error) => {
           console.error("Error creating team:", error);
-          errorToast(t("admin.tournaments.groups.participants.toasts.team_created_error"));
+          errorToast(
+            t("admin.tournaments.groups.participants.toasts.team_created_error")
+          );
         },
       });
     }
@@ -303,13 +274,15 @@ export default function TournamentParticipantsManager({
         }
       } else {
         if (updatedPlayers.length >= table_data.max_team_size) {
-          errorToast(t("admin.tournaments.groups.participants.toasts.max_players"));
+          errorToast(
+            t("admin.tournaments.groups.participants.toasts.max_players")
+          );
           return;
         }
 
         // Add new player
         updatedPlayers.push({
-          id: '',
+          id: "",
           user_id: 0,
           name: playerName,
           first_name: data.first_name,
@@ -346,17 +319,21 @@ export default function TournamentParticipantsManager({
       });
 
       successToast(
-        selectedPlayer ? t("admin.tournaments.groups.participants.toasts.player_updated") : t("admin.tournaments.groups.participants.toasts.player_added")
+        selectedPlayer
+          ? t("admin.tournaments.groups.participants.toasts.player_updated")
+          : t("admin.tournaments.groups.participants.toasts.player_added")
       );
 
       router.navigate({
         to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-      })
+      });
       setIsPlayerDialogOpen(false);
       resetPlayerForm();
     } catch (error) {
       console.error("Error with player:", error);
-      errorToast(t("admin.tournaments.groups.participants.toasts.player_updated_error"));
+      errorToast(
+        t("admin.tournaments.groups.participants.toasts.player_updated_error")
+      );
     }
   };
 
@@ -372,23 +349,22 @@ export default function TournamentParticipantsManager({
       onSuccess: () => {
         router.navigate({
           to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
-        })
+        });
         setIsDeleteDialogOpen(false);
         setTeamToDelete(null);
       },
       onError: (error) => {
         console.error("Error deleting team:", error);
-        errorToast(t("admin.tournaments.groups.participants.toasts.team_deleted_error"));
+        errorToast(
+          t("admin.tournaments.groups.participants.toasts.team_deleted_error")
+        );
       },
     });
   };
 
   const removePlayer = (team: Participant, player: Player): void => {
-
     try {
-      const updatedPlayers = team.players.filter(
-        (p) => p.id !== player.id
-      );
+      const updatedPlayers = team.players.filter((p) => p.id !== player.id);
 
       // Update the participant with the new players array
       const formData: ParticipantFormValues = {
@@ -413,13 +389,19 @@ export default function TournamentParticipantsManager({
           },
           onError: (error) => {
             console.error("Error removing player:", error);
-            errorToast(t("admin.tournaments.groups.participants.toasts.player_removed_error"));
+            errorToast(
+              t(
+                "admin.tournaments.groups.participants.toasts.player_removed_error"
+              )
+            );
           },
         }
       );
     } catch (error) {
       console.error("Error removing player:", error);
-      errorToast(t("admin.tournaments.groups.participants.toasts.player_removed_error"));
+      errorToast(
+        t("admin.tournaments.groups.participants.toasts.player_removed_error")
+      );
     }
   };
 
@@ -523,6 +505,35 @@ export default function TournamentParticipantsManager({
     }
   };
 
+  const handleSelectPlayer = (user: User) => {
+    playerForm.setValue("last_name", user.last_name);
+    playerForm.setValue("first_name", user.first_name);
+    playerForm.setValue("sex", user.sex);
+    console.log(user.sex);
+
+    if (user && user.club_name) {
+      playerForm.setValue("extra_data.club", user.club_name);
+    } else {
+      playerForm.setValue("extra_data.club", "");
+    }
+    setShowResults(false);
+
+    // Reset the search term or update it to match the selected player's name
+    setSearchTerm(user.last_name);
+  };
+
+  useEffect(() => {
+    if (
+      playerSuggestions &&
+      playerSuggestions?.data?.length > 0 &&
+      focusedField
+    ) {
+      setShowResults(true);
+    } else if (!playerSuggestions?.data?.length) {
+      setShowResults(false);
+    }
+  }, [playerSuggestions, focusedField]);
+
   // Loading state
   if (!participants) {
     return (
@@ -537,41 +548,45 @@ export default function TournamentParticipantsManager({
 
   const handleNameChange = async (groupName: string, groupIndex: number) => {
     if (groupName == "") {
-      return
+      return;
     }
     const name = groupName.trim();
-    const players_ids = getSubGroupPlayers(groupIndex).map((player) => player.id);
+    const players_ids = getSubGroupPlayers(groupIndex).map(
+      (player) => player.id
+    );
 
     try {
       await useChangeSubgroupNameMutation.mutateAsync({
         participant_ids: players_ids,
-        group_name: name
+        group_name: name,
       });
       router.navigate({
         to: `/admin/tournaments/${tournament_data.id}/grupid/${table_data.id}/osalejad`,
         replace: true,
-      })
+      });
 
-      setGroupNames(prev => ({
+      setGroupNames((prev) => ({
         ...prev,
-        [groupIndex]: ""
+        [groupIndex]: "",
       }));
     } catch (error) {
       void error;
     }
-  }
+  };
 
   const getSubGroupPlayers = (groupIndex: number) => {
-    return participants.filter((participant) =>
-      participant.group === groupIndex
+    return participants.filter(
+      (participant) => participant.group === groupIndex
     );
-  }
+  };
 
   const getSubGroupName = (groupIndex: number) => {
-    const subGroupPlayers = getSubGroupPlayers(groupIndex)
+    const subGroupPlayers = getSubGroupPlayers(groupIndex);
 
-    return subGroupPlayers.length > 0 ? subGroupPlayers[0].group_name : `Group ${groupIndex}`;
-  }
+    return subGroupPlayers.length > 0
+      ? subGroupPlayers[0].group_name
+      : `Group ${groupIndex}`;
+  };
 
   return (
     <div className="container px-6 py-6">
@@ -612,7 +627,6 @@ export default function TournamentParticipantsManager({
           const existingTeams = groupedParticipants[groupNumber] || [];
           const teamsRemaining = Math.max(0, groupSize - existingTeams.length);
 
-
           return (
             <div key={groupNumber} className="bg-muted/10 p-4 rounded-lg">
               <div className="flex justify-between items-center mb-4">
@@ -620,12 +634,23 @@ export default function TournamentParticipantsManager({
                   <Input
                     placeholder={`Group ${groupNumber}`}
                     className="text-lg"
-                    value={groupNames[groupNumber] !== undefined ? groupNames[groupNumber] : getSubGroupName(groupNumber)}
-                    onChange={(e) => setGroupNames(prev => ({
-                      ...prev,
-                      [groupNumber]: e.target.value
-                    }))}
-                    onBlur={() => handleNameChange(groupNames[groupNumber] || "", groupNumber)}
+                    value={
+                      groupNames[groupNumber] !== undefined
+                        ? groupNames[groupNumber]
+                        : getSubGroupName(groupNumber)
+                    }
+                    onChange={(e) =>
+                      setGroupNames((prev) => ({
+                        ...prev,
+                        [groupNumber]: e.target.value,
+                      }))
+                    }
+                    onBlur={() =>
+                      handleNameChange(
+                        groupNames[groupNumber] || "",
+                        groupNumber
+                      )
+                    }
                   />
                 </h3>
                 <span className="text-muted-foreground text-sm flex flex-row gap-2">
@@ -739,7 +764,9 @@ export default function TournamentParticipantsManager({
                         }
                       >
                         <UserPlus className="h-4 w-4" />
-                        {t("admin.tournaments.groups.participants.actions.add_player.add")}
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_player.add"
+                        )}
                       </Button>
                     </CardContent>
                   </Card>
@@ -756,7 +783,9 @@ export default function TournamentParticipantsManager({
                         <UsersRound className="h-6 w-6 text-muted-foreground" />
                       </div>
                       <p className="text-muted-foreground mb-4">
-                        {t("admin.tournaments.groups.participants.actions.unfilled_slot")}
+                        {t(
+                          "admin.tournaments.groups.participants.actions.unfilled_slot"
+                        )}
                       </p>
                       <Button
                         variant="outline"
@@ -765,7 +794,9 @@ export default function TournamentParticipantsManager({
                         className="flex items-center gap-1"
                       >
                         <Plus className="h-4 w-4" />
-                        {t("admin.tournaments.groups.participants.actions.add_team")}
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_team"
+                        )}
                       </Button>
                     </CardContent>
                   </Card>
@@ -789,13 +820,18 @@ export default function TournamentParticipantsManager({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ?
-                t("admin.tournaments.groups.participants.actions.edit_team_title")
-                : t("admin.tournaments.groups.participants.actions.add_team_title")
-              }
+              {isEditing
+                ? t(
+                    "admin.tournaments.groups.participants.actions.edit_team_title"
+                  )
+                : t(
+                    "admin.tournaments.groups.participants.actions.add_team_title"
+                  )}
             </DialogTitle>
             <DialogDescription>
-              {t("admin.tournaments.groups.participants.actions.team_dialog_description")}
+              {t(
+                "admin.tournaments.groups.participants.actions.team_dialog_description"
+              )}
             </DialogDescription>
           </DialogHeader>
 
@@ -810,11 +846,15 @@ export default function TournamentParticipantsManager({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {t("admin.tournaments.groups.participants.actions.team_name")}
+                      {t(
+                        "admin.tournaments.groups.participants.actions.team_name"
+                      )}
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t("admin.tournaments.groups.participants.actions.team_name_placeholder")}
+                        placeholder={t(
+                          "admin.tournaments.groups.participants.actions.team_name_placeholder"
+                        )}
                         {...field}
                       />
                     </FormControl>
@@ -835,7 +875,11 @@ export default function TournamentParticipantsManager({
                   {t("admin.tournaments.groups.participants.actions.cancel")}
                 </Button>
                 <Button type="submit">
-                  {isEditing ? t("admin.tournaments.groups.participants.actions.update_team") : t("admin.tournaments.groups.participants.actions.submit")}
+                  {isEditing
+                    ? t(
+                        "admin.tournaments.groups.participants.actions.update_team"
+                      )
+                    : t("admin.tournaments.groups.participants.actions.submit")}
                 </Button>
               </DialogFooter>
             </form>
@@ -855,10 +899,18 @@ export default function TournamentParticipantsManager({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {selectedPlayer ? t("admin.tournaments.groups.participants.actions.edit_player.title") : t("admin.tournaments.groups.participants.actions.add_player.title")}
+              {selectedPlayer
+                ? t(
+                    "admin.tournaments.groups.participants.actions.edit_player.title"
+                  )
+                : t(
+                    "admin.tournaments.groups.participants.actions.add_player.title"
+                  )}
             </DialogTitle>
             <DialogDescription>
-              {t("admin.tournaments.groups.participants.actions.add_player.dialog_description")}
+              {t(
+                "admin.tournaments.groups.participants.actions.add_player.dialog_description"
+              )}
             </DialogDescription>
           </DialogHeader>
 
@@ -868,64 +920,172 @@ export default function TournamentParticipantsManager({
               className="space-y-4"
             >
               <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={playerForm.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.groups.participants.actions.add_player.first_name")}</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+                {/* Last Name Field with Debounce */}
                 <FormField
                   control={playerForm.control}
                   name="last_name"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("admin.tournaments.groups.participants.actions.add_player.last_name")}</FormLabel>
+                    <FormItem className="relative">
+                      <FormLabel>
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_player.last_name"
+                        )}
+                      </FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input
+                          {...field}
+                          value={searchTerm}
+                          onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            field.onChange(e.target.value);
+                            if (!e.target.value.trim()) {
+                              setShowResults(false);
+                            } else if (e.target.value.trim().length >= 1) {
+                              setShowResults(true);
+                            }
+                          }}
+                          onFocus={() => {
+                            setFocusedField("last_name");
+                            if (
+                              playerSuggestions &&
+                              playerSuggestions?.data?.length > 0
+                            )
+                              setShowResults(true);
+                          }}
+                          onBlur={() => {
+                            // Delay hiding results to allow clicking on them
+                            setTimeout(() => {
+                              setFocusedField(null);
+                              setShowResults(false);
+                            }, 200);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
+
+                      {/* Search Results Dropdown */}
+                      {showResults &&
+                        playerSuggestions &&
+                        focusedField === "last_name" && (
+                          <div className="absolute z-100 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                            <ul>
+                              {playerSuggestions?.data.map((player) => (
+                                <li
+                                  key={player.id}
+                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                  onMouseDown={() => handleSelectPlayer(player)}
+                                >
+                                  {player.last_name}, {player.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                    </FormItem>
+                  )}
+                />
+
+                {/* First Name Field */}
+                <FormField
+                  control={playerForm.control}
+                  name="first_name"
+                  render={({ field }) => (
+                    <FormItem className="relative">
+                      <FormLabel>
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_player.first_name"
+                        )}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          onFocus={() => {
+                            setFocusedField("first_name");
+                            if (
+                              playerSuggestions &&
+                              playerSuggestions?.data?.length > 0
+                            )
+                              setShowResults(true);
+                          }}
+                          onBlur={() => {
+                            // Delay hiding results to allow clicking on them
+                            setTimeout(() => {
+                              setFocusedField(null);
+                              setShowResults(false);
+                            }, 200);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+
+                      {/* Search Results Dropdown for First Name */}
+                      {showResults &&
+                        playerSuggestions &&
+                        focusedField === "first_name" && (
+                          <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                            <ul>
+                              {playerSuggestions?.data.map((player) => (
+                                <li
+                                  key={player.id}
+                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                  onMouseDown={() => handleSelectPlayer(player)}
+                                >
+                                  {player.last_name}, {player.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                     </FormItem>
                   )}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
+                {/* Sex Field */}
                 <FormField
                   control={playerForm.control}
                   name="sex"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("admin.tournaments.groups.participants.actions.add_player.sex")}</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_player.sex"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <select
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           {...field}
                         >
-                          <option value="M">{t("admin.tournaments.groups.participants.actions.add_player.genders.male")}</option>
-                          <option value="F">{t("admin.tournaments.groups.participants.actions.add_player.genders.female")}</option>
+                          <option value="M">
+                            {t(
+                              "admin.tournaments.groups.participants.actions.add_player.genders.male"
+                            )}
+                          </option>
+                          <option value="N">
+                            {t(
+                              "admin.tournaments.groups.participants.actions.add_player.genders.female"
+                            )}
+                          </option>
                         </select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
 
-              <div className="space-y-4">
+                {/* Club Field */}
                 <FormField
                   control={playerForm.control}
                   name="extra_data.club"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("admin.tournaments.groups.participants.actions.add_player.club")}</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "admin.tournaments.groups.participants.actions.add_player.club"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} value={field.value || ""} />
                       </FormControl>
@@ -947,7 +1107,13 @@ export default function TournamentParticipantsManager({
                   {t("admin.tournaments.groups.participants.actions.cancel")}
                 </Button>
                 <Button type="submit">
-                  {selectedPlayer ? t("admin.tournaments.groups.participants.actions.edit_player.edit") : t("admin.tournaments.groups.participants.actions.add_player.add")}
+                  {selectedPlayer
+                    ? t(
+                        "admin.tournaments.groups.participants.actions.edit_player.edit"
+                      )
+                    : t(
+                        "admin.tournaments.groups.participants.actions.add_player.add"
+                      )}
                 </Button>
               </DialogFooter>
             </form>
@@ -962,13 +1128,21 @@ export default function TournamentParticipantsManager({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("admin.tournaments.groups.participants.actions.confirm.delete")}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t(
+                "admin.tournaments.groups.participants.actions.confirm.delete"
+              )}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              {t("admin.tournaments.groups.participants.actions.confirm.reminder")}
+              {t(
+                "admin.tournaments.groups.participants.actions.confirm.reminder"
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("admin.tournaments.groups.participants.actions.cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t("admin.tournaments.groups.participants.actions.cancel")}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={deleteTeam}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -978,6 +1152,6 @@ export default function TournamentParticipantsManager({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div >
+    </div>
   );
 }

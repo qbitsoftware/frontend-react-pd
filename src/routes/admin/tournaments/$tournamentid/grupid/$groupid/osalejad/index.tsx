@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
 import { UseGetParticipants, UseGetParticipantsQuery } from '@/queries/participants'
 import { UseGetTournamentTable } from '@/queries/tables'
-import { ParticipanForm } from '../../../-components/participants-form'
+import { ParticipantsForm } from '../../../-components/participant-forms/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
-import TournamentParticipantsManager from '../../-components/subgroup-form'
+import TournamentParticipantsManager from '../../../-components/participant-forms/subgroup-form'
 import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute(
@@ -64,7 +64,7 @@ function RouteComponent() {
         return (
             <div className=''>
                 {tournament_data && table_data && participants && table_data.data.type !== "round_robin_full_placement" &&
-                    <ParticipanForm
+                    <ParticipantsForm
                         participants={participants.data}
                         tournament_data={tournament_data.data}
                         table_data={table_data.data}
