@@ -17,7 +17,6 @@ const Navbar = ({ tournament_tables }: Props) => {
     { name: t("competitions.navbar.info"), href: "/" },
     { name: t("competitions.navbar.timetable"), href: "/ajakava" },
     { name: t("competitions.navbar.results"), href: "/tulemused" },
-    { name: t("competitions.navbar.standings"), href: "/standings" },
     { name: t("competitions.navbar.participants"), href: "/mangijad" },
     { name: t("competitions.navbar.gallery"), href: "/galerii" },
     { name: t("competitions.navbar.guide"), href: "/juhend" },

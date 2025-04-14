@@ -17,7 +17,7 @@ const Standings = ({ participants }: { participants: Participant[] }) => {
         <TableBody>
           {participants.map((participant: Participant, index) => (
             <TableRow key={participant.id || index}>
-              <TableCell className="w-16">1</TableCell>
+              <TableCell className="w-16">{index+1}</TableCell>
               <TableCell>{participant.name}</TableCell>
             </TableRow>
           ))}

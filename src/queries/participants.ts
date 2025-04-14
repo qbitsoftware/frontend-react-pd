@@ -184,3 +184,20 @@ export function UsePostOrder(tournament_id: number, table_id: number) {
         },
     })
 }
+
+export function UsePostOrderReset(tournament_id: number, table_id: number) {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/reset`, {}, {
+                withCredentials: true,
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+            queryClient.resetQueries({ queryKey: ["bracket", table_id] })
+            queryClient.resetQueries({ queryKey: ["matches", table_id] })
+        },
+    })
+}

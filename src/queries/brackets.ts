@@ -1,6 +1,7 @@
 import { axiosInstance } from "./axiosconf";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BracketReponse } from "./tournaments";
+import { ParticipantsResponse } from "./participants";
 
 export function UseGetBracket(tournament_id: number, table_id: number) {
     return queryOptions<BracketReponse>({
@@ -44,10 +45,10 @@ export function UseDeleteBrackets(tournament_id: number, table_id: number) {
 }
 
 export function UseGetPlacements(tournament_id: number, table_id: number) {
-    return queryOptions<BracketReponse>({
-        queryKey: ["placements", tournament_id],
+    return useQuery<ParticipantsResponse>({
+        queryKey: ["leaderboard", tournament_id],
         queryFn: async () => {
-            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/placements`, {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/leaderboard`, {
                 withCredentials: true
             });
             return data

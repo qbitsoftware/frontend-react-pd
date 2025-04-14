@@ -31,7 +31,6 @@ import { Route as AdminClubsIndexImport } from './routes/admin/clubs/index'
 import { Route as AdminBlogIndexImport } from './routes/admin/blog/index'
 import { Route as AdminTournamentsTournamentidLayoutImport } from './routes/admin/tournaments/$tournamentid/layout'
 import { Route as VoistlusedTournamentidTulemusedIndexImport } from './routes/voistlused/$tournamentid/tulemused/index'
-import { Route as VoistlusedTournamentidStandingsIndexImport } from './routes/voistlused/$tournamentid/standings/index'
 import { Route as VoistlusedTournamentidSponsoridIndexImport } from './routes/voistlused/$tournamentid/sponsorid/index'
 import { Route as VoistlusedTournamentidMeediaIndexImport } from './routes/voistlused/$tournamentid/meedia/index'
 import { Route as VoistlusedTournamentidMangijadIndexImport } from './routes/voistlused/$tournamentid/mangijad/index'
@@ -176,13 +175,6 @@ const VoistlusedTournamentidTulemusedIndexRoute =
   VoistlusedTournamentidTulemusedIndexImport.update({
     id: '/tulemused/',
     path: '/tulemused/',
-    getParentRoute: () => VoistlusedTournamentidLayoutRoute,
-  } as any)
-
-const VoistlusedTournamentidStandingsIndexRoute =
-  VoistlusedTournamentidStandingsIndexImport.update({
-    id: '/standings/',
-    path: '/standings/',
     getParentRoute: () => VoistlusedTournamentidLayoutRoute,
   } as any)
 
@@ -530,13 +522,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VoistlusedTournamentidSponsoridIndexImport
       parentRoute: typeof VoistlusedTournamentidLayoutImport
     }
-    '/voistlused/$tournamentid/standings/': {
-      id: '/voistlused/$tournamentid/standings/'
-      path: '/standings'
-      fullPath: '/voistlused/$tournamentid/standings'
-      preLoaderRoute: typeof VoistlusedTournamentidStandingsIndexImport
-      parentRoute: typeof VoistlusedTournamentidLayoutImport
-    }
     '/voistlused/$tournamentid/tulemused/': {
       id: '/voistlused/$tournamentid/tulemused/'
       path: '/tulemused'
@@ -708,7 +693,6 @@ interface VoistlusedTournamentidLayoutRouteChildren {
   VoistlusedTournamentidMangijadIndexRoute: typeof VoistlusedTournamentidMangijadIndexRoute
   VoistlusedTournamentidMeediaIndexRoute: typeof VoistlusedTournamentidMeediaIndexRoute
   VoistlusedTournamentidSponsoridIndexRoute: typeof VoistlusedTournamentidSponsoridIndexRoute
-  VoistlusedTournamentidStandingsIndexRoute: typeof VoistlusedTournamentidStandingsIndexRoute
   VoistlusedTournamentidTulemusedIndexRoute: typeof VoistlusedTournamentidTulemusedIndexRoute
   VoistlusedTournamentidTulemusedGroupidIndexRoute: typeof VoistlusedTournamentidTulemusedGroupidIndexRoute
 }
@@ -728,8 +712,6 @@ const VoistlusedTournamentidLayoutRouteChildren: VoistlusedTournamentidLayoutRou
       VoistlusedTournamentidMeediaIndexRoute,
     VoistlusedTournamentidSponsoridIndexRoute:
       VoistlusedTournamentidSponsoridIndexRoute,
-    VoistlusedTournamentidStandingsIndexRoute:
-      VoistlusedTournamentidStandingsIndexRoute,
     VoistlusedTournamentidTulemusedIndexRoute:
       VoistlusedTournamentidTulemusedIndexRoute,
     VoistlusedTournamentidTulemusedGroupidIndexRoute:
@@ -771,7 +753,6 @@ export interface FileRoutesByFullPath {
   '/voistlused/$tournamentid/mangijad': typeof VoistlusedTournamentidMangijadIndexRoute
   '/voistlused/$tournamentid/meedia': typeof VoistlusedTournamentidMeediaIndexRoute
   '/voistlused/$tournamentid/sponsorid': typeof VoistlusedTournamentidSponsoridIndexRoute
-  '/voistlused/$tournamentid/standings': typeof VoistlusedTournamentidStandingsIndexRoute
   '/voistlused/$tournamentid/tulemused': typeof VoistlusedTournamentidTulemusedIndexRoute
   '/admin/tournaments/$tournamentid/grupid/$groupid': typeof AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren
   '/admin/tournaments/$tournamentid/grupid': typeof AdminTournamentsTournamentidGrupidIndexRoute
@@ -813,7 +794,6 @@ export interface FileRoutesByTo {
   '/voistlused/$tournamentid/mangijad': typeof VoistlusedTournamentidMangijadIndexRoute
   '/voistlused/$tournamentid/meedia': typeof VoistlusedTournamentidMeediaIndexRoute
   '/voistlused/$tournamentid/sponsorid': typeof VoistlusedTournamentidSponsoridIndexRoute
-  '/voistlused/$tournamentid/standings': typeof VoistlusedTournamentidStandingsIndexRoute
   '/voistlused/$tournamentid/tulemused': typeof VoistlusedTournamentidTulemusedIndexRoute
   '/admin/tournaments/$tournamentid/grupid': typeof AdminTournamentsTournamentidGrupidIndexRoute
   '/admin/tournaments/$tournamentid/meedia': typeof AdminTournamentsTournamentidMeediaIndexRoute
@@ -857,7 +837,6 @@ export interface FileRoutesById {
   '/voistlused/$tournamentid/mangijad/': typeof VoistlusedTournamentidMangijadIndexRoute
   '/voistlused/$tournamentid/meedia/': typeof VoistlusedTournamentidMeediaIndexRoute
   '/voistlused/$tournamentid/sponsorid/': typeof VoistlusedTournamentidSponsoridIndexRoute
-  '/voistlused/$tournamentid/standings/': typeof VoistlusedTournamentidStandingsIndexRoute
   '/voistlused/$tournamentid/tulemused/': typeof VoistlusedTournamentidTulemusedIndexRoute
   '/admin/tournaments/$tournamentid/grupid/$groupid': typeof AdminTournamentsTournamentidGrupidGroupidLayoutRouteWithChildren
   '/admin/tournaments/$tournamentid/grupid/': typeof AdminTournamentsTournamentidGrupidIndexRoute
@@ -903,7 +882,6 @@ export interface FileRouteTypes {
     | '/voistlused/$tournamentid/mangijad'
     | '/voistlused/$tournamentid/meedia'
     | '/voistlused/$tournamentid/sponsorid'
-    | '/voistlused/$tournamentid/standings'
     | '/voistlused/$tournamentid/tulemused'
     | '/admin/tournaments/$tournamentid/grupid/$groupid'
     | '/admin/tournaments/$tournamentid/grupid'
@@ -944,7 +922,6 @@ export interface FileRouteTypes {
     | '/voistlused/$tournamentid/mangijad'
     | '/voistlused/$tournamentid/meedia'
     | '/voistlused/$tournamentid/sponsorid'
-    | '/voistlused/$tournamentid/standings'
     | '/voistlused/$tournamentid/tulemused'
     | '/admin/tournaments/$tournamentid/grupid'
     | '/admin/tournaments/$tournamentid/meedia'
@@ -986,7 +963,6 @@ export interface FileRouteTypes {
     | '/voistlused/$tournamentid/mangijad/'
     | '/voistlused/$tournamentid/meedia/'
     | '/voistlused/$tournamentid/sponsorid/'
-    | '/voistlused/$tournamentid/standings/'
     | '/voistlused/$tournamentid/tulemused/'
     | '/admin/tournaments/$tournamentid/grupid/$groupid'
     | '/admin/tournaments/$tournamentid/grupid/'
@@ -1085,7 +1061,6 @@ export const routeTree = rootRoute
         "/voistlused/$tournamentid/mangijad/",
         "/voistlused/$tournamentid/meedia/",
         "/voistlused/$tournamentid/sponsorid/",
-        "/voistlused/$tournamentid/standings/",
         "/voistlused/$tournamentid/tulemused/",
         "/voistlused/$tournamentid/tulemused/$groupid/"
       ]
@@ -1190,10 +1165,6 @@ export const routeTree = rootRoute
     },
     "/voistlused/$tournamentid/sponsorid/": {
       "filePath": "voistlused/$tournamentid/sponsorid/index.tsx",
-      "parent": "/voistlused/$tournamentid"
-    },
-    "/voistlused/$tournamentid/standings/": {
-      "filePath": "voistlused/$tournamentid/standings/index.tsx",
       "parent": "/voistlused/$tournamentid"
     },
     "/voistlused/$tournamentid/tulemused/": {

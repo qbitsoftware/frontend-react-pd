@@ -975,7 +975,7 @@ export default function TournamentParticipantsManager({
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                   onMouseDown={() => handleSelectPlayer(player)}
                                 >
-                                  {player.last_name}, {player.first_name}
+                                  {player.last_name} {player.first_name} {player.eltl_id}
                                 </li>
                               ))}
                             </ul>
