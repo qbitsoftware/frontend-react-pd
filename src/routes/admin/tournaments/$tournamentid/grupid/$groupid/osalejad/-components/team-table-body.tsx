@@ -37,7 +37,22 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
         <React.Fragment>
             <TableRow>
                 <TableCell>{idx + 1}</TableCell>
-                <TableCell>{participant.order}</TableCell>
+                <TableCell>
+                    {editingParticipant && editingParticipant.id === participant.id ? (
+                        <Input
+                            {...editForm.register("order", { valueAsNumber: true })}
+                            type="number"
+                            onChange={(e) => {
+                                editForm.setValue("order", Number(e.target.value))
+                            }}
+                            defaultValue={participant.order}
+                            className="w-20"
+                            min="1"
+                        />
+                    ) : (
+                        participant.order
+                    )}
+                </TableCell>
                 <TableCell className="font-medium">
                     {editingParticipant?.id === participant.id ? (
                         <Input
@@ -57,17 +72,34 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    handleEditParticipant(editForm, participant)
-                                }
-                                }
-                            >
-                                <Pencil className="w-4 h-4 mr-2" />
-                                {t(
-                                    "admin.tournaments.groups.participants.actions.edit_team"
-                                )}
-                            </DropdownMenuItem>
+                            {editingParticipant?.id === participant.id ? (
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        handleAddOrUpdateParticipant(
+                                            editForm.getValues(),
+                                            participant.id)
+                                    }}
+                                >
+                                    <Pencil className="w-4 h-4 mr-2" />
+                                    {t(
+                                        "admin.tournaments.groups.participants.actions.save"
+                                    )}
+                                </DropdownMenuItem>
+                            )
+                                :
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        handleEditParticipant(editForm, participant)
+                                    }
+                                    }
+                                >
+                                    <Pencil className="w-4 h-4 mr-2" />
+                                    {t(
+                                        "admin.tournaments.groups.participants.actions.edit_team"
+                                    )}
+                                </DropdownMenuItem>
+
+                            }
                             <DropdownMenuItem
                                 onClick={() =>
                                     handleDeleteParticipant(participant.id)
@@ -107,21 +139,21 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                 playerIdx ? (
                                 <div className="flex gap-2">
                                     <Input
-                                        defaultValue={player.first_name}
+                                        defaultValue={`${player.first_name} ${player.last_name}`}
                                         onChange={(e) =>
                                             (player.first_name = e.target.value)
                                         }
                                         placeholder="First name"
-                                        className="w-24"
+                                        className="w-36"
                                     />
-                                    <Input
+                                    {/* <Input
                                         defaultValue={player.last_name}
                                         onChange={(e) =>
                                             (player.last_name = e.target.value)
                                         }
                                         placeholder="Last name"
                                         className="w-24"
-                                    />
+                                    /> */}
                                 </div>
                             ) : (
                                 `${player.first_name} ${player.last_name}`

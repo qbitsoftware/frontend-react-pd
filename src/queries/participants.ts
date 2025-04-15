@@ -120,11 +120,14 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             queryClient.setQueryData(["participants", table_id],
                 (oldData: ParticipantsResponse | undefined) => {
                     if (!oldData || !oldData.data) return oldData;
+                    const updatedData = oldData.data.map(participant =>
+                        participant.id === data.data?.id ? data.data : participant
+                    );
+
+                    const sortedData = [...updatedData].sort((a, b) => a.order - b.order);
                     const newData = {
                         ...oldData,
-                        data: oldData.data.map(participant =>
-                            participant.id === data.data?.id ? data.data : participant
-                        ),
+                        data: sortedData,
                         message: data.message,
                         error: null
 

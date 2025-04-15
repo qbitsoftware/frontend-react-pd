@@ -92,7 +92,20 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
     return (
         <TableRow>
             <TableCell>{idx + 1}</TableCell>
-            <TableCell>{participant.order}</TableCell>
+            <TableCell>{editingParticipant && editingParticipant.id === participant.id ? (
+                <Input
+                    {...editForm.register("order", { valueAsNumber: true })}
+                    onChange={(e) => {
+                        editForm.setValue("order", e.target.value)
+                    }}
+                    type="number"
+                    defaultValue={participant.order}
+                    className="w-20"
+                    min="1"
+                />
+            ) : (
+                participant.order
+            )}</TableCell>
             <TableCell className="">
                 {editingParticipant && editingParticipant.id === participant.id ? (
                     <div>

@@ -138,6 +138,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     formData: values,
                     participantId,
                 });
+
                 successToast("Participant updated successfully");
                 setEditingParticipant(null);
             } else {
