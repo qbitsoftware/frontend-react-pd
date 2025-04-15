@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import EditImgModal from '../../../../-components/edit-img-modal'
 import { ParticipantFormValues } from '../../../../-components/participant-forms/form-utils'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Player } from '@/types/players'
 
 interface TeamTableBodyProps {
     participant: Participant
@@ -20,6 +21,7 @@ interface TeamTableBodyProps {
 const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
     const { editingParticipant, debouncedSearchTerm, editForm, handleDeleteParticipant, handleEditParticipant, handleAddOrUpdateParticipant, handleEditPlayer, handleRemovePlayer, handleSavePlayerEdit, searchTerm, setSearchTerm, editingPlayerInfo, playerSuggestions, participantsState, activeTeamForPlayer, setActiveTeamForPlayer, setEditingPlayerInfo } = useParticipantForm()
     const { t } = useTranslation()
+    const [isInput, setIsInput] = useState(false);
 
     const [popoverOpen, setPopoverOpen] = useState(false);
 
@@ -31,7 +33,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
             setPopoverOpen(false);
         }
     }, [debouncedSearchTerm]);
-
 
     return (
         <React.Fragment>
@@ -132,33 +133,96 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                 playerImg={player.extra_data.image_url}
                             />
                         </TableCell>
-                        <TableCell className="pl-8">
-                            {editingPlayerInfo &&
-                                editingPlayerInfo.teamId === participant.id &&
-                                editingPlayerInfo.playerIndex ===
-                                playerIdx ? (
-                                <div className="flex gap-2">
-                                    <Input
-                                        defaultValue={`${player.first_name} ${player.last_name}`}
-                                        onChange={(e) =>
-                                            (player.first_name = e.target.value)
+                        <Popover
+                            open={popoverOpen}
+                            onOpenChange={(open) => {
+                                setPopoverOpen(open)
+                            }}
+                        >
+                            <PopoverTrigger asChild>
+                                <TableCell className="pl-8">
+                                    {editingPlayerInfo &&
+                                        editingPlayerInfo.teamId === participant.id &&
+                                        editingPlayerInfo.playerIndex ===
+                                        playerIdx ? (
+                                        <div className="flex gap-2">
+                                            <Input
+                                                defaultValue={`${player.first_name} ${player.last_name}`}
+                                                onChange={(e) => {
+                                                    setSearchTerm(e.target.value)
+                                                    player.first_name = e.target.value
+                                                }
+                                                }
+                                                onFocus={() => {
+                                                    setActiveTeamForPlayer(participant.id)
+                                                }}
+                                                placeholder="First name"
+                                                className="w-36"
+                                            />
+                                        </div>
+                                    ) : (
+                                        `${player.first_name} ${player.last_name}`
+                                    )}
+                                </TableCell>
+
+                            </PopoverTrigger>
+                            {playerSuggestions && playerSuggestions.data && activeTeamForPlayer == participant.id && editingPlayerInfo && editingPlayerInfo.playerIndex === playerIdx && !isInput &&
+                                <PopoverContent
+                                    className="p-0 w-[200px] max-h-[400px] overflow-y-auto suggestion-dropdown"
+                                    align="start"
+                                    sideOffset={5}
+                                    onInteractOutside={(e) => {
+                                        if ((e.target as HTMLElement).closest('input')) {
+                                            e.preventDefault()
+                                        } else {
+                                            setPopoverOpen(false)
                                         }
-                                        placeholder="First name"
-                                        className="w-36"
-                                    />
-                                    {/* <Input
-                                        defaultValue={player.last_name}
-                                        onChange={(e) =>
-                                            (player.last_name = e.target.value)
-                                        }
-                                        placeholder="Last name"
-                                        className="w-24"
-                                    /> */}
-                                </div>
-                            ) : (
-                                `${player.first_name} ${player.last_name}`
-                            )}
-                        </TableCell>
+                                    }}
+                                    onOpenAutoFocus={(e) => {
+                                        e.preventDefault()
+                                    }}
+                                >
+                                    {playerSuggestions.data.map((user, i) => (
+                                        <div
+                                            key={i}
+                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                            onClick={() => {
+                                                const newPlayer: Player = {
+                                                    id: participant.players[playerIdx].id,
+                                                    first_name: user.first_name,
+                                                    last_name: user.last_name,
+                                                    sport_type: "tabletennis",
+                                                    user_id: user.id,
+                                                    name: `${user.first_name} ${user.last_name}`,
+                                                    number: 0,
+                                                    rank: user.rate_pl_points,
+                                                    sex: user.sex,
+                                                    extra_data: {
+                                                        rate_order: user.rate_order,
+                                                        club: user.club_name,
+                                                        rate_points: user.rate_points,
+                                                        eltl_id: user.eltl_id,
+                                                        class: "",
+                                                        image_url: "",
+                                                    },
+                                                    created_at: "",
+                                                    updated_at: "",
+                                                    deleted_at: "",
+                                                }
+                                                participant.players[playerIdx] = newPlayer
+                                                handleSavePlayerEdit(participant.id, playerIdx, newPlayer)
+                                                setPopoverOpen(false)
+                                            }}
+                                        >
+                                            {capitalize(user.first_name)}{" "}
+                                            {capitalize(user.last_name)}{" "}
+                                            {user.eltl_id}
+                                        </div>
+                                    ))}
+                                </PopoverContent>
+                            }
+                        </Popover>
+
                         <TableCell>
                             {editingPlayerInfo &&
                                 editingPlayerInfo.teamId === participant.id &&
@@ -262,12 +326,14 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() =>
+                                        onClick={() => {
                                             handleSavePlayerEdit(
                                                 participant.id,
                                                 playerIdx,
                                                 player
                                             )
+                                            setSearchTerm("")
+                                        }
                                         }
                                     >
                                         <Pencil className="w-4 h-4 text-green-600" />
@@ -275,8 +341,10 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() =>
+                                        onClick={() => {
                                             setEditingPlayerInfo(null)
+                                            setSearchTerm("")
+                                        }
                                         }
                                     >
                                         {t(
@@ -289,11 +357,13 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() =>
+                                        onClick={() => {
                                             handleEditPlayer(
                                                 participant.id,
                                                 playerIdx
                                             )
+                                            setIsInput(false)
+                                        }
                                         }
                                     >
                                         <Pencil className="w-4 h-4" />
@@ -333,18 +403,20 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                     <Input
                                         type="text"
                                         value={
-                                            activeTeamForPlayer == participant.id
+                                            activeTeamForPlayer == participant.id && isInput
                                                 ? searchTerm
                                                 : ""
                                         }
                                         onChange={(e) =>
                                             setSearchTerm(e.target.value)
                                         }
+                                        disabled={editingPlayerInfo !== null}
                                         className="min-w-[200px] mr-2"
                                         placeholder="Lisa mängija"
                                         autoComplete="off"
                                         onFocus={() => {
                                             setActiveTeamForPlayer(participant.id);
+                                            setIsInput(true)
                                         }}
                                     />
                                     <Button
@@ -352,7 +424,9 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                             (playerSuggestions &&
                                                 playerSuggestions.data &&
                                                 playerSuggestions.data.length !== 0) ||
-                                            searchTerm == ""
+                                            searchTerm == "" ||
+                                            (activeTeamForPlayer !== participant.id)
+
                                         }
                                         onClick={() => {
                                             const lastSpaceIndex =
@@ -408,8 +482,8 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
 
 
                             </PopoverTrigger>
-                            {activeTeamForPlayer == participant.id &&
-                                <PopoverContent
+                            {activeTeamForPlayer == participant.id && isInput &&
+                                < PopoverContent
                                     className="p-0 w-[200px] max-h-[400px] overflow-y-auto suggestion-dropdown"
                                     align="start"
                                     sideOffset={5}

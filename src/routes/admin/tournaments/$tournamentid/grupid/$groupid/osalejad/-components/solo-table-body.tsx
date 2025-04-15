@@ -96,7 +96,7 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
                 <Input
                     {...editForm.register("order", { valueAsNumber: true })}
                     onChange={(e) => {
-                        editForm.setValue("order", e.target.value)
+                        editForm.setValue("order", Number(e.target.value))
                     }}
                     type="number"
                     defaultValue={participant.order}

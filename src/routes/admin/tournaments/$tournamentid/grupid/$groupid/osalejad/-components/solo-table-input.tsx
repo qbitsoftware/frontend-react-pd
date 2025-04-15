@@ -27,6 +27,7 @@ const SoloTableInput = ({ table_data }: SoloTableInputProps) => {
             setPopoverOpen(false);
         }
     }, [debouncedSearchTerm]);
+
     return (
         <>
             <TableCell>
@@ -61,6 +62,25 @@ const SoloTableInput = ({ table_data }: SoloTableInputProps) => {
                                     setSearchTerm(e.target.value);
                                     if (table_data.solo) {
                                         form.setValue("name", e.target.value);
+                                    }
+                                    if (isPlayerChosen) {
+                                        setIsPlayerChosen(false);
+                                        form.reset({
+                                            players: [{
+                                                name: e.target.value,
+                                                sex: "",
+                                                extra_data: {
+                                                    rate_points: 0,
+                                                    club: "",
+                                                    eltl_id: 0,
+                                                    rate_order: 0,
+                                                    class: ""
+                                                }
+                                            }],
+                                            name: e.target.value,
+                                            tournament_id: table_data.tournament_id,
+                                            sport_type: "tabletennis"
+                                        })
                                     }
                                 }}
                                 className=" text-sm md:text-base"
@@ -176,7 +196,16 @@ const SoloTableInput = ({ table_data }: SoloTableInputProps) => {
                 <Button
                     disabled={
                         //VEEL FIXIDA
-                        (playerSuggestions && playerSuggestions.data && playerSuggestions.data.length !== 0) || searchTerm == "" || isPlayerChosen
+                        // (playerSuggestions && playerSuggestions.data && playerSuggestions.data.length === 0) || !isPlayerChosen
+                        // playerSuggestions &&
+                        // playerSuggestions.data &&
+                        // playerSuggestions.data.length > 0 &&
+                        // !isPlayerChosen
+                        searchTerm === "" ||
+                        (playerSuggestions &&
+                            playerSuggestions.data &&
+                            playerSuggestions.data.length > 0 &&
+                            !isPlayerChosen)
                     }
                     onClick={form.handleSubmit((values) =>
                         handleAddOrUpdateParticipant(values)
@@ -187,7 +216,7 @@ const SoloTableInput = ({ table_data }: SoloTableInputProps) => {
                     )}
                     <PlusCircle />
                 </Button>
-            </TableCell>
+            </TableCell >
         </>
     )
 }
