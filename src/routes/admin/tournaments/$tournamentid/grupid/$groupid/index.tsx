@@ -38,6 +38,7 @@ function RouteComponent() {
     }
     return (
         <div>
+
             <TournamentTableForm initial_data={table_data.data} />
         </div>
     )

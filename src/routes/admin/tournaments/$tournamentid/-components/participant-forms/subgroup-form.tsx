@@ -822,11 +822,11 @@ export default function TournamentParticipantsManager({
             <DialogTitle>
               {isEditing
                 ? t(
-                    "admin.tournaments.groups.participants.actions.edit_team_title"
-                  )
+                  "admin.tournaments.groups.participants.actions.edit_team_title"
+                )
                 : t(
-                    "admin.tournaments.groups.participants.actions.add_team_title"
-                  )}
+                  "admin.tournaments.groups.participants.actions.add_team_title"
+                )}
             </DialogTitle>
             <DialogDescription>
               {t(
@@ -877,8 +877,8 @@ export default function TournamentParticipantsManager({
                 <Button type="submit">
                   {isEditing
                     ? t(
-                        "admin.tournaments.groups.participants.actions.update_team"
-                      )
+                      "admin.tournaments.groups.participants.actions.update_team"
+                    )
                     : t("admin.tournaments.groups.participants.actions.submit")}
                 </Button>
               </DialogFooter>
@@ -901,11 +901,11 @@ export default function TournamentParticipantsManager({
             <DialogTitle>
               {selectedPlayer
                 ? t(
-                    "admin.tournaments.groups.participants.actions.edit_player.title"
-                  )
+                  "admin.tournaments.groups.participants.actions.edit_player.title"
+                )
                 : t(
-                    "admin.tournaments.groups.participants.actions.add_player.title"
-                  )}
+                  "admin.tournaments.groups.participants.actions.add_player.title"
+                )}
             </DialogTitle>
             <DialogDescription>
               {t(
@@ -935,6 +935,7 @@ export default function TournamentParticipantsManager({
                         <Input
                           {...field}
                           value={searchTerm}
+                          autoComplete="off"
                           onChange={(e) => {
                             setSearchTerm(e.target.value);
                             field.onChange(e.target.value);
@@ -1109,11 +1110,11 @@ export default function TournamentParticipantsManager({
                 <Button type="submit">
                   {selectedPlayer
                     ? t(
-                        "admin.tournaments.groups.participants.actions.edit_player.edit"
-                      )
+                      "admin.tournaments.groups.participants.actions.edit_player.edit"
+                    )
                     : t(
-                        "admin.tournaments.groups.participants.actions.add_player.add"
-                      )}
+                      "admin.tournaments.groups.participants.actions.add_player.add"
+                    )}
                 </Button>
               </DialogFooter>
             </form>

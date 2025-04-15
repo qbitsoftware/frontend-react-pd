@@ -1,12 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
-import { UseGetParticipants, UseGetParticipantsQuery } from '@/queries/participants'
 import { UseGetTournamentTable } from '@/queries/tables'
 import { ParticipantsForm } from '../../../-components/participant-forms/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
-import TournamentParticipantsManager from '../../../-components/participant-forms/subgroup-form'
 import { ErrorResponse } from '@/types/errors'
+import { ParticipantProvider } from '@/providers/participantProvider'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -14,19 +13,8 @@ export const Route = createFileRoute(
     component: RouteComponent,
     errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
-        let participants
         let tournament_data
         let table_data
-        try {
-            participants = await queryClient.ensureQueryData(
-                UseGetParticipants(Number(params.tournamentid), Number(params.groupid)),
-            )
-        } catch (error) {
-            const err = error as ErrorResponse
-            if (err.response.status !== 404) {
-                throw error
-            }
-        }
         try {
             tournament_data = await queryClient.ensureQueryData(
                 UseGetTournament(Number(params.tournamentid)),
@@ -51,31 +39,30 @@ export const Route = createFileRoute(
                 throw error
             }
         }
-        return { participants, tournament_data, table_data }
+        return { tournament_data, table_data }
     },
 })
 
 function RouteComponent() {
-    const { participants, tournament_data, table_data } = Route.useLoaderData()
+    const { tournament_data, table_data } = Route.useLoaderData()
+    const { tournamentid, groupid } = Route.useParams()
 
-    const { data: participant_data } = UseGetParticipantsQuery(tournament_data?.data?.id!, table_data?.data?.id!, false, participants!)
-
-    if (tournament_data && tournament_data.data && table_data && table_data.data && participant_data) {
+    if (tournament_data && tournament_data.data && table_data && table_data.data) {
         return (
             <div className=''>
-                {tournament_data && table_data && participants && table_data.data.type !== "round_robin_full_placement" &&
-                    <ParticipantsForm
-                        participants={participants.data}
-                        tournament_data={tournament_data.data}
-                        table_data={table_data.data}
-                    />
-                }
-                {tournament_data && table_data && participants && table_data.data.type === "round_robin_full_placement" &&
-                    <TournamentParticipantsManager
-                        participants={participant_data.data}
-                        tournament_data={tournament_data.data}
-                        table_data={table_data.data}
-                    />
+
+                {tournament_data && table_data &&
+                    <ParticipantProvider tournament_id={Number(tournamentid)} tournament_table_id={Number(groupid)}>
+                        <ParticipantsForm
+                            tournament_data={tournament_data.data}
+                            table_data={table_data.data}
+                        />
+                        {/* <TournamentParticipantsManager
+                            tournament_data={tournament_data.data}
+                            table_data={table_data.data}
+                        /> */}
+
+                    </ParticipantProvider>
                 }
             </div>
         )

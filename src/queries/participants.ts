@@ -120,14 +120,16 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             queryClient.setQueryData(["participants", table_id],
                 (oldData: ParticipantsResponse | undefined) => {
                     if (!oldData || !oldData.data) return oldData;
-                    return {
+                    const newData = {
                         ...oldData,
                         data: oldData.data.map(participant =>
                             participant.id === data.data?.id ? data.data : participant
                         ),
                         message: data.message,
                         error: null
-                    };
+
+                    }
+                    return newData
                 }
             )
 

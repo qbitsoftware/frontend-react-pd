@@ -1,10 +1,13 @@
+import { capitalize } from "@/lib/utils"
 import { TournamentTable } from "@/types/groups"
 import { Participant } from "@/types/participants"
 import { Tournament } from "@/types/tournaments"
+import { User } from "@/types/users"
+import { UseFormReturn } from "react-hook-form"
 import { z } from "zod"
 
 export interface ParticipantFormProps {
-    participants: Participant[] | null
+    // participants: Participant[] | null
     tournament_data: Tournament
     table_data: TournamentTable
 }
@@ -41,19 +44,23 @@ export const participantSchema = z.object({
 export type ParticipantFormValues = z.infer<typeof participantSchema>
 
 export const playerFormSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
-  number: z.number().optional().nullable(),
-  sex: z.string().default("M"),
-  extra_data: z
-    .object({
-      rate_order: z.number().default(0).optional(),
-      club: z.string().default("").optional(),
-      rate_points: z.number().default(0),
-      eltl_id: z.number().default(0).optional(),
-      class: z.string().default("").optional(),
-    })
-    .optional(),
+    first_name: z.string().min(1, "First name is required"),
+    last_name: z.string().min(1, "Last name is required"),
+    number: z.number().optional().nullable(),
+    sex: z.string().default("M"),
+    extra_data: z
+        .object({
+            rate_order: z.number().default(0).optional(),
+            club: z.string().default("").optional(),
+            rate_points: z.number().default(0),
+            eltl_id: z.number().default(0).optional(),
+            class: z.string().default("").optional(),
+        })
+        .optional(),
 });
 
 export type PlayerFormValues = z.infer<typeof playerFormSchema>;
+
+
+
+
