@@ -6,6 +6,8 @@ import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
 import { ParticipantProvider } from '@/providers/participantProvider'
+import { GroupType, MatchState } from '@/types/matches'
+import RoundRobinForm from '../../../-components/participant-forms/round-robin-form'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -53,15 +55,17 @@ function RouteComponent() {
 
                 {tournament_data && table_data &&
                     <ParticipantProvider tournament_id={Number(tournamentid)} tournament_table_id={Number(groupid)}>
-                        <ParticipantsForm
-                            tournament_data={tournament_data.data}
-                            table_data={table_data.data}
-                        />
-                        {/* <TournamentParticipantsManager
-                            tournament_data={tournament_data.data}
-                            table_data={table_data.data}
-                        /> */}
-
+                        {table_data.data.type !== GroupType.ROUND_ROBIN && table_data.data.type !== GroupType.ROUND_ROBIN_FULL_PLACEMENT ?
+                            <ParticipantsForm
+                                tournament_data={tournament_data.data}
+                                table_data={table_data.data}
+                            />
+                            :
+                            <RoundRobinForm
+                                tournament_data={tournament_data.data}
+                                table_data={table_data.data} 
+                            />
+                        }
                     </ParticipantProvider>
                 }
             </div>

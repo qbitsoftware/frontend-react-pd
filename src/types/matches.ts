@@ -6,6 +6,18 @@ export enum MatchState {
   ONGOING = "ongoing"
 }
 
+export enum GroupType {
+  SINGLE_ELIM = "single_elimination",
+  SINGLE_ELIM_BRONZE = "single_elimination_bronze",
+  DOUBLE_ELIM_FULL_PLACEMENT = "double_elimination_full_placement",
+  DOUBLE_ELIM_FULL_PLACEMENT_TOP_HEAVY = "double_elimination_full_placement_top_heavy",
+  CHAMPIONS_LEAGUE = "champions_league",
+  ROUND_ROBIN = "round_robin",
+  FREE_FOR_ALL = "free_for_all",
+  ROUND_ROBIN_FULL_PLACEMENT = "round_robin_full_placement",
+
+}
+
 export type TableTennisExtraData = {
   table: string;
   score?: Score[];
