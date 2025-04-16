@@ -144,3 +144,19 @@ export const useCreateUser = () => {
         },
     })
 }
+
+export interface FeedbackForm {
+    name: string;
+    title: string;
+    body: string;
+}
+
+export const sendUserFeedback = async (feedback: FeedbackForm) => {
+    try {
+        await axiosInstance.post("/send-feedback", feedback)
+        return { success: true }
+    } catch (error) {
+        console.error("Failed to send feedback:", error)
+        return { success: false, error }
+    }
+}
