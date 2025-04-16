@@ -9,12 +9,17 @@ export type Participant = {
     tournament_id: number;
     created_at: string;
     updated_at: string;
-    deleted_at: string;
+    deleted_at: Deleted_at;
     group: number;
     group_name: string;
     players: Player[];
     tournament_table_id: number;
     extra_data: PartipantExtraData;
+  }
+
+  interface Deleted_at {
+    Valid: boolean;
+    Time: string
   }
   
 

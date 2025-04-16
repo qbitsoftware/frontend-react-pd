@@ -4,6 +4,7 @@ import {
   Trophy,
   FileText,
   PersonStanding,
+  MessagesSquare,
 } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
@@ -77,6 +78,12 @@ function RouteComponent() {
       label: t('admin.layout.sidebar.clubs'),
       icon: <PersonStanding className="w-4 h-4 sm:mr-2" />,
       to: '/admin/clubs',
+    },
+    {
+      id: 'feedback',
+      label: t('admin.layout.sidebar.feedback'),
+      icon: <MessagesSquare className="w-4 h-4 sm:mr-2" />,
+      to: '/admin/feedback',
     },
   ]
 

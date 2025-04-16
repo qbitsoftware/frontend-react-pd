@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import {
   ParticipantFormProps,
 } from "./form-utils";
@@ -26,7 +25,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
 
   const { participantsState } = useParticipantForm();
   const participants = participantsState
-
+ 
   if (tournament_data) {
     return (
       <div className=" mx-auto py-6 space-y-6  w-full">
