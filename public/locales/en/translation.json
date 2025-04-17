@@ -129,7 +129,6 @@
     "standings": {
       "placement": "Placement",
       "participants": "Participants"
-
     },
     "timetable": {
       "table": "Table",
@@ -155,7 +154,6 @@
       "info_missing": "No tournament information available",
       "no_schedule": "No schedule available",
       "standings_missing": "No standings data available yet",
-
       "no_games": "No games available for that group",
       "winner_unknown": "Unknown",
       "no_groups": "No results available",
@@ -343,6 +341,7 @@
         "feedback": "Feedback"
       },
       "info": "Info",
+      "tables": "Tables",
       "groups": "Groups",
       "media": "Media",
       "images": "Images",
@@ -402,8 +401,8 @@
         "category_placeholder": "Type a Category",
         "number_of_tables": "Number of tables",
         "number_of_tables_placeholder": "Enter number of tables",
-        "class": "Class",
-        "class_placeholder": "Type a Class",
+        "class": "Group",
+        "class_placeholder": "Type a Group",
         "tournament_size": "Tournament Size (amount of participants/teams)",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
@@ -424,6 +423,13 @@
         "ranking_description": "Enable ranking for this tournament",
         "team": "Tournament with teams",
         "team_description": "Enable tournament with teams"
+      },
+      "tables": {
+        "no_tables": "No tables have been assigned yet",
+        "title": "Table management",
+        "taken": "Occupied",
+        "free": "Free",
+        "empty_placeholder": "Table available for matches"
       },
       "groups": {
         "layout": {

@@ -343,6 +343,7 @@
       "info": "Info",
       "groups": "Grupid",
       "media": "Meedia",
+      "tables": "Lauad",
       "images": "Pildid",
       "title": "Turniirihaldus",
       "description": "Administreerimine"
@@ -400,8 +401,8 @@
         "category_placeholder": "Sisestage kategooria",
         "number_of_tables": "Laudade arv",
         "number_of_tables_placeholder": "Sisestage laudade arv",
-        "class": "Klass",
-        "class_placeholder": "Sisestage klass",
+        "class": "Grupp",
+        "class_placeholder": "Sisestage grupp",
         "tournament_size": "Tabeli suurus (osalejate/meeskondade arv)",
         "min_team_size": "Minimaalne tiimi suurus",
         "additional_information": "Lisa-informatsioon",
@@ -422,6 +423,13 @@
         "ranking_description": "Reiting arvutatakse iga esmaspäeva hommikul",
         "team": "Meeskondadega turniir",
         "team_description": "Luba meeskondadega turniir"
+      },
+      "tables": {
+        "no_tables": "Laudu pole veel lisatud",
+        "title": "Laudade haldamine",
+        "taken": "Võetud",
+        "free": "Vaba",
+        "empty_placeholder": "Laud on mänguks vaba"
       },
       "groups": {
         "layout": {

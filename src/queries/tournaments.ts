@@ -176,9 +176,16 @@ export const UsePatchTournament = (id: number) => {
             return data;
         },
 
-        onSuccess: () => {
+        onSuccess: (data: TournamentResponse) => {
             queryClient.resetQueries({ queryKey: ['tournaments'] })
-            queryClient.resetQueries({ queryKey: ['tournament', id] })
+            queryClient.setQueryData(["tournament", id], (oldData: TournamentResponse) => {
+                if (oldData) {
+                    oldData.data = data.data
+                    oldData.message = data.message
+                    oldData.error = data.error
+                }
+                return oldData
+            })
             queryClient.resetQueries({ queryKey: ['bracket', id] })
             queryClient.resetQueries({ queryKey: ['matches', id] })
         }

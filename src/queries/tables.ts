@@ -30,6 +30,20 @@ export function UseGetTournamentTables(tournament_id: number) {
     });
 }
 
+export function UseGetTournamentTablesQuery(tournament_id: number) {
+    return useQuery<TournamentTablesResponse>({
+        queryKey: ["tournament_tables_query", tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables`, {
+                withCredentials: true,
+            })
+            return data;
+        },
+    });
+}
+
+
+
 export const UseGetTournamentTable = (tournament_id: number, tournament_table_id: number) => {
     return queryOptions<TournamentTableResponse>({
         queryKey: ["tournament_table", tournament_table_id],

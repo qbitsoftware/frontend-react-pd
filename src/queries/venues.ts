@@ -8,12 +8,13 @@ export interface VenuesResponse {
     error: string | null
 }
 
-export const UseGetFreeVenues = (tournament_id: number) => {
+export const UseGetFreeVenues = (tournament_id: number, includeAll: boolean = false) => {
     return useQuery<VenuesResponse>({
-        queryKey: ["venues", tournament_id],
+        queryKey: ["venues", tournament_id, includeAll],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/free_tables`, {
-                withCredentials: true
+                withCredentials: true,
+                params: includeAll ? { all: true } : {}
             })
             return data
         }

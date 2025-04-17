@@ -8,7 +8,7 @@ import { ErrorResponse } from "@/types/errors"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid")({
   component: RouteComponent,
-    errorComponent: () => <ErrorPage />,
+  errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     let tournament_data = undefined
     try {
@@ -33,7 +33,7 @@ function RouteComponent() {
   const { tournamentid } = Route.useParams()
   const { t } = useTranslation()
 
-  const currentTab = location.pathname.includes("/grupid") ? "groups" : location.pathname.includes("/meedia") ? "media" : location.pathname.includes("/pildid") ? "images" : "info"
+  const currentTab = location.pathname.includes("/grupid") ? "groups" : location.pathname.includes("/meedia") ? "media" : location.pathname.includes("/pildid") ? "images" : location.pathname.includes("/lauad") ? "tables" : "info"
 
   return (
     <div className="mx-auto  h-full">
@@ -41,7 +41,7 @@ function RouteComponent() {
         <div className="py-4 sm:py-auto px-8 lg:h-[3.5rem] flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
           <h5 className="font-semibold text-black">{tournament_data.data?.name}</h5>
           <Tabs value={currentTab} className="">
-            <TabsList className="grid grid-cols-2 sm:grid-cols-4">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
               <Link to={`/admin/tournaments/${tournamentid}`} >
                 <TabsTrigger value="info" className="w-[8rem]">
                   {t("admin.layout.info")}
@@ -62,12 +62,17 @@ function RouteComponent() {
                   {t("admin.layout.images")}
                 </TabsTrigger>
               </Link>
+              <Link to={`/admin/tournaments/${tournamentid}/lauad`} >
+                <TabsTrigger value="tables" className="w-[8rem]">
+                  {t("admin.layout.tables")}
+                </TabsTrigger>
+              </Link>
             </TabsList>
           </Tabs>
         </div>
 
         <div className="">
-            <Outlet />
+          <Outlet />
         </div>
       </div>
     </div>
