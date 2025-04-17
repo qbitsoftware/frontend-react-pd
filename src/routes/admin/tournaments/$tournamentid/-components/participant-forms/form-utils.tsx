@@ -1,13 +1,8 @@
-import { capitalize } from "@/lib/utils"
 import { TournamentTable } from "@/types/groups"
-import { Participant } from "@/types/participants"
 import { Tournament } from "@/types/tournaments"
-import { User } from "@/types/users"
-import { UseFormReturn } from "react-hook-form"
 import { z } from "zod"
 
 export interface ParticipantFormProps {
-    // participants: Participant[] | null
     tournament_data: Tournament
     table_data: TournamentTable
 }

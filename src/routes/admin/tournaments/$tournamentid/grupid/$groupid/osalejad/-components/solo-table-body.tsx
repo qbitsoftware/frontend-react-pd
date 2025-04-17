@@ -83,9 +83,14 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
     const InputCell = ({ field, participant, editingParticipant }: InputCellProps) => {
         const isEditing = editingParticipant?.id === participant.id
         return (
-            <TableCell>
-                {isEditing ? (<Input {...editForm.register(field.path as Path<ParticipantFormValues>, field.valueAsNumber ? { valueAsNumber: true } : { valueAsNumber: false })} />) : (field.getValue(participant))}
-            </TableCell>
+
+            <>
+                {participant.players &&
+                    <TableCell>
+                        {isEditing ? (<Input {...editForm.register(field.path as Path<ParticipantFormValues>, field.valueAsNumber ? { valueAsNumber: true } : { valueAsNumber: false })} />) : (field.getValue(participant))}
+                    </TableCell>
+                }
+            </>
         )
     }
 

@@ -10,6 +10,7 @@ import { UseGetUsersDebounce, UsersResponse } from '@/queries/users';
 import { capitalize, useDebounce } from '@/lib/utils';
 import { User } from '@/types/users';
 import { TournamentTable } from '@/types/groups';
+import { UseChangeSubgroupName } from '@/queries/participants';
 
 interface ParticipantContextType {
     handleAddOrUpdateParticipant: (
@@ -19,6 +20,7 @@ interface ParticipantContextType {
     form: UseFormReturn<ParticipantFormValues>;
     editForm: UseFormReturn<ParticipantFormValues>;
     editingParticipant: Participant | null;
+    setEditingParticipant(team: Participant | null): void;
     handleEditParticipant: (editForm: UseFormReturn<ParticipantFormValues>, participant: Participant) => void
     participantsState: Participant[] | null
     playerSuggestions: UsersResponse | undefined
@@ -34,6 +36,27 @@ interface ParticipantContextType {
     activeTeamForPlayer: string | null
     setActiveTeamForPlayer: React.Dispatch<React.SetStateAction<string | null>>
     setFormValues: (user: User, form: UseFormReturn<ParticipantFormValues>, table_data: TournamentTable) => void
+
+    // Round robin form specific
+
+    teamName: string;
+    setTeamName: (name: string) => void
+    groupId: string;
+    setGroupId: (id: string) => void;
+    editingTeamId: string | null;
+    setEditingTeamId: (id: string | null) => void;
+    editingTeamName: string;
+    setEditingTeamName: (name: string) => void;
+    selectedTeamId: string | null;
+    setSelectedTeamId: (id: string | null) => void;
+
+    groupIds: number[];
+    groupedTeams: Record<number, Participant[] | null>;
+    handleAddNewGroup: (table_data: TournamentTable) => Promise<void>;
+
+    getSubGroupName: (groupIndex: number) => string
+    handleNameChange: (groupName: string, groupIndex: number) => Promise<void>
+
 }
 
 const ParticipantContext = createContext<ParticipantContextType | undefined>(undefined);
@@ -67,6 +90,14 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     const { data: playerSuggestions } =
         UseGetUsersDebounce(debouncedSearchTerm);
 
+
+    // Round Robin specific states:  
+    const [teamName, setTeamName] = useState<string>("");
+    const [groupId, setGroupId] = useState<string>("1");
+    const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
+    const [editingTeamName, setEditingTeamName] = useState<string>("");
+    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+
     //Loading the data in
     useEffect(() => {
         if (participant_data) {
@@ -98,6 +129,10 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     const deleteMutation = UseDeleteParticipant(
         tournament_id,
         tournament_table_id,
+    );
+    const useChangeSubgroupNameMutation = UseChangeSubgroupName(
+        tournament_id,
+        tournament_table_id
     );
 
     const handleEditParticipant = (editForm: UseFormReturn<ParticipantFormValues>, participant: Participant) => {
@@ -273,6 +308,103 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         setEditingPlayerInfo(null);
     };
 
+    const getSubGroupPlayers = (groupIndex: number) => {
+        return participantsState && participantsState.filter(
+            (participant) => participant.group === groupIndex
+        );
+    };
+
+    const getSubGroupName = (groupIndex: number) => {
+        const subGroupPlayers = getSubGroupPlayers(groupIndex);
+
+        return subGroupPlayers && subGroupPlayers.length > 0
+            ? subGroupPlayers[0].group_name
+            : `Group ${groupIndex}`;
+    };
+
+    const handleNameChange = async (groupName: string, groupIndex: number) => {
+        if (groupName == "") {
+            return;
+        }
+        const name = groupName.trim();
+        const subGroupPlayers = getSubGroupPlayers(groupIndex);
+        const players_ids = subGroupPlayers && subGroupPlayers.map(
+            (player) => player.id
+        );
+
+        try {
+            if (players_ids) {
+                await useChangeSubgroupNameMutation.mutateAsync({
+                    participant_ids: players_ids,
+                    group_name: name,
+                });
+            } else {
+                console.log("mingi error kuskil majanduses")
+            }
+        } catch (error) {
+            void error;
+        }
+    };
+
+
+
+    const handleAddNewGroup = async (table_data: TournamentTable) => {
+        let newGroupId;
+        if (groupIds.length === 0) {
+            newGroupId = 1;
+        } else {
+            newGroupId = Math.max(...groupIds) + 1;
+        }
+
+        if (table_data.solo) {
+            await handleAddOrUpdateParticipant({
+                name: `Change me`,
+                tournament_id: tournament_id,
+                group: newGroupId,
+                sport_type: "tabletennis",
+                players: [{
+                    name: "empty",
+                    sport_type: "tabletennis",
+                    sex: "",
+                    extra_data: {
+                        rate_points: 0,
+                        club: "",
+                        eltl_id: 0,
+                        rate_order: 0,
+                        class: ""
+                    }
+                }],
+            });
+        } else {
+            await handleAddOrUpdateParticipant({
+                name: `Team ${newGroupId}`,
+                tournament_id: tournament_id,
+                group: newGroupId,
+                sport_type: "tabletennis",
+                players: [],
+            });
+
+        }
+
+        setGroupId(newGroupId.toString());
+    };
+
+    // Get all unique group IDs
+    const groupIds = participantsState
+        ? [...new Set(participantsState.map((p) => p.group || 1))]
+        : [1];
+
+    const groupedTeams = groupIds.reduce(
+        (acc, groupId) => {
+            acc[groupId] =
+                participantsState?.filter((p) => (p.group || 1) === groupId) || [];
+            return acc;
+        },
+        {} as Record<number, typeof participantsState>
+    );
+
+
+
     const setFormValues = (
         user: User,
         form: UseFormReturn<ParticipantFormValues>,
@@ -316,6 +448,26 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
             activeTeamForPlayer,
             setActiveTeamForPlayer,
             setFormValues,
+
+            // Round Robin specific
+            teamName,
+            setTeamName,
+            groupId,
+            setGroupId,
+            editingTeamId,
+            setEditingTeamId,
+            editingTeamName,
+            setEditingTeamName,
+            selectedTeamId,
+            setSelectedTeamId,
+
+            setEditingParticipant,
+
+            groupIds,
+            groupedTeams,
+            handleAddNewGroup,
+            handleNameChange,
+            getSubGroupName
         }}>
             {children}
         </ParticipantContext.Provider>

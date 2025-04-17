@@ -14,6 +14,14 @@ interface MatchComponentProps {
     topCoord: number
     starting_y: number
     starting_x: number
+    isEditingMode?: boolean;
+    selectedPlayer?: {
+        matchId: string | number;
+        playerId: string | number;
+        position: "home" | "away";
+    } | null;
+    onPlayerSelect?: (matchId: string, playerId: string, position: "home" | "away") => void;
+
 }
 
 const setScore = (match: TableMatch | undefined) => {
@@ -40,7 +48,27 @@ const setScore = (match: TableMatch | undefined) => {
 }
 
 
-const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, HORIZONTAL_GAP, topCoord, starting_y, starting_x, WIDTH }) => {
+const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, HORIZONTAL_GAP, topCoord, starting_y, starting_x, WIDTH, isEditingMode = false,
+    selectedPlayer = null,
+    onPlayerSelect = () => { }, }) => {
+
+    const isHomeSelected = selectedPlayer &&
+        selectedPlayer.matchId === match.match.id &&
+        selectedPlayer.playerId === match.participant_1.id &&
+        selectedPlayer.position === "home";
+
+    const isAwaySelected = selectedPlayer &&
+        selectedPlayer.matchId === match.match.id &&
+        selectedPlayer.playerId === match.participant_2.id &&
+        selectedPlayer.position === "away";
+
+    const handlePlayerClick = (playerId: string, position: "home" | "away") => {
+        if (isEditingMode && onPlayerSelect) {
+            onPlayerSelect(match.match.id, playerId, position);
+        }
+    };
+
+    const firstRound = match.match.round == 0
 
     const { tournamentid } = useParams({ strict: false })
 
@@ -73,11 +101,11 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                 onClick={() =>
                     !isDisabled &&
                     (match.match.table_type == "champions_league" ? setIsOpen2(true) : setIsOpen(true))}
-                className={`absolute flex flex-col z-10 bg-white text-sm`}>
+                className={`absolute flex flex-col ${firstRound ? "z-30" : "z-10"} bg-white text-sm`}>
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute top-[-20px] w-[60px] text-left text-[10px]'>{t("admin.tournaments.matches.table.table")} {match.match.extra_data.table}</div>}
-                {/* match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[112px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.start_date ? formatDateTimeBracket(match.match.start_date) : formatDateTimeBracket(new Date().toISOString())}</div>*/}
                 {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.bracket}</div>}
-                <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
+                <div style={{ height: `${HEIGHT / 2}px` }} className={cn("flex items-center ")}
+                >
                     {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
                     {(match.participant_1.id == "empty") ? (
                         <>
@@ -88,7 +116,14 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     ) : match.participant_1.id === "" ? (
                         <div></div>
                     ) : (
-                        <>
+                        <div className={cn('flex w-full', isHomeSelected ? "bg-blue-100 border-blue-500" : "", isEditingMode && firstRound ? "cursor-pointer hover:bg-blue-200" : "")}
+                            onClick={() => match.participant_1.id && firstRound && handlePlayerClick(match.participant_1.id, "home")}
+                        >
+                            {isEditingMode && match.participant_1.id && firstRound && (
+                                <span className="ml-1 text-xs text-blue-500">
+                                    {isHomeSelected ? "✓" : ""}
+                                </span>
+                            )}
                             <div className="text-center px-2">{getRandomFlag()}</div>
                             <div className={cn(
                                 "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold",
@@ -98,12 +133,13 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
                             <div className={cn("w-[50px]  items-center flex justify-center h-full font-semibold", p1_sets > p2_sets ? "bg-[#F3F9FC]" : p1_sets < p2_sets ? "" : "")}>{match.participant_2.id == "empty" ? "" : p1_sets}</div>
-                        </>
+                        </div>
                     )}
                 </div>
 
                 {/* <Separator className="bg-gray-300" /> */}
-                <div style={{ height: `${HEIGHT / 2}px` }} className="flex items-center">
+                <div style={{ height: `${HEIGHT / 2}px` }} className={cn("flex items-center")}
+                >
                     {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
                     {(match.participant_2.id == "empty") ? (
                         <>
@@ -114,7 +150,14 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                     ) : match.participant_2.id === "" ? (
                         <div></div>
                     ) : (
-                        <>
+                        <div className={cn('flex w-full', isAwaySelected ? "bg-blue-100 border-blue-500" : "", isEditingMode && firstRound ? "cursor-pointer hover:bg-blue-200" : "")}
+                            onClick={() => match.participant_2.id && firstRound && handlePlayerClick(match.participant_2.id, "away")}
+                        >
+                            {isEditingMode && match.participant_2.id && firstRound && (
+                                <span className="ml-1 text-xs text-blue-500">
+                                    {isAwaySelected ? "✓" : ""}
+                                </span>
+                            )}
                             <div className="text-center px-2">{getRandomFlag()}</div>
                             <div className={cn(
                                 "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold",
@@ -124,7 +167,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                             </div>
                             {/* If another player is byebye, don't show score, but only - */}
                             <div className={cn("w-[50px] items-center flex justify-center h-full font-semibold", p1_sets < p2_sets ? "bg-[#F3F9FC]" : p1_sets > p2_sets ? "" : "")}>{match.participant_1.id == "empty" ? "" : p2_sets}</div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
@@ -132,7 +175,54 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                 ? <TableTennisProtocolModal isOpen={isOpen2} onClose={() => { setIsOpen2(false) }} match={{ match: match.match, p1: match.participant_1, p2: match.participant_2, class: "" }} tournament_id={Number(tournamentid)} />
                 : <MatchDialog match={{ match: match.match, p1: match.participant_1, p2: match.participant_2, class: "" }} tournament_id={Number(tournamentid)} open={isOpen} onClose={() => setIsOpen(false)} />
             } */}
-        </div>
+        </div >
+        // <div
+        //     className="absolute transition-all"
+        //     style={{
+        //         width: WIDTH,
+        //         height: HEIGHT,
+        //         top: `${starting_y + topCoord}px`,
+        //         left: `${starting_x + match.match.round * HORIZONTAL_GAP}px`,
+        //     }}
+        // >
+        //     <div className="w-full h-full flex flex-col border rounded overflow-hidden shadow-sm">
+        //         {/* Home player */}
+        //         <div
+        //             className={`w-full h-1/2 flex items-center px-2 border-b ${isEditingMode ? "cursor-pointer" : ""
+        //                 } ${isHomeSelected ? "bg-blue-100 border-blue-500" : "bg-white"
+        //                 }`}
+        //             onClick={() => match.participant_1.id && handlePlayerClick(match.participant_1.id, "home")}
+        //         >
+        //             <div className="truncate text-sm">
+        //                 {match.participant_1.name || "TBD"}
+        //                 {isEditingMode && match.participant_1.id && (
+        //                     <span className="ml-1 text-xs text-blue-500">
+        //                         {isHomeSelected ? "✓" : ""}
+        //                     </span>
+        //                 )}
+        //             </div>
+        //             <div className="ml-auto">{p1_sets}</div>
+        //         </div>
+
+        //         {/* Away player */}
+        //         <div
+        //             className={`w-full h-1/2 flex items-center px-2 ${isEditingMode ? "cursor-pointer" : ""
+        //                 } ${isAwaySelected ? "bg-blue-100 border-blue-500" : "bg-white"
+        //                 }`}
+        //             onClick={() => match.participant_2.id && handlePlayerClick(match.participant_2.id, "away")}
+        //         >
+        //             <div className="truncate text-sm">
+        //                 {match.participant_2.name || "TBD"}
+        //                 {isEditingMode && match.participant_2.id && (
+        //                     <span className="ml-1 text-xs text-blue-500">
+        //                         {isAwaySelected ? "✓" : ""}
+        //                     </span>
+        //                 )}
+        //             </div>
+        //             <div className="ml-auto">{p2_sets}</div>
+        //         </div>
+        //     </div>
+        // </div>
     )
 }
 

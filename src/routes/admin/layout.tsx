@@ -52,6 +52,9 @@ function RouteComponent() {
     }
   }, [location.pathname, router])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+}, [])
 
 
   const menuItems = [
