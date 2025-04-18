@@ -25,16 +25,13 @@ export const VenueComp = ({ table, tables_data }: TableProps) => {
             <>
                 {
                     table.match &&
-                    <CardContent className="pb-3 pt-0">
-                        <div className="space-y-2 text-sm">
+                    <CardContent className="">
                             <div className="flex items-center text-gray-700">
-                                <Users className="h-4 w-4 mr-2 text-blue-500" />
                                 <p><span className="font-medium">{table.match.p1.name || 'TBD'}</span> vs <span className="font-medium">{table.match.p2.name || 'TBD'}</span></p>
                             </div>
 
                             {table.match.match.start_date && (
                                 <div className="flex items-center text-gray-700">
-                                    <CalendarClock className="h-4 w-4 mr-2 text-blue-500" />
                                     <p>{formatDateTimeBracket(table.match.match.start_date)}</p>
                                 </div>
                             )}
@@ -46,7 +43,6 @@ export const VenueComp = ({ table, tables_data }: TableProps) => {
                                     </Badge>
                                 </div>
                             )}
-                        </div>
                     </CardContent>
                 }
             </>
@@ -54,12 +50,12 @@ export const VenueComp = ({ table, tables_data }: TableProps) => {
     }
 
     return (
-        <Card className={`overflow-hidden transition-all hover:shadow-md ${isFree ? 'border-green-200' : 'border-red-200'}`}>
-            <div className={`h-2 ${isFree ? 'bg-green-500' : 'bg-red-500'}`} />
+        <Card className={`overflow-hidden transition-all hover:shadow-md border-2 ${isFree ? 'border-green-200' : 'border-red-200/50'}`}>
+            
             <CardHeader className="pb-2">
                 <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg font-medium">{table.name}</CardTitle>
-                    <Badge variant={isFree ? "default" : "destructive"} className="ml-2">
+                    <CardTitle className="text-2xl font-medium">{table.name}</CardTitle>
+                    <Badge variant={isFree ? "outline" : "destructive"} className="ml-2">
                         {isFree ?
                             <><Check className="h-3 w-3 mr-1" /> {t('admin.tournaments.tables.free')}</> :
                             <><X className="h-3 w-3 mr-1" /> {t('admin.tournaments.tables.taken')}</>

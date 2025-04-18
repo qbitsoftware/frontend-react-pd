@@ -368,7 +368,7 @@
     },
     "tournaments": {
       "title": "Turniirid",
-      "description": "Halda turniire siit",
+      "description": "Turniiride loomine ja haldamine",
       "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
@@ -379,7 +379,8 @@
           "double_elimination_full_placement_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale)",
           "champions_league": "Võistkondlikud liigad",
           "free_for_all": "Tänavapinks",
-          "round_robin_full_placement": "Round Robin"
+          "round_robin_full_placement": "Round Robin (2 roundiga)",
+          "round_robin": "Round Robin"
         },
         "back": "Tagasi",
         "edit_group": "Muuda gruppi",
@@ -513,6 +514,7 @@
         },
         "participants": {
           "teams": "Meeskonnad",
+          "groups": "Grupid",
           "players": "Mängijad",
           "toasts": {
             "team_updated": "Klubi loodud edukalt",

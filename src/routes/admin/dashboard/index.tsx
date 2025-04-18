@@ -164,7 +164,7 @@ export default function RouteComponent() {
   // Main content when everything is working properly
   return (
     <div className="space-y-6 p-8 overflow-y-scroll h-full">
-      <h3 className=" font-bold">{t("admin.dashboard.name")}</h3>
+      <h3 className="text-stone-800 font-bold">{t("admin.dashboard.name")}</h3>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -318,7 +318,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{title}</div>
+        <div className="text-4xl font-bold">{title}</div>
       </CardContent>
     </Card>
   );

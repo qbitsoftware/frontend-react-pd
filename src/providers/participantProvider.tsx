@@ -57,6 +57,8 @@ interface ParticipantContextType {
     getSubGroupName: (groupIndex: number) => string
     handleNameChange: (groupName: string, groupIndex: number) => Promise<void>
 
+    selectedGroupInput: number | null
+    setSelectedGroupInput: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 const ParticipantContext = createContext<ParticipantContextType | undefined>(undefined);
@@ -98,12 +100,16 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     const [editingTeamName, setEditingTeamName] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
 
+    const [selectedGroupInput, setSelectedGroupInput] = useState<number | null>(null);
+
     //Loading the data in
     useEffect(() => {
         if (participant_data) {
             setParticipantsState(participant_data.data);
         }
     }, [participant_data])
+
+
 
     const form = useForm<ParticipantFormValues>({
         resolver: zodResolver(participantSchema),
@@ -404,7 +410,6 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     );
 
 
-
     const setFormValues = (
         user: User,
         form: UseFormReturn<ParticipantFormValues>,
@@ -467,7 +472,10 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
             groupedTeams,
             handleAddNewGroup,
             handleNameChange,
-            getSubGroupName
+            getSubGroupName,
+
+            setSelectedGroupInput,
+            selectedGroupInput,
         }}>
             {children}
         </ParticipantContext.Provider>

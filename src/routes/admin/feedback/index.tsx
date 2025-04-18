@@ -59,9 +59,9 @@ export function FeedbackFormComponent() {
   }
 
   return (
-    <div className="container py-8 px-12">
-      <h4 className="font-bold mb-2">Tagasisidevorm</h4>
-      <p className="text-gray-500 mb-8">Teie ettepanekud ja tagasiside aitavad meil platvormi paremaks teha</p>
+    <div className="container p-8">
+       <h3 className="text-stone-800 font-bold">Tagasisidevorm</h3>
+      <p className="text-gray-500 mb-8 mt-1">Teie ettepanekud ja tagasiside aitavad meil platvormi paremaks teha</p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-lg px-1">

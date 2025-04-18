@@ -21,15 +21,18 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const navigate = useNavigate()
   const { t } = useTranslation()
   return (
-    <Card className="border-none shadow-none px-10">
-      <CardHeader className="flex md:flex-row flex-col items-center gap-4 px-0">
-        <CardTitle className="text-lg">{t("admin.tournaments.groups.title")}</CardTitle>
-        <Link className="w-full md:w-auto flex justify-center items-center" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
+    <Card className="border-none shadow-none px-10 ">
+      <CardHeader className="px-0 flex flex-row items-center gap-4 s">
+      <h5 className="">
+        {t("admin.tournaments.groups.title")}
+        </h5>
+        <Link className="" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
           <Button className="w-full md:w-auto h-8">
             <Plus className="w-4 h-4 mr-2" />
             {t("admin.tournaments.groups.add_new")}
           </Button>
         </Link>
+      
       </CardHeader>
       <CardContent className="px-2">
         <Table className="w-full">

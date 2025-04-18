@@ -35,7 +35,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
   const [groupNames, setGroupNames] = useState<Record<number, string>>({});
   const { t } = useTranslation()
 
-  const renderParticipantTable = (participants_arr: Participant[] | null) => {
+  const renderParticipantTable = (participants_arr: Participant[] | null, groupId: number) => {
     return (<Table className="w-full">
       <TableHeader>
         <TableRow>
@@ -54,11 +54,11 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
             <TeamTableBody key={idx} participant={participant} idx={idx} />
           )
         )}
-        <TableRow className="relative">
+        <TableRow className="relative bg-[#EBF6FD]/50">
           {table_data && table_data.solo ? (
-            <SoloTableInput table_data={table_data} />
+            <SoloTableInput table_data={table_data} groupId={groupId} />
           ) : (
-            <TeamTableInput />
+            <TeamTableInput groupId={groupId} />
           )}
         </TableRow>
       </TableBody>
@@ -75,15 +75,22 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
             <div className="min-h-[60vh] flex flex-col">
               <div className="overflow-x-auto w-full">
                 {table_data.type === GroupType.ROUND_ROBIN || table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
-                  <div>
-
+                  <div className="space-y-12">
+                    <div className="flex justify-end gap-3">
+                    <span className="text-muted-foreground text-sm flex flex-row gap-2">
+                      {t("admin.tournaments.groups.participants.groups")}: {Object.keys(groupedTeams).length }
+                    </span>
+                    <span className="text-muted-foreground text-sm flex flex-row gap-2">
+                      {t("admin.tournaments.groups.participants.teams")}: {participants?.length }
+                    </span>
+                  </div>
                     {Object.entries(groupedTeams).map(([currentGroupId, teams]) => {
                       const groupNumber = Number(currentGroupId)
                       return (
                         <div key={currentGroupId} className="mb-6">
                           <div>
-                            <div className="flex justify-between items-center mb-4">
-                              <h3 className="text-xl font-semibold">
+                            <div className="flex justify-between items-center  bg-[#062842] py-2 rounded-l-sm">
+                              <h3 className="text-xl font-semibold px-2 ">
                                 <Input
                                   placeholder={`Group ${groupNumber}`}
                                   className="text-lg"
@@ -106,14 +113,9 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                                   }
                                 />
                               </h3>
-                              <span className="text-muted-foreground text-sm flex flex-row gap-2">
-                                {t("admin.tournaments.groups.participants.teams")}
-
-                              </span>
                             </div>
-
                           </div>
-                          {renderParticipantTable(teams)}
+                          {renderParticipantTable(teams, groupNumber)}
                         </div>
                       )
                     })}
@@ -121,7 +123,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                   </div>
                 ) : (
                   <>
-                    {renderParticipantTable(participants)}
+                    {renderParticipantTable(participants, 0)}
                   </>
                 )}
               </div>

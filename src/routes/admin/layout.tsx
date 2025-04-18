@@ -95,21 +95,19 @@ function RouteComponent() {
       {/* Sidebar */}
       <div className="w-16 md:w-56">
         <div className=" p-2 sm:p-4 md:p-6">
-          <h5 className="hidden md:block  font-bold text-gray-900">
-            {t('admin.layout.title')}
-          </h5>
-          <p className="hidden md:block text-sm text-gray-500 mt-1">
-            {t('admin.layout.description')}
-          </p>
+          <h6 className="hidden md:block  font-bold text-stone-800">
+          {t('admin.layout.description')}
+          </h6>
+          
         </div>
         <nav className="p-2 flex sm:flex-col justify-between w-screen sm:w-full">
           {menuItems.map((item) => (
             <Link
               key={item.id}
               to={item.to}
-              className={`w-full flex flex-col sm:flex-row items-center justify-center md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
+              className={`w-full flex flex-col sm:flex-row items-center justify-center text-stone-800 md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
                 ? 'bg-blue-50 sm:border-r-4 border-b-4 sm:border-b-0 border-[#4C97F1] font-medium'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                : 'text-gray-600 hover:bg-stone-100 hover:text-stone-900'
                 }`}
             >
               {item.icon}

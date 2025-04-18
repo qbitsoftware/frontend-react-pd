@@ -36,7 +36,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
 
     return (
         <React.Fragment>
-            <TableRow>
+            <TableRow className='bg-[#EBF6FD] hover:bg-[#EBF6FD]'>
                 <TableCell>{idx + 1}</TableCell>
                 <TableCell>
                     {editingParticipant && editingParticipant.id === participant.id ? (
@@ -415,7 +415,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         }
                                         disabled={editingPlayerInfo !== null}
                                         className="min-w-[200px] mr-2"
-                                        placeholder="Lisa mängija"
+                                        placeholder={t("admin.tournaments.groups.participants.actions.add_player.add")}
                                         autoComplete="off"
                                         onFocus={() => {
                                             setActiveTeamForPlayer(participant.id);

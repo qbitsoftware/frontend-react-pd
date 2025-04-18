@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { UseDeleteTournamentTable, UsePatchTournamentTable, UsePostTournamentTable } from '@/queries/tables'
 import { UseGetTournamentSizes, UseGetTournamentTypes } from '@/queries/tournaments'
 import { TournamentTable } from '@/types/groups'
+import { GroupType } from '@/types/matches'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams, useRouter } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
@@ -195,53 +196,53 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-                {form.getValues().type === "round_robin_full" || form.getValues().type === "round_robin_full_placement" || form.getValues().type === "champions_league" ? (
-                <FormItem>
-                  <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      id="tournamentSize" 
-                      placeholder={initial_data?.size?.toString() || "Enter tournament size"}
-                      value={customSize} 
-                      onChange={(e) => {
-                        const numValue = parseInt(e.target.value, 10) || 0;
-                        setCustomSize(e.target.value);
-                        form.setValue("size", numValue);
-                      }} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) : (
-                <FormItem>
-                  <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
-                  <Select
-                    onValueChange={(value) => form.setValue("size", Number.parseInt(value, 10))}
-                    defaultValue={String(form.getValues().size || "")}
-                  >
+                {form.getValues().type === GroupType.ROUND_ROBIN || form.getValues().type === GroupType.ROUND_ROBIN_FULL_PLACEMENT || form.getValues().type === GroupType.CHAMPIONS_LEAGUE ? (
+                  <FormItem>
+                    <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={"Vali turniiri suurus"} />
-                      </SelectTrigger>
+                      <Input
+                        type="number"
+                        id="tournamentSize"
+                        placeholder={initial_data?.size?.toString() || "Enter tournament size"}
+                        value={customSize}
+                        onChange={(e) => {
+                          const numValue = parseInt(e.target.value, 10) || 0;
+                          setCustomSize(e.target.value);
+                          form.setValue("size", numValue);
+                        }}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      {isLoading && (
-                        <SelectItem className="flex justify-center items-center" value="loading">
-                          <Loader />
-                        </SelectItem>
-                      )}
-                      {tournament_sizes?.data?.map((size) => (
-                        <SelectItem key={size.id} value={String(size.size)}>
-                          {size.size}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-  )}
-                
+                    <FormMessage />
+                  </FormItem>
+                ) : (
+                  <FormItem>
+                    <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
+                    <Select
+                      onValueChange={(value) => form.setValue("size", Number.parseInt(value, 10))}
+                      defaultValue={String(form.getValues().size || "")}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={"Vali turniiri suurus"} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {isLoading && (
+                          <SelectItem className="flex justify-center items-center" value="loading">
+                            <Loader />
+                          </SelectItem>
+                        )}
+                        {tournament_sizes?.data?.map((size) => (
+                          <SelectItem key={size.id} value={String(size.size)}>
+                            {size.size}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+
                 <FormField
                   control={form.control}
                   name="solo"

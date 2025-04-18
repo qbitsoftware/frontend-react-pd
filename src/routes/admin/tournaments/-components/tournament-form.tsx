@@ -175,11 +175,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       <Card className="w-full border-none shadow-none">
         <CardHeader className="px-0">
 
-          <CardTitle className="text-lg">
+          <h5 className="font-medium">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
               : t("admin.tournaments.create_tournament.title_create")}
-          </CardTitle>
+          </h5>
         </CardHeader>
         <CardContent className="px-2">
           <Form {...form}>

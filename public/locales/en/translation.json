@@ -379,7 +379,8 @@
           "double_elimination_full_placement_top_heavy": "Double Elimination (Semi-final losers for 3rd)",
           "champions_league": "Team Champions League",
           "free_for_all": "Solo Free-for-all",
-          "round_robin_full_placement": "Round Robin"
+          "round_robin_full_placement": "Round Robin (Placement matches included)",
+          "round_robin": "Round Robin"
         },
         "back": "Back",
         "edit_group": "Edit Group",
@@ -513,6 +514,7 @@
         },
         "participants": {
           "teams": "Teams",
+          "groups": "Groups",
           "players": "Players",
           "toasts": {
             "team_updated": "Club successfully created",
