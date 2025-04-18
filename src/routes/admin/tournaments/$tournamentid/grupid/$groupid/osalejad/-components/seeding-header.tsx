@@ -72,7 +72,6 @@ const SeedingHeader = ({
       errorToast("Error", "Failed to seed participants");
     }
   };
-  console.log(participants_length);
 
   return (
     <CardHeader className="flex flex-row items-center justify-between  space-y-0">

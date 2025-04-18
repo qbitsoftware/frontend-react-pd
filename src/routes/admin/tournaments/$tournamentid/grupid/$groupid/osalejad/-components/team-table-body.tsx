@@ -79,7 +79,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         handleAddOrUpdateParticipant(
                                             editForm.getValues(),
                                             participant.id)
-                                            console.log(participant)
+                                        console.log(participant)
                                     }}
                                 >
                                     <Pencil className="w-4 h-4 mr-2" />
@@ -106,7 +106,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                             }
                             <DropdownMenuItem
                                 onClick={() =>
-                                    handleDeleteParticipant(participant.id)
+                                    handleDeleteParticipant(participant)
                                 }
                             >
                                 <Trash className="w-4 h-4 mr-2" />
@@ -158,6 +158,10 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                                 }
                                                 onFocus={() => {
                                                     setActiveTeamForPlayer(participant.id)
+                                                }}
+                                                onBlur={() => {
+                                                    setSearchTerm("")
+                                                    setPopoverOpen(false)
                                                 }}
                                                 placeholder="First name"
                                                 className="w-36"
@@ -420,6 +424,11 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         onFocus={() => {
                                             setActiveTeamForPlayer(participant.id);
                                             setIsInput(true)
+                                        }}
+
+                                        onBlur={() => {
+                                            setSearchTerm("")
+                                            setPopoverOpen(false)
                                         }}
                                     />
                                     <Button

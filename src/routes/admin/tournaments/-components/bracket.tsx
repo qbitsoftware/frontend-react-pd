@@ -53,7 +53,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
     <div className="w-full h-full">
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
-          <CardHeader className="flex-row justify-between items-center">
+          <CardHeader className="flex-row justify-between items-center space-y-0">
           <Button
               onClick={toggleEditingMode}
               className={`px-3 py-1 text-xs rounded transition-colors ${isEditingMode

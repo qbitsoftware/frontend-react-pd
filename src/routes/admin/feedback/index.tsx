@@ -39,7 +39,6 @@ export function FeedbackFormComponent() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const feedbackData: FeedbackForm = {
       ...values,
       name: "ELTL admin"
@@ -60,7 +59,7 @@ export function FeedbackFormComponent() {
 
   return (
     <div className="container p-8">
-       <h3 className="text-stone-800 font-bold">Tagasisidevorm</h3>
+      <h3 className="text-stone-800 font-bold">Tagasisidevorm</h3>
       <p className="text-gray-500 mb-8 mt-1">Teie ettepanekud ja tagasiside aitavad meil platvormi paremaks teha</p>
 
       <Form {...form}>

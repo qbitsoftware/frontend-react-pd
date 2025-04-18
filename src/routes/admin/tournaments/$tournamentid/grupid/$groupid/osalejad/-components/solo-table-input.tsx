@@ -15,7 +15,7 @@ interface SoloTableInputProps {
 }
 
 const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
-    const { playerSuggestions, participantsState, debouncedSearchTerm, form, setSearchTerm, handleAddOrUpdateParticipant, setFormValues, editingParticipant, searchTerm, selectedGroupInput, setSelectedGroupInput } = useParticipantForm()
+    const { playerSuggestions, participantsState, debouncedSearchTerm, groupNames, form, setSearchTerm, handleAddOrUpdateParticipant, setFormValues, editingParticipant, selectedGroupInput, setSelectedGroupInput } = useParticipantForm()
     const { t } = useTranslation()
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [isPlayerChosen, setIsPlayerChosen] = useState(false);
@@ -55,7 +55,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                             <Input
                                 type="text"
                                 // {...form.register("players.0.name")}
-                                value={groupId === selectedGroupInput ? (table_data.solo ? form.getValues("name") : form.getValues("players.0.name")) : ""}
+                                value={groupId === selectedGroupInput ? (table_data.solo ? form.watch("name") ?? "" : form.watch("players.0.name") ?? "") : ""}
                                 onChange={(e) => {
                                     form.setValue(
                                         "players.0.name",
@@ -66,6 +66,9 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                         form.setValue("name", e.target.value);
                                     }
                                     form.setValue("group", groupId)
+                                    console.log("groupanems", groupNames)
+                                    console.log("setting groupName", groupNames[groupId])
+                                    form.setValue("group_name", groupNames[groupId])
                                     if (isPlayerChosen) {
                                         setIsPlayerChosen(false);
                                         form.reset({
@@ -82,6 +85,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                             }],
                                             name: e.target.value,
                                             group: groupId,
+                                            group_name: groupNames[groupId],
                                             tournament_id: table_data.tournament_id,
                                             sport_type: "tabletennis"
                                         })
@@ -103,12 +107,18 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                             }],
                                             name: "",
                                             group: groupId,
+                                            group_name: groupNames[groupId],
                                             tournament_id: table_data.tournament_id,
                                             sport_type: "tabletennis"
                                         })
 
                                     }
                                     setSelectedGroupInput(groupId)
+                                }}
+                                onBlur={() => {
+                                    console.log("blurring")
+                                    setSearchTerm("")
+                                    setPopoverOpen(false)
                                 }}
                                 className=" text-sm md:text-base"
                                 autoComplete="off"
@@ -163,14 +173,10 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                 <Input
                     className="w-[100px]"
                     type="number"
-                    value={groupId === selectedGroupInput ? form.watch("players.0.number") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.number") ?? "") : ""}
                     onChange={(e) => {
                         form.setValue("players.0.number", Number(e.target.value))
                     }}
-                    // {...form.register(
-                    //     "players.0.extra_data.rate_points",
-                    //     { valueAsNumber: true }
-                    // )}
                     placeholder="Rank"
                 />
             </TableCell>
@@ -178,13 +184,11 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                 <Input
                     className="w-[100px]"
                     type="text"
-                    value={groupId === selectedGroupInput ? form.watch("players.0.sex") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.sex") ?? "") : ""}
                     onChange={(e) => {
-                        console.log(e.target.value)
                         form.setValue("players.0.sex", e.target.value)
 
                     }}
-                    // {...form.register("players.0.sex")}
                     placeholder="Sugu"
                 />
             </TableCell>
@@ -192,11 +196,10 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                 <Input
                     className="w-[100px]"
                     type="text"
-                    value={groupId === selectedGroupInput ? form.watch("players.0.extra_data.club") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.extra_data.club") ?? "") : ""}
                     onChange={(e) => {
                         form.setValue("players.0.extra_data.club", e.target.value)
                     }}
-                    // {...form.register("players.0.extra_data.club")}
                     placeholder="Klubi"
                 />
             </TableCell>
@@ -208,11 +211,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     onChange={(e) => {
                         form.setValue("players.0.extra_data.eltl_id", Number(e.target.value))
                     }}
-                    // {...form.register(
-                    //     "players.0.extra_data.eltl_id",
-                    //     { valueAsNumber: true }
-                    // )}
-                    value={groupId === selectedGroupInput ? form.watch("players.0.extra_data.eltl_id") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.extra_data.eltl_id") ?? "") : ""}
                     placeholder="ELTL ID"
                 />
             </TableCell>
@@ -224,11 +223,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     onChange={(e) => {
                         form.setValue("players.0.extra_data.rate_order", Number(e.target.value))
                     }}
-                    // {...form.register(
-                    //     "players.0.extra_data.rate_order",
-                    //     { valueAsNumber: true }
-                    // )}
-                    value={groupId === selectedGroupInput ? form.watch("players.0.extra_data.rate_order") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.extra_data.rate_order") ?? "") : ""}
                     placeholder="Koht Reitingus"
                 />
             </TableCell>
@@ -239,8 +234,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     onChange={(e) => {
                         form.setValue("players.0.extra_data.class", e.target.value)
                     }}
-                    // {...form.register("players.0.extra_data.class")}
-                    value={groupId === selectedGroupInput ? form.watch("players.0.extra_data.class") : ""}
+                    value={groupId === selectedGroupInput ? (form.watch("players.0.extra_data.class") ?? "") : ""}
                     placeholder="Klass"
                 />
             </TableCell>
@@ -248,7 +242,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                 <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
                 <Button
                     disabled={
-                        groupId != selectedGroupInput || searchTerm === "" ||
+                        groupId != selectedGroupInput ||
                         (playerSuggestions &&
                             playerSuggestions.data &&
                             playerSuggestions.data.length > 0 &&

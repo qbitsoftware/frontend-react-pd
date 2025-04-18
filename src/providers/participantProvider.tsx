@@ -26,7 +26,7 @@ interface ParticipantContextType {
     playerSuggestions: UsersResponse | undefined
     debouncedSearchTerm: string,
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
-    handleDeleteParticipant: (participantId: string) => Promise<void>
+    handleDeleteParticipant: (participant: Participant) => Promise<void>
     handleRemovePlayer: (teamId: string, playerIndex: number) => Promise<void>
     handleEditPlayer: (teamId: string, playerIndex: number) => void
     handleSavePlayerEdit: (teamId: string, playerIndex: number, updatedPlayer: any) => Promise<void>
@@ -41,8 +41,8 @@ interface ParticipantContextType {
 
     teamName: string;
     setTeamName: (name: string) => void
-    groupId: string;
-    setGroupId: (id: string) => void;
+    // groupId: string;
+    // setGroupId: (id: string) => void;
     editingTeamId: string | null;
     setEditingTeamId: (id: string | null) => void;
     editingTeamName: string;
@@ -59,6 +59,9 @@ interface ParticipantContextType {
 
     selectedGroupInput: number | null
     setSelectedGroupInput: React.Dispatch<React.SetStateAction<number | null>>
+
+    groupNames: Record<number, string>;
+    setGroupNames: React.Dispatch<React.SetStateAction<Record<number, string>>>;
 }
 
 const ParticipantContext = createContext<ParticipantContextType | undefined>(undefined);
@@ -93,9 +96,23 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         UseGetUsersDebounce(debouncedSearchTerm);
 
 
+    const [groupNames, setGroupNames] = useState<Record<number, string>>({})
+
+    useEffect(() => {
+        if (participantsState) {
+            const names: Record<number, string> = {};
+            participantsState.forEach((participant) => {
+                if (participant.group) {
+                    names[participant.group] = participant.group_name;
+                }
+            });
+            setGroupNames(names);
+        }
+    }, [participantsState]);
+
     // Round Robin specific states:  
     const [teamName, setTeamName] = useState<string>("");
-    const [groupId, setGroupId] = useState<string>("1");
+    // const [groupId, setGroupId] = useState<string>("1");
     const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
     const [editingTeamName, setEditingTeamName] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
@@ -174,6 +191,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         participantId?: string
     ) => {
         try {
+            console.log("values", values)
             if (participantId) {
                 await updateParticipant.mutateAsync({
                     formData: values,
@@ -220,9 +238,23 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         }
     };
 
-    const handleDeleteParticipant = async (participantId: string) => {
+    const handleDeleteParticipant = async (participant: Participant) => {
         try {
-            const res = await deleteMutation.mutateAsync(participantId);
+            const groupId = participant.group;
+            const participantsInSameGroup = participantsState?.filter(
+                p => p.group === groupId
+            ) || [];
+
+            const isLastInGroup = participantsInSameGroup.length === 1;
+
+            const res = await deleteMutation.mutateAsync(participant.id);
+            setGroupNames((prev) => {
+                const newGroupNames = { ...prev };
+                if (isLastInGroup) {
+                    delete newGroupNames[groupId];
+                }
+                return newGroupNames;
+            })
             successToast(res.message);
         } catch (error) {
             void error;
@@ -392,23 +424,22 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
         }
 
-        setGroupId(newGroupId.toString());
+        // setGroupId(newGroupId.toString());
     };
 
     // Get all unique group IDs
     const groupIds = participantsState
-        ? [...new Set(participantsState.map((p) => p.group || 1))]
+        ? [...new Set(participantsState.map((p) => p.group))]
         : [1];
 
     const groupedTeams = groupIds.reduce(
         (acc, groupId) => {
             acc[groupId] =
-                participantsState?.filter((p) => (p.group || 1) === groupId) || [];
+                participantsState?.filter((p) => p.group === groupId) || [];
             return acc;
         },
         {} as Record<number, typeof participantsState>
     );
-
 
     const setFormValues = (
         user: User,
@@ -457,8 +488,8 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
             // Round Robin specific
             teamName,
             setTeamName,
-            groupId,
-            setGroupId,
+            // groupId,
+            // setGroupId,
             editingTeamId,
             setEditingTeamId,
             editingTeamName,
@@ -476,6 +507,9 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
             setSelectedGroupInput,
             selectedGroupInput,
+
+            groupNames,
+            setGroupNames,
         }}>
             {children}
         </ParticipantContext.Provider>

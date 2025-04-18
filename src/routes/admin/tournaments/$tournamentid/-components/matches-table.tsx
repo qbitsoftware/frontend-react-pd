@@ -111,7 +111,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
   if (data.length > 0) {
     return (
         <Card className="w-full border-stone-100">
-        <CardHeader className="flex flex-row w-full items-center justify-between">
+        <CardHeader className="flex flex-row w-full items-center justify-between space-y-0">
             <Select
               value={filterValue}
               onValueChange={(value: FilterOptions) => setFilterValue(value)}

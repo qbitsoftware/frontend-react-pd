@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import React, { useState } from "react";
+import React from "react";
 import ErrorPage from "@/components/error";
 import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table";
 import { ParticipantFormProps } from "./form-utils";
@@ -28,10 +28,11 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
     getSubGroupName,
     handleNameChange,
     handleAddNewGroup,
+    groupNames,
+    setGroupNames,
   } = useParticipantForm();
   const participants = participantsState;
 
-  const [groupNames, setGroupNames] = useState<Record<number, string>>({});
   const { t } = useTranslation();
 
   const renderParticipantTable = (
@@ -41,39 +42,39 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
     return (
       <div className="rounded-md border">
 
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            {table_data && table_data.solo ? (
-              <SoloTableHead />
-            ) : (
-              <TeamTableHead />
-            )}
-          </TableRow>
-        </TableHeader>
-        <TableBody className="">
-          {participants_arr &&
-            participants_arr.map((participant, idx) =>
-              table_data.solo ? (
-                <SoloTableBody
-                  key={idx}
-                  participant={participant}
-                  idx={idx}
-                  tournament_table_data={table_data}
-                />
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              {table_data && table_data.solo ? (
+                <SoloTableHead />
               ) : (
-                <TeamTableBody key={idx} participant={participant} idx={idx} />
-              )
-            )}
-          <TableRow className="relative bg-[#EBF6FD]/50">
-            {table_data && table_data.solo ? (
-              <SoloTableInput table_data={table_data} groupId={groupId} />
-            ) : (
-              <TeamTableInput groupId={groupId} />
-            )}
-          </TableRow>
-        </TableBody>
-      </Table>
+                <TeamTableHead />
+              )}
+            </TableRow>
+          </TableHeader>
+          <TableBody className="">
+            {participants_arr &&
+              participants_arr.map((participant, idx) =>
+                table_data.solo ? (
+                  <SoloTableBody
+                    key={idx}
+                    participant={participant}
+                    idx={idx}
+                    tournament_table_data={table_data}
+                  />
+                ) : (
+                  <TeamTableBody key={idx} participant={participant} idx={idx} />
+                )
+              )}
+            <TableRow className="relative bg-[#EBF6FD]/50">
+              {table_data && table_data.solo ? (
+                <SoloTableInput table_data={table_data} groupId={groupId} />
+              ) : (
+                <TeamTableInput groupId={groupId} />
+              )}
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     );
   };
@@ -92,7 +93,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
             <div className="min-h-[60vh] flex flex-col">
               <div className="overflow-x-auto w-full">
                 {table_data.type === GroupType.ROUND_ROBIN ||
-                table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
+                  table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
                   <div className="space-y-12">
                     <div className="flex justify-end gap-3">
                       <span className="text-muted-foreground text-sm flex flex-row gap-2">

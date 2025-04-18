@@ -130,6 +130,10 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
                                     }
                                     }
                                     onClick={(e) => { e.stopPropagation() }}
+                                    onBlur={() => {
+                                        setSearchTerm("")
+                                        setPopoverOpen(false)
+                                    }}
                                     defaultValue={participant.name}
                                     placeholder="Lisa mängija"
                                     autoComplete="off"
@@ -216,7 +220,7 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
                         )}
                         <DropdownMenuItem
                             onClick={() =>
-                                handleDeleteParticipant(participant.id)
+                                handleDeleteParticipant(participant)
                             }
                         >
                             <Trash className="w-4 h-4 mr-2" />
