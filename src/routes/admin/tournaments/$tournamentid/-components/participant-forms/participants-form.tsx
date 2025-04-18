@@ -1,15 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import React, { useState } from "react";
 import ErrorPage from "@/components/error";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  ParticipantFormProps,
-} from "./form-utils";
+import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table";
+import { ParticipantFormProps } from "./form-utils";
 import SoloTableHead from "../../grupid/$groupid/osalejad/-components/solo-table-head";
 import TeamTableHead from "../../grupid/$groupid/osalejad/-components/team-table-head";
 import SoloTableBody from "../../grupid/$groupid/osalejad/-components/solo-table-body";
@@ -22,115 +15,148 @@ import { GroupType } from "@/types/matches";
 import { Participant } from "@/types/participants";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
-  tournament_data, table_data
+  tournament_data,
+  table_data,
 }) => {
-
-  const { participantsState, groupedTeams, getSubGroupName, handleNameChange, handleAddNewGroup } = useParticipantForm();
-  const participants = participantsState
+  const {
+    participantsState,
+    groupedTeams,
+    getSubGroupName,
+    handleNameChange,
+    handleAddNewGroup,
+  } = useParticipantForm();
+  const participants = participantsState;
 
   const [groupNames, setGroupNames] = useState<Record<number, string>>({});
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const renderParticipantTable = (participants_arr: Participant[] | null, groupId: number) => {
-    return (<Table className="w-full">
-      <TableHeader>
-        <TableRow>
-          {table_data && table_data.solo ? (
-            <SoloTableHead />
-          ) : (
-            <TeamTableHead />
-          )}
-        </TableRow>
-      </TableHeader>
-      <TableBody className="">
-        {participants_arr && participants_arr.map((participant, idx) =>
-          table_data.solo ? (
-            <SoloTableBody key={idx} participant={participant} idx={idx} tournament_table_data={table_data} />
-          ) : (
-            <TeamTableBody key={idx} participant={participant} idx={idx} />
-          )
-        )}
-        <TableRow className="relative bg-[#EBF6FD]/50">
-          {table_data && table_data.solo ? (
-            <SoloTableInput table_data={table_data} groupId={groupId} />
-          ) : (
-            <TeamTableInput groupId={groupId} />
-          )}
-        </TableRow>
-      </TableBody>
-    </Table>
-    )
-  }
+  const renderParticipantTable = (
+    participants_arr: Participant[] | null,
+    groupId: number
+  ) => {
+    return (
+      <div className="rounded-md border">
+
+      <Table className="w-full">
+        <TableHeader>
+          <TableRow>
+            {table_data && table_data.solo ? (
+              <SoloTableHead />
+            ) : (
+              <TeamTableHead />
+            )}
+          </TableRow>
+        </TableHeader>
+        <TableBody className="">
+          {participants_arr &&
+            participants_arr.map((participant, idx) =>
+              table_data.solo ? (
+                <SoloTableBody
+                  key={idx}
+                  participant={participant}
+                  idx={idx}
+                  tournament_table_data={table_data}
+                />
+              ) : (
+                <TeamTableBody key={idx} participant={participant} idx={idx} />
+              )
+            )}
+          <TableRow className="relative bg-[#EBF6FD]/50">
+            {table_data && table_data.solo ? (
+              <SoloTableInput table_data={table_data} groupId={groupId} />
+            ) : (
+              <TeamTableInput groupId={groupId} />
+            )}
+          </TableRow>
+        </TableBody>
+      </Table>
+      </div>
+    );
+  };
 
   if (tournament_data) {
     return (
-      <div className=" mx-auto py-6 space-y-6  w-full">
-        <Card className=" border-[#F0F3F3]">
-          <SeedingHeader tournament_id={tournament_data.id} tournament_table_id={table_data.id} />
+      <div className=" mx-auto space-y-6  w-full">
+        <Card className="w-full border-stone-100">
+          {" "}
+          <SeedingHeader
+            tournament_id={tournament_data.id}
+            table_data={table_data}
+            participants_length={participants?.length}
+          />
           <CardContent className="">
             <div className="min-h-[60vh] flex flex-col">
               <div className="overflow-x-auto w-full">
-                {table_data.type === GroupType.ROUND_ROBIN || table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
+                {table_data.type === GroupType.ROUND_ROBIN ||
+                table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
                   <div className="space-y-12">
                     <div className="flex justify-end gap-3">
-                    <span className="text-muted-foreground text-sm flex flex-row gap-2">
-                      {t("admin.tournaments.groups.participants.groups")}: {Object.keys(groupedTeams).length }
-                    </span>
-                    <span className="text-muted-foreground text-sm flex flex-row gap-2">
-                      {t("admin.tournaments.groups.participants.teams")}: {participants?.length }
-                    </span>
-                  </div>
-                    {Object.entries(groupedTeams).map(([currentGroupId, teams]) => {
-                      const groupNumber = Number(currentGroupId)
-                      return (
-                        <div key={currentGroupId} className="mb-6">
-                          <div>
-                            <div className="flex justify-between items-center  bg-[#062842] py-2 rounded-l-sm">
-                              <h3 className="text-xl font-semibold px-2 ">
-                                <Input
-                                  placeholder={`Group ${groupNumber}`}
-                                  className="text-lg"
-                                  value={
-                                    groupNames[groupNumber] !== undefined
-                                      ? groupNames[groupNumber]
-                                      : getSubGroupName(groupNumber)
-                                  }
-                                  onChange={(e) =>
-                                    setGroupNames((prev) => ({
-                                      ...prev,
-                                      [groupNumber]: e.target.value,
-                                    }))
-                                  }
-                                  onBlur={() =>
-                                    handleNameChange(
-                                      groupNames[groupNumber] || "",
-                                      groupNumber
-                                    )
-                                  }
-                                />
-                              </h3>
+                      <span className="text-muted-foreground text-sm flex flex-row gap-2">
+                        {t("admin.tournaments.groups.participants.groups")}:{" "}
+                        {Object.keys(groupedTeams).length}
+                      </span>
+                      <span className="text-muted-foreground text-sm flex flex-row gap-2">
+                        {t("admin.tournaments.groups.participants.teams")}:{" "}
+                        {participants?.length}
+                      </span>
+                    </div>
+                    {Object.entries(groupedTeams).map(
+                      ([currentGroupId, teams]) => {
+                        const groupNumber = Number(currentGroupId);
+                        return (
+                          <div key={currentGroupId} className="mb-6">
+                            <div>
+                              <div className="flex justify-between items-center  bg-[#062842] py-2 rounded-l-sm">
+                                <h3 className="text-xl font-semibold px-2 ">
+                                  <Input
+                                    placeholder={`Group ${groupNumber}`}
+                                    className="text-lg"
+                                    value={
+                                      groupNames[groupNumber] !== undefined
+                                        ? groupNames[groupNumber]
+                                        : getSubGroupName(groupNumber)
+                                    }
+                                    onChange={(e) =>
+                                      setGroupNames((prev) => ({
+                                        ...prev,
+                                        [groupNumber]: e.target.value,
+                                      }))
+                                    }
+                                    onBlur={() =>
+                                      handleNameChange(
+                                        groupNames[groupNumber] || "",
+                                        groupNumber
+                                      )
+                                    }
+                                  />
+                                </h3>
+                              </div>
                             </div>
+                            {renderParticipantTable(teams, groupNumber)}
                           </div>
-                          {renderParticipantTable(teams, groupNumber)}
-                        </div>
-                      )
-                    })}
-                    <Button className="w-full h-24" variant="outline" onClick={() => handleAddNewGroup(table_data)}>Uus grupp <Plus /></Button>
+                        );
+                      }
+                    )}
+                    <Button
+                      className="w-full h-24"
+                      variant="outline"
+                      onClick={() => handleAddNewGroup(table_data)}
+                    >
+                      Uus grupp <Plus />
+                    </Button>
                   </div>
                 ) : (
-                  <>
-                    {renderParticipantTable(participants, 0)}
-                  </>
+                  <>{renderParticipantTable(participants, 0)}</>
                 )}
               </div>
             </div>
-          </CardContent >
-        </Card >
-      </div >
+          </CardContent>
+        </Card>
+      </div>
     );
   } else {
     return <ErrorPage />;

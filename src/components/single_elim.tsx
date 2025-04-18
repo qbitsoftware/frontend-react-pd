@@ -119,7 +119,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false
           })}
         </svg>
         {isEditingMode && (
-          <div className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50">
+          <div className="fixed bottom-4 right-4 bg-stone-700 text-white px-4 py-2 rounded shadow-lg z-50">
             Editing Mode: {selectedPlayer ? "Player Selected" : "Select Player"}
           </div>
         )}
@@ -129,4 +129,3 @@ const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false
 };
 
 export default SingleElimBracket;
-

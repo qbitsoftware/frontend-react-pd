@@ -198,8 +198,8 @@ function RouteComponent() {
   );
 
   return (
-    <div className="w-full p-8">
-      <div className="">
+    <div className="w-full">
+      <div className="p-8">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h3 className="font-bold text-gray-900">
@@ -278,7 +278,8 @@ function RouteComponent() {
                             </Button>
                           </Link>
                           <Button
-                            variant="destructive"
+                            variant="outline"
+                            className="text-red-600"
                             size="sm"
                             onClick={() => handleDeleteClick(blog.id)}
                           >

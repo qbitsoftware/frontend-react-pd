@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import { MatchState, MatchWrapper } from "@/types/matches";
 import { TournamentTable } from "@/types/groups";
 import ResetSeeding from "./reset-seeding";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];
@@ -109,8 +110,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
 
   if (data.length > 0) {
     return (
-      <div className="py-4">
-        <div className="flex w-full items-center justify-between">
+        <Card className="w-full border-stone-100">
+        <CardHeader className="flex flex-row w-full items-center justify-between">
             <Select
               value={filterValue}
               onValueChange={(value: FilterOptions) => setFilterValue(value)}
@@ -163,8 +164,9 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               </Button>
             </div>
           )}
-        </div>
-        <div className="rounded-md border my-2">
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border" >
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -255,6 +257,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               )}
             </TableBody>
           </Table>
+          </div>
 
           {selectedMatch &&
             selectedMatch.match.table_type == "champions_league" && (
@@ -287,7 +290,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                 onClose={() => setIsOpen(false)}
               />
             )}
-        </div>
+        </CardContent>
         <ReGrouping
           tournament_id={tournament_id}
           isOpen={isRegroupingModalOpen}
@@ -301,7 +304,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           isOpen={isTimeEditingModalOpen}
           onClose={() => setIsTimeEditingModalOpen(false)}
         />
-      </div>
+      </Card>
     );
   } else {
     return (

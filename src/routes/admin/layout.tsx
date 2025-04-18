@@ -61,31 +61,31 @@ function RouteComponent() {
     {
       id: 'dashboard',
       label: t('admin.layout.sidebar.dashboard'),
-      icon: <LayoutDashboard className="w-4 h-4 sm:mr-2" />,
+      icon: <LayoutDashboard className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/dashboard',
     },
     {
       id: 'tournaments',
       label: t('admin.layout.sidebar.tournaments'),
-      icon: <Trophy className="w-4 h-4 sm:mr-2" />,
+      icon: <Trophy className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/tournaments',
     },
     {
       id: 'blog',
       label: t('admin.layout.sidebar.blogs'),
-      icon: <FileText className="w-4 h-4 sm:mr-2" />,
+      icon: <FileText className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/blog',
     },
     {
       id: 'settings',
       label: t('admin.layout.sidebar.clubs'),
-      icon: <PersonStanding className="w-4 h-4 sm:mr-2" />,
+      icon: <PersonStanding className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/clubs',
     },
     {
       id: 'feedback',
       label: t('admin.layout.sidebar.feedback'),
-      icon: <MessagesSquare className="w-4 h-4 sm:mr-2" />,
+      icon: <MessagesSquare className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/feedback',
     },
   ]
@@ -94,8 +94,8 @@ function RouteComponent() {
     <div className="flex flex-col sm:flex-row max-w-[1440px] mx-auto bg-[#F8F9F9]">
       {/* Sidebar */}
       <div className="w-16 md:w-56">
-        <div className=" p-2 sm:p-4 md:p-6">
-          <h6 className="hidden md:block  font-bold text-stone-800">
+        <div className=" p-2 sm:p-4 md:px-6 md:pt-6 md:pb-2">
+          <h6 className="hidden md:block  font-medium text-stone-800">
           {t('admin.layout.description')}
           </h6>
           
@@ -105,8 +105,8 @@ function RouteComponent() {
             <Link
               key={item.id}
               to={item.to}
-              className={`w-full flex flex-col sm:flex-row items-center justify-center text-stone-800 md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
-                ? 'bg-blue-50 sm:border-r-4 border-b-4 sm:border-b-0 border-[#4C97F1] font-medium'
+              className={`w-full flex flex-col sm:flex-row items-center justify-center text-stone-800 rounded-md md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
+                ? 'bg-[#EFF0F2]  border-b-4 sm:border-b-0 border-[#4C97F1] font-medium'
                 : 'text-gray-600 hover:bg-stone-100 hover:text-stone-900'
                 }`}
             >

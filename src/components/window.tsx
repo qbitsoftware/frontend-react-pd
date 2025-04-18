@@ -6,34 +6,63 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { Separator } from "./ui/separator";
 import { TournamentTable } from "@/types/groups";
 import { Bracket, PlayerSwitch } from "@/types/brackets";
-import { Button } from "./ui/button";
 import { UsePostPlayerSwitch } from "@/queries/brackets";
 
 interface WindowProps {
   data: Bracket;
-  tournament_table: TournamentTable
-}
-
-export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
-  const [bracket, setBracket] = useState(0);
-  const bracketRef = useRef<HTMLDivElement | null>(null);
-  const usePostPlayerSwitchMutation = UsePostPlayerSwitch(tournament_table.tournament_id, tournament_table.id)
-
-  const [isEditingMode, setIsEditingMode] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState<{
+  tournament_table: TournamentTable;
+  toggleEditingMode?: () => void;
+  isEditingMode?: boolean;
+  setIsEditingMode?: (edit: boolean) => void;
+  selectedPlayer?: {
     matchId: string;
     playerId: string;
     position: "home" | "away";
-  } | null>(null);
+  } | null;
+  setSelectedPlayer?: React.Dispatch<
+    React.SetStateAction<{
+      matchId: string;
+      playerId: string;
+      position: "home" | "away";
+    } | null>
+  >;
+}
 
-  const handlePlayerSelect = async (matchId: string, playerId: string, position: "home" | "away") => {
+export const Window: React.FC<WindowProps> = ({
+  data,
+  tournament_table,
+  isEditingMode,
+  selectedPlayer,
+  setSelectedPlayer,
+}) => {
+  const [bracket, setBracket] = useState(0);
+  const bracketRef = useRef<HTMLDivElement | null>(null);
+  const usePostPlayerSwitchMutation = UsePostPlayerSwitch(
+    tournament_table.tournament_id,
+    tournament_table.id
+  );
+
+  const handlePlayerSelect = async (
+    matchId: string,
+    playerId: string,
+    position: "home" | "away"
+  ) => {
     if (!isEditingMode) return;
 
     if (!selectedPlayer) {
-      setSelectedPlayer({ matchId, playerId, position });
+      // Add null check before calling setSelectedPlayer
+      if (setSelectedPlayer) {
+        setSelectedPlayer({ matchId, playerId, position });
+      }
     } else {
-      if (selectedPlayer.matchId === matchId && selectedPlayer.playerId === playerId) {
-        setSelectedPlayer(null);
+      if (
+        selectedPlayer.matchId === matchId &&
+        selectedPlayer.playerId === playerId
+      ) {
+        // Add null check before calling setSelectedPlayer
+        if (setSelectedPlayer) {
+          setSelectedPlayer(null);
+        }
         return;
       }
       const data: PlayerSwitch = {
@@ -43,35 +72,30 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
         participant_1_position: selectedPlayer.position,
         participant_2_id: playerId,
         participant_2_position: position,
-      }
+      };
       try {
-        await usePostPlayerSwitchMutation.mutateAsync(data)
+        await usePostPlayerSwitchMutation.mutateAsync(data);
       } catch (error) {
-        void error
+        void error;
       }
-      setSelectedPlayer(null);
+      // Add null check before calling setSelectedPlayer
+      if (setSelectedPlayer) {
+        setSelectedPlayer(null);
+      }
     }
   };
-
-  const toggleEditingMode = () => {
-    setIsEditingMode(!isEditingMode);
-    setSelectedPlayer(null);
-  };
-
-
 
   const renderBracket = () => {
     let previousTop: number = 0;
 
     return (
       <div className="mt-6 h-screen" key={"test"}>
-
         {data.eliminations[bracket].elimination.map((table, index) => {
           if (index !== 0 && index >= 1) {
             previousTop += CalculateSVGHeight(
               data.eliminations[bracket].elimination[index - 1].matches,
               45,
-              50,
+              50
             );
           }
 
@@ -108,27 +132,9 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
   };
   return (
     <div className="flex flex-col w-full h-full mx-auto relative">
-      <div className="absolute z-20 top-0 w-full flex xl:justify-end xl:p-4">
-        <div className="xl:max-w-[400px] p-2 flex flex-col w-full bg-[#F8F9FA] shadow-md rounded">
-          <div className="flex justify-between mt-2 items-center">
-            <Button
-              onClick={toggleEditingMode}
-              className={`px-3 py-1 text-xs rounded transition-colors ${isEditingMode
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-                }`}
-            >
-              {isEditingMode ? "Exit Editing Mode" : "Enter Editing Mode"}
-            </Button>
-
-            {isEditingMode && (
-              <div className="text-xs text-gray-600">
-                {selectedPlayer
-                  ? "Select second player to switch"
-                  : "Select first player"}
-              </div>
-            )}
-          </div>
+      <div className=" z-40 top-0 w-full flex xl:justify-end ">
+        <div className=" px-4 flex flex-col w-full bg-[#F8F9FA] rounded-t">
+          <div className="flex justify-between mt-2 items-center"></div>
           <div className="flex justify-between z-10">
             <h1 className="text-base font-medium">{tournament_table.class}</h1>
             <p
@@ -162,7 +168,7 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
         </div>
       </div>
       <div
-        className="w-full h-full p-4 overflow-auto bg-[#F8F9FA] pt-[100px] xl:pt-[60px]"
+        className="w-full h-full p-4 overflow-auto bg-[#F8F9FA]"
         ref={bracketRef}
       >
         {renderBracket()}
@@ -170,4 +176,3 @@ export const Window: React.FC<WindowProps> = ({ data, tournament_table }) => {
     </div>
   );
 };
-

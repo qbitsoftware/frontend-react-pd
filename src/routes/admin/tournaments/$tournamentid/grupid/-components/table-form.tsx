@@ -2,7 +2,7 @@ import Loader from '@/components/loader'
 import { useToastNotification } from '@/components/toast-notification'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -118,7 +118,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
   }
 
   return (
-    <div className='py-6'>
+    <div className=''>
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -144,13 +144,13 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Card className="w-full border-none">
-        <CardHeader>
-          <CardTitle className="text-base">
+      <Card className="w-full border-stone-100">
+        <CardHeader className=''>
+          <h5 className="font-medium">
             {initial_data ? t("admin.tournaments.create_tournament.edit_group") : t("admin.tournaments.create_tournament.create_group")}
-          </CardTitle>
+          </h5>
         </CardHeader>
-        <CardContent>
+        <CardContent className='px-8'>
           <Form {...form} >
             <form onSubmit={form.handleSubmit(handleSubmit)}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

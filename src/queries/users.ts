@@ -145,6 +145,23 @@ export const useCreateUser = () => {
     })
 }
 
+export function useUsersCount() {
+    const { data, isLoading } = useQuery({
+      queryKey: ['users'],
+      queryFn: async () => {
+        const response = await axiosInstance.get('/api/v1/users', {
+          withCredentials: true
+        })
+        return response.data
+      }
+    })
+    
+    return {
+      count: data?.data?.length || 0,
+      isLoading
+    }
+  }
+
 export interface FeedbackForm {
     name: string;
     title: string;

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { TableCell, TableRow } from '@/components/ui/table';
+import { TableCell } from '@/components/ui/table';
 import { useParticipantForm } from '@/providers/participantProvider';
 import { PlusCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

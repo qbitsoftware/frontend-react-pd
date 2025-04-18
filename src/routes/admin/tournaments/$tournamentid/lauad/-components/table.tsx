@@ -4,7 +4,7 @@ import { formatDateTimeBracket } from '@/lib/utils'
 import { TournamentTable } from '@/types/groups'
 import { Venue } from '@/types/venues'
 import { Link } from '@tanstack/react-router'
-import { CalendarClock, Check, Users, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 interface TableProps {

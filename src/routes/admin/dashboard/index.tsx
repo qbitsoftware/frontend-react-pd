@@ -1,4 +1,3 @@
-"use client";
 import {
   Card,
   CardContent,
@@ -6,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trophy, Target, type LucideIcon, LayoutDashboard, AlertCircle } from "lucide-react";
+import { Trophy, Target, type LucideIcon, LayoutDashboard, AlertCircle, PersonStanding } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import {
   Table,
@@ -25,6 +24,8 @@ import { ErrorResponse } from "@/types/errors";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Tournament } from "@/types/tournaments";
+import { useUsersCount } from "@/queries/users";
+
 
 export const Route = createFileRoute("/admin/dashboard/")({
   loader: async ({ context: { queryClient } }) => {
@@ -43,6 +44,8 @@ export default function RouteComponent() {
   const { tournaments_data, error } = Route.useLoaderData();
   const router = useRouter();
   const { t } = useTranslation();
+
+  const {count} = useUsersCount()
 
   const processChartData = (tournaments: Tournament[]) => {
     const monthMap = new Map();
@@ -163,11 +166,18 @@ export default function RouteComponent() {
 
   // Main content when everything is working properly
   return (
-    <div className="space-y-6 p-8 overflow-y-scroll h-full">
+    <div className="space-y-6 h-full p-8">
       <h3 className="text-stone-800 font-bold">{t("admin.dashboard.name")}</h3>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <StatsCard
+          Icon={Target}
+          iconColor="text-green-600"
+          bgColor="bg-green-100"
+          title={stats.activeTournaments}
+          description={t("admin.dashboard.active_tournaments")}
+        />
         <StatsCard
           Icon={Trophy}
           iconColor="text-blue-600"
@@ -176,11 +186,11 @@ export default function RouteComponent() {
           description={t("admin.dashboard.total_tournaments")}
         />
         <StatsCard
-          Icon={Target}
-          iconColor="text-green-600"
-          bgColor="bg-green-100"
-          title={stats.activeTournaments}
-          description={t("admin.dashboard.active_tournaments")}
+          Icon={PersonStanding}
+          iconColor="text-orange-600"
+          bgColor="bg-orange-100"
+          title={count}
+          description={t("admin.dashboard.users_in_db")}
         />
       </div>
 
@@ -188,7 +198,7 @@ export default function RouteComponent() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>{t("admin.dashboard.upcoming_tournaments")}</CardTitle>
+            <h5 className="font-medium">{t("admin.dashboard.upcoming_tournaments")}</h5>
             <CardDescription>
               {t("admin.dashboard.upcoming_tournaments_description")}
             </CardDescription>
@@ -230,9 +240,9 @@ export default function RouteComponent() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>
+            <h5 className="font-medium">
               {t("admin.dashboard.recently_created_tournaments")}
-            </CardTitle>
+            </h5>
             <CardDescription>
               {t("admin.dashboard.recently_created_tournaments_description")}
             </CardDescription>
@@ -274,18 +284,18 @@ export default function RouteComponent() {
         </Card>
       </div>
       <Card>
-        <CardHeader>
-          <CardTitle>{t("admin.dashboard.tournament_activity")}</CardTitle>
+        <CardHeader className="mb-2">
+          <h5 className="font-medium">{t("admin.dashboard.tournament_activity")}</h5>
           <CardDescription>
             {t("admin.dashboard.tournament_activity_description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="90%" height={240}>
             <BarChart data={chartData}>
               <XAxis dataKey="name" />
               <YAxis />
-              <Bar dataKey="tournaments" fill="#4f46e5" />
+              <Bar dataKey="tournaments" fill="#4C97F1" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -312,7 +322,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{description}</CardTitle>
+        <CardTitle className="text-base font-medium">{description}</CardTitle>
         <div className={`p-2 ${bgColor} rounded-full`}>
           <Icon className={`w-4 h-4 ${iconColor}`} />
         </div>

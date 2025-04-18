@@ -1,7 +1,7 @@
 // src/components/tournament-tables.tsx
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Plus } from "lucide-react"
 import { Link, useNavigate, useParams } from "@tanstack/react-router"
 import { parseTableType } from "@/lib/utils"
@@ -21,14 +21,14 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const navigate = useNavigate()
   const { t } = useTranslation()
   return (
-    <Card className="border-none shadow-none px-10 ">
-      <CardHeader className="px-0 flex flex-row items-center gap-4 s">
-      <h5 className="">
+    <Card className="w-full border-none shadow-none ">
+      <CardHeader className="px-0 flex-row justify-between items-center space-y-0">
+      <h5 className="font-medium">
         {t("admin.tournaments.groups.title")}
         </h5>
-        <Link className="" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
-          <Button className="w-full md:w-auto h-8">
-            <Plus className="w-4 h-4 mr-2" />
+        <Link className="mt-0 mb-0" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
+          <Button className="w-full md:w-auto ">
+            <Plus className="w-4 h-4 mr-1" />
             {t("admin.tournaments.groups.add_new")}
           </Button>
         </Link>
