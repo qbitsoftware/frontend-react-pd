@@ -1,0 +1,291 @@
+import { MatchesResponse, UseGetChildMatchesQuery, UsePatchMatch, UsePatchMatchSwitch, UseStartMatch } from "@/queries/match";
+import { Match, MatchWrapper, PlayerKey, TableTennisExtraData } from "@/types/matches";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react"
+import { toast } from "sonner";
+
+interface ProtocolModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    match: MatchWrapper;
+    tournament_id: number;
+    player_count: number
+    children: ReactNode
+}
+
+interface ProtocolModalContextValues {
+    playerMatches: MatchWrapper[];
+    isOpen: boolean;
+    tournament_id: number;
+    player_count: number;
+    match: MatchWrapper;
+    notes: string
+    headReferee: string
+    tableReferee: string
+    forfeitMatch: MatchWrapper | null
+    isLoading: boolean
+    childMatches: MatchesResponse | undefined
+    onClose: () => void;
+    setForfeitMatch: (value: MatchWrapper | null) => void
+    setTableReferee: (value: string) => void
+    setHeadReferee: (value: string) => void
+    setNotes: (note: string) => void
+    handleSwitchParticipants: () => void
+    handlePlayerChange: (playerKey: string, playerId: string, playerKeys: PlayerKey[], pairKeys: PlayerKey[]) => void
+    handleCaptainChange: (captainKey: string, value: string) => void
+    handleMatchStart: () => void
+    handleMatchFinish: () => void
+    handleForfeitMatch: (match: MatchWrapper) => void
+}
+
+const ProtocolModalContext = createContext<ProtocolModalContextValues | undefined>(undefined)
+
+export const ProtocolModalProvider = ({
+    isOpen,
+    onClose,
+    match,
+    tournament_id,
+    player_count,
+    children
+}: ProtocolModalProps) => {
+
+    const extraData = match.match.extra_data || {} as TableTennisExtraData
+    const [notes, setNotes] = useState<string>("")
+    const [tableReferee, setTableReferee] = useState<string>("")
+    const [headReferee, setHeadReferee] = useState<string>("")
+    const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
+    
+    // Queries
+    const { data: childMatches, isLoading } = UseGetChildMatchesQuery(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id
+    )
+    // Mutations
+    const { mutateAsync: startMatch } = UseStartMatch(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id
+    )
+    const { mutateAsync: updateMatch } = UsePatchMatch(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id
+    )
+
+    const { mutateAsync: switchParticipants } = UsePatchMatchSwitch(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id
+    )
+
+    const handleSwitchParticipants = async () => {
+        try {
+            await switchParticipants(match.match)
+        } catch (error) {
+            console.log(error)
+            toast.error("Soemthing went wrong")
+        }
+    }
+
+    const handleForfeitMatch = (match: MatchWrapper) => {
+        setForfeitMatch(match)
+    }
+
+    const changePlayer = async (playerKey: string, playerId: string) => {
+        const updatedExtraData = {
+            ...extraData,
+            [playerKey]: playerId
+        };
+
+        const sendMatch: Match = {
+            id: match.match.id,
+            tournament_table_id: match.match.tournament_table_id,
+            type: match.match.type,
+            round: match.match.round,
+            p1_id: match.match.p1_id,
+            p2_id: match.match.p2_id,
+            winner_id: match.match.winner_id,
+            order: match.match.order,
+            sport_type: match.match.sport_type,
+            location: match.match.location,
+            state: match.match.state,
+            start_date: match.match.start_date,
+            bracket: match.match.bracket,
+            forfeit: match.match.forfeit,
+            extra_data: updatedExtraData,
+            topCoord: 0,
+            table_type: match.match.table_type,
+        };
+
+        await updateMatch(sendMatch);
+    }
+
+    const handlePlayerChange = async (
+        currentKey: string,
+        playerId: string,
+        playerKeys: PlayerKey[],
+        pairKeys: PlayerKey[]
+    ) => {
+        try {
+            const currentExtraData = { ...extraData };
+
+            const isPlayerKey = playerKeys.includes(currentKey as PlayerKey);
+            const isPairKey = pairKeys.includes(currentKey as PlayerKey);
+
+            let existingAssignment: string | undefined;
+
+            if (isPlayerKey) {
+                existingAssignment = playerKeys.find((key) =>
+                    key !== currentKey && currentExtraData[key] === playerId
+                );
+            } else if (isPairKey) {
+                existingAssignment = pairKeys.find((key) =>
+                    key !== currentKey && currentExtraData[key] === playerId
+                );
+            }
+
+            if (existingAssignment && playerId !== '') {
+                const completeUpdatedExtraData = {
+                    ...currentExtraData,
+                    [existingAssignment]: '',
+                    [currentKey]: playerId
+                };
+
+                const sendMatch: Match = {
+                    ...match.match,
+                    extra_data: completeUpdatedExtraData,
+                    topCoord: 0,
+                };
+
+                await updateMatch(sendMatch);
+            } else {
+                await changePlayer(currentKey, playerId);
+            }
+        } catch (error) {
+            toast.error("Failed to assign player")
+        }
+    };
+
+
+    const handleCaptainChange = async (value: string, captainKey: string) => {
+        try {
+            const updatedExtraData = {
+                ...extraData,
+                [captainKey]: value
+            };
+
+            const sendMatch: Match = {
+                id: match.match.id,
+                tournament_table_id: match.match.tournament_table_id,
+                type: match.match.type,
+                round: match.match.round,
+                p1_id: match.match.p1_id,
+                p2_id: match.match.p2_id,
+                winner_id: match.match.winner_id,
+                order: match.match.order,
+                sport_type: match.match.sport_type,
+                location: match.match.location,
+                state: match.match.state,
+                start_date: match.match.start_date,
+                bracket: match.match.bracket,
+                forfeit: match.match.forfeit,
+                extra_data: updatedExtraData,
+                topCoord: 0,
+                table_type: match.match.table_type,
+            };
+
+            await updateMatch(sendMatch);
+        } catch (error) {
+            toast.error("Failed to assign captain")
+        }
+    };
+
+    const handleMatchStart = async () => {
+        try {
+            await startMatch()
+            toast.success("Match started successfully")
+        } catch (error) {
+            toast.error("Failed to start match")
+            console.log(error)
+        }
+    }
+
+    const handleMatchFinish = async () => {
+        try {
+            const match_payload: Match = {
+                ...match.match,
+                winner_id: "finished",
+                extra_data: {
+                    ...match.match.extra_data,
+                    table_referee: tableReferee,
+                    head_referee: headReferee,
+                    captain_a: match.match.extra_data.captain_a,
+                    captain_b: match.match.extra_data.captain_b,
+                    notes,
+                }
+            }
+            await updateMatch(match_payload)
+            toast.success("Match finished successfully")
+            setForfeitMatch(null)
+        } catch (error) {
+            console.log(error)
+            toast.error("Failed to finish match")
+        }
+    }
+
+    const [playerMatches, setPlayerMatches] = useState<MatchWrapper[]>([])
+
+    useEffect(() => {
+        if (childMatches && childMatches.data) {
+            setPlayerMatches(childMatches.data)
+        }
+        if (match.match.extra_data.head_referee) {
+            setHeadReferee(match.match.extra_data.head_referee)
+        }
+        if (match.match.extra_data.table_referee) {
+            setTableReferee(match.match.extra_data.table_referee)
+        }
+        if (match.match.extra_data.notes) {
+            setNotes(match.match.extra_data.notes)
+        }
+    }, [childMatches, match.match.extra_data])
+
+    const ProtocolModalValues: ProtocolModalContextValues = {
+        playerMatches,
+        isOpen,
+        tournament_id,
+        player_count,
+        match,
+        notes,
+        headReferee,
+        tableReferee,
+        forfeitMatch,
+        isLoading,
+        childMatches,
+        setForfeitMatch,
+        setHeadReferee,
+        setTableReferee,
+        setNotes,
+        onClose,
+        handleSwitchParticipants,
+        handlePlayerChange,
+        handleCaptainChange,
+        handleMatchStart,
+        handleMatchFinish,
+        handleForfeitMatch
+    }
+
+    return (
+        <ProtocolModalContext.Provider value={ProtocolModalValues}>
+            {children}
+        </ProtocolModalContext.Provider>
+    )
+}
+
+export const useProtocolModal = () => {
+    const context = useContext(ProtocolModalContext)
+    if (context === undefined) {
+        throw new Error("ProtocolModal must be used within a useProtocolModal")
+    }
+    return context
+}

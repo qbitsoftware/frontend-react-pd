@@ -22,8 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TableTennisProtocolModal } from "./tt-modal";
-import { TableTennisProtocolModalTest } from "./tt-modal-test";
 import ReGrouping from "./regrouping";
 import TimeEditingModal from "./time-editing-modal";
 import { createColumns } from "./matches-table-columns";
@@ -32,11 +30,14 @@ import { MatchState, MatchWrapper } from "@/types/matches";
 import { TournamentTable } from "@/types/groups";
 import ResetSeeding from "./reset-seeding";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ProtocolModalProvider } from "@/providers/protocolProvider";
+import { TableTennisProtocolModal } from "./tt-modal/tt-modal-new";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];
   tournament_id: number;
   tournament_table: TournamentTable;
+  player_count: number;
 }
 
 type FilterOptions = MatchState | "all";
@@ -45,6 +46,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
   data,
   tournament_id,
   tournament_table,
+  player_count
 }: MatchesTableProps) => {
   const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false);
   const [isTimeEditingModalOpen, setIsTimeEditingModalOpen] = useState(false);
@@ -110,31 +112,31 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
 
   if (data.length > 0) {
     return (
-        <Card className="w-full border-stone-100">
+      <Card className="w-full border-stone-100">
         <CardHeader className="flex flex-row w-full items-center justify-between space-y-0">
-            <Select
-              value={filterValue}
-              onValueChange={(value: FilterOptions) => setFilterValue(value)}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter matches" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">
-                  {t("admin.tournaments.filters.all_games")}
-                </SelectItem>
-                <SelectItem value={MatchState.FINISHED}>
-                  {t("admin.tournaments.filters.winner_declared")}
-                </SelectItem>
-                <SelectItem value={MatchState.ONGOING}>
-                  {t("admin.tournaments.filters.ongoing_games")}
-                </SelectItem>
-                <SelectItem value={MatchState.CREATED}>
-                  {t("admin.tournaments.filters.upcoming_games")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <ResetSeeding tournament_id={tournament_id} table_id={tournament_table.id} />
+          <Select
+            value={filterValue}
+            onValueChange={(value: FilterOptions) => setFilterValue(value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter matches" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("admin.tournaments.filters.all_games")}
+              </SelectItem>
+              <SelectItem value={MatchState.FINISHED}>
+                {t("admin.tournaments.filters.winner_declared")}
+              </SelectItem>
+              <SelectItem value={MatchState.ONGOING}>
+                {t("admin.tournaments.filters.ongoing_games")}
+              </SelectItem>
+              <SelectItem value={MatchState.CREATED}>
+                {t("admin.tournaments.filters.upcoming_games")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <ResetSeeding tournament_id={tournament_id} table_id={tournament_table.id} />
 
           {tournament_table.type == "champions_league" && (
             <div className="flex gap-4">
@@ -167,129 +169,114 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
         </CardHeader>
         <CardContent>
           <div className="rounded-md border" >
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id} className="whitespace-nowrap">
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id} className="whitespace-nowrap">
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className={cn(
-                      "!h-auto",
-                      row.original.match.state === MatchState.ONGOING &&
-                        "bg-green-100"
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell, cellIndex) => {
-                      if (cell.column.id === "actions") {
-                        return (
-                          <TableCell key={cellIndex}>
-                            <Button
-                              disabled={
-                                row.original.p1.id == "" ||
-                                row.original.p2.id == ""
-                              }
-                              variant="outline"
-                              onClick={() => handleRowClick(row.original)}
-                            >
-                              {t("admin.tournaments.matches.table.modify")}
-                            </Button>
-                          </TableCell>
-                        );
-                      }
-                      if (cell.column.id === "p1_score") {
-                        return (
-                          <TableCell key={cellIndex} className="text-center">
-                            {row.original.match.extra_data.team_1_total}
-                          </TableCell>
-                        );
-                      }
-
-                      if (cell.column.id === "p2_score") {
-                        return (
-                          <TableCell key={cellIndex} className="text-center">
-                            {row.original.match.extra_data.team_2_total}
-                          </TableCell>
-                        );
-                      }
-
-                      return (
-                        <TableCell
-                          className="py-0 !h-auto w-auto whitespace-nowrap"
-                          key={cell.id}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
+                        </TableHead>
                       );
                     })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          </div>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className={cn(
+                        "!h-auto",
+                        row.original.match.state === MatchState.ONGOING &&
+                        "bg-green-100"
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell, cellIndex) => {
+                        if (cell.column.id === "actions") {
+                          return (
+                            <TableCell key={cellIndex}>
+                              <Button
+                                disabled={
+                                  row.original.p1.id == "" ||
+                                  row.original.p2.id == ""
+                                }
+                                variant="outline"
+                                onClick={() => handleRowClick(row.original)}
+                              >
+                                {t("admin.tournaments.matches.table.modify")}
+                              </Button>
+                            </TableCell>
+                          );
+                        }
+                        if (cell.column.id === "p1_score") {
+                          return (
+                            <TableCell key={cellIndex} className="text-center">
+                              {row.original.match.extra_data.team_1_total}
+                            </TableCell>
+                          );
+                        }
 
-          {selectedMatch &&
-            selectedMatch.match.table_type == "champions_league" && (
-              <TableTennisProtocolModal
-                tournament_id={tournament_id}
-                match={selectedMatch}
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-              />
-            )}
-          {selectedMatch &&
-            (selectedMatch.match.table_type === "round_robin_full_placement" ||
-              (!tournament_table.solo &&
-                selectedMatch.match.table_type != "champions_league")) && (
-              <TableTennisProtocolModalTest
-                tournament_id={tournament_id}
-                match={selectedMatch}
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-              />
-            )}
-          {selectedMatch &&
-            selectedMatch.match.table_type != "champions_league" &&
-            selectedMatch.match.table_type != "round_robin_full_placement" &&
-            tournament_table.solo && (
-              <MatchDialog
-                tournament_id={tournament_id}
-                match={selectedMatch}
-                open={isOpen}
-                onClose={() => setIsOpen(false)}
-              />
-            )}
+                        if (cell.column.id === "p2_score") {
+                          return (
+                            <TableCell key={cellIndex} className="text-center">
+                              {row.original.match.extra_data.team_2_total}
+                            </TableCell>
+                          );
+                        }
+
+                        return (
+                          <TableCell
+                            className="py-0 !h-auto w-auto whitespace-nowrap"
+                            key={cell.id}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          {selectedMatch
+            && tournament_table.solo
+            ? <MatchDialog
+              open={isOpen}
+              onClose={() => setIsOpen(false)}
+              match={selectedMatch}
+              tournament_id={tournament_id}
+            /> : selectedMatch && !tournament_table.solo &&
+            <ProtocolModalProvider
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              tournament_id={tournament_id}
+              match={selectedMatch}
+              player_count={player_count}
+            >
+              <TableTennisProtocolModal />
+            </ProtocolModalProvider>}
         </CardContent>
         <ReGrouping
           tournament_id={tournament_id}

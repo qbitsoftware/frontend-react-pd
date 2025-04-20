@@ -79,7 +79,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         handleAddOrUpdateParticipant(
                                             editForm.getValues(),
                                             participant.id)
-                                        console.log(participant)
                                     }}
                                 >
                                     <Pencil className="w-4 h-4 mr-2" />
@@ -92,7 +91,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                 <DropdownMenuItem
                                     onClick={() => {
                                         handleEditParticipant(editForm, participant)
-                                        console.log(participant)
 
                                     }
                                     }

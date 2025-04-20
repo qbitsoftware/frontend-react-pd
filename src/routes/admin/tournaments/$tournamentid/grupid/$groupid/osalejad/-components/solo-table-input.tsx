@@ -66,8 +66,6 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                         form.setValue("name", e.target.value);
                                     }
                                     form.setValue("group", groupId)
-                                    console.log("groupanems", groupNames)
-                                    console.log("setting groupName", groupNames[groupId])
                                     form.setValue("group_name", groupNames[groupId])
                                     if (isPlayerChosen) {
                                         setIsPlayerChosen(false);
@@ -116,7 +114,6 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                     setSelectedGroupInput(groupId)
                                 }}
                                 onBlur={() => {
-                                    console.log("blurring")
                                     setSearchTerm("")
                                     setPopoverOpen(false)
                                 }}

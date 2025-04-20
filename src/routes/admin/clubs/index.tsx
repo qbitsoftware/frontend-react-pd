@@ -47,8 +47,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQueryClient } from "@tanstack/react-query";
 import { Club } from "@/types/clubs";
-import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/clubs/")({
   component: RouteComponent,
@@ -61,8 +61,6 @@ function RouteComponent() {
   const updateClubMutation = useUpdateClub();
   const deleteClubMutation = useDeleteClub();
   const { t } = useTranslation();
-
-  const { toast } = useToast();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -105,18 +103,12 @@ function RouteComponent() {
             website: "",
             image_url: "",
           });
-          toast({
-            title: t("admin.clubs.toast.club_created"),
-          });
+          toast.success(t("admin.clubs.toast.club_created"));
         },
       });
     } catch (error) {
       void error;
-      toast({
-        title: "Error",
-        description: t("admin.clubs.toast.club_created_error"),
-        variant: "destructive",
-      });
+      toast.error(`Error: ${t("admin.clubs.toast.club_created_error")}`)
     }
   };
 
@@ -129,18 +121,12 @@ function RouteComponent() {
           queryClient.invalidateQueries({ queryKey: ["clubs_query"] });
           setIsEditDialogOpen(false);
           setSelectedClub(null);
-          toast({
-            title: t("admin.clubs.toast.club_updated"),
-          });
+          toast.success(t("admin.clubs.toast.club_updated"))
         },
       });
     } catch (error) {
       void error;
-      toast({
-        title: "Error",
-        description: t("admin.clubs.toast.club_updated_error"),
-        variant: "destructive",
-      });
+      toast.error(`Error: ${t("admin.clubs.toast.club_updated_error")}`)
     }
   };
 
@@ -154,18 +140,12 @@ function RouteComponent() {
           queryClient.invalidateQueries({ queryKey: ["clubs_query"] });
           setIsDeleteDialogOpen(false);
           setSelectedClub(null);
-          toast({
-            title: t("admin.clubs.toast.club_deleted"),
-          });
+          toast.success(t("admin.clubs.toast.club_deleted"));
         },
       });
     } catch (error) {
       void error;
-      toast({
-        title: "Error",
-        description: t("admin.clubs.toast.club_deleted_error"),
-        variant: "destructive",
-      });
+      toast.error(`Error: ${t("admin.clubs.toast.club_deleted_error")}`)
     }
   };
 
