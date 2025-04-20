@@ -28,19 +28,17 @@ import { useToast } from "@/hooks/use-toast";
 import {
   UseGetChildMatchesQuery,
   UsePatchMatch,
+  UsePatchMatchSwitch,
   UseStartMatch,
 } from "@/queries/match";
-import {
-  Match,
-  MatchWrapper,
-  Player,
-  TableTennisExtraData,
-} from "@/types/types";
-import { X } from "lucide-react";
+import { GitCompareArrows, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MatchSets } from "./match-sets";
 import Forfeit from "./forfeit";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Match, MatchWrapper, TableTennisExtraData } from "@/types/matches";
+import { Player } from "@/types/players";
+import { ProtocolDownloadButton } from "./download-protocol";
 
 interface ProtocolModalProps {
   isOpen: boolean;
@@ -61,12 +59,12 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const { data: childMathes, isLoading } = UseGetChildMatchesQuery(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
   const useStartMatchMutation = UseStartMatch(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
 
   const [notes, setNotes] = useState<string>("");
@@ -74,7 +72,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const [head_referee, setMainReferee] = useState<string>("");
   const [captainTeam1, setCaptainTeam1] = useState<string>("");
   const [captainTeam2, setCaptainTeam2] = useState<string>("");
-  const [table, setTableNumber] = useState<number>(0);
+  const [table, setTableNumber] = useState<string>("");
   const [isForfeitOpen, setIsForfeitOpen] = useState(false);
   const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
 
@@ -84,7 +82,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     table_referee: match.match.extra_data.table_referee || "",
     head_referee: match.match.extra_data.head_referee || "",
     notes: match.match.extra_data.notes || "",
-    table: match.match.extra_data.table || 0,
+    table: match.match.extra_data.table || "",
   });
 
   const EMPTY_PLAYER: Player = {
@@ -113,7 +111,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const createEmptyPlayers = (
     count: number,
     team_number: number,
-    extraData: TableTennisExtraData,
+    extraData: TableTennisExtraData
   ) => {
     const playerFields1: (keyof TableTennisExtraData)[] = [
       "player_a_id",
@@ -142,8 +140,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
       const selectedPlayer = playerId
         ? (team_number === 1 ? match.p1.players : match.p2.players).find(
-          (player) => player.id === playerId,
-        )
+            (player) => player.id === playerId
+          )
         : null;
       return (
         selectedPlayer || {
@@ -158,10 +156,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   };
 
   const [team1SelectedPlayers, setTeam1SelectedPlayers] = useState<Player[]>(
-    [],
+    []
   );
   const [team2SelectedPlayers, setTeam2SelectedPlayers] = useState<Player[]>(
-    [],
+    []
   );
 
   useEffect(() => {
@@ -174,13 +172,13 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       prevValuesRef.current.captainTeam1 = me.captain_a || "";
       prevValuesRef.current.captainTeam2 = me.captain_b || "";
       prevValuesRef.current.notes = me.notes || "";
-      prevValuesRef.current.table = me.table || 0;
+      prevValuesRef.current.table = me.table || "";
       setTableReferee(me.table_referee || "");
       setMainReferee(me.head_referee || "");
       setCaptainTeam1(me.captain_a || "");
       setCaptainTeam2(me.captain_b || "");
       setNotes(me.notes || "");
-      setTableNumber(me.table || 0);
+      setTableNumber(me.table || "");
     }
   }, [isOpen, match.match.extra_data]);
 
@@ -232,8 +230,8 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           player_w_id: team2SelectedPlayers[4]?.id,
           ...Object.fromEntries(
             Object.entries(hasChanges).filter(
-              ([, value]) => value !== undefined,
-            ),
+              ([, value]) => value !== undefined
+            )
           ),
         };
 
@@ -264,7 +262,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const usePatchMatch = UsePatchMatch(
     tournament_id,
     match.match.tournament_table_id,
-    match.match.id,
+    match.match.id
   );
 
   const handleSubmit = async (match: Match) => {
@@ -275,6 +273,37 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       //   to: location.pathname,
       //   replace: true,
       // });
+    } catch (error) {
+      void error;
+      errorToast("Something went wrong");
+    }
+  };
+
+  const usePatchMatchSwitch = UsePatchMatchSwitch(
+    tournament_id,
+    match.match.tournament_table_id,
+    match.match.id
+  );
+
+  const switchParticipants = async () => {
+    const extra_data: TableTennisExtraData = {
+      ...match.match.extra_data,
+      table_referee,
+      head_referee,
+      notes,
+      table,
+      player_a_id: team1SelectedPlayers[0].id,
+      player_b_id: team1SelectedPlayers[1].id,
+      player_d_id: team1SelectedPlayers[3].id,
+      player_e_id: team1SelectedPlayers[4].id,
+      player_x_id: team2SelectedPlayers[0].id,
+      player_y_id: team2SelectedPlayers[1].id,
+      player_v_id: team2SelectedPlayers[3].id,
+      player_w_id: team2SelectedPlayers[4].id,
+    };
+    match.match.extra_data = extra_data;
+    try {
+      await usePatchMatchSwitch.mutateAsync(match.match);
     } catch (error) {
       void error;
       errorToast("Something went wrong");
@@ -296,6 +325,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state: match.match.state,
       extra_data,
       topCoord: 0,
       table_type: match.match.table_type,
@@ -316,7 +346,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   const handlePlayerChange = async (
     team: number,
     index: number,
-    playerId: string,
+    playerId: string
   ) => {
     const selectedPlayer = (
       team === 1 ? match.p1.players : match.p2.players
@@ -331,7 +361,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     if (team == 1) {
       if (index <= 2) {
         const oldIndex = newTeam1SelectedPlayers.findIndex(
-          (player) => player.id === playerId,
+          (player) => player.id === playerId
         );
         if (oldIndex !== -1) {
           const resetPlayer = {
@@ -357,7 +387,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     } else if (team == 2) {
       if (index <= 2) {
         const oldIndex = newTeam2SelectedPlayers.findIndex(
-          (player) => player.id === playerId,
+          (player) => player.id === playerId
         );
         if (oldIndex !== -1) {
           const resetPlayer = {
@@ -409,6 +439,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
+      state: match.match.state,
       start_date: match.match.start_date,
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
@@ -465,23 +496,37 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
 
   // Helper function to get available players and filtering them
   const getAvailablePlayers = (teamNumber: number) => {
-    const playersArray = teamNumber === 1 ? match.p1?.players : match.p2?.players;
+    const playersArray =
+      teamNumber === 1 ? match.p1?.players : match.p2?.players;
 
-    if (!playersArray || !Array.isArray(playersArray) || playersArray.length === 0) {
+    if (
+      !playersArray ||
+      !Array.isArray(playersArray) ||
+      playersArray.length === 0
+    ) {
       return [];
     }
 
-    return playersArray.filter(player =>
-      player && player.id && (player.first_name || player.last_name)
+    return playersArray.filter(
+      (player) => player && player.id && (player.first_name || player.last_name)
     );
   };
 
   // Player selection component for reuse
-  const PlayerSelector = ({ team, index, label }: { team: number, index: number, label: string }) => {
+  const PlayerSelector = ({
+    team,
+    index,
+    label,
+  }: {
+    team: number;
+    index: number;
+    label: string;
+  }) => {
     const players = getAvailablePlayers(team);
-    const selectedValue = team === 1
-      ? team1SelectedPlayers[index]?.id?.toString()
-      : team2SelectedPlayers[index]?.id?.toString();
+    const selectedValue =
+      team === 1
+        ? team1SelectedPlayers[index]?.id?.toString()
+        : team2SelectedPlayers[index]?.id?.toString();
 
     return (
       <div className="flex items-center space-x-2">
@@ -495,7 +540,7 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
           </SelectTrigger>
           <SelectContent>
             {players.length > 0 ? (
-              players.map(player => (
+              players.map((player) => (
                 <SelectItem
                   key={player.id}
                   value={player.id.toString()}
@@ -518,14 +563,22 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
   // Match order mapping
   const getMatchOrderLabel = (order: number) => {
     switch (order) {
-      case 1: return "A-Y";
-      case 2: return "B-X";
-      case 3: return "C-Z";
-      case 4: return "DE-VW";
-      case 5: return "A-X";
-      case 6: return "C-Y";
-      case 7: return "B-Z";
-      default: return `${order}`;
+      case 1:
+        return "A-Y";
+      case 2:
+        return "B-X";
+      case 3:
+        return "C-Z";
+      case 4:
+        return "DE-VW";
+      case 5:
+        return "A-X";
+      case 6:
+        return "C-Y";
+      case 7:
+        return "B-Z";
+      default:
+        return `${order}`;
     }
   };
 
@@ -539,18 +592,13 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
               <span className="font-bold">{match.p1.name}</span>
               <span>vs</span>
               <span className="font-bold">{match.p2.name}</span>
+              <ProtocolDownloadButton
+                tournament_id={tournament_id}
+                group_id={match.match.tournament_table_id}
+                match_id={match.match.id}
+              />
             </DialogTitle>
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
-                <span className="text-xs text-gray-600">Laud:</span>
-                <Input
-                  type="number"
-                  min="0"
-                  className="w-12 h-6 text-sm"
-                  onChange={(e) => setTableNumber(Number(e.target.value))}
-                  value={!table ? "" : table}
-                />
-              </div>
               <X className="cursor-pointer h-5 w-5" onClick={onClose} />
             </div>
           </div>
@@ -559,28 +607,44 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
         <Tabs
           defaultValue="players"
           className="flex-grow flex flex-col min-h-0"
-        // onValueChange={setActiveTab}
+          // onValueChange={setActiveTab}
         >
-          <TabsList className="mx-auto mt-2 space-x-1 p-1 bg-gray-100 rounded-lg w-auto">
+          <TabsList className="mx-auto my-2 space-x-1 p-1 bg-stone-200/40 rounded-lg w-auto">
             <TabsTrigger
               value="players"
-              className="px-3 py-1.5 text-sm rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
+              className="py-2 px-4 rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
             >
               <span>Mängijad</span>
             </TabsTrigger>
             <TabsTrigger
               value="scores"
-              className="px-3 py-1.5 text-sm rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
+              className="py-2 px-4 rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
             >
               <span>Skoorid</span>
             </TabsTrigger>
           </TabsList>
 
           <div className="flex-grow overflow-hidden flex flex-col min-h-0">
-            <TabsContent value="players" className="flex-grow p-3 md:p-4 overflow-auto m-0">
+            <TabsContent
+              value="players"
+              className="flex-grow p-3 md:p-4 overflow-auto m-0"
+            >
+              <div className="flex items-center justify-center w-full mb-1">
+                <Button
+                  onClick={switchParticipants}
+                  variant="outline"
+                  size="sm"
+                  className=""
+                >
+                  <GitCompareArrows size={16} />
+                </Button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[1, 2].map((team) => (
-                  <div key={team} className="space-y-3 bg-gray-50 p-3 rounded-lg">
+                  <div
+                    key={team}
+                    className="space-y-3 bg-gray-50 p-3 rounded-lg"
+                  >
                     <div className="flex justify-between items-center">
                       <h5 className="font-bold text-sm">
                         {team === 1 ? match.p1.name : match.p2.name}
@@ -602,28 +666,42 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                     </div>
 
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-gray-500 pl-1">Üksikmäng</div>
+                      <div className="text-xs font-semibold text-gray-500 pl-1">
+                        Üksikmäng
+                      </div>
                       <div className="space-y-1.5">
                         {[0, 1, 2].map((index) => (
                           <PlayerSelector
                             key={index}
                             team={team}
                             index={index}
-                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(88 + index)}
+                            label={
+                              team === 1
+                                ? String.fromCharCode(65 + index)
+                                : String.fromCharCode(88 + index)
+                            }
                           />
                         ))}
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className="text-xs font-semibold text-gray-500 pl-1">Paarismäng</div>
+                      <div className="text-xs font-semibold text-gray-500 pl-1">
+                        Paarismäng
+                      </div>
                       <div className="space-y-1.5">
                         {[3, 4].map((index) => (
                           <PlayerSelector
                             key={index}
                             team={team}
                             index={index}
-                            label={team === 1 ? String.fromCharCode(65 + index) : String.fromCharCode(team === 1 ? 65 + index : 80 + index)}
+                            label={
+                              team === 1
+                                ? String.fromCharCode(65 + index)
+                                : String.fromCharCode(
+                                    team === 1 ? 65 + index : 80 + index
+                                  )
+                            }
                           />
                         ))}
                       </div>
@@ -652,17 +730,30 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
               </div>
             </TabsContent>
 
-            <TabsContent value="scores" className="flex-grow p-0 overflow-auto m-0 flex flex-col min-h-0">
+            <TabsContent
+              value="scores"
+              className="flex-grow p-0 overflow-auto m-0 flex flex-col min-h-0"
+            >
               <ScrollArea className="flex-grow overflow-auto">
                 <div className="p-3 md:p-4">
                   {/* Team Score Summary */}
                   <div className="flex justify-around items-center mb-4 px-1">
                     <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium">{match.p1.name}</span>
+                      <span className="text-sm font-medium">
+                        {match.p1.name}
+                      </span>
                       <span className="text-2xl font-bold">
-                        {!isLoading && childMathes && childMathes.data ?
-                          childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p1.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
+                        {!isLoading && childMathes && childMathes.data
+                          ? childMathes.data.reduce(
+                              (total, match) =>
+                                total +
+                                (match.match.winner_id === match.p1.id &&
+                                match.match.winner_id != ""
+                                  ? 1
+                                  : 0),
+                              0
+                            )
+                          : 0}
                       </span>
                     </div>
 
@@ -671,26 +762,53 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                     </div>
 
                     <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium">{match.p2.name}</span>
+                      <span className="text-sm font-medium">
+                        {match.p2.name}
+                      </span>
                       <span className="text-2xl font-bold">
-                        {!isLoading && childMathes && childMathes.data ?
-                          childMathes.data.reduce((total, match) =>
-                            total + ((match.match.winner_id === match.p2.id && match.match.winner_id != "") ? 1 : 0), 0) : 0}
+                        {!isLoading && childMathes && childMathes.data
+                          ? childMathes.data.reduce(
+                              (total, match) =>
+                                total +
+                                (match.match.winner_id === match.p2.id &&
+                                match.match.winner_id != ""
+                                  ? 1
+                                  : 0),
+                              0
+                            )
+                          : 0}
                       </span>
                     </div>
                   </div>
 
                   <div className="overflow-auto border rounded-lg shadow-sm">
-                    <Table className="w-full overflow-auto" style={{ minWidth: "500px" }}>
+                    <Table
+                      className="w-full overflow-auto"
+                      style={{ minWidth: "500px" }}
+                    >
                       <TableHeader>
                         <TableRow className="bg-gray-50 hover:bg-gray-50">
-                          <TableHead className="text-xs font-medium p-2 text-left w-16">Mäng</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S1</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S2</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S3</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S4</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-12">S5</TableHead>
-                          <TableHead className="text-xs font-medium p-2 text-center w-24">Tegevused</TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-left w-16">
+                            Mäng
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S1
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S2
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S3
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S4
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-12">
+                            S5
+                          </TableHead>
+                          <TableHead className="text-xs font-medium p-2 text-center w-24">
+                            Tegevused
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -698,7 +816,10 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                           childMathes &&
                           childMathes.data &&
                           childMathes.data.map((player_match) => (
-                            <TableRow key={player_match.match.id} className="hover:bg-gray-50">
+                            <TableRow
+                              key={player_match.match.id}
+                              className="hover:bg-gray-50"
+                            >
                               <TableCell className="text-xs font-medium p-2">
                                 {getMatchOrderLabel(player_match.match.order)}
                               </TableCell>
@@ -708,7 +829,9 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
                               />
                               <TableCell className="p-2">
                                 <Button
-                                  onClick={() => handleForfeitMatch(player_match)}
+                                  onClick={() =>
+                                    handleForfeitMatch(player_match)
+                                  }
                                   className="text-xs h-6 px-2 w-full"
                                   size="sm"
                                   variant="outline"
@@ -782,4 +905,3 @@ export const TableTennisProtocolModal: React.FC<ProtocolModalProps> = ({
     </Dialog>
   );
 };
-

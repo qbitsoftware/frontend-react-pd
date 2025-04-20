@@ -1,14 +1,22 @@
 import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
-import { EliminationBracket } from "@/types/types";
 import MatchComponent from "./match";
+import { EliminationBracket } from "@/types/brackets";
 
 interface BracketProps {
   starting_x: number;
   starting_y: number;
   data: EliminationBracket;
+  isEditingMode?: boolean;
+  selectedPlayer?: {
+    matchId: string | number;
+    playerId: string | number;
+    position: "home" | "away";
+  } | null;
+  onPlayerSelect?: (matchId: string, playerId: string, position: "home" | "away") => void;
+
 }
 
-const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
+const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false, selectedPlayer = null, onPlayerSelect = () => { } }: BracketProps) => {
   const WIDTH = 220;
   const HEIGTH = 60;
   const VERTICAL_GAP = 30;
@@ -57,6 +65,9 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
               starting_x={starting_x}
               starting_y={starting_y}
               topCoord={topCoord}
+              isEditingMode={isEditingMode}
+              selectedPlayer={selectedPlayer}
+              onPlayerSelect={onPlayerSelect}
             />
           );
         })}
@@ -103,13 +114,18 @@ const SingleElimBracket = ({ data, starting_x, starting_y }: BracketProps) => {
                   fill="none"
                 />
               </g>
+
             );
           })}
         </svg>
+        {isEditingMode && (
+          <div className="fixed bottom-4 right-4 bg-stone-700 text-white px-4 py-2 rounded shadow-lg z-50">
+            Editing Mode: {selectedPlayer ? "Player Selected" : "Select Player"}
+          </div>
+        )}
       </div>
     );
   }
 };
 
 export default SingleElimBracket;
-

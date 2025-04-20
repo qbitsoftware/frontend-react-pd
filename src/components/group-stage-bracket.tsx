@@ -17,13 +17,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { RoundRobins, RoundRobinBracket, MatchWrapper } from "@/types/types";
 import { useTranslation } from "react-i18next";
+import { RoundRobinBracket, RoundRobins } from "@/types/brackets";
+import { MatchWrapper } from "@/types/matches";
 
 interface GroupStageBracketProps {
     brackets: RoundRobins;
     onMatchSelect?: (match: MatchWrapper) => void;
-    name: String;
+    name: string;
 }
 
 export default function GroupStageBracket({

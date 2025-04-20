@@ -1,11 +1,11 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Blog } from "@/types/types";
 import { axiosInstance } from "./axiosconf";
+import { Blog } from "@/types/blogs";
 
 export interface BlogsResponse {
     data: Blog[]
     message: string
-    error: string | null
+    error: string | null   
 }
 
 export interface BlogsResponseUser {

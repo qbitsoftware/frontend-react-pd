@@ -4,10 +4,8 @@ import { Link, useParams, useLocation } from "@tanstack/react-router";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, formatDateString } from "@/lib/utils";
 import { useTournament } from "./tournament-provider";
-import { TournamentTable } from "@/types/types";
 import { useTranslation } from "react-i18next";
-
-
+import { TournamentTable } from "@/types/groups";
 
 interface Props {
   tournament_tables: TournamentTable[]
@@ -60,7 +58,7 @@ const Navbar = ({ tournament_tables }: Props) => {
       </div>
       <div className="px-2 md:px-12 ">
         <Tabs value={activeTab} className="w-full flex justify-center md:justify-start">
-          <TabsList className="flex-wrap space-x-2">
+          <TabsList className="flex-wrap space-x-1">
             {filteredNavLinks.map((link) => (
               <Link
                 className=""

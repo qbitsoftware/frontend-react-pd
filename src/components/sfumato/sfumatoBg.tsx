@@ -26,7 +26,7 @@ const SfumatoBackground = ({ children, className = '' }: SfumatoBackgroundProps)
       // Use more vibrant, noticeable colors
       const r1 = random(100, 255);
       const g1 = random(100, 255);
-      const b1 = random(46, 87); // Emphasize green
+      const b1 = random(180, 215); // Emphasize green
       
       const r2 = random(50, 200);
       const g2 = random(50, 200);

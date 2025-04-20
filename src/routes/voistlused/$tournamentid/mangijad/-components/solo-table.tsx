@@ -7,12 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Participant } from "@/types/types";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import React, { useState } from "react";
 import placeholderImg from "@/assets/placheolderImg.svg";
 import { useTranslation } from "react-i18next";
 import { ImageModal } from "./image-modal";
+import { Participant } from "@/types/participants";
 
 interface SoloTableProps {
   participants: Participant[] | null;

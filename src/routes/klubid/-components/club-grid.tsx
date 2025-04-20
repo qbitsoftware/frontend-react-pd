@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/card";
 import { ClubProfileModal } from "./club-profile-modal";
 import { useState } from "react";
-import { Club } from "@/types/types";
 import { ChevronRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Club } from "@/types/clubs";
 
 interface ClubTableProps {
   clubs: Club[];

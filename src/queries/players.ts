@@ -1,4 +1,4 @@
-import { Profile, User } from "@/types/types"
+import { Profile, User } from "@/types/users"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
 

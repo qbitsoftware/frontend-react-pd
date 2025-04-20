@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation, queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Match, MatchTimeUpdate, MatchWrapper, Participant } from "@/types/types"
+import { Match, MatchTimeUpdate, MatchWrapper } from "@/types/matches"
+import { Participant } from "@/types/participants"
 
 export interface MatchesResponse {
     data: MatchWrapper[] | null
@@ -32,6 +33,7 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
             queryClient.invalidateQueries({ queryKey: ['bracket', id] })
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.invalidateQueries({ queryKey: ['venues', id] })
             // queryClient.resetQueries({ queryKey: ['matches', group_id] })
         }
     })

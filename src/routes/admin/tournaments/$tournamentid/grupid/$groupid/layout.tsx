@@ -1,12 +1,12 @@
 "use client"
 
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router"
-import type { ErrorResponse } from "@/types/types"
 import { UseGetTournamentTable } from "@/queries/tables"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTranslation } from "react-i18next"
 import ErrorPage from "@/components/error"
+import { ErrorResponse } from "@/types/errors"
 
 export const Route = createFileRoute("/admin/tournaments/$tournamentid/grupid/$groupid")({
   component: RouteComponent,
@@ -51,8 +51,8 @@ function RouteComponent() {
 
 
   return (
-    <div className="px-2 sm:px-8">
-      <div className="flex flex-col py-6 lg:flex-row justify-between items-center gap-2 sticky top-0 bg-white transition-all duration-200  border-b border-gray-200 lg:h-[4rem] z-10">
+    <div className="">
+      <div className="flex flex-col py-6 lg:flex-row justify-between items-center gap-2 sticky top-0 bg-white transition-all duration-200  lg:h-[4rem] z-10">
         <div>
           <h4 className="font-semibold">{table_data.data.class}</h4>
         </div>
@@ -67,7 +67,7 @@ function RouteComponent() {
                 <TabsTrigger
                   value={tab.value}
                   className={cn(
-                    "w-full sm:w-[8rem]",
+                    "w-full sm:w-[7rem] py-[6px]",
                     currentTab === tab.value && "bg-secondary text-white hover:bg-secondary/90",
                     currentTab !== tab.value && "hover:bg-secondary/10",
                   )}
@@ -80,7 +80,7 @@ function RouteComponent() {
         </Tabs>
       </div>
 
-      <div className="pt-4">
+      <div className="">
         <Outlet />
       </div>
     </div>

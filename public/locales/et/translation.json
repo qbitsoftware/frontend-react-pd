@@ -126,6 +126,10 @@
     "results": {
       "finished": "Lõppenud"
     },
+    "standings": {
+      "placement": "Koht",
+      "participants": "Osalejad"
+    },
     "timetable": {
       "table": "Laud",
       "search_placeholder": "Otsi nime",
@@ -149,6 +153,7 @@
     "errors": {
       "info_missing": "Turniiri info puudub",
       "no_schedule": "Ajakava puudub",
+      "standings_missing": "Kohad pole veel välja mängitud",
       "no_games": "Mänge pole selles klassis sel päeval",
       "winner_unknown": "Teadmata",
       "no_groups": "Tulemused puuduvad",
@@ -157,6 +162,7 @@
     "navbar": {
       "info": "Info",
       "timetable": "Ajakava",
+      "standings": "Kohad",
       "results": "Tulemused",
       "participants": "Osalejad",
       "gallery": "Galerii",
@@ -330,12 +336,14 @@
       "sidebar": {
         "dashboard": "Töölaud",
         "tournaments": "Turniirid",
-        "blogs": "Blogid",
-        "clubs": "Klubid"
+        "blogs": "Blogi",
+        "clubs": "Klubid",
+        "feedback": "Tagasiside"
       },
       "info": "Info",
       "groups": "Grupid",
       "media": "Meedia",
+      "tables": "Lauad",
       "images": "Pildid",
       "title": "Turniirihaldus",
       "description": "Administreerimine"
@@ -346,12 +354,13 @@
       "missing_subtitle": "Töölauda pole. Loo ja vii läbi turniire, et töölauda näha.",
       "total_tournaments": "Turniire kokku",
       "active_tournaments": "Aktiivseid turniire",
+      "users_in_db": "Mängijaid andmebaasis",
       "upcoming_tournaments": "Tulevased turniirid",
       "upcoming_tournaments_description": "Ülevaade tulevastest turniiridest",
       "recently_created_tournaments": "Hiljuti loodud turniirid",
       "recently_created_tournaments_description": "Ülevaade viimati loodud turniiridest",
-      "tournament_activity": "Turniirid kuu lõikes",
-      "tournament_activity_description": "Turniiride arv kuu lõikes",
+      "tournament_activity": "Turniirid kuude lõikes",
+      "tournament_activity_description": "Turniiride arv kuude lõikes",
       "utils": {
         "name": "Nimi",
         "status": "Staatus",
@@ -360,7 +369,7 @@
     },
     "tournaments": {
       "title": "Turniirid",
-      "description": "Halda turniire siit",
+      "description": "Turniiride loomine ja haldamine",
       "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
@@ -371,10 +380,11 @@
           "double_elimination_full_placement_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale)",
           "champions_league": "Võistkondlikud liigad",
           "free_for_all": "Tänavapinks",
-          "round_robin_full_placement": "Round Robin"
+          "round_robin_full_placement": "Round Robin (2 roundiga)",
+          "round_robin": "Round Robin"
         },
         "back": "Tagasi",
-        "edit_group": "Muuda gruppi",
+        "edit_group": "Muuda grupi seadistusi",
         "create_group": "Loo grupp",
         "title_create": "Loo uus turniir",
         "title_edit": "Muuda turniiri",
@@ -393,8 +403,8 @@
         "category_placeholder": "Sisestage kategooria",
         "number_of_tables": "Laudade arv",
         "number_of_tables_placeholder": "Sisestage laudade arv",
-        "class": "Klass",
-        "class_placeholder": "Sisestage klass",
+        "class": "Grupi nimi",
+        "class_placeholder": "Sisestage grupp",
         "tournament_size": "Tabeli suurus (osalejate/meeskondade arv)",
         "min_team_size": "Minimaalne tiimi suurus",
         "additional_information": "Lisa-informatsioon",
@@ -406,7 +416,7 @@
         },
         "end_date": "Lõppkuupäev",
         "start_date_placeholder": "Pick a date",
-        "type": "Turniiri tüüp",
+        "type": "Tabeli tüüp",
         "type_placeholder": "Vali turniiri tüüp",
         "max_team_size": "Maksimaalne tiimi suurus",
         "private": "Privaatne turniir",
@@ -415,6 +425,13 @@
         "ranking_description": "Reiting arvutatakse iga esmaspäeva hommikul",
         "team": "Meeskondadega turniir",
         "team_description": "Luba meeskondadega turniir"
+      },
+      "tables": {
+        "no_tables": "Laudu pole veel lisatud",
+        "title": "Laudade haldamine",
+        "taken": "Võetud",
+        "free": "Vaba",
+        "empty_placeholder": "Laud on mänguks vaba"
       },
       "groups": {
         "layout": {
@@ -469,8 +486,8 @@
         "title": "Turniiri grupid",
         "order": {
           "title": "Genereeri mängud",
-          "placeholder": "Järjestus",
-          "random": "Suvaline",
+          "placeholder": "Järjesta",
+          "random": "Suvaliselt",
           "by_rating": "Reitingu järgi",
           "by_order": "Järjekorra järgi"
         },
@@ -498,6 +515,7 @@
         },
         "participants": {
           "teams": "Meeskonnad",
+          "groups": "Grupid",
           "players": "Mängijad",
           "toasts": {
             "team_updated": "Klubi loodud edukalt",
@@ -664,12 +682,12 @@
       }
     },
     "blogs": {
-      "title": "Blogid",
-      "description": "Halda blogisid siit",
-      "add_new": "Uus Postitus",
-      "delete": "Kustuta blogi",
-      "text": "Alusta esimese blogiga",
-      "search": "Otsi blogisid...",
+      "title": "Blogi",
+      "description": "Halda kõiki uudiseid siin",
+      "add_new": "Uus postitus",
+      "delete": "Kustuta",
+      "text": "Alusta esimese blogipostitusega",
+      "search": "Otsi blogipostitust...",
       "status_published": "Avaldatud",
       "status_draft": "Mustand",
       "edit": "Muuda",
@@ -682,10 +700,10 @@
         "status": "Staatus",
         "actions": "Tegevused"
       },
-      "not_found": "Blogisid ei leitud",
-      "not_found_subtitle": "Ühtegi blogi postitust ei ole. Loo esimene postitus.",
-      "load_failed": "Blogisid ei õnnestunud laadida",
-      "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
+      "not_found": "Blogipostitusi ei leitud",
+      "not_found_subtitle": "Ühtegi blogipostitust ei ole. Loo esimene postitus.",
+      "load_failed": "Blogi ei õnnestunud laadida",
+      "load_failed_description": "Blogi ei õnnestunud laadida. Palun proovige uuesti.",
       "refresh": "Uuenda lehte"
     },
     "clubs": {
@@ -699,7 +717,8 @@
       },
       "loading": "Laadimine...",
       "error": "Viga",
-      "title": "Klubide manageerimine",
+      "title": "Klubid",
+      "subtitle": "Loo ja halda klubisid",
       "add_new": "Lisa uus klubi",
       "add_new_details": "Sisestage uue klubi andmed",
       "edit": "Muuda klubi",

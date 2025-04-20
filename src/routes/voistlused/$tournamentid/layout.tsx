@@ -6,7 +6,7 @@ import { useEffect } from "react"
 import ErrorPage from '@/components/error'
 import NotFoundPage from '@/routes/-components/notfound'
 import { UseGetTournamentTables } from '@/queries/tables'
-import { ErrorResponse } from '@/types/types'
+import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute('/voistlused/$tournamentid')({
   component: RouteComponent,

@@ -13,8 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Tournament } from "@/types/types"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   UsePostTournament,
   UsePatchTournament,
@@ -38,6 +37,7 @@ import {
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
 import { t } from "i18next"
+import { Tournament } from "@/types/tournaments"
 
 const formSchema = z.object({
   name: z.string().min(4).max(40),
@@ -175,11 +175,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       <Card className="w-full border-none shadow-none">
         <CardHeader className="px-0">
 
-          <CardTitle className="text-lg">
+          <h5 className="font-medium">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
               : t("admin.tournaments.create_tournament.title_create")}
-          </CardTitle>
+          </h5>
         </CardHeader>
         <CardContent className="px-2">
           <Form {...form}>

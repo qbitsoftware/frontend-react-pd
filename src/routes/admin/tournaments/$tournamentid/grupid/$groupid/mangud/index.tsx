@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match";
 import { MatchesTable } from "../../../-components/matches-table";
 import { UseGetTournamentTable } from "@/queries/tables";
-import { ErrorResponse } from "@/types/types";
 import Loader from "@/components/loader";
 import ErrorPage from "@/components/error";
+import { ErrorResponse } from "@/types/errors";
 
 export const Route = createFileRoute(
   "/admin/tournaments/$tournamentid/grupid/$groupid/mangud/"

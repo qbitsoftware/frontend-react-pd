@@ -126,6 +126,10 @@
     "results": {
       "finished": "Finished"
     },
+    "standings": {
+      "placement": "Placement",
+      "participants": "Participants"
+    },
     "timetable": {
       "table": "Table",
       "search_placeholder": "Search by name",
@@ -149,6 +153,7 @@
     "errors": {
       "info_missing": "No tournament information available",
       "no_schedule": "No schedule available",
+      "standings_missing": "No standings data available yet",
       "no_games": "No games available for that group",
       "winner_unknown": "Unknown",
       "no_groups": "No results available",
@@ -157,6 +162,7 @@
     "navbar": {
       "info": "Info",
       "timetable": "Timetable",
+      "standings": "Standings",
       "results": "Results",
       "participants": "Participants",
       "gallery": "Gallery",
@@ -331,9 +337,11 @@
         "dashboard": "Dashboard",
         "tournaments": "Tournaments",
         "blogs": "Blogs",
-        "clubs": "Clubs"
+        "clubs": "Clubs",
+        "feedback": "Feedback"
       },
       "info": "Info",
+      "tables": "Tables",
       "groups": "Groups",
       "media": "Media",
       "images": "Images",
@@ -346,6 +354,7 @@
       "missing_subtitle": "Dashboard unavailable. Create and manage tournaments to view the dashboard.",
       "total_tournaments": "Total tournaments",
       "active_tournaments": "Active tournaments",
+      "users_in_db": "Players in database",
       "upcoming_tournaments": "Upcoming tournaments",
       "upcoming_tournaments_description": "Overview of upcoming tournaments",
       "recently_created_tournaments": "Recently created tournaments",
@@ -371,7 +380,8 @@
           "double_elimination_full_placement_top_heavy": "Double Elimination (Semi-final losers for 3rd)",
           "champions_league": "Team Champions League",
           "free_for_all": "Solo Free-for-all",
-          "round_robin_full_placement": "Round Robin"
+          "round_robin_full_placement": "Round Robin (Placement matches included)",
+          "round_robin": "Round Robin"
         },
         "back": "Back",
         "edit_group": "Edit Group",
@@ -393,8 +403,8 @@
         "category_placeholder": "Type a Category",
         "number_of_tables": "Number of tables",
         "number_of_tables_placeholder": "Enter number of tables",
-        "class": "Class",
-        "class_placeholder": "Type a Class",
+        "class": "Group",
+        "class_placeholder": "Type a Group",
         "tournament_size": "Tournament Size (amount of participants/teams)",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
@@ -415,6 +425,13 @@
         "ranking_description": "Enable ranking for this tournament",
         "team": "Tournament with teams",
         "team_description": "Enable tournament with teams"
+      },
+      "tables": {
+        "no_tables": "No tables have been assigned yet",
+        "title": "Table management",
+        "taken": "Occupied",
+        "free": "Free",
+        "empty_placeholder": "Table available for matches"
       },
       "groups": {
         "layout": {
@@ -498,6 +515,7 @@
         },
         "participants": {
           "teams": "Teams",
+          "groups": "Groups",
           "players": "Players",
           "toasts": {
             "team_updated": "Club successfully created",
@@ -699,7 +717,8 @@
       },
       "loading": "Loading...",
       "error": "No club data available",
-      "title": "Club management",
+      "title": "Clubs",
+      "subtitle": "Create and manage clubs",
       "add_new": "Add new club",
       "add_new_details": "Enter the details for the new club",
       "edit": "Edit Club",

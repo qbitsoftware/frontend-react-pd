@@ -8,11 +8,11 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { useToastNotification } from '@/components/toast-notification'
-import { Participant } from '@/types/types'
 import RegroupDND from './regroup-dnd'
 import { UseGetParticipantsQuery } from '@/queries/participants'
 import { useParams } from '@tanstack/react-router'
 import { UseRegroupMatches } from '@/queries/match'
+import { Participant } from '@/types/participants'
 
 interface ReGroupingProps {
     isOpen: boolean

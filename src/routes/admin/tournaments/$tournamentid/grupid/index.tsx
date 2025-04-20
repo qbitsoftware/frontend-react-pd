@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { TournamentTables } from './-components/tables'
 import { UseGetTournamentTables } from '@/queries/tables'
 import { UseGetTournament } from '@/queries/tournaments'
-import { ErrorResponse } from '@/types/types'
+import { ErrorResponse } from '@/types/errors'
 import ErrorPage from '@/components/error'
 
 export const Route = createFileRoute(

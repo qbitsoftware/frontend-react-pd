@@ -4,15 +4,16 @@ import {
   Trophy,
   FileText,
   PersonStanding,
+  MessagesSquare,
 } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { redirect } from '@tanstack/react-router'
-import { ErrorResponse } from '@/types/types'
 import { useUser } from '@/providers/userProvider'
 import { UseGetCurrentUser } from '@/queries/users'
 import ErrorPage from '@/components/error'
+import { ErrorResponse } from '@/types/errors'
 
 
 export const Route = createFileRoute('/admin')({
@@ -51,67 +52,96 @@ function RouteComponent() {
     }
   }, [location.pathname, router])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
 
   const menuItems = [
     {
       id: 'dashboard',
       label: t('admin.layout.sidebar.dashboard'),
-      icon: <LayoutDashboard className="w-4 h-4 sm:mr-2" />,
+      icon: <LayoutDashboard className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/dashboard',
     },
     {
       id: 'tournaments',
       label: t('admin.layout.sidebar.tournaments'),
-      icon: <Trophy className="w-4 h-4 sm:mr-2" />,
+      icon: <Trophy className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/tournaments',
     },
     {
       id: 'blog',
       label: t('admin.layout.sidebar.blogs'),
-      icon: <FileText className="w-4 h-4 sm:mr-2" />,
+      icon: <FileText className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/blog',
     },
     {
       id: 'settings',
       label: t('admin.layout.sidebar.clubs'),
-      icon: <PersonStanding className="w-4 h-4 sm:mr-2" />,
+      icon: <PersonStanding className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
       to: '/admin/clubs',
+    },
+    {
+      id: 'feedback',
+      label: t('admin.layout.sidebar.feedback'),
+      icon: <MessagesSquare className="w-4 h-4 sm:mr-2 text-[#03326B]" />,
+      to: '/admin/feedback',
     },
   ]
 
   return (
-    <div className="flex flex-col sm:flex-row max-w-[1440px] mx-auto bg-[#F8F9F9]">
-      {/* Sidebar */}
-      <div className="w-16 md:w-56">
-        <div className=" p-2 sm:p-4 md:p-6">
-          <h5 className="hidden md:block  font-bold text-gray-900">
-            {t('admin.layout.title')}
-          </h5>
-          <p className="hidden md:block text-sm text-gray-500 mt-1">
-            {t('admin.layout.description')}
-          </p>
+    <div className="flex flex-col h-screen max-w-[1440px] mx-auto bg-[#F8F9F9]">
+      {/* Main Content Area */}
+      <div className="flex flex-col sm:flex-row flex-1 overflow-hidden">
+        {/* Sidebar - Visible only on SM and above */}
+        <div className="hidden sm:block w-16 md:w-56">
+          <div className="p-4 md:px-6 md:pt-6 md:pb-2">
+            <h6 className="hidden md:block font-medium text-stone-800">
+              {t('admin.layout.description')}
+            </h6>
+          </div>
+          <nav className="p-2 flex flex-col w-full">
+            {menuItems.map((item) => (
+              <Link
+                key={item.id}
+                to={item.to}
+                className={`w-full flex flex-row items-center text-stone-800 rounded-md justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${
+                  location.pathname.includes(item.to)
+                    ? 'bg-[#EFF0F2] border-l-4 border-[#4C97F1] font-medium'
+                    : 'text-gray-600 hover:bg-stone-100 hover:text-stone-900'
+                }`}
+              >
+                {item.icon}
+                <span className="hidden md:inline ml-2">{item.label}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
-        <nav className="p-2 flex sm:flex-col justify-between w-screen sm:w-full">
+
+        {/* Main Content */}
+        <div className="flex-1 bg-white sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 overflow-y-auto pb-20 sm:pb-0">
+          <Outlet />
+        </div>
+      </div>
+
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EFEFEF] z-10">
+        <nav className="flex justify-between items-center px-2">
           {menuItems.map((item) => (
             <Link
               key={item.id}
               to={item.to}
-              className={`w-full flex flex-col sm:flex-row items-center justify-center md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
-                ? 'bg-blue-50 sm:border-r-4 border-b-4 sm:border-b-0 border-[#4C97F1] font-medium'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
+              className={`flex flex-col items-center py-3 px-2 ${
+                location.pathname.includes(item.to)
+                  ? 'text-[#4C97F1] border-t-2 border-[#4C97F1] font-medium'
+                  : 'text-gray-600'
+              }`}
             >
               {item.icon}
-              <span className="sm:hidden md:inline">{item.label}</span>
+              <span className="text-xs mt-1">{item.label}</span>
             </Link>
           ))}
         </nav>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 bg-white sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 overflow-x-scroll">
-        <Outlet />
       </div>
     </div>
   )

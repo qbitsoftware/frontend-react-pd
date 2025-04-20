@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
 import { useToast } from '@/hooks/use-toast'
 import { UsePatchMatch } from '@/queries/match'
-import { MatchWrapper, Score } from '@/types/types'
+import { MatchWrapper, Score } from '@/types/matches'
 import { useParams } from '@tanstack/react-router'
 import React, { useState, useEffect } from 'react'
 

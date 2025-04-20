@@ -1,4 +1,4 @@
-import { Tournament } from '@/types/types'
+import { Tournament } from '@/types/tournaments'
 import React, { createContext, useContext, ReactNode } from 'react'
 
 interface TournamentContextProps {

@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { MatchWrapper } from "@/types/types";
+import { MatchWrapper } from "@/types/matches";
 
 interface TableContentProps {
   match: MatchWrapper;

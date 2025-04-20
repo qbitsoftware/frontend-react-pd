@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { replaceSpecialCharacters } from "@/lib/utils";
-import { Article } from "@/types/types";
+import { Article } from "@/types/blogs";
 import { Link } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next";
 

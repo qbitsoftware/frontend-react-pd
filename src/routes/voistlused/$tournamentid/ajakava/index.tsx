@@ -3,9 +3,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import TournamentSchedule from './-components/tournament-schedule'
 import { UseGetTournamentTables } from '@/queries/tables'
-import { ErrorResponse } from "@/types/types"
 import ErrorPage from '@/components/error'
 import { useTranslation } from 'react-i18next'
+import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/ajakava/')({
   errorComponent: () => <ErrorPage />,

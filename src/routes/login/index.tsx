@@ -13,7 +13,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
 import { useState } from 'react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { ErrorResponse } from '@/types/types'
+import { ErrorResponse } from '@/types/errors'
 import { redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 

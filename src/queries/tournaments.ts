@@ -1,8 +1,10 @@
 
 import { queryOptions, useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf";
-import { Bracket, Category, Tournament, TournamentSize, TournamentType } from "@/types/types";
+import { Tournament, TournamentSize, TournamentType } from "@/types/tournaments";
+import { Bracket } from "@/types/brackets"
 import { TournamentFormValues } from "@/routes/admin/tournaments/-components/tournament-form";
+import { Category } from "@/types/blogs";
 
 export type TournamentsResponse = {
     data: Tournament[] | null
@@ -174,9 +176,16 @@ export const UsePatchTournament = (id: number) => {
             return data;
         },
 
-        onSuccess: () => {
+        onSuccess: (data: TournamentResponse) => {
             queryClient.resetQueries({ queryKey: ['tournaments'] })
-            queryClient.resetQueries({ queryKey: ['tournament', id] })
+            queryClient.setQueryData(["tournament", id], (oldData: TournamentResponse) => {
+                if (oldData) {
+                    oldData.data = data.data
+                    oldData.message = data.message
+                    oldData.error = data.error
+                }
+                return oldData
+            })
             queryClient.resetQueries({ queryKey: ['bracket', id] })
             queryClient.resetQueries({ queryKey: ['matches', id] })
         }

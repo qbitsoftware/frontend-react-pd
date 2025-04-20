@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Tournament } from '@/types/types';
+import { Tournament } from '@/types/tournaments';
 import { Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import SfumatoBackground from '@/components/sfumato/sfumatoBg';
@@ -51,12 +51,15 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
           {isUpcoming ? (
             <SfumatoBackground>
               <div className="flex flex-row justify-between hover:bg-white/10 bg-white/30 items-start gap-2 p-2">
-                <h6 className="px-1 font-semibold w-2/3">
+              <div className='px-1  flex flex-col gap-2'>
+                <h6 className="font-semibold w-2/3">
                   {event.name}
                   {event.isGameday && event.order && (
                     <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
                   )}
                 </h6>
+                <p>{event.category}</p>
+                </div>
 
                 <div className="flex items-center gap-2">
                   <div className="px-2 py-1 bg-white text-center font-bold border-t-2 border-red-600 rounded-t-[2px] text-stone-800 shadow-sm">

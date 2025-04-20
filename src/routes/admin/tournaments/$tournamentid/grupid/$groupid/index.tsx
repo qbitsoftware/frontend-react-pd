@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import TournamentTableForm from '../-components/table-form'
 import { UseGetTournamentTable } from '@/queries/tables'
-import { ErrorResponse } from '@/types/types'
 import ErrorPage from '@/components/error'
+import { ErrorResponse } from '@/types/errors'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/',
@@ -38,6 +38,7 @@ function RouteComponent() {
     }
     return (
         <div>
+
             <TournamentTableForm initial_data={table_data.data} />
         </div>
     )

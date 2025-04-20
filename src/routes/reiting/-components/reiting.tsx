@@ -3,7 +3,6 @@ import { PlayerProfileModal } from "./player-profile-modal";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef } from "react"
 import { filterByAgeClass, modifyTitleDependingOnFilter, getYear } from "@/lib/rating-utils";
-import { UserNew } from "@/types/types";
 import {
   Select,
   SelectContent,
@@ -14,9 +13,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { User } from "@/types/users";
 
 interface UserTableProps {
-  users: UserNew[]
+  users: User[]
 }
 
 export function Reiting({ users }: UserTableProps = { users: [] }) {
@@ -78,7 +78,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
     }
   }, [isModalOpen]);
 
-  const handleModalOpen = (user: UserNew) => {
+  const handleModalOpen = (user: User) => {
     setSelectedPlayerId(user.id);
     setIsModalOpen(true);
   };

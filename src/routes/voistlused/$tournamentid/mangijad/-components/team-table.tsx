@@ -3,11 +3,11 @@ import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import type { Participant } from "@/types/types"
 import placeholderImg from "@/assets/placheolderImg.svg"
 import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 import { useTranslation } from "react-i18next"
 import { ImageModal } from "./image-modal"
+import { Participant } from "@/types/participants"
 
 interface TeamTableProps {
   participants: Participant[] | null

@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
-import { Tournament } from "@/types/types"
+import { Tournament } from "@/types/tournaments"
 
 interface TournamentProps {
   tournaments: Tournament[]

@@ -11,9 +11,30 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import ErrorPage from '@/components/error'
 import { useTranslation } from 'react-i18next'
-import { createRegisterSchema, RegisterFormData } from '@/types/types'
 import { useCreateUser } from '@/queries/users'
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectGroup, SelectItem } from '@/components/ui/select'
+import { TFunction } from "i18next"
+import { z } from "zod"
+
+
+export const createRegisterSchema = (t: TFunction) => z.object({
+    first_name: z.string().min(1, t('register.form.errors.first_name')),
+    last_name: z.string().min(1, t('register.form.errors.last_name')),
+    email: z.string().email(t('register.form.errors.email')),
+    sex: z.enum(['male', 'female', 'other'], {
+        required_error: t('register.form.errors.sex'),
+    }),
+    birth_date: z.string().min(1, t('register.form.errors.date_of_birth')),
+    username: z.string().min(3, t('register.form.errors.username')),
+    password: z.string().min(8, t('register.form.errors.password')),
+    confirm_password: z.string().min(1, t('register.form.errors.password_confirmation')),
+    create_profile: z.boolean().default(true),
+}).refine((data) => data.password === data.confirm_password, {
+    message: t('register.form.errors.password_confirmation'),
+    path: ["confirmPassword"],
+});
+
+export type RegisterFormData = z.infer<ReturnType<typeof createRegisterSchema>>
 
 export const Route = createFileRoute('/register/')({
     component: RouteComponent,
@@ -25,7 +46,7 @@ export const Route = createFileRoute('/register/')({
 type RegisterError = {
     message: string;
     statusCode?: number;
-  };
+};
 
 function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
@@ -38,14 +59,14 @@ function RouteComponent() {
     type MutationOptions = {
         onSuccess: () => void;
         onError?: (error: Error) => void;
-      };
-      
-      const registerMutation = {
-          mutate: (_: RegisterFormData, options: MutationOptions) => {
-              options.onSuccess();
-          },
-          isPending: false
-      };
+    };
+
+    const registerMutation = {
+        mutate: (_: RegisterFormData, options: MutationOptions) => {
+            options.onSuccess();
+        },
+        isPending: false
+    };
 
     const registerSchema = createRegisterSchema(t);
 
@@ -112,19 +133,19 @@ function RouteComponent() {
                             <Label htmlFor="sex">{t('register.form.sex')}</Label>
                             <Select
                                 onValueChange={(value) => {
-                                const event = { target: { name: 'sex', value } };
-                                register('sex').onChange(event);
+                                    const event = { target: { name: 'sex', value } };
+                                    register('sex').onChange(event);
                                 }}
                             >
                                 <SelectTrigger className="w-full mt-1">
-                                <SelectValue placeholder={t('register.form.sex')} />
+                                    <SelectValue placeholder={t('register.form.sex')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="male">{t('register.form.sex_options.male')}</SelectItem>
-                                    <SelectItem value="female">{t('register.form.sex_options.female')}</SelectItem>
-                                    <SelectItem value="other">{t('register.form.sex_options.other')}</SelectItem>
-                                </SelectGroup>
+                                    <SelectGroup>
+                                        <SelectItem value="male">{t('register.form.sex_options.male')}</SelectItem>
+                                        <SelectItem value="female">{t('register.form.sex_options.female')}</SelectItem>
+                                        <SelectItem value="other">{t('register.form.sex_options.other')}</SelectItem>
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                             {errors.sex && (

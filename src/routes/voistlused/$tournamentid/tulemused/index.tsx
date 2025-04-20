@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournamentTables } from '@/queries/tables'
-import { ErrorResponse } from '@/types/types'
 import { parseTableType } from '@/lib/utils'
 import { useTournament } from '../-components/tournament-provider'
 import { formatDateString } from '@/lib/utils'
@@ -8,6 +7,7 @@ import { UsersRound } from 'lucide-react';
 import { Link } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
 import { useTranslation } from 'react-i18next'
+import { ErrorResponse } from '@/types/errors'
 
 
 export const Route = createFileRoute('/voistlused/$tournamentid/tulemused/')({

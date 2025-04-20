@@ -1,4 +1,4 @@
-import { TournamentTable } from "@/types/types";
+import { TournamentTable } from "@/types/groups";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
 import TournamentTableForm from "@/routes/admin/tournaments/$tournamentid/grupid/-components/table-form";
@@ -29,6 +29,20 @@ export function UseGetTournamentTables(tournament_id: number) {
         gcTime: 30 * 60 * 1000,
     });
 }
+
+export function UseGetTournamentTablesQuery(tournament_id: number) {
+    return useQuery<TournamentTablesResponse>({
+        queryKey: ["tournament_tables_query", tournament_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables`, {
+                withCredentials: true,
+            })
+            return data;
+        },
+    });
+}
+
+
 
 export const UseGetTournamentTable = (tournament_id: number, tournament_table_id: number) => {
     return queryOptions<TournamentTableResponse>({
@@ -93,7 +107,7 @@ export const UsePostTournamentTable = (tournament_id: number) => {
         },
 
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournaments_tables', tournament_id] })
+            queryClient.resetQueries({ queryKey: ['tournament_tables', tournament_id] })
         }
     })
 }

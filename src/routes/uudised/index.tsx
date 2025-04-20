@@ -15,7 +15,7 @@ import {
   FileText,
   FileX,
 } from 'lucide-react'
-import { Blog } from '@/types/types'
+import { Blog } from '@/types/blogs'
 import { formatDate } from '@/lib/utils'
 
 // Define interfaces

@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosconf";
-import { Participant } from "@/types/types";
-import { ParticipantFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participants-form";
+import { ParticipantFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participant-forms/form-utils";
+import { Participant } from "@/types/participants";
 
 export type ParticipantResponse = {
     data: Participant | null
@@ -120,14 +120,19 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             queryClient.setQueryData(["participants", table_id],
                 (oldData: ParticipantsResponse | undefined) => {
                     if (!oldData || !oldData.data) return oldData;
-                    return {
+                    const updatedData = oldData.data.map(participant =>
+                        participant.id === data.data?.id ? data.data : participant
+                    );
+
+                    const sortedData = [...updatedData].sort((a, b) => a.order - b.order);
+                    const newData = {
                         ...oldData,
-                        data: oldData.data.map(participant =>
-                            participant.id === data.data?.id ? data.data : participant
-                        ),
+                        data: sortedData,
                         message: data.message,
                         error: null
-                    };
+
+                    }
+                    return newData
                 }
             )
 
@@ -173,6 +178,23 @@ export function UsePostOrder(tournament_id: number, table_id: number) {
     return useMutation({
         mutationFn: async (order: Order) => {
             const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/order`, order, {
+                withCredentials: true,
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+            queryClient.resetQueries({ queryKey: ["bracket", table_id] })
+            queryClient.resetQueries({ queryKey: ["matches", table_id] })
+        },
+    })
+}
+
+export function UsePostOrderReset(tournament_id: number, table_id: number) {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/reset`, {}, {
                 withCredentials: true,
             })
             return data;

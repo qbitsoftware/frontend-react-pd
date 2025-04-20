@@ -1,5 +1,7 @@
 import i18n from "@/i18n"
-import { User, TableMatch, ContentNode, TextNode, ComplexNode, YooptaContent, ContentBlock, ContentBlockWithText, ContentBlockWithImage } from "@/types/types"
+import { ComplexNode, ContentBlock, ContentBlockWithImage, ContentBlockWithText, ContentNode, TextNode, YooptaContent } from "@/types/blogs"
+import { TableMatch } from "@/types/brackets"
+import { User } from "@/types/users"
 import { YooptaContentValue } from "@yoopta/editor"
 import { type ClassValue, clsx } from "clsx"
 import { useEffect, useState } from "react"
@@ -90,12 +92,12 @@ export const replaceSpecialCharacters = (str: string) => {
 
 export function findEnemyName(p1: number, p2: number, current: number, players: User[]): string {
   if (p1 == current) {
-    const enemy = players.filter((player) => player.ID == p2)[0]
+    const enemy = players.filter((player) => player.id == p2)[0]
     if (enemy) {
       return enemy.first_name + enemy.last_name
     }
   } else {
-    const enemy = players.filter((player) => player.ID == p1)[0]
+    const enemy = players.filter((player) => player.id == p1)[0]
     if (enemy) {
       return enemy.first_name + enemy.last_name
     }
