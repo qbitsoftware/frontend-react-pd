@@ -12,19 +12,27 @@ interface BracketProps {
     playerId: string | number;
     position: "home" | "away";
   } | null;
-  onPlayerSelect?: (matchId: string, playerId: string, position: "home" | "away") => void;
-
+  onPlayerSelect?: (
+    matchId: string,
+    playerId: string,
+    position: "home" | "away",
+  ) => void;
 }
 
-const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false, selectedPlayer = null, onPlayerSelect = () => { } }: BracketProps) => {
+const SingleElimBracket = ({
+  data,
+  starting_x,
+  starting_y,
+  isEditingMode = false,
+  selectedPlayer = null,
+  onPlayerSelect = () => {},
+}: BracketProps) => {
   const WIDTH = 220;
   const HEIGTH = 60;
   const VERTICAL_GAP = 30;
   const HORISONTAL_GAP = 250;
   const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP);
   const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH);
-
-
 
   if (data && data.matches) {
     return (
@@ -73,7 +81,7 @@ const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false
         })}
         {/* Bracket lines */}
         <svg
-          className="absolute"
+          className="absolute pdf-connector-grid"
           style={{ top: `${starting_y + 30}`, left: `${starting_x}` }}
           width={SVG_WIDTH}
           height={SVG_HEIGTH}
@@ -101,20 +109,20 @@ const SingleElimBracket = ({ data, starting_x, starting_y, isEditingMode = false
               <g key={`line-${match.match.id}-${match.match.order}`}>
                 <path
                   d={`M${startX} ${startY - 5} H${startX - HEIGTH / 2} V${endY1} H${endX}`}
-                  className="stroke-gray-300"
+                  className="stroke-gray-500 connector"
                   strokeWidth="1"
-                  shapeRendering={"crispEdges"}
                   fill="none"
+                  shapeRendering={"crispEdges"}
                 />
                 <path
                   d={`M${startX} ${startY + 5} H${startX - HEIGTH / 2} V${endY2} H${endX}`}
+                  color="black"
                   strokeWidth="1"
                   shapeRendering={"crispEdges"}
-                  className="stroke-gray-300"
+                  className="stroke-gray-500 connector"
                   fill="none"
                 />
               </g>
-
             );
           })}
         </svg>
