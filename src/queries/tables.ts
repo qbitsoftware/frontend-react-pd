@@ -107,7 +107,7 @@ export const UsePostTournamentTable = (tournament_id: number) => {
         },
 
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournaments_tables', tournament_id] })
+            queryClient.resetQueries({ queryKey: ['tournament_tables', tournament_id] })
         }
     })
 }

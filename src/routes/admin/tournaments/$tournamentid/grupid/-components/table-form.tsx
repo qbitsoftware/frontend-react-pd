@@ -25,8 +25,8 @@ const formSchema = z.object({
   class: z.string(),
   type: z.string(),
   solo: z.boolean(),
-  min_team_size: z.number(),
-  max_team_size: z.number(),
+  min_team_size: z.number().min(2),
+  max_team_size: z.number().min(2),
   size: z.number(),
 })
 
@@ -64,8 +64,8 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         class: "",
         type: "",
         solo: false,
-        min_team_size: 1,
-        max_team_size: 1,
+        min_team_size: 2,
+        max_team_size: 2,
         size: 16,
 
       },
