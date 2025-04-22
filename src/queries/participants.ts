@@ -107,7 +107,7 @@ type UpdateParticipantArgs = {
 export function UseUpdateParticipant(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
 
-    return useMutation<ParticipantResponse, Error, UpdateParticipantArgs>({
+    return useMutation<ParticipantsResponse, Error, UpdateParticipantArgs>({
         mutationFn: async ({ formData, participantId }) => {
             const { data } = await axiosInstance.patch(
                 `/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/${participantId}`,
@@ -116,23 +116,29 @@ export function UseUpdateParticipant(tournament_id: number, table_id: number) {
             )
             return data
         },
-        onSuccess: (data: ParticipantResponse) => {
+        onSuccess: (data: ParticipantsResponse) => {
             queryClient.setQueryData(["participants", table_id],
                 (oldData: ParticipantsResponse | undefined) => {
                     if (!oldData || !oldData.data) return oldData;
+                    const updatedParticipantsMap = new Map(
+                        // we can put ? since always there is atleast one participant ( updated participant )
+                        data.data?.map(participant => [participant.id, participant])
+                    );
+
                     const updatedData = oldData.data.map(participant =>
-                        participant.id === data.data?.id ? data.data : participant
+                        updatedParticipantsMap.has(participant.id)
+                            ? updatedParticipantsMap.get(participant.id)!
+                            : participant
                     );
 
                     const sortedData = [...updatedData].sort((a, b) => a.order - b.order);
-                    const newData = {
+
+                    return {
                         ...oldData,
                         data: sortedData,
                         message: data.message,
                         error: null
-
                     }
-                    return newData
                 }
             )
 

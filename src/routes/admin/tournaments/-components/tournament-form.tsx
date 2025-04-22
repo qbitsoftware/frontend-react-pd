@@ -360,12 +360,12 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
               />
 
               {/* Pane siiia */}
-              <div className="w-full flex flex-col gap-4 ">
+              <div className="w-full flex flex-col gap-4">
                 <p className="text-sm">{t("admin.tournaments.create_tournament.additional_information")} </p>
 
                 <Editor value={value} setValue={setValue} readOnly={false} />
               </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col-reverse gap-10 md:gap-4 md:flex-row md:justify-between ">
                 {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
                     {t("admin.tournaments.delete")}

@@ -47,8 +47,8 @@ function RouteComponent() {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tournamentTables.data.map((table) => (
-            <VenueComp table={table} tables_data={tournamentGroups?.data} />
+          {tournamentTables.data.map((table, key) => (
+            <VenueComp key={key} table={table} tables_data={tournamentGroups?.data} />
           ))}
         </div>
       </CardContent>

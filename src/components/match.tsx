@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { TableMatch } from '@/types/brackets'
-import { getRandomFlag } from '@/lib/utils'
 import { useLocation, useParams } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'

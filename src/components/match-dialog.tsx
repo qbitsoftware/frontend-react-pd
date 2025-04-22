@@ -65,6 +65,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
   });
 
   const { reset } = form;
+  console.log("MatchDialog", match);
 
   useEffect(() => {
     if (match && open) {
@@ -102,6 +103,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       p2_score: score.player2,
     }));
 
+
     const sendMatch: Match = {
       id: match.match.id,
       tournament_table_id: match.match.tournament_table_id,
@@ -113,10 +115,10 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
-      start_date: new Date().toString(),
+      start_date: new Date().toISOString(),
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
-      state:match.match.state,
+      state: match.match.state,
       extra_data: {
         head_referee: data.mainReferee,
         table_referee: data.tableReferee,
@@ -153,27 +155,27 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <ScrollArea className="h-[60vh]">
               <div className="p-6 space-y-6">
-                    <div className="flex justify-center items-center gap-4">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Round:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {match.match.round + 1}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 items-center py-4">
-                      <div className="text-right pr-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p1.name}
-                        </span>
-                      </div>
-                      <div className="text-center font-bold text-lg">VS</div>
-                      <div className="text-left pl-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p2.name}
-                        </span>
-                      </div>
-                    </div>
+                <div className="flex justify-center items-center gap-4">
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Round:
+                  </span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {match.match.round + 1}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 items-center py-4">
+                  <div className="text-right pr-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p1.name}
+                    </span>
+                  </div>
+                  <div className="text-center font-bold text-lg">VS</div>
+                  <div className="text-left pl-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p2.name}
+                    </span>
+                  </div>
+                </div>
                 <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                   <CardHeader className="bg-gray-50 dark:bg-gray-900 rounded-t-lg">
                     <CardTitle className="text-lg text-gray-900 dark:text-white">
