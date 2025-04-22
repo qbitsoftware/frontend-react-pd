@@ -9,8 +9,6 @@ import {
   useDeleteGameday,
   useDeleteGamedayImage,
 } from "@/queries/images";
-import { useToast } from "@/hooks/use-toast";
-import { useToastNotification } from "@/components/toast-notification";
 import ImageUpload from "./-components/image-upload";
 
 import { Button } from "@/components/ui/button";
@@ -30,6 +28,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
 import { Gameday } from "@/types/gamedays";
+import { toast } from "sonner";
 
 export const Route = createFileRoute(
   "/admin/tournaments/$tournamentid/pildid/"
@@ -39,7 +38,6 @@ export const Route = createFileRoute(
     let gamedaysData;
 
     try {
-      // Always call the hook
       const gamedaysOptions = useGetGamedaysOptions(tournamentId);
       gamedaysData = await queryClient.ensureQueryData(gamedaysOptions);
     } catch (error) {
@@ -81,10 +79,6 @@ function RouteComponent() {
     Number(activeTab)
   );
 
-  // Toast notifications
-  const toast = useToast();
-  const { successToast, errorToast } = useToastNotification(toast);
-
   // Add new game day
   const addGameDay = () => {
     try {
@@ -100,10 +94,9 @@ function RouteComponent() {
       };
 
       postGamedayMutation.mutateAsync(gameday);
-      successToast(t("admin.tournaments.groups.images.toasts.success_add"));
+      toast.message(t("admin.tournaments.groups.images.toasts.success_add"));
     } catch (error) {
-      console.error("Error adding game day:", error);
-      errorToast(t("admin.tournaments.groups.images.toasts.error_add"));
+      toast.error(t("admin.tournaments.groups.images.toasts.error_add"));
     }
   };
 
@@ -118,10 +111,9 @@ function RouteComponent() {
 
     try {
       removeGameDayMutation.mutateAsync(gamedayToDelete);
-      successToast(t("admin.tournaments.groups.images.toasts.success_remove"));
+      toast.message(t("admin.tournaments.groups.images.toasts.success_remove"));
     } catch (error) {
-      console.error("Error deleting gameday", error);
-      errorToast(t("admin.tournaments.groups.images.toasts.error_remove"));
+      toast.error(t("admin.tournaments.groups.images.toasts.error_remove"));
     } finally {
       setDeleteConfirmOpen(false);
       setGamedayToDelete(null);
@@ -150,10 +142,10 @@ function RouteComponent() {
           gameday_id: editingGameday.id,
         });
         setEditingGameday(null);
-        successToast(t("admin.tournaments.groups.images.toasts.success_edit"));
+        toast.message(t("admin.tournaments.groups.images.toasts.success_edit"));
       } catch (error) {
         void error;
-        errorToast(t("admin.tournaments.groups.images.toasts.error_edit"));
+        toast.error(t("admin.tournaments.groups.images.toasts.error_edit"));
       }
     }
   };
@@ -162,15 +154,11 @@ function RouteComponent() {
   const deleteImage = (imageId: number) => {
     deleteImageMutation.mutate(imageId, {
       onSuccess: () => {
-        successToast(
-          t("admin.tournaments.groups.images.toasts.success_remove_image")
-        );
+        toast.message(t("admin.tournaments.groups.images.toasts.success_remove_image"));
       },
       onError: (error) => {
         void error;
-        errorToast(
-          t("admin.tournaments.groups.images.toasts.error_remove_image")
-        );
+        toast.error(t("admin.tournaments.groups.images.toasts.error_remove_image"));
       },
     });
   };
@@ -200,7 +188,7 @@ function RouteComponent() {
     <>
       {" "}
       <Card className="w-full border-none shadow-none ">
-        <CardHeader className="px-0 flex-row justify-between items-center space-y-0">
+        <CardHeader className="px-0 flex-col md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
           <h5 className=" font-medium">
             {t("admin.tournaments.groups.images.title")}
           </h5>

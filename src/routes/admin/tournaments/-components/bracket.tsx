@@ -52,12 +52,22 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
     <div className="w-full h-full">
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
+<<<<<<< HEAD
           <CardHeader className="flex-row justify-between items-center space-y-0 pdf-header">
             <Button
               onClick={toggleEditingMode}
               className={`px-3 py-1 text-xs rounded transition-colors ${
                 isEditingMode ? " bg-stone-700 border border-dashed" : ""
               }`}
+=======
+          <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
+          <Button
+              onClick={toggleEditingMode}
+              className={`w-full md:w-auto px-3 py-1 text-xs rounded transition-colors ${isEditingMode
+                ? " bg-stone-700 border border-dashed"
+                : ""
+                }`}
+>>>>>>> f867b6d1c052b40946489ca40a869eb69526102e
             >
               {isEditingMode ? "Exit Editing Mode" : "Enter Editing Mode"}
             </Button>
@@ -77,7 +87,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
               Print Bracket
             </Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {hasEliminations ? (
               <Window
                 data={bracket.data}

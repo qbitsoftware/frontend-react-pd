@@ -90,7 +90,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
     match.match.id,
   );
 
-  const { fields, append, remove } = useFieldArray({
+  const { append, remove } = useFieldArray({
     name: "scores",
     control: form.control,
   });
@@ -101,6 +101,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       p1_score: score.player1,
       p2_score: score.player2,
     }));
+
 
     const sendMatch: Match = {
       id: match.match.id,
@@ -113,10 +114,10 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
-      start_date: new Date().toString(),
+      start_date: new Date().toISOString(),
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
-      state:match.match.state,
+      state: match.match.state,
       extra_data: {
         head_referee: data.mainReferee,
         table_referee: data.tableReferee,
@@ -153,27 +154,27 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <ScrollArea className="h-[60vh]">
               <div className="p-6 space-y-6">
-                    <div className="flex justify-center items-center gap-4">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Round:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {match.match.round + 1}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 items-center py-4">
-                      <div className="text-right pr-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p1.name}
-                        </span>
-                      </div>
-                      <div className="text-center font-bold text-lg">VS</div>
-                      <div className="text-left pl-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p2.name}
-                        </span>
-                      </div>
-                    </div>
+                <div className="flex justify-center items-center gap-4">
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Round:
+                  </span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {match.match.round + 1}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 items-center py-4">
+                  <div className="text-right pr-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p1.name}
+                    </span>
+                  </div>
+                  <div className="text-center font-bold text-lg">VS</div>
+                  <div className="text-left pl-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p2.name}
+                    </span>
+                  </div>
+                </div>
                 <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                   <CardHeader className="bg-gray-50 dark:bg-gray-900 rounded-t-lg">
                     <CardTitle className="text-lg text-gray-900 dark:text-white">
@@ -189,9 +190,9 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                         {match.p2.name}
                       </div>
                     </div>
-                    {fields.map((field, index) => (
+                    {form.watch("scores").map((_, index) => (
                       <div
-                        key={field.id}
+                        key={index}
                         className="flex items-start space-x-2"
                       >
                         <FormField
@@ -201,11 +202,26 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                             <FormItem className="flex-1">
                               <FormControl>
                                 <Input
-                                  type="number"
+                                  type="text"
+                                  {...field}
                                   value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseInt(e.target.value))
-                                  }
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    
+                                    if (value === "") {
+                                      field.onChange(0);
+                                      return;
+                                    }
+                                    
+                                    if (!/^\d*$/.test(value)) {
+                                      return; 
+                                    }
+                                    
+                                    const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                    const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+                                    
+                                    field.onChange(numberValue);
+                                  }}
                                   className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                 />
                               </FormControl>
@@ -220,11 +236,26 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                             <FormItem className="flex-1">
                               <FormControl>
                                 <Input
-                                  type="number"
+                                  type="text"
+                                  {...field}
                                   value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseInt(e.target.value))
-                                  }
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    
+                                    if (value === "") {
+                                      field.onChange(0);
+                                      return;
+                                    }
+                                    
+                                    if (!/^\d*$/.test(value)) {
+                                      return; 
+                                    }
+                                    
+                                    const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                    const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+                                    
+                                    field.onChange(numberValue);
+                                  }}
                                   className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                 />
                               </FormControl>
@@ -252,7 +283,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                           {form.formState.errors.scores.root.message}
                         </p>
                       )}
-                    {fields.length < 7 && (
+                    {form.watch("scores").length < 7 && (
                       <Button
                         type="button"
                         variant="outline"

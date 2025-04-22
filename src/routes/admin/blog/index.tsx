@@ -199,9 +199,9 @@ function RouteComponent() {
 
   return (
     <div className="w-full">
-      <div className="p-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
+      <div className="p-2 py-8 md:p-8">
+        <div className="flex flex-col md:flex-row md:justify-between items-center mb-8">
+          <div className="mb-4 md:mb-0 text-center md:text-left">
             <h3 className="font-bold text-gray-900">
               {t("admin.blogs.title")}
             </h3>
@@ -216,8 +216,6 @@ function RouteComponent() {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 ">
-          
-
           <div className="relative w-full sm:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -229,9 +227,9 @@ function RouteComponent() {
           </div>
         </div>
 
-        <Card className="overflow-y-auto h-[600px]">
+        <Card className="">
           <CardContent className="p-0">
-            <Table>
+            <Table className="mb-8 ">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[300px]">

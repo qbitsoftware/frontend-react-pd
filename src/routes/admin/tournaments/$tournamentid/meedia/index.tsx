@@ -3,13 +3,14 @@ import { YooptaContentValue } from "@yoopta/editor";
 import Editor from "@/routes/admin/-components/yooptaeditor";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import {
   UseGetTournament,
   UsePatchTournamentMedia,
 } from "@/queries/tournaments";
 import ErrorPage from "@/components/error";
 import { Card, CardHeader } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export const Route = createFileRoute(
   "/admin/tournaments/$tournamentid/meedia/"
@@ -31,6 +32,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const { t } = useTranslation();
   const { tournament } = Route.useLoaderData();
   const [value, setValue] = useState<YooptaContentValue | undefined>(
     JSON.parse((tournament && tournament.data && tournament.data.media) || "{}")
@@ -38,39 +40,31 @@ function RouteComponent() {
   const mediaMutation = UsePatchTournamentMedia(
     Number(Route.useParams().tournamentid)
   );
-  const { toast } = useToast();
 
   const handleSave = async () => {
     try {
       await mediaMutation.mutateAsync({ media: JSON.stringify(value) });
-      toast({
-        title: "Media saved successfully",
-        description: "",
-      });
+      toast.message(t("toasts.media.save_success"))
     } catch (error) {
       void error;
-      toast({
-        title: "Failed to save media content",
-        description: "Refresh the page and try again",
-        variant: "destructive",
-      });
+      toast.error(t("toasts.media.save_error"));
     }
   };
 
   return (
-      <Card className="w-full border-none shadow-none ">
-      <CardHeader className="px-0 flex-row justify-between items-center space-y-0">
-        <h5 className="font-medium">Meedia</h5>
+    <Card className="w-full border-none shadow-none ">
+      <CardHeader className="px-0 flex-col md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
+        <h5 className="font-medium">{t('admin.media.title')}</h5>
         <Button
           onClick={handleSave}
           disabled={mediaMutation.isPending}
         >
-          {mediaMutation.isPending ? "Saving..." : "Save Changes"}
+          {mediaMutation.isPending ? t("admin.media.save_progress") : t("admin.media.save_button")}
         </Button>
       </CardHeader>
       <div className="">
         <Editor value={value} setValue={setValue} readOnly={false} />
-        </div>
-      </Card>
+      </div>
+    </Card>
   );
 }

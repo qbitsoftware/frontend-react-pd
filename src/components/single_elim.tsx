@@ -36,7 +36,7 @@ const SingleElimBracket = ({
 
   if (data && data.matches) {
     return (
-      <div className="relative h-full w-full">
+      <div className="relative h-fit w-full">
         {/* Match boxes */}
         {data.matches.map((match, index) => {
           let topCoord;

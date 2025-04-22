@@ -63,7 +63,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                     tournament_table_data={table_data}
                   />
                 ) : (
-                  <TeamTableBody key={idx} participant={participant} idx={idx} />
+                  <TeamTableBody key={idx} participant={participant} idx={idx} tournament_table={table_data} />
                 )
               )}
             <TableRow className="relative bg-[#EBF6FD]/50">
@@ -114,7 +114,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                               <div className="flex justify-between items-center  bg-[#062842] py-2 rounded-l-sm">
                                 <h3 className="text-xl font-semibold px-2 ">
                                   <Input
-                                    placeholder={`Group ${groupNumber}`}
+                                    placeholder={`${t('admin.tournaments.groups.participants.team_placeholder')} ${groupNumber}`}
                                     className="text-lg"
                                     value={
                                       groupNames[groupNumber] !== undefined
@@ -147,7 +147,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                       variant="outline"
                       onClick={() => handleAddNewGroup(table_data)}
                     >
-                      Uus grupp <Plus />
+                      {t('admin.tournaments.groups.participants.new_group')} <Plus />
                     </Button>
                   </div>
                 ) : (

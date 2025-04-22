@@ -373,6 +373,16 @@
       "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
+        "errors": {
+          "location": "Asukoht on kohustuslik",
+          "name_min": "Turniiri nimi peab olema vähemalt 4 tähemärki pikk",
+          "name_max": "Turniiri nimi peab olema maksimaalselt 40 tähemärki pikk",
+          "sport": "Sport on kohustuslik",
+          "start_date": "Alguskuupäev on kohustuslik",
+          "end_date": "Lõppkuupäev on kohustuslik",
+          "total_tables": "Laudade arv peab olema suurem kui 1",
+          "category": "Kategooria on kohustuslik"
+        },
         "tournament_tables": {
           "single_elimination": "Klassikaline Üksikeliminatsioon",
           "single_elimination_bronze": "Üksikeliminatsioon (kolmanda koha väljamängimisega)",
@@ -441,17 +451,17 @@
           "tables": "Tabelid"
         },
         "images": {
-          "title": "Mängupäevad",
-          "new": "Uus mängupäev",
+          "title": "Pildigrupid",
+          "new": "Uus pildigrupp",
           "uploading": "Lõpuni jäänud",
           "dialog": {
             "confirmation": "Oled kindel",
-            "description": "Peale toimingut kustutatakse mängupäev ja seda ei saa tagasi võtta",
+            "description": "Peale toimingut kustutatakse pildigrupp ja seda ei saa tagasi võtta",
             "cancel": "Katkesta",
             "delete": "Kustuta"
           },
-          "no_gamedays": "Mängupäevi pole",
-          "no_gamedays_description": "Loo uus mängupäev, et alustada piltide haldamist",
+          "no_gamedays": "Pildigruppe pole",
+          "no_gamedays_description": "Loo uus pildigrupp, et alustada piltide haldamist",
           "no_images": "Pilte pole",
           "edit": "Muuda",
           "delete": "Kustuta",
@@ -459,12 +469,12 @@
           "remove_all": "Eemalda kõik",
           "save": "Salvesta",
           "toasts": {
-            "success_add": "Mängupäev loodud edukalt",
-            "error_add": "Mängupäeva loomine nurjus",
-            "success_remove": "Mängupäev eemaldatud edukalt",
-            "error_remove": "Mängupäeva eemaldamine nurjus",
-            "success_edit": "Mängupäev muudetud edukalt",
-            "error_edit": "Mängupäeva muutmine nurjus",
+            "success_add": "Pildigrupp loodud edukalt",
+            "error_add": "Pildigrupi loomine nurjus",
+            "success_remove": "Pildigrupp eemaldati edukalt",
+            "error_remove": "Pildigrupi eemaldamine nurjus",
+            "success_edit": "Pildigruppi muudeti edukalt",
+            "error_edit": "Pildigrupi muutmine nurjus",
             "success_remove_image": "Pilt eemaldatud edukalt",
             "error_remove_image": "Pildi eemaldamine nurjus",
             "uploading_images": "Piltide laadimine võib võtta mõne hetke. Ärge sulgege veebilehte.",
@@ -484,6 +494,12 @@
         "add_new": "Lisa uus",
         "no_tables": "Gruppe pole veel lisatud",
         "title": "Turniiri grupid",
+        "errors": {
+          "class": "Grupi nimi on kohustuslik",
+          "type": "Turniiri tüüp on kohustuslik"
+        },
+        "solo": "Üksik",
+        "team": "Meeskondadega",
         "order": {
           "title": "Genereeri mängud",
           "placeholder": "Järjesta",
@@ -517,6 +533,9 @@
           "teams": "Meeskonnad",
           "groups": "Grupid",
           "players": "Mängijad",
+          "change_me": "MUUDA MIND",
+          "new_group": "Uus grupp",
+          "team_placeholder": "Tiim",
           "toasts": {
             "team_updated": "Klubi loodud edukalt",
             "team_updated_error": "Meeskonna uuendamisel ilmnes viga",
@@ -749,6 +768,11 @@
         "confirmation": "Oled kindel?",
         "description": "Peale toimingut on klubi kustutatud ja seda ei saa tagasi võtta. Kustutamisele kuulub "
       }
+    },
+    "media": {
+      "title": "Meedia",
+      "save_button": "Salvesta",
+      "save_progress": "Salvestamine..."
     }
   },
   "protocol": {
@@ -795,5 +819,37 @@
   },
   "media": {
     "no_content": "Meedia puudub"
+  },
+  "toasts": {
+    "media": {
+      "save_success": "Meedia edukalt salvestatud",
+      "save_error": "Meedia salvestamine nurjus"
+    },
+    "tournaments": {
+      "created": "Turniir loodud edukalt",
+      "updated": "Turniir uuendatud edukalt",
+      "deleted": "Turniir kustutatud edukalt",
+      "created_error": "Turniiri loomine nurjus. Palun proovige uuesti",
+      "updated_error": "Turniiri uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Turniiri kustutamine nurjus. Palun proovige uuesti"
+    },
+    "tournament_tables": {
+      "created": "Grupp on loodud edukalt",
+      "updated": "Grupp on uuendatud edukalt",
+      "deleted": "Grupp on kustutatud edukalt",
+      "created_error": "Grupi loomine nurjus. Palun proovige uuesti",
+      "updated_error": "Grupi uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Group kustutamine nurjus. Palun proovige uuesti"
+    },
+    "participants": {
+      "created": "Osaleja lisatud edukalt",
+      "updated": "Osaleja uuendatud edukalt",
+      "deleted": "Osaleja eemaldatud edukalt",
+      "created_error": "Osaleja lisamine nurjus. Palun proovige uuesti",
+      "updated_error": "Osaleja uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Osaleja eemaldamine nurjus. Palun proovige uuesti",
+      "group_name_updated": "Grupi nimi uuendatud edukalt",
+      "group_name_updated_error": "Grupi nime uuendamine nurjus. Palun proovige uuesti"
+    }
   }
 }

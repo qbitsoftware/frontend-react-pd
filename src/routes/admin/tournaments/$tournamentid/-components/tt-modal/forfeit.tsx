@@ -1,55 +1,63 @@
-import { MatchWrapper } from '@/types/matches';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useState } from 'react'
 import { UsePatchMatch } from '@/queries/match'
-import { useEffect } from 'react'
+import { useProtocolModal } from '@/providers/protocolProvider';
+import { toast } from 'sonner';
+import { MatchWrapper } from '@/types/matches'
 
+const Forfeit = ({match}: {match: MatchWrapper}) => {
+    const {
+        tournament_id,
+        forfeitMatch,
+        setForfeitMatch
+    } = useProtocolModal()
 
-interface Props {
-    match: MatchWrapper
-    isOpen: boolean
-    tournament_id: number
-    onClose: () => void
-}
-
-const Forfeit = ({ match, isOpen, onClose, tournament_id }: Props) => {
     const [winnerId, setWinnerId] = useState<string>("")
     const [error, setError] = useState<string>("")
-    const usePatchMatch = UsePatchMatch(tournament_id, match.match.tournament_table_id, match.match.id)
+
+    const { mutateAsync: updateMatch } = UsePatchMatch(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id)
 
     const handleForfeit = async () => {
-        setError("")
-        const send_match = match.match
-        if (winnerId != "") {
-            send_match.winner_id = winnerId
-            send_match.forfeit = true
-            await usePatchMatch.mutateAsync(send_match)
-            onClose()
-        } else {
-            setError("You must select winner")
+        try {
+            setError("")
+            const send_match = match.match
+            if (winnerId != "") {
+                send_match.winner_id = winnerId
+                send_match.forfeit = true
+                await updateMatch(send_match)
+                setForfeitMatch(null)
+            } else {
+                setError("You must select winner")
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Error updating match")
         }
     }
 
-    useEffect(() => {
-        if (match.match.winner_id && match.match.forfeit) {
-            setWinnerId(match.match.winner_id)
-        }
-    }, [match])
 
     const deleteForfeit = async () => {
-        setError("")
-        const send_match = match.match
-        send_match.winner_id = ""
-        send_match.forfeit = false
-        await usePatchMatch.mutateAsync(send_match)
-        onClose()
+        try {
+            setError("")
+            const send_match = match.match
+            send_match.winner_id = ""
+            send_match.forfeit = false
+            await updateMatch(send_match)
+            setForfeitMatch(null)
+        } catch (error) {
+            console.log(error)
+            toast.error("Error updating match")
+        }
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose} >
+        <Dialog open={forfeitMatch !== null} onOpenChange={() => setForfeitMatch(null)} >
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>Loobusmivõit</DialogTitle>
@@ -71,7 +79,7 @@ const Forfeit = ({ match, isOpen, onClose, tournament_id }: Props) => {
                 </div>
                 <div className="flex justify-end flex-col md:flex-row gap-2 mt-6">
                     <Button variant="destructive" onClick={deleteForfeit}>Kustuta loobumisvõit</Button>
-                    <Button variant="outline" onClick={onClose}>Tagasi</Button>
+                    <Button variant="outline" onClick={() => setForfeitMatch(null)}>Tagasi</Button>
                     <Button onClick={handleForfeit} disabled={winnerId === null}>Kinnita loobumisvõit</Button>
                 </div>
                 <div>

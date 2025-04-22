@@ -1,5 +1,3 @@
-import { useToastNotification } from '@/components/toast-notification';
-import { useToast } from '@/hooks/use-toast';
 import { UseCreateParticipants, UseDeleteParticipant, UseGetParticipantsQuery, UseUpdateParticipant } from '@/queries/participants';
 import { ParticipantFormValues, participantSchema } from '@/routes/admin/tournaments/$tournamentid/-components/participant-forms/form-utils';
 import { Participant } from '@/types/participants';
@@ -11,6 +9,8 @@ import { capitalize, useDebounce } from '@/lib/utils';
 import { User } from '@/types/users';
 import { TournamentTable } from '@/types/groups';
 import { UseChangeSubgroupName } from '@/queries/participants';
+import { toast } from "sonner";
+import { useTranslation } from 'react-i18next';
 
 interface ParticipantContextType {
     handleAddOrUpdateParticipant: (
@@ -74,11 +74,9 @@ interface ParticipantProviderProps {
 }
 
 export const ParticipantProvider = ({ children, tournament_id, tournament_table_id }: ParticipantProviderProps) => {
-    const toast = useToast();
-    const { successToast, errorToast } = useToastNotification(toast);
-
     const { data: participant_data } = UseGetParticipantsQuery(tournament_id, tournament_table_id, false)
     const [participantsState, setParticipantsState] = useState<Participant[] | null>(null);
+    const { t } = useTranslation()
 
     const [editingParticipant, setEditingParticipant] =
         useState<Participant | null>(null);
@@ -112,7 +110,6 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
     // Round Robin specific states:  
     const [teamName, setTeamName] = useState<string>("");
-    // const [groupId, setGroupId] = useState<string>("1");
     const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
     const [editingTeamName, setEditingTeamName] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
@@ -160,13 +157,14 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
     const handleEditParticipant = (editForm: UseFormReturn<ParticipantFormValues>, participant: Participant) => {
         setEditingParticipant(participant);
+        const players = participant.players ? participant.players : [];
         editForm.reset({
             name: participant.name,
             order: participant.order,
             tournament_id: 30,
             class: participant.extra_data.class,
             sport_type: participant.sport_type || "tabletennis",
-            players: participant.players.map((player) => ({
+            players: players.map((player) => ({
                 id: player.id,
                 user_id: player.user_id,
                 first_name: player.first_name,
@@ -191,50 +189,52 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         participantId?: string
     ) => {
         try {
-            console.log("values", values)
             if (participantId) {
                 await updateParticipant.mutateAsync({
                     formData: values,
                     participantId,
                 });
 
-                successToast("Participant updated successfully");
+                toast.message(t("toasts.participants.updated"))
                 setEditingParticipant(null);
             } else {
                 await createParticipant.mutateAsync(values);
-                successToast("Participant added successfully");
+                toast.message(t("toasts.participants.created"))
             }
             form.resetField("players");
             form.reset(
                 {
                     name: "",
-                    tournament_id: Number(30),
+                    tournament_id: values.tournament_id,
                     class: "",
                     sport_type: "tabletennis",
                     players: [
-                        {
-                            name: "",
-                            user_id: 0,
-                            first_name: "",
-                            last_name: "",
-                            sport_type: "tabletennis",
-                            sex: "",
-                            extra_data: {
-                                rate_order: 0,
-                                club: "",
-                                rate_points: 0,
-                                eltl_id: 0,
-                                class: "",
-                            },
-                        },
+                        // {
+                        //     name: "",
+                        //     user_id: 0,
+                        //     first_name: "",
+                        //     last_name: "",
+                        //     sport_type: "tabletennis",
+                        //     sex: "",
+                        //     extra_data: {
+                        //         rate_order: 0,
+                        //         club: "",
+                        //         rate_points: 0,
+                        //         eltl_id: 0,
+                        //         class: "",
+                        //     },
+                        // },
                     ],
                 },
                 { keepValues: false }
             );
         } catch (error) {
-            errorToast(
-                `Error ${participantId ? "updating" : "adding"} participant: ${error}`
-            );
+            void error;
+            if (participantId) {
+                toast.error(t("toasts.participants.updated_error"))
+            } else {
+                toast.error(t("toasts.participants.created_error"))
+            }
         }
     };
 
@@ -247,7 +247,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
             const isLastInGroup = participantsInSameGroup.length === 1;
 
-            const res = await deleteMutation.mutateAsync(participant.id);
+            await deleteMutation.mutateAsync(participant.id);
             setGroupNames((prev) => {
                 const newGroupNames = { ...prev };
                 if (isLastInGroup) {
@@ -255,10 +255,10 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                 }
                 return newGroupNames;
             })
-            successToast(res.message);
+            toast.message(t("toasts.participants.deleted"))
         } catch (error) {
             void error;
-            errorToast("Osaleja kustutamisel tekkis viga");
+            toast.error(t("toasts.participants.deleted_error"))
         }
     };
 
@@ -357,7 +357,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
         return subGroupPlayers && subGroupPlayers.length > 0
             ? subGroupPlayers[0].group_name
-            : `Group ${groupIndex}`;
+            : `${groupIndex}`;
     };
 
     const handleNameChange = async (groupName: string, groupIndex: number) => {
@@ -376,11 +376,11 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     participant_ids: players_ids,
                     group_name: name,
                 });
-            } else {
-                console.log("mingi error kuskil majanduses")
+                toast.message(t("toasts.participants.group_name_updated"))
             }
         } catch (error) {
             void error;
+            toast.error(t("toasts.participants.group_name_updated_error"))
         }
     };
 
@@ -396,7 +396,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
         if (table_data.solo) {
             await handleAddOrUpdateParticipant({
-                name: `Change me`,
+                name: t("admin.tournaments.groups.participants.change_me"),
                 tournament_id: tournament_id,
                 group: newGroupId,
                 sport_type: "tabletennis",
@@ -415,7 +415,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
             });
         } else {
             await handleAddOrUpdateParticipant({
-                name: `Team ${newGroupId}`,
+                name: `${t('admin.tournaments.groups.participants.change_me')} ${newGroupId}`,
                 tournament_id: tournament_id,
                 group: newGroupId,
                 sport_type: "tabletennis",
@@ -424,7 +424,6 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
         }
 
-        // setGroupId(newGroupId.toString());
     };
 
     // Get all unique group IDs
