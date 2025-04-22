@@ -175,9 +175,9 @@ function RouteComponent() {
   const clubs = clubsData.data;
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div className="">
+    <div className="px-2 py-8 md:p-8 overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div className="text-center md:text-left mb-4 md:mb-0">
           <h3 className="font-bold">{t("admin.clubs.title")}</h3>
           <p className="text-gray-600 mt-1">{t("admin.clubs.subtitle")}</p>
         </div>
@@ -193,7 +193,7 @@ function RouteComponent() {
         {clubs.length} {t("admin.clubs.clubs")}
       </span>
 
-      <Table>
+      <Table className="">
         <TableHeader>
           <TableRow>
             <TableHead>{t("admin.clubs.table.image")}</TableHead>
@@ -238,7 +238,7 @@ function RouteComponent() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
+                      <span className="">Open menu</span>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

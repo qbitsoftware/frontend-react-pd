@@ -45,6 +45,7 @@ function RouteComponent() {
       <div className="pb-12">
         <MatchesTable
           tournament_id={Number(tournamentid)}
+          player_count={table_data.data.min_team_size}
           data={matches.data || []}
           tournament_table={table_data.data}
         />

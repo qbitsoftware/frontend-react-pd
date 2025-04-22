@@ -12,7 +12,6 @@ const StandingsProtocol = ({group_id}: {group_id: number}) => {
     isLoading,
     isError,
   } = UseGetPlacements(Number(tournamentid), group_id);
-  console.log("participants", participants);
 
   if (isLoading) {
     return <LoadingScreen />;

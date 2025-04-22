@@ -44,16 +44,16 @@ export const TournamentTable: React.FC<TournamentTableProps> = ({ tournaments })
             <TableCell>
               <Badge variant={tournament.state === "started" ? "outline" : "destructive"}>{tournament.state}</Badge>
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               {formatDateString(tournament.start_date)} - {formatDateString(tournament.end_date)}
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-2 text-red-500" />
                 {tournament.location}
               </div>
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-purple-500" />
                 {getDurationDays(tournament.start_date, tournament.end_date) + 1} days
