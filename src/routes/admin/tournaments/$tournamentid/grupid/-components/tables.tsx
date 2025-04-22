@@ -22,7 +22,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const { t } = useTranslation()
   return (
     <Card className="w-full border-none shadow-none ">
-      <CardHeader className="px-0 flex-col gap-4 md:gap-0 md:flex-row md:justify-between items-center space-y-0">
+      <CardHeader className="px-0 flex-col gap-4 md:gap-0 md:flex-row md:justify-between items-start md:items-center space-y-0">
       <h5 className="font-medium">
         {t("admin.tournaments.groups.title")}
         </h5>
@@ -51,7 +51,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
                 <TableCell className="font-medium">{table.class}</TableCell>
                 <TableCell><span className="font-semibold">{table.participants.length}</span>/{table.size}</TableCell>
                 <TableCell className="truncate">{parseTableType(table.type)}</TableCell>
-                <TableCell>{table.solo ? 'Üksik' : 'Meeskondadega'}</TableCell>
+                <TableCell>{table.solo ? t('admin.tournaments.groups.solo') : t('admin.tournaments.groups.team')}</TableCell>
 
               </TableRow>
             ))

@@ -5,7 +5,6 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { TanStackQueryDevtools, TanStackRouterDevtools } from "@/React.lazy";
 import Footer from "./-components/footer";
 import Navbar from "@/components/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -33,10 +32,6 @@ export const Route = createRootRouteWithContext<{
             </main>
             {!isLoading && <Footer />}
             <Toaster />
-            <Suspense>
-              {/*<TanStackRouterDevtools />
-              <TanStackQueryDevtools /> */}
-            </Suspense>
           </div>
           <AppSidebar />
         </SidebarProvider>

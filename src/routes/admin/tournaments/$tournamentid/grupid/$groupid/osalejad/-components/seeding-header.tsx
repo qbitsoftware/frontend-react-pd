@@ -74,7 +74,7 @@ const SeedingHeader = ({
   };
 
   return (
-    <CardHeader className="flex flex-row items-center justify-between  space-y-0">
+    <CardHeader className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between  space-y-0">
       <div className="flex gap-2 items-center">
         <h5 className="font-medium">{t("admin.tournaments.info.participants")}</h5>
         <p className="bg-[#FBFBFB] font-medium px-3 py-1 rounded-full border border-[#EAEAEA] ">

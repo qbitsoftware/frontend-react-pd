@@ -125,7 +125,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EFEFEF] z-10">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EFEFEF] z-40">
         <nav className="flex justify-between items-center px-2">
           {menuItems.map((item) => (
             <Link

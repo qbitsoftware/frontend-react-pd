@@ -20,8 +20,6 @@ import {
   UseDeleteTournament,
   UseGetTournamentCategories,
 } from "@/queries/tournaments"
-import { useToast } from "@/hooks/use-toast"
-import { useToastNotification } from "@/components/toast-notification"
 import { useTranslation } from "react-i18next"
 import { useState as useStateOriginal } from "react"
 import {
@@ -36,23 +34,24 @@ import {
 } from "@/components/ui/alert-dialog"
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
-import { t } from "i18next"
+import { t, TFunction } from "i18next"
 import { Tournament } from "@/types/tournaments"
+import { toast } from "sonner"
 
-const formSchema = z.object({
-  name: z.string().min(4).max(40),
-  start_date: z.date(),
-  end_date: z.date(),
-  sport: z.string(),
-  total_tables: z.number().min(1),
-  category: z.string(),
-  location: z.string().min(1, { message: "Location is required" }),
+const createFormSchema = (t: TFunction) => z.object({
+  name: z.string().min(4, { message: t("admin.tournaments.create_tournament.errors.name_min") }).max(40, { message: t("admin.tournaments.create_tournament.errors.name_max") }),
+  start_date: z.date({ message: t("admin.tournaments.create_tournament.errors.start_date") }),
+  end_date: z.date({ message: t("admin.tournaments.create_tournament.errors.end_date") }),
+  sport: z.string({ message: t("admin.tournaments.create_tournament.errors.sport") }),
+  total_tables: z.number().min(1, { message: t("admin.tournaments.create_tournament.errors.total_tables") }),
+  category: z.string({ message: t("admin.tournaments.create_tournament.errors.category") }),
+  location: z.string().min(1, { message: t("admin.tournaments.create_tournament.errors.location") }),
   information: z.any(),
   private: z.boolean(),
   calc_rating: z.boolean(),
 })
 
-export type TournamentFormValues = z.infer<typeof formSchema>
+export type TournamentFormValues = z.infer<ReturnType<typeof createFormSchema>>
 
 interface TournamentFormProps {
   initial_data: Tournament | undefined | null
@@ -63,6 +62,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const [value, setValue] = useState<YooptaContentValue | undefined>(
     initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined
   );
+  const formSchema = createFormSchema(t)
 
   const form = useForm<TournamentFormValues>({
     resolver: zodResolver(formSchema),
@@ -76,6 +76,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         name: "",
         start_date: new Date(),
         end_date: new Date(),
+        total_tables: 1,
         sport: "",
         location: "",
         category: "",
@@ -88,10 +89,6 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
   const deleteMutation = UseDeleteTournament(initial_data?.id)
   const { data: tournament_categories } = UseGetTournamentCategories()
-
-
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
   const router = useRouter()
 
   let postMutation = UsePostTournament()
@@ -108,21 +105,18 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const onSubmit = async (values: TournamentFormValues) => {
     try {
       values.information = JSON.stringify(value)
-      const res = await postMutation.mutateAsync(values)
+      await postMutation.mutateAsync(values)
       if (initial_data) {
-        successToast("Turniir edukalt uuendatud")
+        toast.message(t('toasts.tournaments.updated'))
       } else {
-        successToast("Turniir edukalt lisatud")
+        toast.error(t('toasts.tournaments.created'))
       }
-      router.navigate({
-        to: `/admin/tournaments/${res.data.id}`,
-      })
     } catch (error) {
       void error
       if (initial_data) {
-        errorToast("Turniiri uuendamisel tekkis viga")
+        toast.message(t('toasts.tournaments.updated_error'))
       } else {
-        errorToast("Turniiri loomisel tekkis viga")
+        toast.error(t('toasts.tournaments.created_error'))
       }
     }
   }
@@ -134,11 +128,11 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         to: `/admin/tournaments`,
         replace: true,
       })
-      successToast("Turniir on edukalt kustutatud")
+      toast.message(t('toasts.tournaments.deleted'))
       setShowDeleteDialog(false)
     } catch (error) {
-      errorToast("Turniiri kustutamine ebaõnnestus")
-      console.error(error)
+      void error;
+      toast.error(t('toasts.tournaments.deleted_error'))
     }
   }
 
@@ -316,7 +310,16 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                         type="number"
                         placeholder={t("admin.tournaments.create_tournament.number_of_tables_placeholder")}
                         {...field}
-                        onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === "") {
+                            field.onChange(0);
+                          } else {
+                            const cleanedValue = value.replace(/^0+/, '');
+                            field.onChange(cleanedValue === '' ? 0 : Number.parseInt(cleanedValue));
+                          }
+                        }}
+                        value={field.value === 0 ? '' : field.value}
                       />
                     </FormControl>
                     <FormMessage />
