@@ -2,6 +2,8 @@ import { MatchesResponse, UseGetChildMatchesQuery, UsePatchMatch, UsePatchMatchS
 import { Match, MatchWrapper, PlayerKey, TableTennisExtraData } from "@/types/matches";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react"
 import { toast } from "sonner";
+import { useCallback } from "react";
+import { debounce } from "lodash";
 
 interface ProtocolModalProps {
     isOpen: boolean;
@@ -21,6 +23,8 @@ interface ProtocolModalContextValues {
     notes: string
     headReferee: string
     tableReferee: string
+    teamACaptain: string
+    teamBCaptain: string
     forfeitMatch: MatchWrapper | null
     isLoading: boolean
     childMatches: MatchesResponse | undefined
@@ -35,6 +39,9 @@ interface ProtocolModalContextValues {
     handleMatchStart: () => void
     handleMatchFinish: () => void
     handleForfeitMatch: (match: MatchWrapper) => void
+    handleNotesChange: (value: string) => void
+    handleTableRefereeChange: (value: string) => void
+    handleHeadRefereeChange: (value: string) => void
 }
 
 const ProtocolModalContext = createContext<ProtocolModalContextValues | undefined>(undefined)
@@ -50,10 +57,12 @@ export const ProtocolModalProvider = ({
 
     const extraData = match.match.extra_data || {} as TableTennisExtraData
     const [notes, setNotes] = useState<string>("")
+    const [teamACaptain, setTeamACaptain] = useState<string>("")
+    const [teamBCaptain, setTeamBCaptain] = useState<string>("")
     const [tableReferee, setTableReferee] = useState<string>("")
     const [headReferee, setHeadReferee] = useState<string>("")
     const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
-    
+
     // Queries
     const { data: childMatches, isLoading } = UseGetChildMatchesQuery(
         tournament_id,
@@ -166,38 +175,50 @@ export const ProtocolModalProvider = ({
         }
     };
 
+    const debouncedUpdateField = useCallback(
+        debounce(async (fieldKey: string, value: string) => {
+            try {
+                const updatedExtraData = {
+                    ...match.match.extra_data,
+                    [fieldKey]: value
+                };
 
-    const handleCaptainChange = async (value: string, captainKey: string) => {
-        try {
-            const updatedExtraData = {
-                ...extraData,
-                [captainKey]: value
-            };
+                const sendMatch: Match = {
+                    ...match.match,
+                    extra_data: updatedExtraData,
+                    topCoord: 0,
+                };
 
-            const sendMatch: Match = {
-                id: match.match.id,
-                tournament_table_id: match.match.tournament_table_id,
-                type: match.match.type,
-                round: match.match.round,
-                p1_id: match.match.p1_id,
-                p2_id: match.match.p2_id,
-                winner_id: match.match.winner_id,
-                order: match.match.order,
-                sport_type: match.match.sport_type,
-                location: match.match.location,
-                state: match.match.state,
-                start_date: match.match.start_date,
-                bracket: match.match.bracket,
-                forfeit: match.match.forfeit,
-                extra_data: updatedExtraData,
-                topCoord: 0,
-                table_type: match.match.table_type,
-            };
+                await updateMatch(sendMatch);
+            } catch (error) {
+                toast.error(`Failed to update ${fieldKey}`);
+            }
+        }, 500),
+        [match.match, updateMatch]
+    );
 
-            await updateMatch(sendMatch);
-        } catch (error) {
-            toast.error("Failed to assign captain")
+    const handleCaptainChange = (value: string, captainKey: string) => {
+        if (captainKey === "captain_a") {
+            setTeamACaptain(value);
+        } else if (captainKey === "captain_b") {
+            setTeamBCaptain(value);
         }
+        debouncedUpdateField(captainKey, value);
+    };
+
+    const handleNotesChange = (value: string) => {
+        setNotes(value);
+        debouncedUpdateField('notes', value);
+    };
+
+    const handleTableRefereeChange = (value: string) => {
+        setTableReferee(value);
+        debouncedUpdateField('table_referee', value);
+    };
+
+    const handleHeadRefereeChange = (value: string) => {
+        setHeadReferee(value);
+        debouncedUpdateField('head_referee', value);
     };
 
     const handleMatchStart = async () => {
@@ -215,14 +236,6 @@ export const ProtocolModalProvider = ({
             const match_payload: Match = {
                 ...match.match,
                 winner_id: "finished",
-                extra_data: {
-                    ...match.match.extra_data,
-                    table_referee: tableReferee,
-                    head_referee: headReferee,
-                    captain_a: match.match.extra_data.captain_a,
-                    captain_b: match.match.extra_data.captain_b,
-                    notes,
-                }
             }
             await updateMatch(match_payload)
             toast.success("Match finished successfully")
@@ -248,6 +261,12 @@ export const ProtocolModalProvider = ({
         if (match.match.extra_data.notes) {
             setNotes(match.match.extra_data.notes)
         }
+        if (match.match.extra_data.captain_a) {
+            setTeamACaptain(match.match.extra_data.captain_a)
+        }
+        if (match.match.extra_data.captain_b) {
+            setTeamBCaptain(match.match.extra_data.captain_b)
+        }
     }, [childMatches, match.match.extra_data])
 
     const ProtocolModalValues: ProtocolModalContextValues = {
@@ -262,6 +281,8 @@ export const ProtocolModalProvider = ({
         forfeitMatch,
         isLoading,
         childMatches,
+        teamACaptain,
+        teamBCaptain,
         setForfeitMatch,
         setHeadReferee,
         setTableReferee,
@@ -272,7 +293,10 @@ export const ProtocolModalProvider = ({
         handleCaptainChange,
         handleMatchStart,
         handleMatchFinish,
-        handleForfeitMatch
+        handleForfeitMatch,
+        handleNotesChange,
+        handleTableRefereeChange,
+        handleHeadRefereeChange,
     }
 
     return (

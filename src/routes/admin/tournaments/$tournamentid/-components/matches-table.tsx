@@ -31,7 +31,7 @@ import { TournamentTable } from "@/types/groups";
 import ResetSeeding from "./reset-seeding";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProtocolModalProvider } from "@/providers/protocolProvider";
-import { TableTennisProtocolModal } from "./tt-modal/tt-modal-new";
+import { TableTennisProtocolModal } from "./tt-modal/tt-modal";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];

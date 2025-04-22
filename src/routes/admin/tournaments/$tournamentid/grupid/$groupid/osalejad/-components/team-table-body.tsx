@@ -429,7 +429,6 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                         }}
 
                                         onBlur={() => {
-                                            setSearchTerm("")
                                             setPopoverOpen(false)
                                         }}
                                     />
@@ -443,8 +442,6 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
 
                                         }
                                         onClick={() => {
-
-                                            console.log("test")
                                             const lastSpaceIndex =
                                                 searchTerm.lastIndexOf(" ");
 

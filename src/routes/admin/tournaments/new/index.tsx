@@ -8,7 +8,6 @@ export const Route = createFileRoute('/admin/tournaments/new/')({
 
 function RouteComponent() {
   return (
-
       <div className="w-full px-10">
         <TournamentForm initial_data={undefined} />
       </div>

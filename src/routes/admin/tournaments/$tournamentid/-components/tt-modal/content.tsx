@@ -17,12 +17,12 @@ export function Content() {
     headReferee,
     tableReferee,
     forfeitMatch,
-    setNotes,
-    setHeadReferee,
-    setTableReferee,
     handleSwitchParticipants,
     handleMatchStart,
-    handleMatchFinish
+    handleMatchFinish,
+    handleTableRefereeChange,
+    handleNotesChange,
+    handleHeadRefereeChange
   } = useProtocolModal()
 
   const getAvailablePlayers = (teamNumber: number) => {
@@ -77,8 +77,8 @@ export function Content() {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TeamPlayers team={1} playerCount={player_count} players={getAvailablePlayers(1)} />
-            <TeamPlayers team={2} playerCount={player_count} players={getAvailablePlayers(2)} />
+            <TeamPlayers key={1} team={1} playerCount={player_count} players={getAvailablePlayers(1)} />
+            <TeamPlayers key={2} team={2} playerCount={player_count} players={getAvailablePlayers(2)} />
           </div>
           <div className="mt-4">
             <div className="flex items-center justify-between mb-1">
@@ -93,7 +93,7 @@ export function Content() {
             </div>
             <Textarea
               placeholder="Märkmed"
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={(e) => handleNotesChange(e.target.value)}
               value={notes}
               className="w-full min-h-[60px] text-sm mt-4"
             />
@@ -114,7 +114,7 @@ export function Content() {
               className="h-8 text-sm"
               value={tableReferee}
               placeholder="Lauakohtunik"
-              onChange={(e) => setTableReferee(e.target.value)}
+              onChange={(e) => handleTableRefereeChange(e.target.value)}
             />
           </div>
           <div className="flex flex-col">
@@ -123,7 +123,7 @@ export function Content() {
               className="h-8 text-sm"
               value={headReferee}
               placeholder="Peakohtunik"
-              onChange={(e) => setHeadReferee(e.target.value)}
+              onChange={(e) => handleHeadRefereeChange(e.target.value)}
             />
           </div>
         </div>

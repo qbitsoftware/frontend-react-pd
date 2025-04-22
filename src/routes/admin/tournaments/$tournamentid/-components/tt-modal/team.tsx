@@ -20,6 +20,8 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
         match,
         handleCaptainChange,
         handlePlayerChange,
+        teamACaptain,
+        teamBCaptain,
     } = useProtocolModal()
 
     const playerKeys = getPlayerKeys(team, playerCount);
@@ -39,7 +41,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                         <span className="text-xs">Kapten:</span>
                         <Input
                             type="text"
-                            value={extraData[captainKey] || ''}
+                            value={team === 1 ? teamACaptain : teamBCaptain}
                             onChange={(e) => handleCaptainChange(e.target.value, captainKey)}
                             placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
                             className="h-7 text-xs w-28"
@@ -51,7 +53,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                         Üksikmäng
                     </div>
                     {playerKeys.map((playerKey, index) => (
-                        <div key={playerKey} className="flex items-center space-x-2">
+                        <div key={index} className="flex items-center space-x-2">
                             <span className="text-sm font-medium w-8">{getPlayerLabel(index, team)}</span>
                             <Select
                                 value={extraData[playerKey] || ''}
@@ -85,7 +87,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                         Paarismäng
                     </div>
                     {pairKeys.map((pairKey, index) => (
-                        <div className="flex items-center space-x-2">
+                        <div key={index} className="flex items-center space-x-2">
                             <span className="text-sm font-medium w-8">{getPairLabel(index, team)}</span>
                             <Select
                                 value={extraData[pairKey] || ''}
