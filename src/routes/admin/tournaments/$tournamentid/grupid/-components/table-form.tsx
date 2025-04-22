@@ -1,5 +1,4 @@
 import Loader from '@/components/loader'
-import { useToastNotification } from '@/components/toast-notification'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -7,7 +6,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { UseDeleteTournamentTable, UsePatchTournamentTable, UsePostTournamentTable } from '@/queries/tables'
 import { UseGetTournamentSizes, UseGetTournamentTypes } from '@/queries/tournaments'
@@ -15,22 +13,25 @@ import { TournamentTable } from '@/types/groups'
 import { GroupType } from '@/types/matches'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams, useRouter } from '@tanstack/react-router'
+import { TFunction } from 'i18next'
 import { Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
+import { toast } from 'sonner'
 
-const formSchema = z.object({
-  class: z.string(),
-  type: z.string(),
+
+const createFormSchema = (t: TFunction) => z.object({
+  class: z.string().min(1, t('admin.tournaments.groups.errors.class')),
+  type: z.string().min(1, t('admin.tournaments.groups.errors.type')),
   solo: z.boolean(),
   min_team_size: z.number().min(2),
   max_team_size: z.number().min(2),
   size: z.number(),
 })
 
-export type TournamentTableForm = z.infer<typeof formSchema>
+export type TournamentTableForm = z.infer<ReturnType<typeof createFormSchema>>
 
 interface TableFormProps {
   initial_data: TournamentTable | undefined
@@ -42,10 +43,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [customSize, setCustomSize] = useState("");
-
-
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
+  const formSchema = createFormSchema(t)
 
   const { tournamentid } = useParams({ strict: false })
 
@@ -76,28 +74,25 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
     postMutation = UsePatchTournamentTable(Number(tournamentid), initial_data.id)
   }
 
-
-
-
   const handleSubmit = async (values: TournamentTableForm) => {
     try {
       const res = await postMutation.mutateAsync(values)
       if (initial_data) {
-        successToast("Turniir edukalt uuendatud")
+        toast.message(t('toasts.tournament_tables.updated'))
         router.navigate({
           to: `/admin/tournaments/${tournamentid}/grupid/${initial_data.id}/`,
         })
       } else {
-        successToast("Turniir edukalt lisatud")
+        toast.message(t('toasts.tournament_tables.created'))
         router.navigate({
           to: `/admin/tournaments/${tournamentid}/grupid/${res.data.id}/`,
         })
       }
     } catch (error) {
       if (initial_data) {
-        errorToast("Turniiri uuendamisel tekkis viga")
+        toast.error(t('toasts.tournament_tables.updated_error'))
       } else {
-        errorToast("Turniiri loomisel tekkis viga")
+        toast.error(t('toasts.tournament_tables.created_error'))
       }
     }
   }
@@ -109,11 +104,11 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         to: `/admin/tournaments/${Number(tournamentid)}/grupid/`,
         replace: true,
       })
-      successToast("Turniir on edukalt kustutatud")
+      toast.message(t('toasts.tournament_tables.deleted'))
       setShowDeleteDialog(false)
     } catch (error) {
-      errorToast("Turniiri kustutamine ebaõnnestus")
-      console.error(error)
+      void error
+      toast.error(t('toasts.tournament_tables.deleted_error'))
     }
   }
 
@@ -196,7 +191,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-                {form.getValues().type === GroupType.ROUND_ROBIN || form.getValues().type === GroupType.ROUND_ROBIN_FULL_PLACEMENT || form.getValues().type === GroupType.CHAMPIONS_LEAGUE ? (
+                {form.watch("type") === GroupType.ROUND_ROBIN || form.watch("type") === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
                   <FormItem>
                     <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
                     <FormControl>
@@ -214,7 +209,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                ) : (
+                ) : form.watch("type") === GroupType.CHAMPIONS_LEAGUE ? <div></div> : (
                   <FormItem>
                     <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
                     <Select

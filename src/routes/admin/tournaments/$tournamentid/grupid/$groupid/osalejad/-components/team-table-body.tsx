@@ -12,13 +12,16 @@ import EditImgModal from '../../../../-components/edit-img-modal'
 import { ParticipantFormValues } from '../../../../-components/participant-forms/form-utils'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Player } from '@/types/players'
+import { TournamentTable } from '@/types/groups'
+import { GroupType } from '@/types/matches'
 
 interface TeamTableBodyProps {
     participant: Participant
+    tournament_table: TournamentTable
     idx: number
 }
 
-const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
+const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProps) => {
     const { editingParticipant, debouncedSearchTerm, editForm, handleDeleteParticipant, handleEditParticipant, handleAddOrUpdateParticipant, handleEditPlayer, handleRemovePlayer, handleSavePlayerEdit, searchTerm, setSearchTerm, editingPlayerInfo, playerSuggestions, participantsState, activeTeamForPlayer, setActiveTeamForPlayer, setEditingPlayerInfo } = useParticipantForm()
     const { t } = useTranslation()
     const [isInput, setIsInput] = useState(false);
@@ -39,7 +42,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
             <TableRow className='bg-[#EBF6FD] hover:bg-[#EBF6FD]'>
                 <TableCell>{idx + 1}</TableCell>
                 <TableCell>
-                    {editingParticipant && editingParticipant.id === participant.id ? (
+                    {tournament_table.type !== GroupType.ROUND_ROBIN && tournament_table.type !== GroupType.ROUND_ROBIN_FULL_PLACEMENT && editingParticipant && editingParticipant.id === participant.id ? (
                         <Input
                             {...editForm.register("order", { valueAsNumber: true })}
                             type="number"
@@ -57,6 +60,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                 <TableCell className="font-medium">
                     {editingParticipant?.id === participant.id ? (
                         <Input
+                            autoComplete='off'
                             {...editForm.register("name")}
                             defaultValue={capitalize(participant.name)}
                         />
@@ -79,7 +83,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         handleAddOrUpdateParticipant(
                                             editForm.getValues(),
                                             participant.id)
-                                        console.log(participant)
                                     }}
                                 >
                                     <Pencil className="w-4 h-4 mr-2" />
@@ -92,7 +95,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                 <DropdownMenuItem
                                     onClick={() => {
                                         handleEditParticipant(editForm, participant)
-                                        console.log(participant)
 
                                     }
                                     }
@@ -427,7 +429,6 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                         }}
 
                                         onBlur={() => {
-                                            setSearchTerm("")
                                             setPopoverOpen(false)
                                         }}
                                     />
@@ -456,6 +457,7 @@ const TeamTableBody = ({ participant, idx }: TeamTableBodyProps) => {
                                                     lastSpaceIndex + 1
                                                 );
                                             }
+
 
                                             const existingPlayers =
                                                 participant.players ?? [];

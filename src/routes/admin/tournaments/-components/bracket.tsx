@@ -53,10 +53,10 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
     <div className="w-full h-full">
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
-          <CardHeader className="flex-row justify-between items-center space-y-0">
+          <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
           <Button
               onClick={toggleEditingMode}
-              className={`px-3 py-1 text-xs rounded transition-colors ${isEditingMode
+              className={`w-full md:w-auto px-3 py-1 text-xs rounded transition-colors ${isEditingMode
                 ? " bg-stone-700 border border-dashed"
                 : ""
                 }`}
@@ -79,7 +79,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
               Print Bracket
             </Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {hasEliminations ? (
               <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer}/>
             ) : hasRoundRobins ? (

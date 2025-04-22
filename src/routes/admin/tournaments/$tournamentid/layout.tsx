@@ -38,32 +38,32 @@ function RouteComponent() {
   return (
     <div className="mx-auto min-h-[95vh] h-full">
       <div className="w-full z-12">
-        <div className="py-4 sm:py-auto px-8  flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
+        <div className="py-4 sm:py-auto md:px-8 flex flex-col lg:flex-row gap-4 justify-between items-center w-full bg-gradient-to-b from-white via-white/50 to-[#EBEBEB]/50 z-12">
           <h5 className="font-semibold text-[#03326B]">{tournament_data.data?.name}</h5>
-          <Tabs value={currentTab} className="">
-            <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+          <Tabs value={currentTab} className="w-full lg:w-auto">
+            <TabsList className="p-2 md:p-0 flex flex-row justify-start items-center w-full overflow-x-auto scrollbar-hide gap-1 px-1">
               <Link to={`/admin/tournaments/${tournamentid}`} >
-                <TabsTrigger value="info" className="w-[7rem] py-[6px]">
+                <TabsTrigger value="info" className="w-[7rem] py-[6px] flex-shrink-0">
                   {t("admin.layout.info")}
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/grupid`}>
-                <TabsTrigger value="groups" className="w-[7rem] py-[6px]">
+                <TabsTrigger value="groups" className="w-[7rem] py-[6px] flex-shrink-0">
                   {t("admin.layout.groups")}
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/meedia`} >
-                <TabsTrigger value="media" className="w-[7rem] py-[6px]">
+                <TabsTrigger value="media" className="w-[7rem] py-[6px] flex-shrink-0">
                   {t("admin.layout.media")}
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/pildid`} >
-                <TabsTrigger value="images" className="w-[7rem] py-[6px]">
+                <TabsTrigger value="images" className="w-[7rem] py-[6px] flex-shrink-0">
                   {t("admin.layout.images")}
                 </TabsTrigger>
               </Link>
               <Link to={`/admin/tournaments/${tournamentid}/lauad`} >
-                <TabsTrigger value="tables" className="w-[7rem] py-[6px]">
+                <TabsTrigger value="tables" className="w-[7rem] py-[6px] flex-shrink-0">
                   {t("admin.layout.tables")}
                 </TabsTrigger>
               </Link>
@@ -71,11 +71,10 @@ function RouteComponent() {
           </Tabs>
         </div>
 
-        <div className="px-10">
+        <div className="px-4 md:px-10">
           <Outlet />
         </div>
       </div>
     </div>
   )
 }
-

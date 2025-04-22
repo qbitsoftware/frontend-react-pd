@@ -373,6 +373,16 @@
       "add_new": "New Tournament",
       "delete": "Delete a tournament",
       "create_tournament": {
+        "errors": {
+          "location": "Location is required",
+          "name_min": "Tournament name must be at least 4 characters long",
+          "name_max": "Tournament name must be at most 40 characters long",
+          "start_date": "Start date is required",
+          "sport": "Sport is required",
+          "end_date": "End date is required",
+          "total_tables": "Total tables must be at least 1",
+          "category": "Category is required"
+        },
         "tournament_tables": {
           "single_elimination": "Single Elimination (No bronze)",
           "single_elimination_bronze": "Single Elimination",
@@ -441,8 +451,8 @@
           "tables": "Tables"
         },
         "images": {
-          "title": "Gamedays",
-          "new": "New gameday",
+          "title": "Image groups",
+          "new": "New image group",
           "uploading": "Remaining",
           "dialog": {
             "confirmation": "Are you sure?",
@@ -450,8 +460,8 @@
             "cancel": "Cancel",
             "delete": "Delete"
           },
-          "no_gamedays": "There are no gamedays",
-          "no_gamedays_description": "Create a new gameday to upload and manage images",
+          "no_gamedays": "There are no image groups yet",
+          "no_gamedays_description": "Create a new image group to upload and manage images",
           "no_images": "There are currently no images",
           "edit": "Edit",
           "delete": "Delete",
@@ -459,12 +469,12 @@
           "remove_all": "Remove all",
           "save": "Save",
           "toasts": {
-            "success_add": "Gameday added",
-            "error_add": "Failed to add gameday",
-            "success_remove": "Gameday removed successfully",
-            "error_remove": "Failed to remove gameday",
-            "success_edit": "Gameday edited successfully",
-            "error_edit": "Failed to edit gameday",
+            "success_add": "Image group added",
+            "error_add": "Failed to add image group",
+            "success_remove": "Image group removed successfully",
+            "error_remove": "Failed to remove image group",
+            "success_edit": "Image group edited successfully",
+            "error_edit": "Failed to edit image group",
             "success_remove_image": "Image removed successfully",
             "error_remove_image": "Failed to remove image",
             "uploading_images": "Uploading images might take some time. Do not close the page.",
@@ -484,6 +494,12 @@
         "add_new": "Add new",
         "no_tables": "No groups created yet",
         "title": "Tournament Groups",
+        "errors": {
+          "class": "Group name is required",
+          "type": "Tournament type is required"
+        },
+        "solo": "Solo",
+        "team": "Teams",
         "order": {
           "title": "Generate matches",
           "placeholder": "Sort by",
@@ -517,6 +533,9 @@
           "teams": "Teams",
           "groups": "Groups",
           "players": "Players",
+          "change_me": "CHANGE ME",
+          "team_placeholder": "Team",
+          "new_group": "New group",
           "toasts": {
             "team_updated": "Club successfully created",
             "team_updated_error": "Issue updating team",
@@ -749,6 +768,11 @@
         "confirmation": "Are you sure?",
         "description": "This action cannot be undone. This will permanently delete the club"
       }
+    },
+    "media": {
+      "title": "Media",
+      "save_button": "Save changes",
+      "save_progress": "Saving..."
     }
   },
   "protocol": {
@@ -795,5 +819,37 @@
   },
   "media": {
     "no_content": "No media content available"
+  },
+  "toasts": {
+    "media": {
+      "save_success": "Media saved successfully",
+      "save_error": "Failed to save media"
+    },
+    "tournaments": {
+      "created": "Tournament created successfully",
+      "updated": "Tournament updated successfully",
+      "deleted": "Tournament deleted successfully",
+      "created_error": "Tournament creation failed. Please try again",
+      "updated_error": "Tournament update failed. Please try again",
+      "deleted_error": "Tournament deletion failed. Please try again"
+    },
+    "tournament_tables": {
+      "created": "Tournament table created successfully",
+      "updated": "Tournament table updated successfully",
+      "deleted": "Tournament table deleted successfully",
+      "created_error": "Tournament table creation failed. Please try again",
+      "updated_error": "Tournament table update failed. Please try again",
+      "deleted_error": "Tournament table deletion failed. Please try again"
+    },
+    "participants": {
+      "created": "Participant added successfully",
+      "updated": "Participant updated successfully",
+      "deleted": "Participant deleted successfully",
+      "created_error": "Participant addition failed. Please try again",
+      "updated_error": "Participant update failed. Please try again",
+      "deleted_error": "Participant deletion failed. Please try again",
+      "group_name_updated": "Group name updated successfully",
+      "group_name_updated_error": "Group name update failed. Please try again"
+    }
   }
 }

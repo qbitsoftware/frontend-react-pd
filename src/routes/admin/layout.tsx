@@ -91,7 +91,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex flex-col h-screen max-w-[1440px] mx-auto bg-[#F8F9F9]">
+    <div className="flex flex-col  max-w-[1440px] mx-auto bg-[#F8F9F9]">
       {/* Main Content Area */}
       <div className="flex flex-col sm:flex-row flex-1 overflow-hidden">
         {/* Sidebar - Visible only on SM and above */}
@@ -120,12 +120,12 @@ function RouteComponent() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-white sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3 overflow-y-auto pb-20 sm:pb-0">
+        <div className="flex-1 bg-white sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3  pb-20 sm:pb-0 overflow-x-scroll">
           <Outlet />
         </div>
       </div>
 
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EFEFEF] z-10">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#EFEFEF] z-40">
         <nav className="flex justify-between items-center px-2">
           {menuItems.map((item) => (
             <Link

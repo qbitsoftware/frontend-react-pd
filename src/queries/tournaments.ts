@@ -138,9 +138,15 @@ export const UsePostTournament = () => {
             })
             return data;
         },
-
-        onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournaments'] })
+        onSuccess: (data: TournamentResponse) => {
+            queryClient.setQueryData(["tournaments"], (oldData: TournamentsResponse) => {
+                if (oldData && oldData.data && data.data) {
+                    oldData.data = [...oldData.data, data.data]
+                    oldData.message = data.message
+                    oldData.error = data.error
+                }
+                return oldData
+            })
         }
     })
 }
@@ -202,7 +208,13 @@ export const UseDeleteTournament = (id: number | undefined) => {
             return data;
         },
         onSuccess: () => {
-            queryClient.resetQueries({ queryKey: ['tournaments'] })
+            queryClient.setQueryData(['tournaments'], (oldData: TournamentsResponse) => {
+                if (oldData && oldData.data) {
+                    oldData.data = oldData.data.filter((tournament: Tournament) => tournament.id !== id)
+                }
+                return oldData
+            })
+            // queryClient.resetQueries({ queryKey: ['tournaments'] })
         },
     })
 }
