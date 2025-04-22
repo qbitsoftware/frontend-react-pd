@@ -32,7 +32,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
     const title = tournament_table
       ? `${tournament_table.class} Tournament`
       : "Tournament Bracket";
-    PrintPDF("bracket-container", title);
+    PrintPDF("bracket-container", title, true);
   };
 
   const [isEditingMode, setIsEditingMode] = useState(false);
@@ -43,16 +43,23 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
   };
 
   const [selectedPlayer, setSelectedPlayer] = useState<{
-      matchId: string;
-      playerId: string;
-      position: "home" | "away";
-    } | null>(null);
-
+    matchId: string;
+    playerId: string;
+    position: "home" | "away";
+  } | null>(null);
 
   return (
     <div className="w-full h-full">
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
+<<<<<<< HEAD
+          <CardHeader className="flex-row justify-between items-center space-y-0 pdf-header">
+            <Button
+              onClick={toggleEditingMode}
+              className={`px-3 py-1 text-xs rounded transition-colors ${
+                isEditingMode ? " bg-stone-700 border border-dashed" : ""
+              }`}
+=======
           <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
           <Button
               onClick={toggleEditingMode}
@@ -60,6 +67,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
                 ? " bg-stone-700 border border-dashed"
                 : ""
                 }`}
+>>>>>>> f867b6d1c052b40946489ca40a869eb69526102e
             >
               {isEditingMode ? "Exit Editing Mode" : "Enter Editing Mode"}
             </Button>
@@ -81,7 +89,15 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
           </CardHeader>
           <CardContent className="p-0">
             {hasEliminations ? (
-              <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer}/>
+              <Window
+                data={bracket.data}
+                tournament_table={tournament_table}
+                toggleEditingMode={toggleEditingMode}
+                isEditingMode={isEditingMode}
+                setIsEditingMode={setIsEditingMode}
+                selectedPlayer={selectedPlayer}
+                setSelectedPlayer={setSelectedPlayer}
+              />
             ) : hasRoundRobins ? (
               <GroupStageBracket
                 brackets={bracket.data.round_robins[0]}

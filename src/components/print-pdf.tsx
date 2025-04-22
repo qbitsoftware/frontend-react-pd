@@ -1,41 +1,60 @@
+import html2canvas from "html2canvas";
+import { setupCloneStyles } from "./pdf_utils/styles";
+import { createDebugWrapper } from "./pdf_utils/debug";
+import { processElementsForPDF } from "./pdf_utils/element-processor";
+import { generatePDF } from "./pdf_utils/generator";
 
-import { jsPDF } from 'jspdf';
-
-export const PrintPDF = async (containerId: string, title: string = 'Tournament Bracket') => {
+/**
+ * Prints the specified container as a PDF file
+ * @param containerId - ID of the container to print
+ * @param title - Title for the PDF file
+ * @param debugMode - Whether to show debug preview
+ */
+export const PrintPDF = async (
+  containerId: string,
+  title: string = "turna bracket",
+  debugMode = false,
+) => {
   const container = document.getElementById(containerId);
   if (!container) return;
-  
+
   try {
-    const svgElements = container.querySelectorAll('svg');
-    svgElements.forEach(svg => {
-      if (!svg.getAttribute('width')) {
-        svg.setAttribute('width', svg.getBoundingClientRect().width.toString());
-      }
-      if (!svg.getAttribute('height')) {
-        svg.setAttribute('height', svg.getBoundingClientRect().height.toString());
-      }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const clone = container.cloneNode(true) as HTMLElement;
+    const rect = container.getBoundingClientRect();
+
+    setupCloneStyles(clone, rect, debugMode);
+
+    const debugWrapper = debugMode
+      ? createDebugWrapper(containerId, title)
+      : null;
+
+    processElementsForPDF(clone);
+
+    if (debugMode && debugWrapper) {
+      debugWrapper.appendChild(clone);
+      console.log("HTML clone for PDF:", clone.outerHTML);
+      return;
+    }
+
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      logging: false,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      imageTimeout: 15000,
+      foreignObjectRendering: false,
+      removeContainer: false,
     });
-    
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
-    
-    pdf.setFontSize(16);
-    pdf.text(title, 149, 15, { align: 'center' });
-    
-    pdf.html(container, {
-      callback: function(pdf) {
-        pdf.save(`${title.replace(/\s+/g, '_')}.pdf`);
-      },
-      x: 10,
-      y: 25,
-      width: 277, 
-      autoPaging: 'text'
-    });
+
+    document.body.removeChild(clone);
+
+    generatePDF(canvas, title, 1.0);
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    alert('Failed to generate PDF');
+    console.error("Error generating PDF:", error);
+    alert("Failed to generate PDF: " + (error as Error).message);
   }
 };

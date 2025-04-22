@@ -39,13 +39,13 @@ export const Window: React.FC<WindowProps> = ({
   const bracketRef = useRef<HTMLDivElement | null>(null);
   const usePostPlayerSwitchMutation = UsePostPlayerSwitch(
     tournament_table.tournament_id,
-    tournament_table.id
+    tournament_table.id,
   );
 
   const handlePlayerSelect = async (
     matchId: string,
     playerId: string,
-    position: "home" | "away"
+    position: "home" | "away",
   ) => {
     if (!isEditingMode) return;
 
@@ -89,13 +89,13 @@ export const Window: React.FC<WindowProps> = ({
     let previousTop: number = 0;
 
     return (
-      <div className="mt-6 h-screen" key={"test"}>
+      <div className="mt-0 h-screen" key={"test"}>
         {data.eliminations[bracket].elimination.map((table, index) => {
           if (index !== 0 && index >= 1) {
             previousTop += CalculateSVGHeight(
               data.eliminations[bracket].elimination[index - 1].matches,
               45,
-              50
+              50,
             );
           }
 
@@ -133,7 +133,7 @@ export const Window: React.FC<WindowProps> = ({
   return (
     <div className="flex flex-col w-full h-full mx-auto relative">
       <div className=" z-40 top-0 w-full flex xl:justify-end ">
-        <div className=" px-4 flex flex-col w-full bg-[#F8F9FA] rounded-t">
+        <div className=" px-4 flex flex-col w-full bg-[#F8F9FA] rounded-t pdf-background">
           <div className="flex justify-between mt-2 items-center"></div>
           <div className="flex justify-between z-10">
             <h1 className="text-base font-medium">{tournament_table.class}</h1>
@@ -144,8 +144,10 @@ export const Window: React.FC<WindowProps> = ({
               {/* Download */}
             </p>
           </div>
-          <div className="z-10">
-            <h2 className="text-xs">{parseTableType(tournament_table.type)}</h2>
+          <div className="z-10 pdf-remove-in-print">
+            <h2 className="pdf-remove-in-print text-xs">
+              {parseTableType(tournament_table.type)}
+            </h2>
           </div>
           <Separator className="my-1 z-10" />
           <Tabs
@@ -168,7 +170,7 @@ export const Window: React.FC<WindowProps> = ({
         </div>
       </div>
       <div
-        className="w-full h-full p-4 overflow-auto bg-[#F8F9FA]"
+        className="w-full h-full px-4 overflow-auto bg-[#F8F9FA] pdf-background"
         ref={bracketRef}
       >
         {renderBracket()}
