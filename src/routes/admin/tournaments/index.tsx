@@ -28,8 +28,8 @@ function RouteComponent() {
 
     if (tournaments_data && tournaments_data.data) {
         return (
-            <div className='p-8'>
-                <div className="flex flex-col md:flex-row justify-between items-center mb-5">
+            <div className='py-8 px-2 md:p-8'>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-8">
                     <div className='flex items-center justify-center flex-col text-center mb-4 md:mb-0 md:justify-start md:items-start'>
                         <h3 className="font-bold text-gray-900">
                             {t('admin.tournaments.title')}

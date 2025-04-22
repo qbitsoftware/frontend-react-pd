@@ -34,8 +34,8 @@ export const Route = createRootRouteWithContext<{
             {!isLoading && <Footer />}
             <Toaster />
             <Suspense>
-              <TanStackRouterDevtools />
-              <TanStackQueryDevtools />
+              {/*<TanStackRouterDevtools />
+              <TanStackQueryDevtools /> */}
             </Suspense>
           </div>
           <AppSidebar />

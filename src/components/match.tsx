@@ -124,7 +124,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                                     {isHomeSelected ? "✓" : ""}
                                 </span>
                             )}
-                            <div className="text-center px-2">{getRandomFlag()}</div>
+                            <div className="text-center px-2">{firstRound ? match.participant_1.order : ""}</div>
                             <div className={cn(
                                 "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold",
                                 match.match.winner_id == match.participant_1.id || match.participant_2.id == "empty" ? "" : "font-medium"
@@ -158,7 +158,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({ match, index, HEIGHT, H
                                     {isAwaySelected ? "✓" : ""}
                                 </span>
                             )}
-                            <div className="text-center px-2">{getRandomFlag()}</div>
+                            <div className="text-center px-2">{firstRound ? match.participant_2.order : ""}</div>
                             <div className={cn(
                                 "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold",
                                 match.match.winner_id == match.participant_2.id || match.participant_1.id == "empty" ? "" : "font-medium"

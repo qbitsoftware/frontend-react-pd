@@ -47,8 +47,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQueryClient } from "@tanstack/react-query";
 import { Club } from "@/types/clubs";
+import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/clubs/")({
   component: RouteComponent,
@@ -61,6 +61,8 @@ function RouteComponent() {
   const updateClubMutation = useUpdateClub();
   const deleteClubMutation = useDeleteClub();
   const { t } = useTranslation();
+
+  const { toast } = useToast();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -103,12 +105,18 @@ function RouteComponent() {
             website: "",
             image_url: "",
           });
-          toast.success(t("admin.clubs.toast.club_created"));
+          toast({
+            title: t("admin.clubs.toast.club_created"),
+          });
         },
       });
     } catch (error) {
       void error;
-      toast.error(`Error: ${t("admin.clubs.toast.club_created_error")}`)
+      toast({
+        title: "Error",
+        description: t("admin.clubs.toast.club_created_error"),
+        variant: "destructive",
+      });
     }
   };
 
@@ -121,12 +129,18 @@ function RouteComponent() {
           queryClient.invalidateQueries({ queryKey: ["clubs_query"] });
           setIsEditDialogOpen(false);
           setSelectedClub(null);
-          toast.success(t("admin.clubs.toast.club_updated"))
+          toast({
+            title: t("admin.clubs.toast.club_updated"),
+          });
         },
       });
     } catch (error) {
       void error;
-      toast.error(`Error: ${t("admin.clubs.toast.club_updated_error")}`)
+      toast({
+        title: "Error",
+        description: t("admin.clubs.toast.club_updated_error"),
+        variant: "destructive",
+      });
     }
   };
 
@@ -140,12 +154,18 @@ function RouteComponent() {
           queryClient.invalidateQueries({ queryKey: ["clubs_query"] });
           setIsDeleteDialogOpen(false);
           setSelectedClub(null);
-          toast.success(t("admin.clubs.toast.club_deleted"));
+          toast({
+            title: t("admin.clubs.toast.club_deleted"),
+          });
         },
       });
     } catch (error) {
       void error;
-      toast.error(`Error: ${t("admin.clubs.toast.club_deleted_error")}`)
+      toast({
+        title: "Error",
+        description: t("admin.clubs.toast.club_deleted_error"),
+        variant: "destructive",
+      });
     }
   };
 
@@ -155,9 +175,9 @@ function RouteComponent() {
   const clubs = clubsData.data;
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div className="">
+    <div className="px-2 py-8 md:p-8 overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div className="text-center md:text-left mb-4 md:mb-0">
           <h3 className="font-bold">{t("admin.clubs.title")}</h3>
           <p className="text-gray-600 mt-1">{t("admin.clubs.subtitle")}</p>
         </div>
@@ -173,7 +193,7 @@ function RouteComponent() {
         {clubs.length} {t("admin.clubs.clubs")}
       </span>
 
-      <Table>
+      <Table className="">
         <TableHeader>
           <TableRow>
             <TableHead>{t("admin.clubs.table.image")}</TableHead>
@@ -218,7 +238,7 @@ function RouteComponent() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
+                      <span className="">Open menu</span>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
