@@ -1,17 +1,9 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { TableMatch } from "@/types/brackets";
 import { getRandomFlag } from "@/lib/utils";
 import { useLocation, useParams } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-=======
-import React, { useEffect, useState } from 'react'
-import { TableMatch } from '@/types/brackets'
-import { useLocation, useParams } from '@tanstack/react-router'
-import { cn } from '@/lib/utils'
-import { useTranslation } from 'react-i18next'
->>>>>>> f867b6d1c052b40946489ca40a869eb69526102e
 
 interface MatchComponentProps {
   match: TableMatch;
@@ -128,7 +120,6 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
             ? setIsOpen2(true)
             : setIsOpen(true))
         }
-<<<<<<< HEAD
         className={`pdf-participant-box absolute flex flex-col ${firstRound ? "z-30" : "z-10"} bg-white text-sm`}
       >
         {match.participant_1.id != "empty" &&
@@ -136,112 +127,6 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
             <div className="absolute top-[-20px] w-[60px] text-left text-[10px] pdf-game-court">
               {t("admin.tournaments.matches.table.table")}{" "}
               {match.match.extra_data.table}
-=======
-    };
-
-    const firstRound = match.match.round == 0
-
-    const { tournamentid } = useParams({ strict: false })
-
-    const location = useLocation()
-    const [isDisabled, setIsDisabled] = useState(true)
-    const { t } = useTranslation()
-
-    useEffect(() => {
-        if (location.pathname.includes("admin")) {
-            setIsDisabled(false)
-        }
-    }, [location])
-
-    const [isOpen, setIsOpen] = useState(false)
-    const [isOpen2, setIsOpen2] = useState(false)
-    void isOpen, isOpen2, tournamentid
-
-    const { p1_sets, p2_sets } = setScore(match)
-
-    return (
-        <div key={index}>
-            <div
-                key={match.match.id}
-                style={{
-                    top: `${topCoord + starting_y + 30}px`,
-                    left: `${(match.match.round * HORIZONTAL_GAP) + starting_x}px`,
-                    width: `${WIDTH}px`,
-                    height: `${HEIGHT}px`,
-                }}
-                onClick={() =>
-                    !isDisabled &&
-                    (match.match.table_type == "champions_league" ? setIsOpen2(true) : setIsOpen(true))}
-                className={`absolute flex flex-col ${firstRound ? "z-30" : "z-10"} bg-white text-sm`}>
-                {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute top-[-20px] w-[60px] text-left text-[10px]'>{t("admin.tournaments.matches.table.table")} {match.match.extra_data.table}</div>}
-                {match.participant_1.id != "empty" && match.participant_2.id != "empty" && <div className='absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]'>{match.match.bracket}</div>}
-                <div style={{ height: `${HEIGHT / 2}px` }} className={cn("flex items-center ")}
-                >
-                    {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
-                    {(match.participant_1.id == "empty") ? (
-                        <>
-                            <div className="text-center px-2">{""}</div>
-                            <div className="w-full text-gray-500">(Bye)</div>
-                            <div className="text-right pr-4">{""}</div>
-                        </>
-                    ) : match.participant_1.id === "" ? (
-                        <div></div>
-                    ) : (
-                        <div className={cn('flex w-full', isHomeSelected ? "bg-blue-100 border-blue-500" : "", isEditingMode && firstRound ? "cursor-pointer hover:bg-blue-200" : "")}
-                            onClick={() => match.participant_1.id && firstRound && handlePlayerClick(match.participant_1.id, "home")}
-                        >
-                            {isEditingMode && match.participant_1.id && firstRound && (
-                                <span className="ml-1 text-xs text-blue-500">
-                                    {isHomeSelected ? "✓" : ""}
-                                </span>
-                            )}
-                            <div className="text-center px-2">{firstRound ? match.participant_1.order : ""}</div>
-                            <div className={cn(
-                                "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold",
-                                match.match.winner_id == match.participant_1.id || match.participant_2.id == "empty" ? "" : "font-medium"
-                            )}>
-                                {match.participant_1.name}
-                            </div>
-                            {/* If another player is byebye, don't show score, but only - */}
-                            <div className={cn("w-[50px]  items-center flex justify-center h-full font-semibold", p1_sets > p2_sets ? "bg-[#F3F9FC]" : p1_sets < p2_sets ? "" : "")}>{match.participant_2.id == "empty" ? "" : p1_sets}</div>
-                        </div>
-                    )}
-                </div>
-
-                {/* <Separator className="bg-gray-300" /> */}
-                <div style={{ height: `${HEIGHT / 2}px` }} className={cn("flex items-center")}
-                >
-                    {/* 3 different layouts, one for byeybe, another for regular player and another for empty player */}
-                    {(match.participant_2.id == "empty") ? (
-                        <>
-                            <div className="text-center px-2">{""}</div>
-                            <div className="w-full text-gray-500">(Bye)</div>
-                            <div className="text-right pr-4">{""}</div>
-                        </>
-                    ) : match.participant_2.id === "" ? (
-                        <div></div>
-                    ) : (
-                        <div className={cn('flex w-full', isAwaySelected ? "bg-blue-100 border-blue-500" : "", isEditingMode && firstRound ? "cursor-pointer hover:bg-blue-200" : "")}
-                            onClick={() => match.participant_2.id && firstRound && handlePlayerClick(match.participant_2.id, "away")}
-                        >
-                            {isEditingMode && match.participant_2.id && firstRound && (
-                                <span className="ml-1 text-xs text-blue-500">
-                                    {isAwaySelected ? "✓" : ""}
-                                </span>
-                            )}
-                            <div className="text-center px-2">{firstRound ? match.participant_2.order : ""}</div>
-                            <div className={cn(
-                                "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold",
-                                match.match.winner_id == match.participant_2.id || match.participant_1.id == "empty" ? "" : "font-medium"
-                            )}>
-                                {match.participant_2.name}
-                            </div>
-                            {/* If another player is byebye, don't show score, but only - */}
-                            <div className={cn("w-[50px] items-center flex justify-center h-full font-semibold", p1_sets < p2_sets ? "bg-[#F3F9FC]" : p1_sets > p2_sets ? "" : "")}>{match.participant_1.id == "empty" ? "" : p2_sets}</div>
-                        </div>
-                    )}
-                </div>
->>>>>>> f867b6d1c052b40946489ca40a869eb69526102e
             </div>
           )}
         {match.participant_1.id != "empty" &&

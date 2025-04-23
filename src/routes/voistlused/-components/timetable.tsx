@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -19,7 +17,6 @@ export const TimeTable: React.FC<TimeTableProps> = ({ tournament, matches }: Tim
   // const [isOpen, setIsOpen] = useState<boolean>(false)
 
   //   const toast = useToast()
-  //   const { successToast, errorToast } = useToastNotification(toast)
 
   // if (isLoading) return <LoadingSkeleton />
   // if (error) return <ErrorMessage message={error.message} />

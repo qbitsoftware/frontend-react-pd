@@ -59,7 +59,7 @@ export const getPairLabel = (index: number, team: number): string => {
 export const generateMatchOrderLabels = (playerCount: number) => {
     if (playerCount === 2) {
         return ["A-X", "B-Y", "DE-VW", "A-Y", "B-X"];
-    } else if (playerCount === 3) {
+    } else if (playerCount >= 3) {
         return ["A-Y", "B-X", "C-Z", "DE-VW", "A-X", "C-Y", "B-Z"];
     } else {
         return [""]

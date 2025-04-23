@@ -28,13 +28,13 @@ import { createColumns } from "./matches-table-columns";
 import { useTranslation } from "react-i18next";
 import { MatchState, MatchWrapper } from "@/types/matches";
 import { TournamentTable } from "@/types/groups";
-import ResetSeeding from "./reset-seeding";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProtocolModalProvider } from "@/providers/protocolProvider";
 import { TableTennisProtocolModal } from "./tt-modal/tt-modal";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];
+  all_matches: MatchWrapper[] | [];
   tournament_id: number;
   tournament_table: TournamentTable;
   player_count: number;
@@ -46,7 +46,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
   data,
   tournament_id,
   tournament_table,
-  player_count
+  player_count,
+  all_matches,
 }: MatchesTableProps) => {
   const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false);
   const [isTimeEditingModalOpen, setIsTimeEditingModalOpen] = useState(false);
@@ -136,33 +137,40 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               </SelectItem>
             </SelectContent>
           </Select>
-          <ResetSeeding tournament_id={tournament_id} table_id={tournament_table.id} />
 
           {tournament_table.type == "champions_league" && (
-            <div className="flex gap-4">
+            <div className="flex gap-1 border bg-[#FAFCFE] py-1 px-1 rounded-md">
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+                className=""
                 onClick={() => {
                   setInitialTab("regrouping");
                   setIsRegroupingModalOpen(true);
                 }}
               >
-                Regrupeeri
+                {t("admin.tournaments.groups.regroup")}
               </Button>
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+
+                className=""
                 onClick={() => {
                   setInitialTab("finals");
                   setIsRegroupingModalOpen(true);
                 }}
               >
-                Finaalid
+                {t("admin.tournaments.groups.finals")}
               </Button>
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+
+                className=""
                 onClick={() => setIsTimeEditingModalOpen(true)}
               >
-                Muuda aegu
+                {t("admin.tournaments.groups.change_time")}
               </Button>
             </div>
           )}
@@ -253,7 +261,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No results.
+                      {t("admin.tournaments.groups.no_results")}
                     </TableCell>
                   </TableRow>
                 )}
@@ -285,7 +293,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           state={initialTab}
         />
         <TimeEditingModal
-          matches={data}
+          matches={all_matches}
           tournament_table_id={tournament_table.id}
           tournament_id={tournament_id}
           isOpen={isTimeEditingModalOpen}

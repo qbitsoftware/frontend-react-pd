@@ -1,6 +1,7 @@
 import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
-import MatchComponent from "./match";
 import { EliminationBracket } from "@/types/brackets";
+import { useTranslation } from "react-i18next";
+import MatchComponent from "./match";
 
 interface BracketProps {
   starting_x: number;
@@ -25,7 +26,7 @@ const SingleElimBracket = ({
   starting_y,
   isEditingMode = false,
   selectedPlayer = null,
-  onPlayerSelect = () => {},
+  onPlayerSelect = () => { },
 }: BracketProps) => {
   const WIDTH = 220;
   const HEIGTH = 60;
@@ -33,6 +34,8 @@ const SingleElimBracket = ({
   const HORISONTAL_GAP = 250;
   const SVG_WIDTH = CalculateSVGWidth(data.matches, HORISONTAL_GAP);
   const SVG_HEIGTH = CalculateSVGHeight(data.matches, VERTICAL_GAP, HEIGTH);
+
+  const { t } = useTranslation();
 
   if (data && data.matches) {
     return (
@@ -128,7 +131,7 @@ const SingleElimBracket = ({
         </svg>
         {isEditingMode && (
           <div className="fixed bottom-4 right-4 bg-stone-700 text-white px-4 py-2 rounded shadow-lg z-50">
-            Editing Mode: {selectedPlayer ? "Player Selected" : "Select Player"}
+            {t('admin.tournaments.groups.tables.editing.title')}: {selectedPlayer ? t('admin.tournaments.groups.tables.editing.player_selected') : t('admin.tournaments.groups.tables.editing.select_p1')}
           </div>
         )}
       </div>

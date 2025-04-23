@@ -1,5 +1,5 @@
 import i18n from '@/i18n';
-import { MatchTimeUpdate, MatchWrapper } from '@/types/matches';
+import { MatchWrapper } from '@/types/matches';
 
 /**
  * Remove duplicate matches based on match ID
@@ -201,16 +201,4 @@ export function distributeMatchesByTable(
   });
 
   return distribution;
-}
-
-/**
- * Create a matchTimeUpdate from a date and time string
- */
-export function createMatchTimeUpdate(matchId: string, dateStr: string, timeStr: string): MatchTimeUpdate {
-  const dateTime = new Date(`${dateStr}T${timeStr}:00`);
-
-  return {
-    match_id: matchId,
-    start_date: dateTime.toISOString()
-  };
 }

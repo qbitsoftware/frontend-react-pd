@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { debounce } from "lodash";
+import { useTranslation } from "react-i18next";
 
 interface ProtocolModalProps {
     isOpen: boolean;
@@ -87,12 +88,14 @@ export const ProtocolModalProvider = ({
         match.match.id
     )
 
+    const { t } = useTranslation()
+
     const handleSwitchParticipants = async () => {
         try {
             await switchParticipants(match.match)
         } catch (error) {
-            console.log(error)
-            toast.error("Soemthing went wrong")
+            void error;
+            toast.error(t("toasts.protocol_modals.switch_participant_error"))
         }
     }
 
@@ -171,7 +174,8 @@ export const ProtocolModalProvider = ({
                 await changePlayer(currentKey, playerId);
             }
         } catch (error) {
-            toast.error("Failed to assign player")
+            void error;
+            toast.error(t("toasts.protocol_modals.player_assign_error"))
         }
     };
 
@@ -191,7 +195,8 @@ export const ProtocolModalProvider = ({
 
                 await updateMatch(sendMatch);
             } catch (error) {
-                toast.error(`Failed to update ${fieldKey}`);
+                void error;
+                toast.error(t("toasts.protocol_modals.update_error"))
             }
         }, 500),
         [match.match, updateMatch]
@@ -224,10 +229,10 @@ export const ProtocolModalProvider = ({
     const handleMatchStart = async () => {
         try {
             await startMatch()
-            toast.success("Match started successfully")
+            toast.success(t("toasts.protocol_modals.match_start_success"))
         } catch (error) {
-            toast.error("Failed to start match")
-            console.log(error)
+            void error
+            toast.error(t("toasts.protocol_modals.match_start_error"))
         }
     }
 
@@ -238,11 +243,11 @@ export const ProtocolModalProvider = ({
                 winner_id: "finished",
             }
             await updateMatch(match_payload)
-            toast.success("Match finished successfully")
+            toast.success(t("toasts.protocol_modals.match_finish_success"))
             setForfeitMatch(null)
         } catch (error) {
-            console.log(error)
-            toast.error("Failed to finish match")
+            void error;
+            toast.error(t("toasts.protocol_modals.match_finish_error"))
         }
     }
 

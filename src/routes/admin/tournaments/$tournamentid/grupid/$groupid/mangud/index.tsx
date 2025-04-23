@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match";
+import { MatchesResponse, UseGetMatchesAllQuery, UseGetMatchesQuery } from "@/queries/match";
 import { MatchesTable } from "../../../-components/matches-table";
 import { UseGetTournamentTable } from "@/queries/tables";
 import Loader from "@/components/loader";
@@ -39,14 +39,20 @@ function RouteComponent() {
     Number(groupid)
   );
 
+  const { data: matches_for_time_change } = UseGetMatchesAllQuery(
+    Number(tournamentid),
+    Number(groupid)
+  );
+
   const { table_data } = Route.useLoaderData();
-  if (matches && table_data && table_data.data) {
+  if (matches && table_data && table_data.data && matches_for_time_change) {
     return (
       <div className="pb-12">
         <MatchesTable
           tournament_id={Number(tournamentid)}
           player_count={table_data.data.min_team_size}
           data={matches.data || []}
+          all_matches={matches_for_time_change.data || []}
           tournament_table={table_data.data}
         />
       </div>

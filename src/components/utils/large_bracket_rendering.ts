@@ -1,3 +1,5 @@
+import { Bracket } from "@/types/brackets";
+
 export function splitLargeEliminationBrackets(data: Bracket): Bracket {
   const processedData = structuredClone(data);
 

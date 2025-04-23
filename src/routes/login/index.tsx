@@ -6,8 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { UseGetCurrentUser } from '@/queries/users'
-import { useToastNotification } from '@/components/toast-notification'
-import { useToast } from '@/hooks/use-toast'
 import { useLogin } from '@/queries/users'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import ErrorPage from '@/components/error'
@@ -16,6 +14,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ErrorResponse } from '@/types/errors'
 import { redirect } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { TFunction } from 'i18next'
 
 export const Route = createFileRoute('/login/')({
     component: RouteComponent,
@@ -33,17 +33,16 @@ export const Route = createFileRoute('/login/')({
                     to: '/',
                 })
             }
-            // throw error
         }
     },
 })
 
-const loginSchema = z.object({
-    login: z.string().email('Vigane e-posti aadress'),
-    password: z.string().min(5, 'Parool peab olema vähemalt 5 tähemärki pikk'),
+const createLoginSchema = (t: TFunction) => z.object({
+    login: z.string().email(t('login.form_errors.email')),
+    password: z.string().min(5, t('login.form_errors.password_min')),
 })
 
-export type LoginFormData = z.infer<typeof loginSchema>
+export type LoginFormData = z.infer<ReturnType<typeof createLoginSchema>>
 
 function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
@@ -51,8 +50,8 @@ function RouteComponent() {
     const { t } = useTranslation()
 
     const { mutate: loginMutation, isPending } = useLogin()
-    const toast = useToast()
-    const { successToast } = useToastNotification(toast)
+
+    const loginSchema = createLoginSchema(t)
 
     const {
         register,
@@ -66,11 +65,11 @@ function RouteComponent() {
         setServerError(null)
         loginMutation(data, {
             onSuccess: () => {
-                successToast('Edukalt sisse logitud')
+                toast.message(t('toasts.auth.login_success'))
                 navigate({ to: '/' })
             },
             onError: () => {
-                setServerError('Vale parool või kasutajanimi')
+                setServerError(t('login.login_error'))
             },
         })
     }
@@ -90,7 +89,7 @@ function RouteComponent() {
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div className="mb-5">
                             <Label htmlFor="login" className="sr-only">
-                                E-post
+                                {t('login.email')}
                             </Label>
                             <Input
                                 id="login"
@@ -102,7 +101,7 @@ function RouteComponent() {
                         </div>
                         <div>
                             <Label htmlFor="password" className="sr-only">
-                                Parool
+                                {t('login.password')}
                             </Label>
                             <Input
                                 id="password"

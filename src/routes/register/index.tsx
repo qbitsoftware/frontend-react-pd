@@ -5,8 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/hooks/use-toast'
-import { useToastNotification } from '@/components/toast-notification'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import ErrorPage from '@/components/error'
@@ -15,6 +13,7 @@ import { useCreateUser } from '@/queries/users'
 import { Select, SelectTrigger, SelectContent, SelectValue, SelectGroup, SelectItem } from '@/components/ui/select'
 import { TFunction } from "i18next"
 import { z } from "zod"
+import { toast } from 'sonner'
 
 
 export const createRegisterSchema = (t: TFunction) => z.object({
@@ -52,8 +51,6 @@ function RouteComponent() {
     const [serverError, setServerError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const toast = useToast()
-    const { successToast } = useToastNotification(toast)
     const userMutation = useCreateUser()
 
     type MutationOptions = {
@@ -85,7 +82,7 @@ function RouteComponent() {
         setServerError(null);
         userMutation.mutate(data, {
             onSuccess: () => {
-                successToast(t('register.successful_registration'));
+                toast.message(t('register.successful_registration'));
                 navigate({ to: '/login' });
             },
             onError: (error: RegisterError) => {

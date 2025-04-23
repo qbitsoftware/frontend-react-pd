@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { addPlayerImage } from '@/queries/images';
-import { useToast } from '@/hooks/use-toast';
-import { useToastNotification } from "@/components/toast-notification"
+import { addParticipantImage, addPlayerImage } from '@/queries/images';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 
 // Allowed image formats
@@ -13,31 +12,31 @@ const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 interface EditImgModalProps {
-  playerId: string;
+  id: string;
+  type: string;
   playerName: string;
-  playerImg?: string;
+  img?: string;
   onSuccess?: () => void;
 }
 
-const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgModalProps) => {
+const EditImgModal = ({ id, playerName, img, onSuccess, type }: EditImgModalProps) => {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
   const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
 
-  const { mutate: uploadImage } = addPlayerImage();
+  const { mutate: uploadPlayerImage } = addPlayerImage();
+  const { mutate: uploadParticipantImage } = addParticipantImage();
   const { t } = useTranslation()
 
   // Set initial preview from playerImg prop when dialog opens
   useEffect(() => {
-    if (isOpen && playerImg) {
-      setPreview(playerImg);
+    if (isOpen && img) {
+      setPreview(img);
     }
-  }, [isOpen, playerImg]);
+  }, [isOpen, img]);
 
   const validateFile = (file: File): boolean => {
     // Reset previous error
@@ -71,7 +70,7 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
       // Clear the file input if validation fails
       e.target.value = '';
       setImage(null);
-      setPreview(playerImg || "");
+      setPreview(img || "");
     }
   };
 
@@ -85,31 +84,55 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
     setIsLoading(true);
     setError("");
 
-    uploadImage(
-      {
-        player_id: playerId,
-        image_file: image
-      },
-      {
-        onSuccess: () => {
-          setIsOpen(false);
-          setIsLoading(false);
-          if (onSuccess) onSuccess();
-          successToast(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
+    if (type === "player") {
+      uploadPlayerImage(
+        {
+          player_id: id,
+          image_file: image
         },
-        onError: (error) => {
-          void error;
-          setError(t("admin.tournaments.groups.img_modal.errors.upload_failed"));
-          setIsLoading(false);
-          errorToast(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+            setIsLoading(false);
+            if (onSuccess) onSuccess();
+            toast.message(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
+          },
+          onError: (error) => {
+            void error;
+            setError(t("admin.tournaments.groups.img_modal.errors.upload_failed"));
+            setIsLoading(false);
+            toast.error(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
+          }
         }
-      }
-    );
+      );
+
+    } else if (type === "participant") {
+      uploadParticipantImage(
+        {
+          participant_id: id,
+          image_file: image
+        },
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+            setIsLoading(false);
+            if (onSuccess) onSuccess();
+            toast.message(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
+          },
+          onError: (error) => {
+            void error;
+            setError(t("admin.tournaments.groups.img_modal.errors.upload_failed"));
+            setIsLoading(false);
+            toast.error(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
+          }
+        }
+      );
+    }
   };
 
   const resetForm = () => {
     setImage(null);
-    setPreview(playerImg || "");
+    setPreview(img || "");
     setError("");
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -119,8 +142,8 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
       resetForm();
     } else {
       // When opening the dialog, set the preview to the existing image
-      if (playerImg) {
-        setPreview(playerImg);
+      if (img) {
+        setPreview(img);
       }
     }
     setIsOpen(open);

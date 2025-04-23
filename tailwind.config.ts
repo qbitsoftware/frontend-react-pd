@@ -15,6 +15,8 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			midnightTable: 'hsl(var(--midnight-table))',
+
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -65,6 +67,7 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
+
   		},
 		  boxShadow: {
 			'scheduleCard': 'rgba(149, 157, 165, .2) -4px 9px 25px -6px',

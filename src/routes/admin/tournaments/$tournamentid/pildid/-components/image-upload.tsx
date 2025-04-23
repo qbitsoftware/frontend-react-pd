@@ -2,11 +2,10 @@ import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { X, Upload, Trash2, Check } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
-import { useToastNotification } from '@/components/toast-notification'
 import { usePostGamedayImage } from '@/queries/images'
 import { useTranslation } from 'react-i18next'
 import { Progress } from '@/components/ui/progress'
+import { toast } from 'sonner'
 
 interface ImageUploadProps {
     tournament_id: number
@@ -14,8 +13,6 @@ interface ImageUploadProps {
 }
 
 export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps) {
-    const toast = useToast()
-    const { successToast, errorToast } = useToastNotification(toast)
     const [images, setImages] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement>(null)
     const postImageMutation = usePostGamedayImage(tournament_id, gameDay)
@@ -55,18 +52,18 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             formData.append("images", file)
         })
         try {
-            successToast(t('admin.tournaments.groups.images.toasts.uploading_images'))
+            toast.message(t('admin.tournaments.groups.images.toasts.uploading_images'))
             await postImageMutation.mutateAsync({
                 formData,
                 onProgress: (progress) => {
                     setUploadProgress(progress);
                 }
             })
-            successToast(t('admin.tournaments.groups.images.toasts.upload_success'))
+            toast.message(t('admin.tournaments.groups.images.toasts.upload_success'))
             setImages([])
         } catch (error) {
             void error;
-            errorToast(t('admin.tournaments.groups.images.toasts.upload_error'))
+            toast.error(t('admin.tournaments.groups.images.toasts.upload_error'))
         } finally {
             setIsUploading(false);
         }

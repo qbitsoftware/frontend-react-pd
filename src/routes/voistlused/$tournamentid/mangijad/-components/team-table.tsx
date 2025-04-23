@@ -104,29 +104,44 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {selectedTeam.players.map((player) => (
-                  <TableRow key={player.id}>
-                    <TableCell>
-                      <Avatar onClick={(e) => {
-                        e.stopPropagation();
-                        player.extra_data.image_url &&
-                          openModal(player.extra_data.image_url)
-                      }}>
-                        <AvatarImage
-                          src={player.extra_data.image_url}
-                          className="cursor-pointer object-cover"
-                        />
-                        <AvatarFallback><img src={placeholderImg} className='rounded-full' alt="Player" /></AvatarFallback>
-                      </Avatar>
-                    </TableCell>
-                    <TableCell>{`${player.first_name} ${player.last_name}`}</TableCell>
-                    <TableCell>{player.extra_data.rate_order == 0 ? "-" : player.extra_data.rate_order}</TableCell>
-                    <TableCell>{player.extra_data.class}</TableCell>
-                    <TableCell>{player.extra_data.club}</TableCell>
-                    <TableCell>{player.sex}</TableCell>
-                    <TableCell>{player.extra_data.eltl_id == 0 ? "?" : player.extra_data.eltl_id}</TableCell>
-                  </TableRow>
-                ))}
+                {selectedTeam.players
+                  .slice()
+                  .sort((a, b) => {
+                    const aIsForeign = a.extra_data.club.toLowerCase() === "välismängija";
+                    const bIsForeign = b.extra_data.club.toLowerCase() === "välismängija";
+
+                    if (aIsForeign !== bIsForeign) {
+                      return aIsForeign ? 1 : -1;
+                    }
+
+                    const aRating = a.extra_data.rate_order === 0 ? Number.MAX_SAFE_INTEGER : a.extra_data.rate_order;
+                    const bRating = b.extra_data.rate_order === 0 ? Number.MAX_SAFE_INTEGER : b.extra_data.rate_order;
+
+                    return aRating - bRating;
+                  })
+                  .map((player) => (
+                    <TableRow key={player.id}>
+                      <TableCell>
+                        <Avatar onClick={(e) => {
+                          e.stopPropagation();
+                          player.extra_data.image_url &&
+                            openModal(player.extra_data.image_url)
+                        }}>
+                          <AvatarImage
+                            src={player.extra_data.image_url}
+                            className="cursor-pointer object-cover"
+                          />
+                          <AvatarFallback><img src={placeholderImg} className='rounded-full' alt="Player" /></AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+                      <TableCell>{`${player.first_name} ${player.last_name}`}</TableCell>
+                      <TableCell>{player.extra_data.rate_order == 0 ? "-" : player.extra_data.rate_order}</TableCell>
+                      <TableCell>{player.extra_data.class}</TableCell>
+                      <TableCell>{player.extra_data.club}</TableCell>
+                      <TableCell>{player.sex}</TableCell>
+                      <TableCell>{player.extra_data.eltl_id == 0 ? "?" : player.extra_data.eltl_id}</TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           ) : (

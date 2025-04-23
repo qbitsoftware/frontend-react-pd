@@ -7,8 +7,9 @@ import { UsePatchMatch } from '@/queries/match'
 import { useProtocolModal } from '@/providers/protocolProvider';
 import { toast } from 'sonner';
 import { MatchWrapper } from '@/types/matches'
+import { useTranslation } from 'react-i18next'
 
-const Forfeit = ({match}: {match: MatchWrapper}) => {
+const Forfeit = ({ match }: { match: MatchWrapper }) => {
     const {
         tournament_id,
         forfeitMatch,
@@ -17,6 +18,8 @@ const Forfeit = ({match}: {match: MatchWrapper}) => {
 
     const [winnerId, setWinnerId] = useState<string>("")
     const [error, setError] = useState<string>("")
+
+    const { t } = useTranslation()
 
     const { mutateAsync: updateMatch } = UsePatchMatch(
         tournament_id,
@@ -33,11 +36,11 @@ const Forfeit = ({match}: {match: MatchWrapper}) => {
                 await updateMatch(send_match)
                 setForfeitMatch(null)
             } else {
-                setError("You must select winner")
+                setError(t('protocol.forfeit.select_winner_error'))
             }
         } catch (error) {
-            console.log(error)
-            toast.error("Error updating match")
+            void error;
+            toast.error(t('toasts.protocol_modals.forfeit_error'))
         }
     }
 
@@ -51,8 +54,8 @@ const Forfeit = ({match}: {match: MatchWrapper}) => {
             await updateMatch(send_match)
             setForfeitMatch(null)
         } catch (error) {
-            console.log(error)
-            toast.error("Error updating match")
+            void error;
+            toast.error(t('toasts.protocol_modals.forfeit_delete_error'))
         }
     }
 
@@ -60,27 +63,27 @@ const Forfeit = ({match}: {match: MatchWrapper}) => {
         <Dialog open={forfeitMatch !== null} onOpenChange={() => setForfeitMatch(null)} >
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Loobusmivõit</DialogTitle>
+                    <DialogTitle>{t('protocol.forfeit.title')}</DialogTitle>
                     <DialogDescription>
-                        Märgi võitja
+                        {t('protocol.forfeit.description')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className='mt-4'>
                     <RadioGroup value={winnerId} onValueChange={(value) => setWinnerId(value)}>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value={match.p1.id} id="player1" />
-                            <Label htmlFor="player1">{match.p1.name == "" ? "Mängija on valimata" : match.p1.name}</Label>
+                            <Label htmlFor="player1">{match.p1.name == "" ? t('protocol.forfeit.no_player_chosen') : match.p1.name}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value={match.p2.id} id="player2" />
-                            <Label htmlFor="player2">{match.p2.name == "" ? "Mängija on valimata" : match.p2.name}</Label>
+                            <Label htmlFor="player2">{match.p2.name == "" ? t('protocol.forfeit.no_player_chosen') : match.p2.name}</Label>
                         </div>
                     </RadioGroup>
                 </div>
                 <div className="flex justify-end flex-col md:flex-row gap-2 mt-6">
-                    <Button variant="destructive" onClick={deleteForfeit}>Kustuta loobumisvõit</Button>
-                    <Button variant="outline" onClick={() => setForfeitMatch(null)}>Tagasi</Button>
-                    <Button onClick={handleForfeit} disabled={winnerId === null}>Kinnita loobumisvõit</Button>
+                    <Button variant="destructive" onClick={deleteForfeit}>{t('protocol.forfeit.delete')}</Button>
+                    <Button variant="outline" onClick={() => setForfeitMatch(null)}>{t('protocol.forfeit.back')}</Button>
+                    <Button onClick={handleForfeit} disabled={winnerId === null}>{t('protocol.forfeit.delete_confirm')}</Button>
                 </div>
                 <div>
                     <p className='text-red-500'>

@@ -95,7 +95,6 @@ export const UseGetTournamentMatches = (tournament_id: number) => {
     })
 }
 
-
 export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
     return useQuery<MatchesResponse>({
         queryKey: ['matches', group_id],
@@ -107,6 +106,20 @@ export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
         }
     })
 }
+
+export const UseGetMatchesAllQuery = (tournament_id: number, group_id: number) => {
+    return useQuery<MatchesResponse>({
+        queryKey: ['matches_time_modal', group_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/time_matches`, {
+                withCredentials: true
+            })
+            return data;
+        }
+    })
+}
+
+
 
 export const UseGetChildMatchesQuery = (tournament_id: number, group_id: number, match_id: string) => {
     return useQuery<MatchesResponse>({
@@ -156,7 +169,6 @@ export const UseRegroupMatches = (tournament_id: number, group_id: number, regro
     })
 }
 
-
 export const UseUpdateMatchTime = (tournament_id: number, group_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -169,8 +181,11 @@ export const UseUpdateMatchTime = (tournament_id: number, group_id: number) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches_time_modal', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches_time_modal', group_id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
             queryClient.resetQueries({ queryKey: ['matches', group_id] })
+
         }
     })
 }

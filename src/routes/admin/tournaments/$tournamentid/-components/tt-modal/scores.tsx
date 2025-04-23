@@ -4,6 +4,7 @@ import { useProtocolModal } from '@/providers/protocolProvider'
 import { MatchSets } from '../match-sets'
 import { generateMatchOrderLabels } from './utils'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 const Scores = () => {
     const {
@@ -16,6 +17,8 @@ const Scores = () => {
 
 
     const order = generateMatchOrderLabels(player_count)
+
+    const { t } = useTranslation()
 
     const maxSets = 5
 
@@ -75,15 +78,15 @@ const Scores = () => {
                         <TableHeader>
                             <TableRow className="bg-gray-50 hover:bg-gray-50">
                                 <TableHead className="text-xs font-medium p-2 text-left w-16">
-                                    Mäng
+                                    {t('protocol.table.game')}
                                 </TableHead>
                                 {Array.from({ length: maxSets }).map((_, idx) => (
-                                    <TableHead className="text-xs font-medium p-2 text-center w-12">
+                                    <TableHead key={idx} className="text-xs font-medium p-2 text-center w-12">
                                         {`S${idx + 1}`}
                                     </TableHead>
                                 ))}
                                 <TableHead className="text-xs font-medium p-2 text-center w-24">
-                                    Tegevused
+                                    {t('protocol.actions.title')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -112,7 +115,7 @@ const Scores = () => {
                                                 size="sm"
                                                 variant="outline"
                                             >
-                                                Loobumine
+                                                {t('protocol.table.forfeit')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>
@@ -123,7 +126,7 @@ const Scores = () => {
 
                 {match.match.winner_id && (
                     <div className="flex justify-center items-center gap-2 my-4 bg-green-50 p-2 rounded-md">
-                        <span className="font-semibold text-sm">Võitja:</span>
+                        <span className="font-semibold text-sm">{t('protocol.winner')}:</span>
                         <span className="font-bold text-sm">
                             {match.match.winner_id === match.p1.id
                                 ? match.p1.name
