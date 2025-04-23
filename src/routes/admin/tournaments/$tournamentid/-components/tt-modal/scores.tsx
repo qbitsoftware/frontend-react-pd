@@ -81,7 +81,7 @@ const Scores = () => {
                                     {t('protocol.table.game')}
                                 </TableHead>
                                 {Array.from({ length: maxSets }).map((_, idx) => (
-                                    <TableHead className="text-xs font-medium p-2 text-center w-12">
+                                    <TableHead key={idx} className="text-xs font-medium p-2 text-center w-12">
                                         {`S${idx + 1}`}
                                     </TableHead>
                                 ))}

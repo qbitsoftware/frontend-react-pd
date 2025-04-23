@@ -2,8 +2,8 @@ import { Participant } from "./participants";
 
 
 export type PlayerKey = keyof Pick<TableTennisExtraData,
-'player_a_id' | 'player_b_id' | 'player_c_id' | 'player_d_id' | 'player_e_id' |
-'player_x_id' | 'player_y_id' | 'player_z_id' | 'player_v_id' | 'player_w_id'
+  'player_a_id' | 'player_b_id' | 'player_c_id' | 'player_d_id' | 'player_e_id' |
+  'player_x_id' | 'player_y_id' | 'player_z_id' | 'player_v_id' | 'player_w_id'
 >
 
 export enum MatchState {
@@ -84,4 +84,5 @@ export type Score = {
 export interface MatchTimeUpdate {
   match_id: string;
   start_date: string;
+  location: string;
 }

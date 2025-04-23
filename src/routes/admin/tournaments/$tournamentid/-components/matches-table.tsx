@@ -35,6 +35,7 @@ import { TableTennisProtocolModal } from "./tt-modal/tt-modal";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];
+  all_matches: MatchWrapper[] | [];
   tournament_id: number;
   tournament_table: TournamentTable;
   player_count: number;
@@ -46,7 +47,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
   data,
   tournament_id,
   tournament_table,
-  player_count
+  player_count,
+  all_matches,
 }: MatchesTableProps) => {
   const [isRegroupingModalOpen, setIsRegroupingModalOpen] = useState(false);
   const [isTimeEditingModalOpen, setIsTimeEditingModalOpen] = useState(false);
@@ -285,7 +287,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           state={initialTab}
         />
         <TimeEditingModal
-          matches={data}
+          matches={all_matches}
           tournament_table_id={tournament_table.id}
           tournament_id={tournament_id}
           isOpen={isTimeEditingModalOpen}

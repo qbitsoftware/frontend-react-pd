@@ -58,8 +58,38 @@ export const TournamentSchedule = ({
     )
   }
 
-  // Filter by gamedays based on class
   const uniqueGamedays = getUniqueGamedays(classFilteredMatches);
+
+  useEffect(() => {
+    if (activeDay !== 0) return;
+
+    const today = new Date();
+    let closestDayIndex = 0;
+
+    const gameDayDates = uniqueGamedays.map(day => new Date(day));
+
+    for (let i = 0; i < gameDayDates.length; i++) {
+      const gameDate = gameDayDates[i];
+
+      if (gameDate.toDateString() === today.toDateString()) {
+        closestDayIndex = i;
+        break;
+      }
+
+      if (gameDate <= today) {
+        closestDayIndex = i;
+      }
+
+      if (gameDate > today) {
+        break;
+      }
+    }
+
+    setActiveDay(closestDayIndex);
+  }, [uniqueGamedays, setActiveDay, activeDay]);
+
+
+  // Filter by gamedays based on class
   const totalDays = uniqueGamedays.length || 1;
   const safeDayIndex = activeDay >= 0 && activeDay < uniqueGamedays.length ? activeDay : 0;
 
@@ -121,7 +151,6 @@ export const TournamentSchedule = ({
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
-
       {tables.length > 0 && timeSlots.length > 0 ? (
         <div className="w-full pr-4 overflow-auto my-8">
           <div
@@ -195,6 +224,9 @@ const ScheduleFilters = ({
   setSearchTerm
 }: ScheduleFiltersProps) => {
   const { t } = useTranslation()
+  console.log(totalDays)
+  console.log('gamedays', gamedays)
+
   return (
     <div className="flex flex-wrap gap-4">
       <div className="relative w-full md:w-auto">

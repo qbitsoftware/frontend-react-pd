@@ -177,7 +177,27 @@ export function addPlayerImage() {
             formData.append('image', image_file)
             formData.append('player_id', player_id)
 
-            const { data } = await axiosInstance.post('/api/v1/image/participants', formData, {
+            const { data } = await axiosInstance.post('/api/v1/image/participants?type=player', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true,
+            });
+            return data;
+        }
+    })
+}
+
+export function addParticipantImage() {
+    return useMutation({
+        mutationFn: async ({ participant_id, image_file }: { participant_id: string, image_file: File }) => {
+
+            const formData = new FormData()
+
+            formData.append('image', image_file)
+            formData.append('participant_id', participant_id)
+
+            const { data } = await axiosInstance.post('/api/v1/image/participants?type=participant', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

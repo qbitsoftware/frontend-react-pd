@@ -61,7 +61,7 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                         const date = new Date(match.match.start_date);
 
                         if (!isNaN(date.getTime())) {
-                            const year = date.getFullYear();
+                            const year = date.getFullYear().toString().padStart(4, '0');
                             const month = (date.getMonth() + 1).toString().padStart(2, '0');
                             const day = date.getDate().toString().padStart(2, '0');
 
@@ -84,6 +84,7 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                         name,
                         date: dateStr,
                         time: timeStr,
+                        location: match.match.location,
                     };
                 });
 
@@ -112,16 +113,24 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
         setModifiedRounds(prev => new Set(prev).add(id))
     }
 
+    const handleLocationChange = (id: string, location: string) => {
+        setRounds(rounds.map(round =>
+            round.id === id ? { ...round, location } : round
+        ))
+        setModifiedRounds(prev => new Set(prev).add(id))
+    }
+
     const handleSubmit = async () => {
         setLoading(true)
         try {
-            const updatedRoundData = new Map<string, { date: string, time: string }>();
+            const updatedRoundData = new Map<string, { date: string, time: string, location: string }>();
 
             rounds.forEach(round => {
                 if (modifiedRounds.has(round.id)) {
                     updatedRoundData.set(round.id, {
                         date: round.date,
-                        time: round.time
+                        time: round.time,
+                        location: round.location
                     });
                 }
             });
@@ -138,6 +147,7 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                     const m: MatchTimeUpdate = {
                         match_id: match.match.id,
                         start_date: date.toISOString(),
+                        location: roundData.location,
                     };
 
                     return m
@@ -186,6 +196,14 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                                             type="time"
                                             value={round.time}
                                             onChange={(e) => handleTimeChange(round.id, e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Input
+                                            id={`location-${round.id}`}
+                                            type="text"
+                                            value={round.location}
+                                            onChange={(e) => handleLocationChange(round.id, e.target.value)}
                                         />
                                     </div>
                                 </div>

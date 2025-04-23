@@ -68,7 +68,15 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                         participant.name
                     )}
                 </TableCell>
-                <TableCell colSpan={6}></TableCell>
+                <TableCell>
+                    <EditImgModal
+                        id={participant.id}
+                        playerName={`${participant.name}`}
+                        img={participant.extra_data.image_url}
+                        type='participant'
+                    />
+                </TableCell>
+                <TableCell colSpan={5}></TableCell>
                 <TableCell>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -133,9 +141,10 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                         <TableCell></TableCell>
                         <TableCell>
                             <EditImgModal
-                                playerId={player.id}
+                                id={player.id}
                                 playerName={`${player.first_name} ${player.last_name}`}
-                                playerImg={player.extra_data.image_url}
+                                img={player.extra_data.image_url}
+                                type='player'
                             />
                         </TableCell>
                         <Popover
