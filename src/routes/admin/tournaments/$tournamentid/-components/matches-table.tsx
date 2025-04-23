@@ -147,7 +147,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                   setIsRegroupingModalOpen(true);
                 }}
               >
-                Regrupeeri
+                {t("admin.tournaments.groups.regroup")}
               </Button>
               <Button
                 className="text-white bg-primary"
@@ -156,13 +156,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                   setIsRegroupingModalOpen(true);
                 }}
               >
-                Finaalid
+                {t("admin.tournaments.groups.finals")}
               </Button>
               <Button
                 className="text-white bg-primary"
                 onClick={() => setIsTimeEditingModalOpen(true)}
               >
-                Muuda aegu
+                {t("admin.tournaments.groups.change_time")}
               </Button>
             </div>
           )}
@@ -253,7 +253,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No results.
+                      {t("admin.tournaments.groups.no_results")}
                     </TableCell>
                   </TableRow>
                 )}

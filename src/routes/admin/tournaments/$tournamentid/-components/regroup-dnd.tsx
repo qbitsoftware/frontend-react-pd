@@ -10,6 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Participant } from '@/types/participants'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
     participant: Participant
@@ -18,6 +19,8 @@ interface Props {
 
 export default function RegroupDND({ participant, index }: Props) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: participant.id })
+
+    const { t } = useTranslation()
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -29,15 +32,15 @@ export default function RegroupDND({ participant, index }: Props) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">Koht</TableHead>
-                        <TableHead>Tiim</TableHead>
-                        <TableHead className="w-[100px] text-right">Punktisumma</TableHead>
-                        <TableHead className="w-[100px] text-right">Lohista SIIT</TableHead>
+                        <TableHead className="w-[100px] text-center">{t('admin.tournaments.groups.participants.regroup.table.place')}</TableHead>
+                        <TableHead>{t('admin.tournaments.groups.participants.regroup.table.team')}</TableHead>
+                        <TableHead className="w-[100px] text-center">{t('admin.tournaments.groups.participants.regroup.table.points')}</TableHead>
+                        <TableHead className="w-[150px] text-center">{t('admin.tournaments.groups.participants.regroup.table.drag_here')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow>
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell className='text-center'>{index + 1}</TableCell>
                         <TableCell className="font-medium">{participant.name}</TableCell>
                         <TableCell className="text-center">{participant.extra_data.total_points}</TableCell>
                         <TableCell className="text-center">
@@ -47,12 +50,11 @@ export default function RegroupDND({ participant, index }: Props) {
                                 {...listeners}
                             >
                                 <GripVertical className="h-4 w-4" />
-                                <span className="sr-only">Drag to reorder</span>
                             </button>
                         </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-        </div>
+        </div >
     )
 }

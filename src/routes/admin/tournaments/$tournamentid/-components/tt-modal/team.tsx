@@ -4,6 +4,7 @@ import { useProtocolModal } from "@/providers/protocolProvider"
 import { Player } from "@/types/players"
 import { TableTennisExtraData } from "@/types/matches"
 import { getCaptainKey, getPairKeys, getPairLabel, getPlayerKeys, getPlayerLabel } from "./utils"
+import { useTranslation } from "react-i18next"
 
 interface TeamPlayersProps {
     playerCount: number,
@@ -27,6 +28,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
     const playerKeys = getPlayerKeys(team, playerCount);
     const captainKey = getCaptainKey(team);
     const pairKeys = getPairKeys(team, playerCount)
+    const { t } = useTranslation()
 
     const extraData = match.match.extra_data || {} as TableTennisExtraData;
 
@@ -38,19 +40,19 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                         {team === 1 ? match.p1?.name : match.p2?.name}
                     </h5>
                     <div className="flex items-center gap-1">
-                        <span className="text-xs">Kapten:</span>
+                        <span className="text-xs">{t('protocol.captain')}:</span>
                         <Input
                             type="text"
                             value={team === 1 ? teamACaptain : teamBCaptain}
                             onChange={(e) => handleCaptainChange(e.target.value, captainKey)}
-                            placeholder={team === 1 ? "Kapten ABC" : "Kapten XYZ"}
+                            placeholder={team === 1 ? t('protocol.captain') + " ABC" : t('protocol.captain') + " XYZ"}
                             className="h-7 text-xs w-28"
                         />
                     </div>
                 </div>
                 <div className="space-y-2 mt-2">
                     <div className="text-xs font-semibold text-gray-500 pl-1">
-                        Üksikmäng
+                        {t('protocol.table.solo_game')}
                     </div>
                     {playerKeys.map((playerKey, index) => (
                         <div key={index} className="flex items-center space-x-2">
@@ -60,7 +62,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                                 onValueChange={(value) => handlePlayerChange(playerKey, value, playerKeys, pairKeys)}
                             >
                                 <SelectTrigger className="flex-1 h-8 text-sm">
-                                    <SelectValue placeholder={`Vali mängija`} />
+                                    <SelectValue placeholder={t('protocol.choose_player')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {players.length > 0 ?
@@ -74,7 +76,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                                             </SelectItem>
                                         ))
                                         : <SelectItem disabled value="no-players" className="text-sm">
-                                            No players available
+                                            {t('protocol.no_players')}
                                         </SelectItem>
                                     }
                                 </SelectContent>
@@ -84,7 +86,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                 </div>
                 <div className="space-y-2">
                     <div className="text-xs font-semibold text-gray-500 pl-1">
-                        Paarismäng
+                        {t('protocol.table.double_game')}
                     </div>
                     {pairKeys.map((pairKey, index) => (
                         <div key={index} className="flex items-center space-x-2">
@@ -94,7 +96,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                                 onValueChange={(value) => handlePlayerChange(pairKey, value, playerKeys, pairKeys)}
                             >
                                 <SelectTrigger className="flex-1 h-8 text-sm">
-                                    <SelectValue placeholder={`Vali mängija`} />
+                                    <SelectValue placeholder={t('protocol.choose_player')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {players.length > 0 ?
@@ -108,7 +110,7 @@ const TeamPlayers: React.FC<TeamPlayersProps> = ({
                                             </SelectItem>
                                         ))
                                         : <SelectItem disabled value="no-players" className="text-sm">
-                                            No players available
+                                            {t('protocol.no_players')}
                                         </SelectItem>
                                     }
                                 </SelectContent>

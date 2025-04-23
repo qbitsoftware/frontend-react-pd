@@ -295,7 +295,12 @@
     "email": "E-posti aadress",
     "password": "Parool",
     "login": "Logi sisse",
-    "login_progress": "Sisselogimine..."
+    "login_progress": "Sisselogimine...",
+    "login_error": "Vale parool või e-posti aadress",
+    "form_errors": {
+      "email": "Vigane e-posti aadress",
+      "password_min": "Parool peab olema vähemalt 5 tähemärki pikk"
+    }
   },
   "register": {
     "form": {
@@ -500,12 +505,29 @@
         },
         "solo": "Üksik",
         "team": "Meeskondadega",
+        "reset_seeding": "Lähtesta asetused",
+        "regroup": "Regrupeeri",
+        "finals": "Finaalid",
+        "no_results": "Tulemusi pole",
+        "change_time": "Aegade muutmine",
         "order": {
           "title": "Genereeri mängud",
           "placeholder": "Järjesta",
           "random": "Suvaliselt",
           "by_rating": "Reitingu järgi",
           "by_order": "Järjekorra järgi"
+        },
+        "tables": {
+          "no_data": "Tabeleid pole hetkel saadaval",
+          "editing": {
+            "title": "Muutmine",
+            "enter": "Mine muutma",
+            "exit": "Lõpeta muutmine",
+            "select_p1": "Vali esimene mängija",
+            "select_p2": "Vali teine mängija vahetamiseks",
+            "player_selected": "Mängija valitud"
+          },
+          "print": "Prindi tabel"
         },
         "img_modal": {
           "title": "Muuda pilti",
@@ -536,6 +558,26 @@
           "change_me": "MUUDA MIND",
           "new_group": "Uus grupp",
           "team_placeholder": "Tiim",
+          "regroup": {
+            "title_regroup": "Mängu regrupeering",
+            "title_finals": "Mängu finaalid",
+            "description": "Kuvasime juhuslikult tiimid. Tiimide liigutamiseks lohistage nupust",
+            "regroup_button": "Regrupeeri",
+            "final_button": "Finaalid",
+            "table": {
+              "place": "Koht",
+              "team": "Meeskond",
+              "points": "Punktisumma",
+              "drag_here": "Lohista SIIT"
+            }
+          },
+          "change_time": {
+            "title": "Muuda voorude aegu",
+            "round": "Voor",
+            "play_off": "Koha mängud",
+            "save": "Salvesta",
+            "cancel": "Katkesta"
+          },
           "toasts": {
             "team_updated": "Klubi loodud edukalt",
             "team_updated_error": "Meeskonna uuendamisel ilmnes viga",
@@ -776,6 +818,28 @@
     }
   },
   "protocol": {
+    "title": "Mängu protokoll",
+    "round": "Ring",
+    "referees": "Kohtunikud",
+    "players": "Mängijad",
+    "winner": "Võitja",
+    "no_players": "Mängijaid pole saadaval",
+    "actions": {
+      "title": "Tegevused",
+      "add_set": "Lisa set",
+      "cancel": "Katkesta",
+      "save": "Salvesta",
+      "optional": "Valikuline"
+    },
+    "forfeit": {
+      "title": "Loobumisvõit",
+      "description": "Märgi võitja",
+      "delete": "Kustuta loobumisvõit",
+      "delete_confirm": "Kinnita loobumisvõit",
+      "back": "Tagasi",
+      "no_player_chosen": "Mängijat pole valitud",
+      "select_winner_error": "Vali mängija, kes võitis loobumisega"
+    },
     "loading": "Laadimine...",
     "error": "Viga",
     "date": "Kuupäev",
@@ -785,13 +849,25 @@
       "sets": "Setid",
       "score": "Skoor",
       "total": "Kokku",
-      "doubles": "Paar"
+      "doubles": "Paar",
+      "solo_game": "Üksik mäng",
+      "double_game": "Paarismäng",
+      "forfeit": "Loobumine"
     },
+    "captain": "Kapten",
     "notes": "Märkused",
+    "notes_placeholder": "Sisesta märkused",
     "notes_missing": "Märkused puuduvad",
     "table_referee": "Lauakohtunik",
+    "table_referee_placeholder": "Sisesta lauakohtuniku nimi",
     "head_referee": "Peakohtunik",
-    "final_score": "Lõpp skoor"
+    "head_referee_placeholder": "Sisesta peakohtuniku nimi",
+    "final_score": "Lõpp skoor",
+    "download": "Lae protokoll alla",
+    "start_game": "Alusta mängu",
+    "finish_game": "Lõpeta mäng",
+    "game_finished": "Mäng lõpetatud",
+    "choose_player": "Vali mängija"
   },
   "errors": {
     "not_found": {
@@ -849,7 +925,31 @@
       "updated_error": "Osaleja uuendamine nurjus. Palun proovige uuesti",
       "deleted_error": "Osaleja eemaldamine nurjus. Palun proovige uuesti",
       "group_name_updated": "Grupi nimi uuendatud edukalt",
-      "group_name_updated_error": "Grupi nime uuendamine nurjus. Palun proovige uuesti"
+      "group_name_updated_error": "Grupi nime uuendamine nurjus. Palun proovige uuesti",
+      "regroup_success": "Grupid uuendatud edukalt",
+      "regorup_error": "Grupi uuendamine nurjus. Palun proovige uuesti",
+      "round_process_error": "Ringide töötlemine nurjus. Palun proovige uuesti",
+      "time_change_success": "Aegade muutmine õnnestus",
+      "time_change_error": "Aegade muutmine nurjus. Palun proovige uuesti",
+      "seeding_success": "Osalejate asetamine õnnestus",
+      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti"
+    },
+    "protocol_modals": {
+      "updated_match_score": "Mängu skoore on muudetud",
+      "updated_match_score_error": "Mängu skooride uuendamine nurjus. Palun proovige uuesti",
+      "switch_participant_error": "Osalejate vahetamine nurjus. Palun proovige uuesti",
+      "player_assign_error": "Mängija määramine nurjus. Palun proovige uuesti",
+      "update_error": "Protokolli uuendamine nurjus. Palun proovige uuesti",
+      "match_start_error": "Mängu algatamine nurjus. Palun proovige uuesti",
+      "match_start_success": "Mäng algatatud edukalt",
+      "match_finish_success": "Mäng lõpetatud edukalt",
+      "match_finish_error": "Mängu lõpetamine nurjus. Palun proovige uuesti",
+      "forfeit_error": "Loobumisvõidu määramine nurjus. Palun proovige uuesti",
+      "forfeit_delete_error": "Loobumisvõidu kustutamine nurjus. Palun proovige uuesti",
+      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti"
+    },
+    "auth": {
+      "login_success": "Sisselogimine õnnestus"
     }
   }
 }

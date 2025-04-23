@@ -2,10 +2,10 @@ import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { useParams } from "@tanstack/react-router"
 import { UsePatchMatch } from "@/queries/match"
-import { useToast } from "@/hooks/use-toast"
-import { useToastNotification } from "@/components/toast-notification"
 import { Match } from "@/types/matches"
 import { UseGetFreeVenues } from "@/queries/venues"
+import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
 
 interface TableNumberFormProps {
   match: Match
@@ -15,21 +15,20 @@ interface TableNumberFormProps {
 export function TableNumberForm({ match, initialTableNumber }: TableNumberFormProps) {
   const params = useParams({ strict: false })
   const { data: freeVenues, isLoading, isError } = UseGetFreeVenues(Number(params.tournamentid))
+  const { t } = useTranslation()
 
   const [tableNumber, setTableNumber] = useState<string>(initialTableNumber)
-  const toast = useToast()
-  const { errorToast } = useToastNotification(toast)
 
   const matchMutation = UsePatchMatch(Number(params.tournamentid), match.tournament_table_id, match.id)
 
   const handleChange = async (value: string) => {
     setTableNumber(value)
     try {
-      const data: Match = { ...match, extra_data: { ...match.extra_data, table: value.trim()} }
+      const data: Match = { ...match, extra_data: { ...match.extra_data, table: value.trim() } }
       await matchMutation.mutateAsync(data)
     } catch (error) {
       void error
-      errorToast("Lauanumbri muutmine ebaõnnestus")
+      toast.error(t('toasts.protocol_modals.table_number_change_error'))
     }
   }
 

@@ -1,5 +1,3 @@
-"use client"
-
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router"
 import { UseGetTournamentTable } from "@/queries/tables"
 import { cn } from "@/lib/utils"

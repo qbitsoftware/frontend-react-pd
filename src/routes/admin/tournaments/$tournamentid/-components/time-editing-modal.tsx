@@ -7,9 +7,7 @@ import { toast } from "sonner"
 import { UseUpdateMatchTime } from '@/queries/match'
 import { MatchTimeUpdate, MatchWrapper } from '@/types/matches'
 import { RoundTime } from '@/types/tournaments'
-
-// New interface for the update payload
-
+import { useTranslation } from 'react-i18next'
 
 interface TimeEditingModalProps {
     tournament_id: number
@@ -24,6 +22,8 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
     const [loading, setLoading] = useState(false)
     const [modifiedRounds, setModifiedRounds] = useState<Set<string>>(new Set())
     const timeMutation = UseUpdateMatchTime(tournament_id, tournament_table_id)
+
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (isOpen && matches && matches.length > 0) {
@@ -75,9 +75,9 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
 
                     let name = ""
                     if (match.match.type === "winner") {
-                        name = "Playoff " + roundNumber.split("-")[1]
+                        name = t('admin.tournaments.groups.participants.change_time.play_off') + " " + roundNumber.split("-")[1]
                     } else {
-                        name = "Round" + roundNumber.split("-")[1]
+                        name = t('admin.tournaments.groups.participants.change_time.round') + " " + roundNumber.split("-")[1]
                     }
                     return {
                         id: roundNumber,
@@ -89,8 +89,8 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
 
             setRounds(extractedRounds);
         } catch (error) {
-            console.error('Error extracting rounds from matches:', error);
-            toast.error('Failed to process round information');
+            void error;
+            toast.error(t('toasts.participants.round_process_error'));
 
             setRounds([]);
         } finally {
@@ -145,10 +145,10 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
                 .filter((update): update is MatchTimeUpdate => update !== null);
 
             await timeMutation.mutateAsync(matchTimeUpdates)
-            toast.success('Voorude ajad edukalt salvestatud')
+            toast.success(t('toasts.participants.time_change_success'))
         } catch (err) {
-            console.error("Error updating match time", err)
-            toast.error("Voorude aegade uuendamine ebaõnnestus")
+            void err;
+            toast.error(t('toasts.participants.time_change_error'))
         }
         onClose()
     }
@@ -157,12 +157,14 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Muuda voorude aegu</DialogTitle>
+                    <DialogTitle>
+                        {t('admin.tournaments.groups.participants.change_time.title')}
+                    </DialogTitle>
                 </DialogHeader>
 
                 <div className="grid gap-4 py-4">
                     {loading ? (
-                        <div className="flex justify-center">Laadin...</div>
+                        <div className="flex justify-center">{t('protocol.loading')}</div>
                     ) : (
                         rounds.map(round => {
                             return (
@@ -194,10 +196,10 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
 
                 <div className="flex justify-end gap-4">
                     <Button variant="outline" onClick={onClose} disabled={loading}>
-                        Tühista
+                        {t('admin.tournaments.groups.participants.change_time.cancel')}
                     </Button>
                     <Button onClick={handleSubmit} disabled={loading}>
-                        Salvesta
+                        {t('admin.tournaments.groups.participants.change_time.save')}
                     </Button>
                 </div>
             </DialogContent>

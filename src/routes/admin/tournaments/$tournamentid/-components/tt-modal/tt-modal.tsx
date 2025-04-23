@@ -3,11 +3,12 @@ import { ProtocolDownloadButton } from "../download-protocol";
 import { X } from "lucide-react";
 import { useProtocolModal } from "@/providers/protocolProvider";
 import { Content } from "./content";
+import { useTranslation } from "react-i18next";
 
 
 export const TableTennisProtocolModal = () => {
-
-    const {isOpen, onClose, tournament_id, match } = useProtocolModal()
+    const { t } = useTranslation()
+    const { isOpen, onClose, tournament_id, match } = useProtocolModal()
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -15,7 +16,7 @@ export const TableTennisProtocolModal = () => {
                 <DialogHeader className="bg-background p-3 md:px-4 border-b sticky top-0 z-10">
                     <div className="flex items-center justify-between">
                         <DialogTitle className="text-base font-medium flex items-center gap-2">
-                            <span>Protokoll:</span>
+                            <span>{t("protocol.title")}:</span>
                             <span className="font-bold">{match.p1.name}</span>
                             <span>vs</span>
                             <span className="font-bold">{match.p2.name}</span>
@@ -30,7 +31,7 @@ export const TableTennisProtocolModal = () => {
                         </div>
                     </div>
                 </DialogHeader>
-                <Content/>
+                <Content />
             </DialogContent>
         </Dialog>
     )

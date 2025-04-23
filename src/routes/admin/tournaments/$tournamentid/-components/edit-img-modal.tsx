@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
 import { addPlayerImage } from '@/queries/images';
-import { useToast } from '@/hooks/use-toast';
-import { useToastNotification } from "@/components/toast-notification"
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 
 // Allowed image formats
@@ -26,8 +25,6 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
 
   const { mutate: uploadImage } = addPlayerImage();
   const { t } = useTranslation()
@@ -95,13 +92,13 @@ const EditImgModal = ({ playerId, playerName, playerImg, onSuccess }: EditImgMod
           setIsOpen(false);
           setIsLoading(false);
           if (onSuccess) onSuccess();
-          successToast(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
+          toast.message(t("admin.tournaments.groups.img_modal.notifications.upload_success"))
         },
         onError: (error) => {
           void error;
           setError(t("admin.tournaments.groups.img_modal.errors.upload_failed"));
           setIsLoading(false);
-          errorToast(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
+          toast.error(t("admin.tournaments.groups.img_modal.errors.upload_failed"))
         }
       }
     );

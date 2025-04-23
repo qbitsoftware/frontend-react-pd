@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UsePostOrderReset } from "@/queries/participants";
+import { useTranslation } from "react-i18next";
 
 const ResetSeeding = ({
   tournament_id,
@@ -8,6 +9,7 @@ const ResetSeeding = ({
   tournament_id: number;
   table_id: number;
 }) => {
+  const { t } = useTranslation()
   const resetSeedingMutation = UsePostOrderReset(tournament_id, table_id);
 
   const handleReset = () => {
@@ -19,7 +21,7 @@ const ResetSeeding = ({
   };
   return (
     <Button onClick={handleReset} variant="ghost">
-      Reset seeding
+      {t('admin.tournaments.groups.reset_seeding')}
     </Button>
   );
 };

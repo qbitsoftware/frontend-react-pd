@@ -1,4 +1,3 @@
-import { useToastNotification } from "@/components/toast-notification";
 import { Button } from "@/components/ui/button";
 import { CardHeader } from "@/components/ui/card";
 import {
@@ -8,13 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match";
 import { UsePostOrder } from "@/queries/participants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import seeds3 from "@/assets/seeds3.png";
 import { TournamentTable } from "@/types/groups";
+import { toast } from 'sonner';
 
 interface SeedingHeaderProps {
   tournament_id: number;
@@ -53,8 +52,6 @@ const SeedingHeader = ({
     setDisabled(isDisabled(matches_data));
   }, [matches_data]);
 
-  const toast = useToast();
-  const { successToast, errorToast } = useToastNotification(toast);
   const { t } = useTranslation();
   const [selectedOrderValue, setSelectedOrderValue] = useState<
     string | undefined
@@ -65,11 +62,11 @@ const SeedingHeader = ({
       return;
     }
     try {
-      const res = await updateOrdering.mutateAsync({ order });
-      successToast(res.message);
+      updateOrdering.mutateAsync({ order });
+      toast.message(t('toasts.participants.seeding_success'))
     } catch (error) {
       void error;
-      errorToast("Error", "Failed to seed participants");
+      toast.error(t("toasts.participants.seeding_error"))
     }
   };
 
@@ -82,7 +79,6 @@ const SeedingHeader = ({
         </p>
       </div>
       <div className="flex flex-col gap-4 space-y-0">
-        {/*<p className="pl-1  text-sm">Status: <span className="bg-[#FBFBFB] font-medium px-3 py-1 rounded-full border border-[#EAEAEA]">Unseeded</span></p> */}
         <div className="flex gap-4">
           <Select
             onValueChange={setSelectedOrderValue}

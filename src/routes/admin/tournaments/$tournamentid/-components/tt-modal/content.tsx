@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import Scores from "./scores";
 import Forfeit from "./forfeit";
+import { useTranslation } from "react-i18next";
 
 export function Content() {
 
@@ -42,6 +43,8 @@ export function Content() {
     );
   };
 
+  const { t } = useTranslation()
+
   return (
     <div>
       <Tabs
@@ -53,13 +56,13 @@ export function Content() {
             value="players"
             className="py-2 px-4 rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
           >
-            <span>Mängijad</span>
+            <span>{t('protocol.players')}</span>
           </TabsTrigger>
           <TabsTrigger
             value="scores"
             className="py-2 px-4 rounded-md data-[state=active]:bg-stone-800 data-[state=active]:shadow-sm flex items-center gap-1"
           >
-            <span>Skoorid</span>
+            <span>{t('protocol.table.score')}</span>
           </TabsTrigger>
         </TabsList>
         <TabsContent
@@ -82,17 +85,17 @@ export function Content() {
           </div>
           <div className="mt-4">
             <div className="flex items-center justify-between mb-1">
-              <h6 className="font-semibold text-sm">Märkmed</h6>
+              <h6 className="font-semibold text-sm">{t('protocol.notes')}</h6>
               <Button
                 onClick={handleMatchStart}
                 size="sm"
                 className="h-8 px-3 text-xs"
               >
-                Alusta mängu
+                {t("protocol.start_game")}
               </Button>
             </div>
             <Textarea
-              placeholder="Märkmed"
+              placeholder={t("protocol.notes_placeholder")}
               onChange={(e) => handleNotesChange(e.target.value)}
               value={notes}
               className="w-full min-h-[60px] text-sm mt-4"
@@ -109,20 +112,20 @@ export function Content() {
       <div className="bg-gray-100 p-3 border-t flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col">
-            <label className="text-xs text-gray-600 mb-1">Lauakohtunik</label>
+            <label className="text-xs text-gray-600 mb-1">{t('protocol.table_referee')}</label>
             <Input
               className="h-8 text-sm"
               value={tableReferee}
-              placeholder="Lauakohtunik"
+              placeholder={t('protocol.table_referee_placeholder')}
               onChange={(e) => handleTableRefereeChange(e.target.value)}
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-xs text-gray-600 mb-1">Peakohtunik</label>
+            <label className="text-xs text-gray-600 mb-1">{t('protocol.head_referee')}</label>
             <Input
               className="h-8 text-sm"
               value={headReferee}
-              placeholder="Peakohtunik"
+              placeholder={t('protocol.head_referee_placeholder')}
               onChange={(e) => handleHeadRefereeChange(e.target.value)}
             />
           </div>
@@ -133,7 +136,7 @@ export function Content() {
           className="w-full h-9 font-medium"
           variant={match.match.winner_id !== "" ? "outline" : "default"}
         >
-          {match.match.winner_id !== "" ? "Mäng lõpetatud" : "Lõpeta Mängud"}
+          {match.match.winner_id !== "" ? t('protocol.game_finished') : t('protocol.finish_game')}
         </Button>
       </div>
     </div>

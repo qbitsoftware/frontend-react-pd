@@ -7,6 +7,7 @@ import { PrintPDF } from "@/components/print-pdf";
 import { Printer } from "lucide-react";
 import { TournamentTable } from "@/types/groups";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 interface BracketComponentProps {
   bracket: BracketReponse;
@@ -17,8 +18,9 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
   bracket,
   tournament_table,
 }) => {
+  const { t } = useTranslation()
   if (!bracket.data || !tournament_table) {
-    return <div>No bracket data available</div>;
+    return <div>{t('admin.tournaments.groups.tables.no_data')}</div>;
   }
 
   const hasEliminations =
@@ -43,10 +45,10 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
   };
 
   const [selectedPlayer, setSelectedPlayer] = useState<{
-      matchId: string;
-      playerId: string;
-      position: "home" | "away";
-    } | null>(null);
+    matchId: string;
+    playerId: string;
+    position: "home" | "away";
+  } | null>(null);
 
 
   return (
@@ -54,20 +56,20 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
           <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
-          <Button
+            <Button
               onClick={toggleEditingMode}
               className={`w-full md:w-auto px-3 py-1 text-xs rounded transition-colors ${isEditingMode
                 ? " bg-stone-700 border border-dashed"
                 : ""
                 }`}
             >
-              {isEditingMode ? "Exit Editing Mode" : "Enter Editing Mode"}
+              {isEditingMode ? t('admin.tournaments.groups.tables.editing.exit') : t('admin.tournaments.groups.tables.editing.enter')}
             </Button>
             {isEditingMode && (
               <div className="text-xs text-gray-600">
                 {selectedPlayer
-                  ? "Select second player to switch"
-                  : "Select first player"}
+                  ? t('admin.tournaments.groups.tables.editing.select_p2')
+                  : t('admin.tournaments.groups.tables.editing.select_p1')}
               </div>
             )}
             <Button
@@ -76,20 +78,20 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
               onClick={handlePrint}
             >
               <Printer className="mr-1 h-4 w-4" />
-              Print Bracket
+              {t('admin.tournaments.groups.tables.print')}
             </Button>
           </CardHeader>
           <CardContent className="p-0">
             {hasEliminations ? (
-              <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer}/>
+              <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer} />
             ) : hasRoundRobins ? (
               <GroupStageBracket
                 brackets={bracket.data.round_robins[0]}
-                onMatchSelect={() => {}}
+                onMatchSelect={() => { }}
                 name={tournament_table.class}
               />
             ) : (
-              <div>No elimination or round robin data available</div>
+              <div>{t('admin.tournaments.groups.tables.no_data')}</div>
             )}
           </CardContent>
         </div>

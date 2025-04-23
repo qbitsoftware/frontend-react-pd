@@ -295,7 +295,12 @@
     "email": "Email",
     "password": "Password",
     "login": "Log in",
-    "login_progress": "Logging in..."
+    "login_progress": "Logging in...",
+    "login_error": "Incorrect email or password",
+    "form_errors": {
+      "email": "Invalid email address",
+      "password_min": "Password must be at least 5 characters long"
+    }
   },
   "register": {
     "form": {
@@ -500,12 +505,29 @@
         },
         "solo": "Solo",
         "team": "Teams",
+        "reset_seeding": "Reset seeding",
+        "regroup": "Regroup",
+        "finals": "Finals assignment",
+        "change_time": "Change time",
+        "no_results": "No results",
         "order": {
           "title": "Generate matches",
           "placeholder": "Sort by",
           "random": "Random",
           "by_rating": "By rating",
           "by_order": "By order"
+        },
+        "tables": {
+          "no_data": "No tables available",
+          "editing": {
+            "title": "Editing mode",
+            "enter": "Enter editing mode",
+            "exit": "Exit editing mode",
+            "select_p1": "Select first player",
+            "select_p2": "Select second player to switch",
+            "player_selected": "Player selected"
+          },
+          "print": "Print bracket"
         },
         "img_modal": {
           "title": "Edit image",
@@ -536,6 +558,26 @@
           "change_me": "CHANGE ME",
           "team_placeholder": "Team",
           "new_group": "New group",
+          "regroup": {
+            "title_regroup": "Regroup",
+            "title_finals": "Finals",
+            "description": "Teams are organized randomly. Drag and drop to change the order.",
+            "regroup_button": "Generate regrouping",
+            "final_button": "Generate finals",
+            "table": {
+              "place": "Rank",
+              "team": "Team",
+              "points": "Points",
+              "drag_here": "Drag HERE"
+            }
+          },
+          "change_time": {
+            "title": "Change round time",
+            "round": "Round",
+            "play_off": "Play-off",
+            "save": "Save",
+            "cancel": "Cancel"
+          },
           "toasts": {
             "team_updated": "Club successfully created",
             "team_updated_error": "Issue updating team",
@@ -776,6 +818,28 @@
     }
   },
   "protocol": {
+    "title": "Protocol",
+    "round": "Round",
+    "referees": "Referees",
+    "players": "Participants",
+    "winner": "Winner",
+    "no_players": "No players available",
+    "actions": {
+      "title": "Actions",
+      "add_set": "Add set",
+      "cancel": "Cancel",
+      "save": "Save",
+      "optional": "Optional"
+    },
+    "forfeit": {
+      "title": "Forfeit",
+      "description": "Choose a winner",
+      "delete": "Delete forfeit",
+      "delete_confirm": "Confirm forfeit",
+      "back": "Back",
+      "no_player_chosen": "No player chosen",
+      "select_winner_error": "Select a winner"
+    },
     "loading": "Loading...",
     "error": "Error",
     "date": "Date",
@@ -785,13 +849,25 @@
       "sets": "Sets",
       "score": "Score",
       "total": "Total",
-      "doubles": "Doubles"
+      "doubles": "Doubles",
+      "solo_game": "Solo game",
+      "double_game": "Double game",
+      "forfeit": "Forfeit"
     },
+    "captain": "Captain",
     "notes": "Notes",
+    "notes_placeholder": "Enter notes here",
     "notes_missing": "No notes available",
     "table_referee": "Table referee",
+    "table_referee_placeholder": "Enter table referee name",
     "head_referee": "Head referee",
-    "final_score": "Final score"
+    "head_referee_placeholder": "Enter head referee name",
+    "final_score": "Final score",
+    "download": "Download protocol",
+    "start_game": "Start game",
+    "finish_game": "Finish game",
+    "game_finished": "Game finished",
+    "choose_player": "Choose player"
   },
   "errors": {
     "not_found": {
@@ -849,7 +925,31 @@
       "updated_error": "Participant update failed. Please try again",
       "deleted_error": "Participant deletion failed. Please try again",
       "group_name_updated": "Group name updated successfully",
-      "group_name_updated_error": "Group name update failed. Please try again"
+      "group_name_updated_error": "Group name update failed. Please try again",
+      "regroup_success": "Group updated successfully",
+      "regorup_error": "Group update failed. Please try again",
+      "round_process_error": "Round process failed. Please try again",
+      "time_change_success": "Round time updated successfully",
+      "time_change_error": "Round time update failed. Please try again",
+      "seeding_success": "Seeding successful",
+      "seeding_error": "Seeding failed. Please try again"
+    },
+    "protocol_modals": {
+      "updated_match_score": "Match score updated successfully",
+      "updated_match_score_error": "Match score update failed. Please try again",
+      "switch_participant_error": "Switching participants failed. Please try again",
+      "player_assign_error": "Player assignment failed. Please try again",
+      "update_error": "Match update failed. Please try again",
+      "match_start_error": "Match start failed. Please try again",
+      "match_start_success": "Match started successfully",
+      "match_finish_success": "Match finished successfully",
+      "match_finish_error": "Match finish failed. Please try again",
+      "forfeit_error": "Forfeit assignment failed. Please try again",
+      "forfeit_delete_error": "Forfeit deletion failed. Please try again",
+      "table_number_change_error": "Table number change failed. Please try again"
+    },
+    "auth": {
+      "login_success": "Login successful"
     }
   }
 }

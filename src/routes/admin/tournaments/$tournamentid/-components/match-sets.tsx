@@ -1,26 +1,22 @@
-'use client'
-
-import { useToastNotification } from '@/components/toast-notification'
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { useToast } from '@/hooks/use-toast'
 import { UsePatchMatch } from '@/queries/match'
 import { MatchWrapper, Score } from '@/types/matches'
 import { useParams } from '@tanstack/react-router'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner';
 
-// Interface for the SetScore type
 interface MatchSetProps {
     match: MatchWrapper
 }
 
 export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
     const [setScores, setSetScores] = useState<Score[]>([])
-
-    const toast = useToast()
     const { tournamentid } = useParams({ strict: false })
-    const { errorToast } = useToastNotification(toast)
     const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id, match.match.id)
+
+    const { t } = useTranslation()
 
     useEffect(() => {
         const backendScores = match.match.extra_data.score
@@ -58,7 +54,7 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                 await updateMatchMutation.mutateAsync(updatedMatch)
             } catch (error) {
                 void error
-                errorToast("Something went wrong")
+                toast.error(t('toasts.protocol_modals.updated_match_score_error'))
             }
         }
     }
