@@ -139,7 +139,7 @@ export const formatDateToNumber = (dateString: string) => {
 export const formatDateTimeNew = (dateTime: string) => {
   const date = new Date(dateTime);
 
-  return date.toLocaleString('en-GB', {
+  return date.toLocaleString(i18n.language, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -148,6 +148,43 @@ export const formatDateTimeNew = (dateTime: string) => {
     hour12: false
   });
 };
+
+export const formatDateGetDayMonthYear = (dateTime: string) => {
+  const date = new Date(dateTime);
+  const locale = i18n.language;
+
+  const dayOfWeek = date.toLocaleString(locale, { weekday: 'short' });
+  const dayOfMonth = date.getDate();
+  const month = date.toLocaleString(locale, { month: 'short' });
+  const year = date.getFullYear();
+  const ordinalSuffix = getLocalizedOrdinalSuffix(dayOfMonth, locale);
+
+  return `${dayOfWeek}, ${dayOfMonth}${ordinalSuffix} ${month} ${year}`;
+}
+
+const getLocalizedOrdinalSuffix = (day: number, locale: string): string => {
+  if (locale.startsWith('en')) {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  } else if (locale.startsWith('fr')) {
+    return day === 1 ? 'er' : 'e';
+  } else if (locale.startsWith('de')) {
+    return '.';
+  } else if (locale.startsWith('es')) {
+    return 'º';
+  } else if (locale.startsWith('et') || locale.startsWith('fi')) {
+    return '.';
+  } else if (locale.startsWith('ru')) {
+    return '-е';
+  } else {
+    return '.';
+  }
+}
 
 export const formatDateTimeBracket = (dateTime: string) => {
   const date = new Date(dateTime);
@@ -161,10 +198,19 @@ export const formatDateTimeBracket = (dateTime: string) => {
   });
 };
 
+export const formatDateGetHours = (dateTime: string) => {
+  const date = new Date(dateTime);
+  return date.toLocaleString(i18n.language, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+}
+
 export const formatDate = (time: string) => {
   const date = new Date(time);
 
-  const formattedDate = date.toLocaleDateString("et-EE", {
+  const formattedDate = date.toLocaleDateString(i18n.language, {
     day: "numeric",
     month: "short"
   });

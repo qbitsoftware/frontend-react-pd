@@ -28,7 +28,6 @@ import { createColumns } from "./matches-table-columns";
 import { useTranslation } from "react-i18next";
 import { MatchState, MatchWrapper } from "@/types/matches";
 import { TournamentTable } from "@/types/groups";
-import ResetSeeding from "./reset-seeding";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProtocolModalProvider } from "@/providers/protocolProvider";
 import { TableTennisProtocolModal } from "./tt-modal/tt-modal";
@@ -138,12 +137,13 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               </SelectItem>
             </SelectContent>
           </Select>
-          <ResetSeeding tournament_id={tournament_id} table_id={tournament_table.id} />
 
           {tournament_table.type == "champions_league" && (
-            <div className="flex gap-4">
+            <div className="flex gap-1 border bg-[#FAFCFE] py-1 px-1 rounded-md">
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+                className=""
                 onClick={() => {
                   setInitialTab("regrouping");
                   setIsRegroupingModalOpen(true);
@@ -152,7 +152,10 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                 {t("admin.tournaments.groups.regroup")}
               </Button>
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+
+                className=""
                 onClick={() => {
                   setInitialTab("finals");
                   setIsRegroupingModalOpen(true);
@@ -161,7 +164,10 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                 {t("admin.tournaments.groups.finals")}
               </Button>
               <Button
-                className="text-white bg-primary"
+                variant="ghost"
+                size="sm"
+
+                className=""
                 onClick={() => setIsTimeEditingModalOpen(true)}
               >
                 {t("admin.tournaments.groups.change_time")}

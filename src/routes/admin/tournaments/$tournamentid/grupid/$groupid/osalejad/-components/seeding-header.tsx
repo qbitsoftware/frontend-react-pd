@@ -30,6 +30,7 @@ const SeedingHeader = ({
     tournament_id,
     table_data.id
   );
+
   const updateOrdering = UsePostOrder(tournament_id, table_data.id);
 
   const [disabled, setDisabled] = useState(false);
@@ -78,7 +79,10 @@ const SeedingHeader = ({
           {participants_length && participants_length} / {table_data.size}{" "}
         </p>
       </div>
+
+
       <div className="flex flex-col gap-4 space-y-0">
+
         <div className="flex gap-4">
           <Select
             onValueChange={setSelectedOrderValue}
@@ -105,14 +109,16 @@ const SeedingHeader = ({
           <Button
             disabled={!selectedOrderValue}
             onClick={() => handleOrder(selectedOrderValue)}
-            className="flex p-0 justify-between items-center px-4"
+            className="flex p-0 justify-between items-center px-4 bg-midnightTable"
           >
             <div className="flex flex-row pr-6 gap-2">
               {t("admin.tournaments.groups.order.title")}{" "}
               <img src={seeds3} className="h-5 w-5 object-contain" />
             </div>
           </Button>
+
         </div>
+
       </div>
     </CardHeader>
   );

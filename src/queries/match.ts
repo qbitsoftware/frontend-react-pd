@@ -95,7 +95,6 @@ export const UseGetTournamentMatches = (tournament_id: number) => {
     })
 }
 
-
 export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
     return useQuery<MatchesResponse>({
         queryKey: ['matches', group_id],

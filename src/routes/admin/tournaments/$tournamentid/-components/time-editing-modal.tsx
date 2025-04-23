@@ -165,54 +165,69 @@ const TimeEditingModal: React.FC<TimeEditingModalProps> = ({ tournament_id, isOp
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
                 <DialogHeader>
                     <DialogTitle>
                         {t('admin.tournaments.groups.participants.change_time.title')}
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="grid gap-4 py-4">
+                <div className="py-4 overflow-y-auto flex-grow pr-2">
                     {loading ? (
                         <div className="flex justify-center">{t('protocol.loading')}</div>
                     ) : (
-                        rounds.map(round => {
-                            return (
-                                <div key={round.id} className="grid grid-cols-3 items-center gap-4">
-                                    <Label htmlFor={`round-${round.id}`} className="text-right">
-                                        {round.name}:
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {rounds.map(round => (
+                                <div key={round.id} className="border rounded-md p-3">
+                                    <Label className="font-medium block mb-2">
+                                        {round.name}
                                     </Label>
-                                    <div>
-                                        <Input
-                                            id={`date-${round.id}`}
-                                            type="date"
-                                            value={round.date}
-                                            onChange={(e) => handleDateChange(round.id, e.target.value)}
-                                        />
+                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                        <div>
+                                            <Label htmlFor={`date-${round.id}`} className="text-xs text-muted-foreground">
+                                                {t('admin.tournaments.groups.participants.change_time.date', 'Date')}
+                                            </Label>
+                                            <Input
+                                                id={`date-${round.id}`}
+                                                type="date"
+                                                value={round.date}
+                                                onChange={(e) => handleDateChange(round.id, e.target.value)}
+                                                className="mt-1"
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label htmlFor={`time-${round.id}`} className="text-xs text-muted-foreground">
+                                                {t('admin.tournaments.groups.participants.change_time.time', 'Time')}
+                                            </Label>
+                                            <Input
+                                                id={`time-${round.id}`}
+                                                type="time"
+                                                value={round.time}
+                                                onChange={(e) => handleTimeChange(round.id, e.target.value)}
+                                                className="mt-1"
+                                            />
+                                        </div>
                                     </div>
                                     <div>
-                                        <Input
-                                            id={`time-${round.id}`}
-                                            type="time"
-                                            value={round.time}
-                                            onChange={(e) => handleTimeChange(round.id, e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
+                                        <Label htmlFor={`location-${round.id}`} className="text-xs text-muted-foreground">
+                                            {t('admin.tournaments.groups.participants.change_time.location', 'Location')}
+                                        </Label>
                                         <Input
                                             id={`location-${round.id}`}
                                             type="text"
+                                            placeholder="Location"
                                             value={round.location}
                                             onChange={(e) => handleLocationChange(round.id, e.target.value)}
+                                            className="mt-1"
                                         />
                                     </div>
                                 </div>
-                            )
-                        })
+                            ))}
+                        </div>
                     )}
                 </div>
 
-                <div className="flex justify-end gap-4">
+                <div className="flex justify-end gap-4 pt-2 bg-background border-t mt-auto">
                     <Button variant="outline" onClick={onClose} disabled={loading}>
                         {t('admin.tournaments.groups.participants.change_time.cancel')}
                     </Button>

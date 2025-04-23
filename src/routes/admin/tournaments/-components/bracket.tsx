@@ -58,7 +58,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
           <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
             <Button
               onClick={toggleEditingMode}
-              className={`w-full md:w-auto px-3 py-1 text-xs rounded transition-colors ${isEditingMode
+              className={`w-full md:w-auto bg-midnightTable transition-colors ${isEditingMode
                 ? " bg-stone-700 border border-dashed"
                 : ""
                 }`}

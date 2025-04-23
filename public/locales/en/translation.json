@@ -2,6 +2,10 @@
   "eltl": {
     "name": "Estonian Table Tennis Association"
   },
+  "common": {
+     "cancel": "Cancel",
+          "confirm": "Confirm"
+  },
   "navbar": {
     "language": {
       "estonian": "Estonian",
@@ -505,7 +509,11 @@
         },
         "solo": "Solo",
         "team": "Teams",
-        "reset_seeding": "Reset seeding",
+        "reset_seeding": {
+          "title": "Reset seeding",
+          "subtitle": "Are you sure you want to reset the seeding? This action cannot be undone."
+         
+        },        
         "regroup": "Regroup",
         "finals": "Finals assignment",
         "change_time": "Change time",
@@ -575,6 +583,9 @@
             "title": "Change round time",
             "round": "Round",
             "play_off": "Play-off",
+            "date": "Date",
+            "time": "Time",
+            "location": "Location",
             "save": "Save",
             "cancel": "Cancel"
           },

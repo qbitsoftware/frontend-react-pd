@@ -1,13 +1,3 @@
-import { Search, ChevronDown } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -15,16 +5,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   distributeMatchesByTable,
-  generateTimeSlotsForGameday,
-  getUniqueMatches,
-  getUniqueTables,
   getFormattedDate,
-  getUniqueGamedays,
-  getUniqueClasses,
-  filterMatchesByGameday
 } from "./schedule-utils";
 import { useTranslation } from 'react-i18next';
 import { MatchWrapper } from '@/types/matches';
@@ -32,94 +16,29 @@ import { MatchWrapper } from '@/types/matches';
 export interface ScheduleProps {
   matches: MatchWrapper[];
   activeDay: number;
-  setActiveDay: (day: number) => void;
-  activeClass: string;
-  setActiveClass: (classValue: string) => void;
+  timeSlots: {
+    key: string;
+    displayTime: string;
+    timestamp: number;
+  }[],
+  tables: string[],
+  uniqueGamedays: string[],
+  safeDayIndex: number,
 }
 
 export const TournamentSchedule = ({
   matches,
-  activeDay,
-  setActiveDay,
-  activeClass,
-  setActiveClass
+  timeSlots,
+  tables,
+  uniqueGamedays,
+  safeDayIndex,
 }: ScheduleProps) => {
-  const [searchTerm, setSearchTerm] = useState("");
   const { t } = useTranslation()
 
-  const safeMatches = Array.isArray(matches) ? getUniqueMatches(matches) : [];
-  const uniqueClasses = getUniqueClasses(safeMatches);
+  const matchesByTableAndTime = distributeMatchesByTable(matches);
 
-  // Filter by class
-  let classFilteredMatches = safeMatches;
-  if (activeClass !== 'all') {
-    classFilteredMatches = safeMatches.filter(
-      match => match.class === activeClass
-    )
-  }
-
-  const uniqueGamedays = getUniqueGamedays(classFilteredMatches);
-
-  useEffect(() => {
-    if (activeDay !== 0) return;
-
-    const today = new Date();
-    let closestDayIndex = 0;
-
-    const gameDayDates = uniqueGamedays.map(day => new Date(day));
-
-    for (let i = 0; i < gameDayDates.length; i++) {
-      const gameDate = gameDayDates[i];
-
-      if (gameDate.toDateString() === today.toDateString()) {
-        closestDayIndex = i;
-        break;
-      }
-
-      if (gameDate <= today) {
-        closestDayIndex = i;
-      }
-
-      if (gameDate > today) {
-        break;
-      }
-    }
-
-    setActiveDay(closestDayIndex);
-  }, [uniqueGamedays, setActiveDay, activeDay]);
-
-
-  // Filter by gamedays based on class
-  const totalDays = uniqueGamedays.length || 1;
-  const safeDayIndex = activeDay >= 0 && activeDay < uniqueGamedays.length ? activeDay : 0;
-
-  let filteredMatches = filterMatchesByGameday(classFilteredMatches, uniqueGamedays[safeDayIndex]);
-
-  if (searchTerm) {
-    const term = searchTerm.toLowerCase();
-    filteredMatches = filteredMatches.filter(match =>
-      match.p1?.name?.toLowerCase().includes(term) ||
-      match.p2?.name?.toLowerCase().includes(term)
-    );
-  }
-
-  useEffect(() => {
-    setActiveClass("all");
-  }, [setActiveClass]);
-
-  // Generate time slots for the current gameday (column headers)
-  const timeSlots = generateTimeSlotsForGameday(filteredMatches);
-
-  // Get table names (row headers)
-  const tables = getUniqueTables(filteredMatches);
-
-  // Distribute matches by table and time (table cells)
-  const matchesByTableAndTime = distributeMatchesByTable(filteredMatches);
-
-  // Get the formatted date for display
   const formattedDate = getFormattedDate(uniqueGamedays[safeDayIndex] || '');
 
-  // Calculate grid template columns based on number of timeslots
   const calculateGridColumns = () => {
     // Fixed width for the Laud column
     const labelColumn = "10rem";
@@ -140,17 +59,6 @@ export const TournamentSchedule = ({
 
   return (
     <>
-      <ScheduleFilters
-        gamedays={uniqueGamedays}
-        activeDay={safeDayIndex}
-        setActiveDay={setActiveDay}
-        totalDays={totalDays}
-        classes={uniqueClasses}
-        activeClass={activeClass}
-        setActiveClass={setActiveClass}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
       {tables.length > 0 && timeSlots.length > 0 ? (
         <div className="w-full pr-4 overflow-auto my-8">
           <div
@@ -197,108 +105,6 @@ export const TournamentSchedule = ({
         </div>
       )}
     </>
-  );
-};
-
-interface ScheduleFiltersProps {
-  gamedays: string[];
-  activeDay: number;
-  setActiveDay: (day: number) => void;
-  totalDays: number;
-  classes: string[];
-  activeClass: string;
-  setActiveClass: (classValue: string) => void;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-}
-
-const ScheduleFilters = ({
-  gamedays,
-  activeDay,
-  setActiveDay,
-  totalDays,
-  classes,
-  activeClass,
-  setActiveClass,
-  searchTerm,
-  setSearchTerm
-}: ScheduleFiltersProps) => {
-  const { t } = useTranslation()
-  console.log(totalDays)
-  console.log('gamedays', gamedays)
-
-  return (
-    <div className="flex flex-wrap gap-4">
-      <div className="relative w-full md:w-auto">
-        <Input
-          type="text"
-          placeholder={t('competitions.timetable.search_placeholder')}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="h-12 pl-4 pr-10 py-2 text-sm bg-[#F7F6F7] focus:outline-none focus:ring-1 focus:ring-gray-300"
-        />
-        <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-      </div>
-
-      {classes.length > 0 && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
-              <span>{activeClass === 'all' ? t('competitions.timetable.all_groups') : `${activeClass}`}</span>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={() => setActiveClass('all')}
-              className={activeClass === 'all' ? "bg-slate-100" : ""}
-            >
-              {t('competitions.timetable.all_groups')}
-            </DropdownMenuItem>
-            {classes.map((classValue) => (
-              <DropdownMenuItem
-                key={classValue}
-                onClick={() => setActiveClass(classValue)}
-                className={activeClass === classValue ? "bg-slate-100" : ""}
-              >
-                {classValue}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-12 flex items-center space-x-2 px-4 py-2 rounded-lg border text-sm bg-[#F7F6F7]">
-            <span>
-              {/* (${getFormattedDate(gamedays[activeDay])}) */}
-              {gamedays[activeDay] ?
-                `${t('competitions.timetable.gameday')} ${activeDay + 1} ` :
-                `${t('competitions.timetable.gameday')} ${activeDay + 1}`
-              }
-            </span>
-            <ChevronDown className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent>
-          {Array.from({ length: totalDays }).map((_, index) => (
-            <DropdownMenuItem
-              key={index}
-              onClick={() => setActiveDay(index)}
-              className={activeDay === index ? "bg-slate-100" : ""}
-            >
-              {gamedays[index] ?
-                // (${getFormattedDate(gamedays[index])})
-                `${t('competitions.timetable.gameday')} ${index + 1} ` :
-                `${t('competitions.timetable.gameday')} ${index + 1}`
-              }
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
   );
 };
 

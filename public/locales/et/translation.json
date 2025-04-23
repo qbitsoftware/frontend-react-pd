@@ -2,6 +2,10 @@
   "eltl": {
     "name": "Eesti lauatenniseliit"
   },
+  "common": {
+     "cancel": "Katkesta",
+          "confirm": "Kinnita"
+  },
   "navbar": {
     "language": {
       "estonian": "Eesti",
@@ -505,7 +509,11 @@
         },
         "solo": "Üksik",
         "team": "Meeskondadega",
-        "reset_seeding": "Lähtesta asetused",
+        "reset_seeding": {
+          "title": "Lähtesta asetused",
+          "subtitle": "Kas olete kindel? Pärast kinnitamist ei saa seda tagasi võtta."
+          
+        },
         "regroup": "Regrupeeri",
         "finals": "Finaalid",
         "no_results": "Tulemusi pole",
@@ -529,6 +537,7 @@
           },
           "print": "Prindi tabel"
         },
+        
         "img_modal": {
           "title": "Muuda pilti",
           "description": "Vali või muuda pilti. Vajuta salvesta, et salvestada muudatused.",
@@ -575,6 +584,9 @@
             "title": "Muuda voorude aegu",
             "round": "Voor",
             "play_off": "Koha mängud",
+            "date": "Kuupäev",
+            "time": "Kellaaeg",
+            "location": "Asukoht",
             "save": "Salvesta",
             "cancel": "Katkesta"
           },

@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import ResetSeeding from "../reset-seeding"
 
 export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
   tournament_data,
@@ -89,7 +90,11 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
             table_data={table_data}
             participants_length={participants?.length}
           />
+
           <CardContent className="">
+            <div className="flex justify-end pb-1">
+              <ResetSeeding tournament_id={tournament_data.id} table_id={table_data.id} />
+            </div>
             <div className="min-h-[60vh] flex flex-col">
               <div className="overflow-x-auto w-full">
                 {table_data.type === GroupType.ROUND_ROBIN ||
