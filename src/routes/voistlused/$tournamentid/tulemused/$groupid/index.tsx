@@ -35,7 +35,7 @@ function RouteComponent() {
 
   const tournamentId = Number(params.tournamentid);
   const groupId = Number(params.groupid);
-  
+
   const tableQuery = useQuery({
     ...UseGetTournamentTable(tournamentId, groupId),
     staleTime: 0,
@@ -90,7 +90,7 @@ function RouteComponent() {
   };
 
   const hasBracketData = isMeistrikad || isRoundRobinFull;
-  
+
   return (
     <div className="min-h-screen p-2">
       <div className="flex justify-center">
@@ -188,17 +188,18 @@ function RouteComponent() {
               <div className="text-center text-stone-700">
                 {t("competitions.errors.no_groups")}
               </div>
-            ) : bracketQuery.data?.data?.eliminations && 
-               Array.isArray(bracketQuery.data.data.eliminations) && 
-               bracketQuery.data.data.eliminations.length > 0 && 
-               bracketQuery.data.data.eliminations[0]?.elimination ? (
+            ) : bracketQuery.data?.data?.eliminations &&
+              Array.isArray(bracketQuery.data.data.eliminations) &&
+              bracketQuery.data.data.eliminations.length > 0 &&
+              bracketQuery.data.data.eliminations[0]?.elimination ? (
               <Window
                 data={bracketQuery.data.data}
                 tournament_table={tableQuery.data.data}
               />
             ) : (
               <div className="text-center text-stone-700">
-                No data available yet
+                {/* No data available yet */}
+                {t('competitions.results.no_results')}
               </div>
             )}
           </TabsContent>

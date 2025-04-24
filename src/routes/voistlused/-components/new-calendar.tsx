@@ -260,11 +260,11 @@ export function TournamentsCalendar({ tournaments }: Props) {
                                         <div>
                                           <div className="text-sm font-medium">
                                             {event.name}
-                                            {event.isGameday && event.order && (
-                                              <p className="text-xs self-start">
-                                                {t('calendar.game_day')} {event.order}
-                                              </p>
-                                            )}
+                                            {(event.isGameday && event.order) && event.eventType === "winner" ? (
+                                              <p className="text-xs self-start">{t('calendar.play_off')}</p>
+                                            ) :
+                                              <p className="text-xs self-start">{t('calendar.game_day')} {event.order}</p>
+                                            }
                                           </div>
                                         </div>
                                       </div>
@@ -363,9 +363,15 @@ export function TournamentsCalendar({ tournaments }: Props) {
         <div className="mb-3 flex flex-row justify-between hover:bg-white/10 bg-white/50 items-start gap-2 p-2">
           <h6 className="px-1 font-semibold w-2/3">
             {event.name}
-            {event.isGameday && event.order && (
+            {/* {event.isGameday && event.order && (
               <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
-            )}
+            )} */}
+            {(event.isGameday && event.order) && event.eventType === "winner" ? (
+              <p className="text-xs self-start">{t('calendar.play_off')}</p>
+            ) :
+              <p className="text-xs self-start">{t('calendar.game_day')} {event.order}</p>
+            }
+
           </h6>
 
           <div className="flex items-center gap-2">

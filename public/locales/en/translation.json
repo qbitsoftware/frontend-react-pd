@@ -128,7 +128,8 @@
       }
     },
     "results": {
-      "finished": "Finished"
+      "finished": "Finished",
+      "no_results": "No results"
     },
     "standings": {
       "placement": "Placement",
@@ -152,7 +153,9 @@
       "status_pending": "Ongoing",
       "bracket": "Bracket",
       "final": "Final",
-      "winner": "Winner"
+      "winner": "Winner",
+      "matches": "Matches",
+      "timetable": "Timetable"
     },
     "errors": {
       "info_missing": "No tournament information available",

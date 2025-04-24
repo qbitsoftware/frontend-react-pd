@@ -53,7 +53,7 @@ function RouteComponent() {
   }
 
   if (!matchesData || !matchesData.data) {
-    return <div>No results</div>
+    return <div>{t('competitions.errors.no_groups')}</div>
   }
 
   const safeMatches = Array.isArray(matchesData.data) ? getUniqueMatches(matchesData.data) : [];
@@ -63,7 +63,6 @@ function RouteComponent() {
       match => match.class === activeClass
     )
   }
-
 
   const uniqueGamedays = getUniqueGamedays(classFilteredMatches);
   const [searchTerm, setSearchTerm] = useState("");
@@ -81,8 +80,8 @@ function RouteComponent() {
   const uniqueClasses = getUniqueClasses(safeMatches);
   const timeSlots = generateTimeSlotsForGameday(filteredMatches);
   const tables = getUniqueTables(filteredMatches);
-
   const initialSetupDone = useRef(false);
+
   useEffect(() => {
     if (initialSetupDone.current) return;
     const today = new Date();
@@ -118,10 +117,10 @@ function RouteComponent() {
           <Tabs defaultValue='matches'>
             <TabsList className='flex justify-center py-8 gap-1'>
               <TabsTrigger value="matches" className="data-[state=active]:bg-primary">
-                Matches
+                {t('competitions.timetable.matches')}
               </TabsTrigger>
               <TabsTrigger value="timetable" className='data-[state=active]:bg-primary'>
-                Timetable
+                {t('competitions.timetable.timetable')}
               </TabsTrigger>
             </TabsList>
             <Filters gamedays={uniqueGamedays} activeClass={activeClass} activeDay={activeDay} setActiveDay={setActiveDay} totalDays={uniqueGamedays.length || 1} classes={uniqueClasses} setActiveClass={setActiveClass} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />

@@ -3,8 +3,8 @@
     "name": "Eesti lauatenniseliit"
   },
   "common": {
-     "cancel": "Katkesta",
-          "confirm": "Kinnita"
+    "cancel": "Katkesta",
+    "confirm": "Kinnita"
   },
   "navbar": {
     "language": {
@@ -128,7 +128,8 @@
       }
     },
     "results": {
-      "finished": "Lõppenud"
+      "finished": "Lõppenud",
+      "no_results": "Tulemusi pole"
     },
     "standings": {
       "placement": "Koht",
@@ -152,7 +153,9 @@
       "status_pending": "Käimas",
       "bracket": "Koht",
       "final": "Finaal",
-      "winner": "Võitja"
+      "winner": "Võitja",
+      "matches": "Matšid",
+      "timetable": "Ajakava"
     },
     "errors": {
       "info_missing": "Turniiri info puudub",
@@ -513,7 +516,6 @@
         "reset_seeding": {
           "title": "Lähtesta asetused",
           "subtitle": "Kas olete kindel? Pärast kinnitamist ei saa seda tagasi võtta."
-          
         },
         "regroup": "Regrupeeri",
         "finals": "Finaalid",
@@ -538,7 +540,6 @@
           },
           "print": "Prindi tabel"
         },
-        
         "img_modal": {
           "title": "Muuda pilti",
           "description": "Vali või muuda pilti. Vajuta salvesta, et salvestada muudatused.",
