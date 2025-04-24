@@ -22,7 +22,7 @@ export function applyPDFStyles(clone: HTMLElement) {
   });
 
   clone.querySelectorAll(".pdf-participant").forEach((el) => {
-    console.log("Found pariticpants", el);
+    // console.log("Found pariticpants", el);
     const element = el as HTMLElement;
     element.style.marginBottom = "15px";
     element.style.overflow = "visible";
@@ -30,19 +30,19 @@ export function applyPDFStyles(clone: HTMLElement) {
 
   clone.querySelectorAll(".pdf-participant-box").forEach((el) => {
     const element = el as HTMLElement;
-    console.log("found el", el);
+    // console.log("found el", el);
     element.style.border = "2px solid black";
   });
 
   clone.querySelectorAll(".pdf-game-court").forEach((el) => {
     const element = el as HTMLElement;
-    console.log("found el", el);
+    // console.log("found el", el);
     element.style.top = "-30px";
   });
 
   clone.querySelectorAll(".pdf-background").forEach((el) => {
     const element = el as HTMLElement;
-    console.log("found el", el);
+    // console.log("found el", el);
     element.style.background = "#FFFFFF";
   });
 }

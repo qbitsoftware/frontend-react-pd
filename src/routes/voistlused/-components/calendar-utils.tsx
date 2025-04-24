@@ -103,6 +103,7 @@ export interface ProcessedEvent {
   color: string;
   isGameday?: boolean;
   parentTournamentId?: number;
+  eventType?: string;
   class?: string;
   order?: number;
   round?: number;
@@ -212,6 +213,7 @@ export const useTournamentEvents = (
                     round: match.match.round,
                     color: getTournamentColor(`${tournament.id}`),
                     isGameday: true,
+                    eventType: match.match.type,
                     parentTournamentId: tournament.id,
                   });
                 }

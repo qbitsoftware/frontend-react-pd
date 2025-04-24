@@ -51,14 +51,21 @@ const CalendarWidget = ({ tournaments, isEmpty, isLoading = false }: Props) => {
           {isUpcoming ? (
             <SfumatoBackground>
               <div className="flex flex-row justify-between hover:bg-white/10 bg-white/30 items-start gap-2 p-2">
-              <div className='px-1  flex flex-col gap-2'>
-                <h6 className="font-semibold w-2/3">
-                  {event.name}
-                  {event.isGameday && event.order && (
-                    <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
-                  )}
-                </h6>
-                <p>{event.category}</p>
+                <div className='px-1  flex flex-col gap-2'>
+                  <h6 className="font-semibold w-2/3">
+                    {event.name}
+
+                    {(event.isGameday && event.order) && event.eventType === "winner" ? (
+                      <div>
+                        <p className="font-normal text-sm">{t('calendar.play_off')}</p>
+                      </div>
+                    ) :
+                      <div>
+                        <p className="font-normal text-sm">{t('calendar.game_day')} {event.order}</p>
+                      </div>
+                    }
+                  </h6>
+                  <p>{event.category}</p>
                 </div>
 
                 <div className="flex items-center gap-2">

@@ -17,7 +17,7 @@ export function generatePDF(
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
 
-  console.log("PDF height", pageHeight);
+  // console.log("PDF height", pageHeight);
   const contentWidth = pageWidth;
   const contentHeight = pageHeight;
 
@@ -25,7 +25,7 @@ export function generatePDF(
 
   let imgWidth = contentWidth * scale;
   let imgHeight = imgWidth / aspectRatio;
-  console.log("img height", imgHeight);
+  // console.log("img height", imgHeight);
 
   if (imgHeight > contentHeight * scale) {
     imgHeight = contentHeight * scale;
