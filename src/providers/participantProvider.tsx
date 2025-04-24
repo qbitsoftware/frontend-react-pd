@@ -233,7 +233,6 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                 { keepValues: false }
             );
 
-            console.log("form values", form.getValues())
         } catch (error) {
             void error;
             if (participantId) {
