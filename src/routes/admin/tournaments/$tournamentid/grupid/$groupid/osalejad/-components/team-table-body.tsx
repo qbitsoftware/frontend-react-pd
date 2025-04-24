@@ -409,183 +409,83 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                 <TableCell></TableCell>
                 <TableCell></TableCell>
 
-                {/* {participant.players && participant.players.length < tournament_table.max_team_size && */}
-                <TableCell className="pl-8">
-                    <div className="">
-                        <Popover
-                            open={popoverOpen}
-                            onOpenChange={(open) => {
-                                setPopoverOpen(open)
-                            }}
-                        >
-                            <PopoverTrigger asChild>
-                                <div className="flex relative">
-                                    <Input
-                                        type="text"
-                                        value={
-                                            activeTeamForPlayer == participant.id && isInput
-                                                ? searchTerm
-                                                : ""
-                                        }
-                                        onChange={(e) =>
-                                            setSearchTerm(e.target.value)
-                                        }
-                                        disabled={editingPlayerInfo !== null}
-                                        className="min-w-[200px] mr-2"
-                                        placeholder={t("admin.tournaments.groups.participants.actions.add_player.add")}
-                                        autoComplete="off"
-                                        onFocus={() => {
-                                            setActiveTeamForPlayer(participant.id);
-                                            setIsInput(true)
-                                        }}
-
-                                        onBlur={() => {
-                                            setPopoverOpen(false)
-                                        }}
-                                    />
-                                    <Button
-                                        disabled={
-                                            (playerSuggestions &&
-                                                playerSuggestions.data &&
-                                                playerSuggestions.data.length !== 0) ||
-                                            searchTerm == "" ||
-                                            (activeTeamForPlayer !== participant.id)
-
-                                        }
-                                        onClick={() => {
-                                            const lastSpaceIndex =
-                                                searchTerm.lastIndexOf(" ");
-
-                                            let first_name = searchTerm;
-                                            let last_name = "";
-
-                                            if (lastSpaceIndex !== -1) {
-                                                first_name = searchTerm.substring(
-                                                    0,
-                                                    lastSpaceIndex
-                                                );
-                                                last_name = searchTerm.substring(
-                                                    lastSpaceIndex + 1
-                                                );
+                {(!participant.players || (participant.players && participant.players.length < tournament_table.max_team_size)) &&
+                    <TableCell className="pl-8">
+                        <div className="">
+                            <Popover
+                                open={popoverOpen}
+                                onOpenChange={(open) => {
+                                    setPopoverOpen(open)
+                                }}
+                            >
+                                <PopoverTrigger asChild>
+                                    <div className="flex relative">
+                                        <Input
+                                            type="text"
+                                            value={
+                                                activeTeamForPlayer == participant.id && isInput
+                                                    ? searchTerm
+                                                    : ""
                                             }
+                                            onChange={(e) =>
+                                                setSearchTerm(e.target.value)
+                                            }
+                                            disabled={editingPlayerInfo !== null}
+                                            className="min-w-[200px] mr-2"
+                                            placeholder={t("admin.tournaments.groups.participants.actions.add_player.add")}
+                                            autoComplete="off"
+                                            onFocus={() => {
+                                                setActiveTeamForPlayer(participant.id);
+                                                setIsInput(true)
+                                            }}
 
+                                            onBlur={() => {
+                                                setPopoverOpen(false)
+                                            }}
+                                        />
+                                        <Button
+                                            disabled={
+                                                (playerSuggestions &&
+                                                    playerSuggestions.data &&
+                                                    playerSuggestions.data.length !== 0) ||
+                                                searchTerm == "" ||
+                                                (activeTeamForPlayer !== participant.id)
 
-                                            const existingPlayers =
-                                                participant.players ?? [];
-                                            const updatedTeam: ParticipantFormValues = {
-                                                name: participant.name,
-                                                tournament_id: participant.tournament_id,
-                                                sport_type:
-                                                    participant.sport_type || "tabletennis",
-                                                class: participant.extra_data?.class,
-                                                players: [
-                                                    ...existingPlayers,
-                                                    {
-                                                        name: searchTerm,
-                                                        first_name: first_name,
-                                                        last_name: last_name,
-                                                        sport_type: "tabletennis",
-                                                        extra_data: { rate_points: 0 },
-                                                    },
-                                                ],
-                                            };
-
-                                            handleAddOrUpdateParticipant(
-                                                updatedTeam,
-                                                participant.id
-                                            );
-                                            setSearchTerm("")
-                                        }}
-                                    >
-                                        {t(
-                                            "admin.tournaments.groups.participants.actions.submit"
-                                        )}{" "}
-                                        <PlusCircle />
-                                    </Button>
-
-                                </div>
-
-
-                            </PopoverTrigger>
-                            {activeTeamForPlayer == participant.id && isInput &&
-                                < PopoverContent
-                                    className="p-0 w-[200px] max-h-[400px] overflow-y-auto suggestion-dropdown"
-                                    align="start"
-                                    sideOffset={5}
-                                    onInteractOutside={(e) => {
-                                        if ((e.target as HTMLElement).closest('input')) {
-                                            e.preventDefault()
-                                        } else {
-                                            setPopoverOpen(false)
-                                        }
-                                    }}
-                                    onOpenAutoFocus={(e) => {
-                                        e.preventDefault()
-                                    }}
-                                >
-                                    {playerSuggestions?.data.map((user, i) => (
-                                        <div
-                                            key={i}
-                                            className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                            }
                                             onClick={() => {
-                                                const team = participantsState?.find(
-                                                    (p) => p.id === participant.id
-                                                );
-                                                if (!team) return;
-                                                const players = team.players || [];
-                                                const updatedTeam: ParticipantFormValues =
-                                                {
-                                                    name: team.name,
-                                                    tournament_id:
-                                                        team.tournament_id,
+                                                const lastSpaceIndex =
+                                                    searchTerm.lastIndexOf(" ");
+
+                                                let first_name = searchTerm;
+                                                let last_name = "";
+
+                                                if (lastSpaceIndex !== -1) {
+                                                    first_name = searchTerm.substring(
+                                                        0,
+                                                        lastSpaceIndex
+                                                    );
+                                                    last_name = searchTerm.substring(
+                                                        lastSpaceIndex + 1
+                                                    );
+                                                }
+
+
+                                                const existingPlayers =
+                                                    participant.players ?? [];
+                                                const updatedTeam: ParticipantFormValues = {
+                                                    name: participant.name,
+                                                    tournament_id: participant.tournament_id,
                                                     sport_type:
-                                                        team.sport_type ||
-                                                        "tabletennis",
-                                                    class: team.extra_data?.class,
+                                                        participant.sport_type || "tabletennis",
+                                                    class: participant.extra_data?.class,
                                                     players: [
-                                                        ...players.map((player) => ({
-                                                            id: player.id,
-                                                            name: `${player.first_name} ${player.last_name}`,
-                                                            sport_type:
-                                                                player.sport_type ||
-                                                                "tabletennis",
-                                                            first_name:
-                                                                player.first_name,
-                                                            last_name: player.last_name,
-                                                            user_id: player.user_id,
-                                                            sex: player.sex,
-                                                            extra_data: {
-                                                                rate_order:
-                                                                    player.extra_data
-                                                                        .rate_order,
-                                                                club: player.extra_data
-                                                                    .club,
-                                                                rate_points:
-                                                                    player.extra_data
-                                                                        .rate_points,
-                                                                eltl_id:
-                                                                    player.extra_data
-                                                                        .eltl_id,
-                                                                class:
-                                                                    player.extra_data.class,
-                                                            },
-                                                        })),
+                                                        ...existingPlayers,
                                                         {
-                                                            name: `${user.first_name} ${user.last_name}`,
+                                                            name: searchTerm,
+                                                            first_name: first_name,
+                                                            last_name: last_name,
                                                             sport_type: "tabletennis",
-                                                            first_name: user.first_name,
-                                                            last_name: user.last_name,
-                                                            user_id: user.id || 0,
-                                                            sex: user.sex || "",
-                                                            extra_data: {
-                                                                rate_points:
-                                                                    user.rate_points || 0,
-                                                                rate_order:
-                                                                    user.rate_order,
-                                                                club: user.club_name,
-                                                                eltl_id: user.eltl_id,
-                                                                class: "",
-                                                            },
+                                                            extra_data: { rate_points: 0 },
                                                         },
                                                     ],
                                                 };
@@ -594,21 +494,121 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                     updatedTeam,
                                                     participant.id
                                                 );
-                                                setActiveTeamForPlayer(null);
-                                                setSearchTerm("");
+                                                setSearchTerm("")
                                             }}
                                         >
-                                            {capitalize(user.first_name)}{" "}
-                                            {capitalize(user.last_name)}{" "}
-                                            {user.eltl_id}
-                                        </div>
-                                    ))}
+                                            {t(
+                                                "admin.tournaments.groups.participants.actions.submit"
+                                            )}{" "}
+                                            <PlusCircle />
+                                        </Button>
 
-                                </PopoverContent>}
-                        </Popover>
-                    </div>
-                </TableCell>
-                {/* } */}
+                                    </div>
+
+
+                                </PopoverTrigger>
+                                {activeTeamForPlayer == participant.id && isInput &&
+                                    < PopoverContent
+                                        className="p-0 w-[200px] max-h-[400px] overflow-y-auto suggestion-dropdown"
+                                        align="start"
+                                        sideOffset={5}
+                                        onInteractOutside={(e) => {
+                                            if ((e.target as HTMLElement).closest('input')) {
+                                                e.preventDefault()
+                                            } else {
+                                                setPopoverOpen(false)
+                                            }
+                                        }}
+                                        onOpenAutoFocus={(e) => {
+                                            e.preventDefault()
+                                        }}
+                                    >
+                                        {playerSuggestions?.data.map((user, i) => (
+                                            <div
+                                                key={i}
+                                                className="px-3 py-2 cursor-pointer hover:bg-accent"
+                                                onClick={() => {
+                                                    const team = participantsState?.find(
+                                                        (p) => p.id === participant.id
+                                                    );
+                                                    if (!team) return;
+                                                    const players = team.players || [];
+                                                    const updatedTeam: ParticipantFormValues =
+                                                    {
+                                                        name: team.name,
+                                                        tournament_id:
+                                                            team.tournament_id,
+                                                        sport_type:
+                                                            team.sport_type ||
+                                                            "tabletennis",
+                                                        class: team.extra_data?.class,
+                                                        players: [
+                                                            ...players.map((player) => ({
+                                                                id: player.id,
+                                                                name: `${player.first_name} ${player.last_name}`,
+                                                                sport_type:
+                                                                    player.sport_type ||
+                                                                    "tabletennis",
+                                                                first_name:
+                                                                    player.first_name,
+                                                                last_name: player.last_name,
+                                                                user_id: player.user_id,
+                                                                sex: player.sex,
+                                                                extra_data: {
+                                                                    rate_order:
+                                                                        player.extra_data
+                                                                            .rate_order,
+                                                                    club: player.extra_data
+                                                                        .club,
+                                                                    rate_points:
+                                                                        player.extra_data
+                                                                            .rate_points,
+                                                                    eltl_id:
+                                                                        player.extra_data
+                                                                            .eltl_id,
+                                                                    class:
+                                                                        player.extra_data.class,
+                                                                },
+                                                            })),
+                                                            {
+                                                                name: `${user.first_name} ${user.last_name}`,
+                                                                sport_type: "tabletennis",
+                                                                first_name: user.first_name,
+                                                                last_name: user.last_name,
+                                                                user_id: user.id || 0,
+                                                                sex: user.sex || "",
+                                                                extra_data: {
+                                                                    rate_points:
+                                                                        user.rate_points || 0,
+                                                                    rate_order:
+                                                                        user.rate_order,
+                                                                    club: user.club_name,
+                                                                    eltl_id: user.eltl_id,
+                                                                    class: "",
+                                                                },
+                                                            },
+                                                        ],
+                                                    };
+
+                                                    handleAddOrUpdateParticipant(
+                                                        updatedTeam,
+                                                        participant.id
+                                                    );
+                                                    setActiveTeamForPlayer(null);
+                                                    setSearchTerm("");
+                                                }}
+                                            >
+                                                {capitalize(user.first_name)}{" "}
+                                                {capitalize(user.last_name)}{" "}
+                                                {user.eltl_id}
+                                            </div>
+                                        ))}
+
+                                    </PopoverContent>}
+                            </Popover>
+                        </div>
+                    </TableCell>
+                }
                 <TableCell></TableCell>
                 <TableCell colSpan={6}></TableCell>
             </TableRow>

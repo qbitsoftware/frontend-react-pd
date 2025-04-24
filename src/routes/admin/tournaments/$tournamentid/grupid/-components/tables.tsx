@@ -8,6 +8,7 @@ import { parseTableType } from "@/lib/utils"
 import { useTranslation } from "react-i18next"
 import { TournamentTable } from "@/types/groups"
 import { Tournament } from "@/types/tournaments"
+import { GroupType } from "@/types/matches"
 
 
 interface TournamentTablesProps {
@@ -23,8 +24,8 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   return (
     <Card className="w-full border-none shadow-none ">
       <CardHeader className="px-0 flex-col gap-4 md:gap-0 md:flex-row md:justify-between items-start md:items-center space-y-0">
-      <h5 className="font-medium">
-        {t("admin.tournaments.groups.title")}
+        <h5 className="font-medium">
+          {t("admin.tournaments.groups.title")}
         </h5>
         <Link className="mt-0 mb-0" to={`/admin/tournaments/${tournamentid}/grupid/uus`}>
           <Button className="w-full md:w-auto ">
@@ -32,7 +33,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
             {t("admin.tournaments.groups.add_new")}
           </Button>
         </Link>
-      
+
       </CardHeader>
       <CardContent className="px-0 md:px-2">
         <Table className="w-full">
@@ -46,15 +47,23 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tables ? tables.map((table) => (
-              <TableRow key={table.id} onClick={() => (navigate({ to: `${table.id}` }))} className="cursor-pointer h-[100px] sm:h-[40px]">
-                <TableCell className="font-medium">{table.class}</TableCell>
-                <TableCell><span className="font-semibold">{table.participants.length}</span>/{table.size}</TableCell>
-                <TableCell className="truncate">{parseTableType(table.type)}</TableCell>
-                <TableCell>{table.solo ? t('admin.tournaments.groups.solo') : t('admin.tournaments.groups.team')}</TableCell>
+            {tables ? tables.map((table) => {
+              let participants = table.participants.length
+              if (table.type === GroupType.ROUND_ROBIN || table.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT) {
+                const uniqueGroups = new Set(table.participants.map(participant => participant.group));
+                participants = uniqueGroups.size;
 
-              </TableRow>
-            ))
+              }
+              return (
+                <TableRow key={table.id} onClick={() => (navigate({ to: `${table.id}` }))} className="cursor-pointer h-[100px] sm:h-[40px]">
+                  <TableCell className="font-medium">{table.class}</TableCell>
+                  <TableCell><span className="font-semibold">{participants}</span>/{table.size}</TableCell>
+                  <TableCell className="truncate">{parseTableType(table.type)}</TableCell>
+                  <TableCell>{table.solo ? t('admin.tournaments.groups.solo') : t('admin.tournaments.groups.team')}</TableCell>
+
+                </TableRow>
+              )
+            })
               :
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-6">
