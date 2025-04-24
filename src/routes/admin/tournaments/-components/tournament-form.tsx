@@ -105,10 +105,15 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const onSubmit = async (values: TournamentFormValues) => {
     try {
       values.information = JSON.stringify(value)
-      await postMutation.mutateAsync(values)
+      const result = await postMutation.mutateAsync(values)
       if (initial_data) {
         toast.message(t('toasts.tournaments.updated'))
       } else {
+        if (result.data) {
+          router.navigate({ to: `/admin/tournaments/${result.data.id}`, replace: true })
+        } else {
+          router.navigate({ to: `/admin/tournaments`, replace: true })
+        }
         toast.error(t('toasts.tournaments.created'))
       }
     } catch (error) {

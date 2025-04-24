@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { TableMatch } from "@/types/brackets";
-import { getRandomFlag } from "@/lib/utils";
 import { useLocation, useParams } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -64,7 +63,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
   WIDTH,
   isEditingMode = false,
   selectedPlayer = null,
-  onPlayerSelect = () => {},
+  onPlayerSelect = () => { },
 }) => {
   const isHomeSelected =
     selectedPlayer &&
@@ -168,7 +167,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
                   {isHomeSelected ? "✓" : ""}
                 </span>
               )}
-              <div className="text-center px-2">{getRandomFlag()}</div>
+              <div className="text-center font-medium px-2 w-[35px]">{match.match.type == "winner" && firstRound && match.participant_1.order}</div>
               <div
                 className={cn(
                   "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full text-[#575757] font-bold pdf-participant",
@@ -231,7 +230,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
                   {isAwaySelected ? "✓" : ""}
                 </span>
               )}
-              <div className="text-center px-2">{getRandomFlag()}</div>
+              <div className="text-center font-medium px-2 w-[35px]">{match.match.type == "winner" && firstRound && match.participant_2.order}</div>
               <div
                 className={cn(
                   "text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap pr-2 w-full  text-[#575757] font-bold pdf-participant",
