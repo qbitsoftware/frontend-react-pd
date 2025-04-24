@@ -119,7 +119,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                               <div className="flex justify-between items-center  bg-[#062842] py-2 rounded-l-sm">
                                 <h3 className="text-xl font-semibold px-2 ">
                                   <Input
-                                    placeholder={`${t('admin.tournaments.groups.participants.team_placeholder')} ${groupNumber}`}
+                                    placeholder={`${t('admin.tournaments.groups.participants.new_group')} ${groupNumber}`}
                                     className="text-lg"
                                     value={
                                       groupNames[groupNumber] !== undefined

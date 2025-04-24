@@ -12,7 +12,7 @@ export const TableTennisProtocolModal = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[90vw] md:max-w-[80vw] overflow-hidden flex flex-col p-0">
+            <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[90vw] md:max-w-[80vw] overflow-y-scroll flex flex-col p-0">
                 <DialogHeader className="bg-background p-3 md:px-4 border-b sticky top-0 z-10">
                     <div className="flex items-center justify-between">
                         <DialogTitle className="text-base font-medium flex items-center gap-2">

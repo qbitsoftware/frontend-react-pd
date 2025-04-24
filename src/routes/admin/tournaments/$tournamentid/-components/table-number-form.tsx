@@ -6,6 +6,7 @@ import { Match } from "@/types/matches"
 import { UseGetFreeVenues } from "@/queries/venues"
 import { toast } from "sonner"
 import { useTranslation } from "react-i18next"
+import { Label } from "@/components/ui/label"
 
 interface TableNumberFormProps {
   match: Match
@@ -41,9 +42,10 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
   }
 
   return (
-    <div>
+    <div className="flex items-center gap-3">
+      <Label>{t("admin.tournaments.matches.table.table")}</Label>
       <Select value={String(tableNumber)} onValueChange={handleChange}>
-        <SelectTrigger>
+        <SelectTrigger className="h-8">
           <span>{tableNumber}</span>
         </SelectTrigger>
         <SelectContent>
