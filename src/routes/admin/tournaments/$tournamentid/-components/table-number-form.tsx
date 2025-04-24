@@ -36,7 +36,7 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
     return <div></div>
   }
 
-  if (!freeVenues?.data || isError) {
+  if (isError) {
     return <div></div>
   }
 
@@ -48,7 +48,7 @@ export function TableNumberForm({ match, initialTableNumber }: TableNumberFormPr
         </SelectTrigger>
         <SelectContent>
           <SelectItem className="min-h-[30px]" value=" "></SelectItem>
-          {freeVenues.data.map((table) => (
+          {freeVenues && freeVenues.data && freeVenues.data.map((table) => (
             <SelectItem key={table.name} value={String(table.name)}>
               {table.name}
             </SelectItem>
