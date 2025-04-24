@@ -32,7 +32,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
 
     return (
         <>
-            {(participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) && (
+            {((participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT)) && (
                 <>
                     <TableCell>
                         {(participantsState && participantsState.length > 0

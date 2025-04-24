@@ -71,7 +71,7 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
               {table_data && table_data.solo ? (
                 <SoloTableInput table_data={table_data} groupId={groupId} />
               ) : (
-                <TeamTableInput groupId={groupId} />
+                <TeamTableInput table_data={table_data} groupId={groupId} />
               )}
             </TableRow>
           </TableBody>

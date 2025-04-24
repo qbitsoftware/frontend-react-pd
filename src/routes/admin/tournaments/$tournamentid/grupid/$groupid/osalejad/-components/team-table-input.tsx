@@ -2,18 +2,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TableCell } from '@/components/ui/table';
 import { useParticipantForm } from '@/providers/participantProvider';
+import { TournamentTable } from '@/types/groups';
 import { PlusCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface TeamTableInputProps {
     groupId: number
+    table_data: TournamentTable
 }
 
-const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
+const TeamTableInput = ({ groupId, table_data }: TeamTableInputProps) => {
+    void table_data
     const { t } = useTranslation()
     const { form, handleAddOrUpdateParticipant, participantsState, activeGroupId, setActiveGroupId, groupNames } = useParticipantForm()
     return (
         <>
+            {/* {(table_data.type !== GroupType.ROUND_ROBIN && table_data.type !== GroupType.ROUND_ROBIN_FULL_PLACEMENT) && participantsState && participantsState.length < table_data.size} */}
             <TableCell>
                 {(participantsState && participantsState.length > 0
                     ? participantsState.length
