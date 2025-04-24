@@ -108,7 +108,7 @@
     "location": "Toimumiskoht",
     "tables": "Laudu kokku",
     "bracket": "Tabelid",
-    "play_off": "Koha mängud",
+    "play_off": "Kohamängud",
     "participants": {
       "search": "Otsi",
       "title": "Mängijad",
@@ -188,7 +188,7 @@
     "finished": "Lõppenud",
     "3_months": "Kuude lõikes",
     "game_day": "Mängupäev",
-    "play_off": "Koha mängud",
+    "play_off": "Kohamängud",
     "full_year": "Aasta lõikes",
     "multiple_tournaments_placeholder": "Rohkem kui 1 turniir",
     "months": {
@@ -585,7 +585,7 @@
           "change_time": {
             "title": "Muuda voorude aegu",
             "round": "Voor",
-            "play_off": "Koha mängud",
+            "play_off": "Kohamängud",
             "date": "Kuupäev",
             "time": "Kellaaeg",
             "location": "Asukoht",

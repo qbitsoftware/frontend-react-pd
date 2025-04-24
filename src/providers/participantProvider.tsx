@@ -62,6 +62,9 @@ interface ParticipantContextType {
 
     groupNames: Record<number, string>;
     setGroupNames: React.Dispatch<React.SetStateAction<Record<number, string>>>;
+
+    activeGroupId: number | null;
+    setActiveGroupId: React.Dispatch<React.SetStateAction<number| null>>
 }
 
 const ParticipantContext = createContext<ParticipantContextType | undefined>(undefined);
@@ -113,6 +116,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
     const [editingTeamName, setEditingTeamName] = useState<string>("");
     const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+    const [activeGroupId, setActiveGroupId] = useState<number | null>(null);
 
     const [selectedGroupInput, setSelectedGroupInput] = useState<number | null>(null);
 
@@ -228,6 +232,8 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                 },
                 { keepValues: false }
             );
+
+            console.log("form values", form.getValues())
         } catch (error) {
             void error;
             if (participantId) {
@@ -509,6 +515,9 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
 
             groupNames,
             setGroupNames,
+
+            activeGroupId,
+            setActiveGroupId,
         }}>
             {children}
         </ParticipantContext.Provider>

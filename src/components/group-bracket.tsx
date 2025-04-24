@@ -19,7 +19,7 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
 
-    if (!brackets.round_robin || brackets.round_robin.length !== 1 || brackets.round_robin[0].length < 8)  {
+    if (!brackets.round_robin || brackets.round_robin.length !== 1 || brackets.round_robin[0].length < 8) {
         return (
             <div className="flex items-center justify-center h-64 w-full">
                 <p className="text-lg font-medium text-gray-500">{t("competitions.errors.no_table")}</p>
@@ -120,43 +120,67 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
                                     </TableHead>
                                 ))}
                                 <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
+                                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
+                                    Asetus
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {Array(8).fill(0).map((_, rowIndex) => (
-                                <TableRow
-                                    key={rowIndex}
-                                    className={cn(
-                                        rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
-                                        selectedTeam === displayTeams[rowIndex]?.participant.id ? 'bg-blue-100' : ''
-                                    )}
-                                >
-                                    <TableCell className="font-medium border text-center">
-                                        {displayTeams[rowIndex]?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
-                                    </TableCell>
-                                    {Array(8).fill(0).map((_, colIndex) => (
-                                        <TableCell
-                                            key={colIndex}
-                                            className={cn(
-                                                "p-2 border",
-                                                rowIndex === colIndex ? "bg-gray-200" : ""
-                                            )}
-                                        >
-                                            {rowIndex === colIndex ? (
-                                                <div className="w-full h-full bg-gray-300"></div>
+                            {Array(8).fill(0).map((_, rowIndex) => {
+                                const sortedTeams = [...displayTeams].sort((a, b) =>
+                                    (b?.total_points || 0) - (a?.total_points || 0)
+                                );
+
+                                const rankMap: Record<string, number> = {};
+                                sortedTeams.forEach((team, index) => {
+                                    if (team?.participant?.id) {
+                                        rankMap[team.participant.id] = index + 1;
+                                    }
+                                });
+
+
+                                return (
+                                    <TableRow
+                                        key={rowIndex}
+                                        className={cn(
+                                            rowIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-background',
+                                            selectedTeam === displayTeams[rowIndex]?.participant.id ? 'bg-blue-100' : ''
+                                        )}
+                                    >
+                                        <TableCell className="font-medium border text-center">
+                                            {displayTeams[rowIndex]?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
+                                        </TableCell>
+                                        {Array(8).fill(0).map((_, colIndex) => (
+                                            <TableCell
+                                                key={colIndex}
+                                                className={cn(
+                                                    "p-2 border",
+                                                    rowIndex === colIndex ? "bg-gray-200" : ""
+                                                )}
+                                            >
+                                                {rowIndex === colIndex ? (
+                                                    <div className="w-full h-full bg-gray-300"></div>
+                                                ) : (
+                                                    renderMatchCell(displayTeams[rowIndex].participant.id, displayTeams[colIndex].participant.id)
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                        <TableCell className="font-bold border text-center bg-secondary/30">
+                                            {displayTeams[rowIndex]?.total_points !== undefined ?
+                                                displayTeams[rowIndex].total_points :
+                                                <Skeleton className="h-6 w-12 mx-auto" />
+                                            }
+                                        </TableCell>
+                                        <TableCell className='font-bold border text-center bg-secondary/30'>
+                                            {displayTeams[rowIndex]?.total_points !== undefined ? (
+                                                rankMap[displayTeams[rowIndex].participant.id]
                                             ) : (
-                                                renderMatchCell(displayTeams[rowIndex].participant.id, displayTeams[colIndex].participant.id)
+                                                <Skeleton className="h-6 w-12 mx-auto" />
                                             )}
                                         </TableCell>
-                                    ))}
-                                    <TableCell className="font-bold border text-center bg-secondary/30">
-                                        {displayTeams[rowIndex]?.total_points !== undefined ?
-                                            displayTeams[rowIndex].total_points :
-                                            <Skeleton className="h-6 w-12 mx-auto" />
-                                        }
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                    </TableRow>
+                                )
+                            })}
                         </TableBody>
                     </Table>
                 </div>

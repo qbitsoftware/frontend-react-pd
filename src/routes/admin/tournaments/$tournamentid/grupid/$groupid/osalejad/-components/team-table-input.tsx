@@ -11,8 +11,7 @@ interface TeamTableInputProps {
 
 const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
     const { t } = useTranslation()
-    const { form, handleAddOrUpdateParticipant, participantsState } = useParticipantForm()
-
+    const { form, handleAddOrUpdateParticipant, participantsState, activeGroupId, setActiveGroupId } = useParticipantForm()
     return (
         <>
             <TableCell>
@@ -30,10 +29,12 @@ const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
             <TableCell className="min-w-[200px]">
                 <Input
                     type="text"
+                    onFocus={() => setActiveGroupId(groupId)}
                     onChange={(e) => {
                         form.setValue("name", e.target.value);
                         form.setValue("group", groupId)
                     }}
+                    value={groupId === activeGroupId ? form.watch("name") : ""}
                     autoComplete='off'
                     placeholder={t("admin.tournaments.groups.participants.actions.add_team")}
                 />

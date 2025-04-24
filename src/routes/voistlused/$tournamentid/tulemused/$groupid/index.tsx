@@ -12,8 +12,9 @@ import { GroupStatisticsCard } from "./-components/group-stage-protocol";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
 import GroupStageBracket from "@/components/group-stage-bracket";
-import { MatchWrapper } from "@/types/matches";
+import { GroupType, MatchWrapper } from "@/types/matches";
 import StandingsProtocol from "./-components/standings-protocol";
+import Loader from "@/components/loader";
 
 export const Route = createFileRoute(
   "/voistlused/$tournamentid/tulemused/$groupid/"
@@ -49,7 +50,7 @@ function RouteComponent() {
   useEffect(() => {
     if (tableQuery.data?.data) {
       const type = tableQuery.data.data.type;
-      if (type === "champions_league" || type === "round_robin_full_placement") {
+      if (type === GroupType.CHAMPIONS_LEAGUE || type === GroupType.ROUND_ROBIN || type === GroupType.ROUND_ROBIN_FULL_PLACEMENT) {
         setActiveTab("bracket");
       } else {
         setActiveTab("placement");
@@ -58,7 +59,7 @@ function RouteComponent() {
   }, [tableQuery.data?.data?.type]);
 
   if (tableQuery.isLoading || bracketQuery.isLoading) {
-    return <div>{t("news.loading")}</div>;
+    return (<Loader />)
   }
 
   if (tableQuery.isError || bracketQuery.isError) {
@@ -70,9 +71,9 @@ function RouteComponent() {
   }
 
   const tournamentType = tableQuery.data.data.type;
-  const isMeistrikad = tournamentType === "champions_league";
-  const isRoundRobinFull = tournamentType === "round_robin_full_placement";
-  const isFreeForAll = tournamentType === "free_for_all";
+  const isMeistrikad = tournamentType === GroupType.CHAMPIONS_LEAGUE;
+  const isRoundRobinFull = tournamentType === GroupType.ROUND_ROBIN || tournamentType === GroupType.ROUND_ROBIN_FULL_PLACEMENT;
+  const isFreeForAll = tournamentType === GroupType.FREE_FOR_ALL;
   const groupName = tableQuery.data.data.class;
 
   const handleSelectMatch = (match: MatchWrapper) => {
