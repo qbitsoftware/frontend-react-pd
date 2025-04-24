@@ -14,6 +14,8 @@ import { useTranslation } from "react-i18next";
 import seeds3 from "@/assets/seeds3.png";
 import { TournamentTable } from "@/types/groups";
 import { toast } from 'sonner';
+import { useParticipantForm } from "@/providers/participantProvider";
+import { GroupType } from "@/types/matches";
 
 interface SeedingHeaderProps {
   tournament_id: number;
@@ -32,6 +34,8 @@ const SeedingHeader = ({
   );
 
   const updateOrdering = UsePostOrder(tournament_id, table_data.id);
+
+  const { groupedTeams } = useParticipantForm();
 
   const [disabled, setDisabled] = useState(false);
   const isDisabled = (data: MatchesResponse | undefined): boolean => {
@@ -76,7 +80,7 @@ const SeedingHeader = ({
       <div className="flex gap-2 items-center">
         <h5 className="font-medium">{t("admin.tournaments.info.participants")}</h5>
         <p className="bg-[#FBFBFB] font-medium px-3 py-1 rounded-full border border-[#EAEAEA] ">
-          {participants_length && participants_length} / {table_data.size}{" "}
+          {((table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) && Object.keys(groupedTeams).length) || (participants_length && participants_length)} / {table_data.size}{" "}
         </p>
       </div>
 

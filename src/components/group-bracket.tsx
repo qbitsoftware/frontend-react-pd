@@ -113,15 +113,19 @@ export default function GroupBracket({ brackets, onMatchSelect }: GroupBracketPr
                     <Table className="w-full border-collapse">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">Meeskonnad</TableHead>
+                                <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">
+                                    {t('competitions.results.teams')}
+                                </TableHead>
                                 {Array(8).fill(0).map((_, index) => (
                                     <TableHead key={index} className="w-[120px] text-center bg-primary text-primary-foreground">
                                         {displayTeams[index]?.participant.name || <Skeleton className="h-6 w-20 mx-auto" />}
                                     </TableHead>
                                 ))}
-                                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">Punktid kokku</TableHead>
                                 <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                    Asetus
+                                    {t('competitions.results.total_points')}
+                                </TableHead>
+                                <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
+                                    {t('competitions.results.placement')}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>

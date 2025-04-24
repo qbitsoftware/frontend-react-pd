@@ -20,16 +20,48 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { Slider } from '@/components/ui/slider'
 
 
 const createFormSchema = (t: TFunction) => z.object({
   class: z.string().min(1, t('admin.tournaments.groups.errors.class')),
   type: z.string().min(1, t('admin.tournaments.groups.errors.type')),
   solo: z.boolean(),
-  min_team_size: z.number().min(2),
-  max_team_size: z.number().min(2),
+  min_team_size: z.number().optional(),
+  max_team_size: z.number().optional(),
+  woman_weight: z.number().min(1).max(10),
   size: z.number(),
-})
+}).superRefine((data, ctx) => {
+  if (data.solo) return;
+
+  if (data.min_team_size === undefined) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('admin.tournaments.groups.errors.min_team_size'),
+      path: ['min_team_size']
+    });
+  } else if (data.min_team_size < 2) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('admin.tournaments.groups.errors.min_team_size'),
+      path: ['min_team_size']
+    });
+  }
+
+  if (data.max_team_size === undefined) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('admin.tournaments.groups.errors.min_team_size'),
+      path: ['max_team_size']
+    });
+  } else if (data.max_team_size < 2) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('admin.tournaments.groups.errors.min_team_size'),
+      path: ['max_team_size']
+    });
+  }
+});
 
 export type TournamentTableForm = z.infer<ReturnType<typeof createFormSchema>>
 
@@ -65,7 +97,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
         min_team_size: 2,
         max_team_size: 2,
         size: 16,
-
+        woman_weight: 1,
       },
   })
 
@@ -263,9 +295,18 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                       <FormLabel>{t("admin.tournaments.create_tournament.min_team_size")}</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
+                          type="text"
                           {...field}
-                          onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "") {
+                              field.onChange(0);
+                            } else {
+                              const cleanedValue = value.replace(/^0+/, '');
+                              field.onChange(cleanedValue === '' ? 0 : Number.parseInt(cleanedValue));
+                            }
+                          }}
+                          value={field.value === 0 ? '' : field.value}
                         />
                       </FormControl>
                       <FormMessage />
@@ -280,9 +321,18 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                       <FormLabel>{t("admin.tournaments.create_tournament.max_team_size")}</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
+                          type="text"
                           {...field}
-                          onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "") {
+                              field.onChange(0);
+                            } else {
+                              const cleanedValue = value.replace(/^0+/, '');
+                              field.onChange(cleanedValue === '' ? 0 : Number.parseInt(cleanedValue));
+                            }
+                          }}
+                          value={field.value === 0 ? '' : field.value}
                         />
                       </FormControl>
                       <FormMessage />
@@ -290,6 +340,50 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="woman_weight"
+                render={({ field }) => (
+                  < FormItem >
+                    <FormLabel>{t("admin.tournaments.create_tournament.woman_weight")}</FormLabel>
+                    <div className="grid grid-cols-[1fr,80px] items-center gap-4">
+                      <FormControl>
+                        <Slider
+                          min={1}
+                          max={10}
+                          step={0.1}
+                          value={[field.value]}
+                          onValueChange={(values) => field.onChange(values[0])}
+                          className="pt-2"
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <Input
+                          type='number'
+                          min={1}
+                          max={10}
+                          step={0.1}
+                          value={typeof field.value === 'number' ? field.value : 1}
+                          onChange={(e) => {
+                            const value = parseFloat(e.target.value);
+                            if (!isNaN(value) && value >= 1 && value <= 10) {
+                              field.onChange(value);
+                            } else if (e.target.value === '') {
+                              field.onChange(1);
+                            }
+                          }}
+                          className="w-20"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormDescription>
+                      {t("admin.tournaments.create_tournament.woman_weight_description")}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="flex justify-between gap-4 mt-10">
                 {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>

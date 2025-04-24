@@ -129,6 +129,9 @@
     },
     "results": {
       "finished": "Lõppenud",
+      "teams": "Meeskonnad",
+      "total_points": "Punktid kokku",
+      "placement": "Asetus",
       "no_results": "Tulemusi pole"
     },
     "standings": {
@@ -410,6 +413,8 @@
         "edit_group": "Muuda grupi seadistusi",
         "create_group": "Loo grupp",
         "title_create": "Loo uus turniir",
+        "woman_weight": "Naiste reitingu kaal",
+        "woman_weight_description": "Naiste reiting korrutatakse selle kaaluga",
         "title_edit": "Muuda turniiri",
         "title_create_table": "Loo grupp",
         "title_edit_table": "Muuda gruppi",
@@ -509,7 +514,8 @@
         "title": "Turniiri grupid",
         "errors": {
           "class": "Grupi nimi on kohustuslik",
-          "type": "Turniiri tüüp on kohustuslik"
+          "type": "Turniiri tüüp on kohustuslik",
+          "min_team_size": "Minimaalne tiimi suurus on 2"
         },
         "solo": "Üksik",
         "team": "Meeskondadega",

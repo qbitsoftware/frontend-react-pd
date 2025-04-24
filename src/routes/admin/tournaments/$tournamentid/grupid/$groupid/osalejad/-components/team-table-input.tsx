@@ -11,7 +11,7 @@ interface TeamTableInputProps {
 
 const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
     const { t } = useTranslation()
-    const { form, handleAddOrUpdateParticipant, participantsState, activeGroupId, setActiveGroupId } = useParticipantForm()
+    const { form, handleAddOrUpdateParticipant, participantsState, activeGroupId, setActiveGroupId, groupNames } = useParticipantForm()
     return (
         <>
             <TableCell>
@@ -32,7 +32,6 @@ const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
                     onFocus={() => setActiveGroupId(groupId)}
                     onChange={(e) => {
                         form.setValue("name", e.target.value);
-                        form.setValue("group", groupId)
                     }}
                     value={groupId === activeGroupId ? form.watch("name") : ""}
                     autoComplete='off'
@@ -44,6 +43,16 @@ const TeamTableInput = ({ groupId }: TeamTableInputProps) => {
                 <div className="absolute inset-0 bg-slate-200 blur-md -z-10"></div>
                 <Button
                     onClick={form.handleSubmit((values) => {
+                        values.group = groupId
+                        values.group_name = groupNames[groupId]
+                        //set order if we have order set
+                        if (participantsState && participantsState.length > 0) {
+                            const lastParticipant = participantsState[participantsState.length - 1]
+                            values.order = lastParticipant.order + 1
+                        } else {
+                            values.order = 0
+                        }
+
                         handleAddOrUpdateParticipant(values)
                     }
                     )}

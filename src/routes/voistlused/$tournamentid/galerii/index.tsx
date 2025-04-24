@@ -1,27 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { useGetGamedaysOptions } from "@/queries/images";
+import { useGetGamedaysQuery } from "@/queries/images";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImageModal } from "../mangijad/-components/image-modal"
 
 export const Route = createFileRoute("/voistlused/$tournamentid/galerii/")({
-  loader: async ({ context: { queryClient }, params }) => {
-    let gamedaysData;
-    try {
-      gamedaysData = await queryClient.ensureQueryData(
-        useGetGamedaysOptions(Number(params.tournamentid))
-      );
-    } catch (error) {
-      console.error("Error fetching game days:", error);
-    }
-    return { gamedaysData };
-  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { gamedaysData } = Route.useLoaderData();
+  const params = Route.useParams();
+  const { data: gamedaysData } = useGetGamedaysQuery(Number(params.tournamentid))
   const { t } = useTranslation();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null)

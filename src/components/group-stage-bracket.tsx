@@ -135,7 +135,6 @@ export default function GroupStageBracket({
         );
     };
 
-    // Function to render a single group table
     const renderGroupTable = (
         roundRobinBracket: RoundRobinBracket[],
         groupIndex: number
@@ -164,7 +163,7 @@ export default function GroupStageBracket({
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">
-                                        Meeskonnad
+                                        {t('competitions.results.teams')}
                                     </TableHead>
                                     {roundRobinBracket.map((team, index) => (
                                         <TableHead
@@ -177,11 +176,11 @@ export default function GroupStageBracket({
                                         </TableHead>
                                     ))}
                                     <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        Punktid kokku
+                                        {t('competitions.results.total_points')}
                                     </TableHead>
 
                                     <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                       Asetus 
+                                        {t('competitions.results.placement')}
                                     </TableHead>
 
                                 </TableRow>

@@ -62,6 +62,7 @@ export default function ImageUpload({ tournament_id, gameDay }: ImageUploadProps
             toast.message(t('admin.tournaments.groups.images.toasts.upload_success'))
             setImages([])
         } catch (error) {
+            console.log(error)
             void error;
             toast.error(t('admin.tournaments.groups.images.toasts.upload_error'))
         } finally {

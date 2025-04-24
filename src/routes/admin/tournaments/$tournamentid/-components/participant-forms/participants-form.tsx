@@ -147,13 +147,15 @@ export const ParticipantsForm: React.FC<ParticipantFormProps> = ({
                         );
                       }
                     )}
-                    <Button
-                      className="w-full h-24"
-                      variant="outline"
-                      onClick={() => handleAddNewGroup(table_data)}
-                    >
-                      {t('admin.tournaments.groups.participants.new_group')} <Plus />
-                    </Button>
+                    {Object.keys(groupedTeams).length < table_data.size && (
+                      <Button
+                        className="w-full h-24"
+                        variant="outline"
+                        onClick={() => handleAddNewGroup(table_data)}
+                      >
+                        {t('admin.tournaments.groups.participants.new_group')} <Plus />
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <>{renderParticipantTable(participants, 0)}</>

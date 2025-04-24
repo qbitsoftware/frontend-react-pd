@@ -1,13 +1,13 @@
 import type React from "react";
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Calendar, Edit2, Plus, Trash2 } from "lucide-react";
 import {
   usePostGameDay,
-  useGetGamedaysOptions,
   usePatchGameDay,
   useDeleteGameday,
   useDeleteGamedayImage,
+  useGetGamedaysQuery,
 } from "@/queries/images";
 import ImageUpload from "./-components/image-upload";
 
@@ -33,45 +33,34 @@ import { toast } from "sonner";
 export const Route = createFileRoute(
   "/admin/tournaments/$tournamentid/pildid/"
 )({
-  loader: async ({ context: { queryClient }, params }) => {
-    const tournamentId = Number(params.tournamentid);
-    let gamedaysData;
-
-    try {
-      const gamedaysOptions = useGetGamedaysOptions(tournamentId);
-      gamedaysData = await queryClient.ensureQueryData(gamedaysOptions);
-    } catch (error) {
-      void error;
-    }
-    return { gamedaysData };
-  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { gamedaysData } = Route.useLoaderData();
   const params = useParams({ from: Route.id });
+  const { data: gamedaysData } = useGetGamedaysQuery(Number(params.tournamentid))
   const tournamentId = Number(params.tournamentid);
+  const [activeTab, setActiveTab] = useState("")
+  const initialTabSet = useRef(false);
 
-  // State management
-  const [activeTab, setActiveTab] = useState(() => {
-    if (gamedaysData?.data && gamedaysData.data.length > 0) {
+  useEffect(() => {
+    if (gamedaysData?.data && gamedaysData.data.length > 0 && !initialTabSet.current) {
       const sortedGamedays = [...gamedaysData.data].sort((a, b) => {
         const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
         const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
         return dateA - dateB;
       });
-      return sortedGamedays[0].id.toString();
+      setActiveTab(sortedGamedays[0].id.toString());
+      initialTabSet.current = true;
     }
-    return "";
-  });
+  }, [gamedaysData]);
+
   const [editingGameday, setEditingGameday] = useState<Gameday | null>(null);
   const [editName, setEditName] = useState("");
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [gamedayToDelete, setGamedayToDelete] = useState<number | null>(null);
   const { t } = useTranslation();
 
-  // Mutations
   const postGamedayMutation = usePostGameDay(tournamentId);
   const patchGamedayMutation = usePatchGameDay(tournamentId);
   const removeGameDayMutation = useDeleteGameday(tournamentId);
@@ -79,7 +68,6 @@ function RouteComponent() {
     Number(activeTab)
   );
 
-  // Add new game day
   const addGameDay = () => {
     try {
       const now = new Date();

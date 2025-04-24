@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
 import { Gameday, GamedayImage, GamedayImageResponse, GamedayImagesResponse, GetGamedayResponse, GetGamedaysResponse } from "@/types/gamedays";
 
@@ -33,6 +33,7 @@ export const usePostGameDay = (tournament_id: number) => {
                     return data
                 }
                 resp.data.push(data.data)
+                return resp
             })
         }
     })
@@ -58,8 +59,8 @@ export const usePatchGameDay = (tournament_id: number) => {
                     if (index !== -1) {
                         resp.data[index] = data.data
                     }
-                    resp.data[index] = data.data
                 }
+                return resp
             })
         }
     })
@@ -90,15 +91,24 @@ export const usePostGamedayImage = (tournament_id: number, gameday_id: number) =
                 if (!resp) {
                     return data
                 }
-                if (data && data.data) {
-                    //update the gameday
-                    data.data.map((img: GamedayImage) => {
-                        const index = resp.data.findIndex((gameday: Gameday) => gameday.id === img.gameday_id)
-                        if (index !== -1) {
-                            resp.data[index].images.push(img)
+                const newResp = {
+                    ...resp,
+                    data: resp.data.map(gameday => {
+                        const newImagesForThisGameday = data?.data?.filter(
+                            img => img.gameday_id === gameday.id
+                        ) || [];
+
+                        if (newImagesForThisGameday.length > 0) {
+                            return {
+                                ...gameday,
+                                images: [...gameday.images, ...newImagesForThisGameday]
+                            };
                         }
+                        return gameday;
                     })
-                }
+                };
+
+                return newResp;
             })
         }
     })
@@ -150,14 +160,14 @@ export const useDeleteGamedayImage = (tournament_id: number, getGamedayId: () =>
                         gameday.images = gameday.images.filter((image: GamedayImage) => image.id !== data.data.id)
                     }
                 })
-                return data;
+                return oldData;
             });
 
         }
     });
 };
-export const useGetGamedaysOptions = (tournament_id: number) => {
-    return queryOptions<GetGamedaysResponse>({
+export const useGetGamedaysQuery = (tournament_id: number) => {
+    return useQuery<GetGamedaysResponse>({
         queryKey: ["images_options", tournament_id],
         queryFn: async () => {
             const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/gamedays`, {

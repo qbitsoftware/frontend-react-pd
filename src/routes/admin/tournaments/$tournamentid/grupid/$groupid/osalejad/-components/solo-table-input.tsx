@@ -5,6 +5,7 @@ import { TableCell } from '@/components/ui/table';
 import { capitalize } from '@/lib/utils';
 import { useParticipantForm } from '@/providers/participantProvider';
 import { TournamentTable } from '@/types/groups';
+import { GroupType } from '@/types/matches';
 import { PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
 
     return (
         <>
-            {participantsState && table_data.size > participantsState.length && (
+            {(participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) && (
                 <>
                     <TableCell>
                         {(participantsState && participantsState.length > 0
@@ -56,7 +57,6 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                 <PopoverTrigger asChild>
                                     <Input
                                         type="text"
-                                        // {...form.register("players.0.name")}
                                         value={groupId === selectedGroupInput ? (table_data.solo ? form.watch("name") ?? "" : form.watch("players.0.name") ?? "") : ""}
                                         onChange={(e) => {
                                             form.setValue(
@@ -247,8 +247,15 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                     playerSuggestions.data.length > 0 &&
                                     !isPlayerChosen)
                             }
-                            onClick={form.handleSubmit((values) =>
+                            onClick={form.handleSubmit((values) => {
+                                if (participantsState && participantsState.length > 0) {
+                                    const lastParticipant = participantsState[participantsState.length - 1]
+                                    values.order = lastParticipant.order + 1
+                                } else {
+                                    values.order = 0
+                                }
                                 handleAddOrUpdateParticipant(values)
+                            }
                             )}
                         >
                             {t(

@@ -129,6 +129,9 @@
     },
     "results": {
       "finished": "Finished",
+      "teams": "Teams",
+      "total_points": "Total points",
+      "placement": "Placement",
       "no_results": "No results"
     },
     "standings": {
@@ -409,6 +412,8 @@
         "back": "Back",
         "edit_group": "Edit Group",
         "create_group": "Create Group",
+        "woman_weight": "Woman rating weight",
+        "woman_weight_description": "Woman rating will be multiplied by this number",
         "title_create": "Create Tournament",
         "title_edit": "Edit Tournament",
         "title_create_table": "Create Group",
@@ -509,7 +514,8 @@
         "title": "Tournament Groups",
         "errors": {
           "class": "Group name is required",
-          "type": "Tournament type is required"
+          "type": "Tournament type is required",
+          "min_team_size": "Minimum team size is 2"
         },
         "solo": "Solo",
         "team": "Teams",
