@@ -90,8 +90,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
     return filtered.filter((match) => match.p1.id !== "" && match.p2.id !== "");
   }, [data, filterValue]);
 
-  console.log("games, ", filteredData)
-
   const handleCardClick = (match: MatchWrapper) => {
     setSelectedMatch(match);
     setIsOpen(true);
@@ -155,9 +153,30 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           </p>
           {match.match.state !== MatchState.CREATED && (
             <span className={cn(isWinner ? "font-bold" : "")}>
-              {match.p1.id === participant.id
+              {/* {match.p1.id === participant.id
                 ? match.match.extra_data.team_1_total
-                : match.match.extra_data.team_2_total}
+                : match.match.extra_data.team_2_total} */}
+              {match.p1.id === participant.id ?
+                tournament_table.solo ? match.match.extra_data.score
+                  && `${match.match.extra_data.score.reduce(
+                    (total, set) => total + (set.p1_score > set.p2_score ? 1 : 0),
+                    0
+                  )}`
+                  :
+                  <>
+                    {match.match.extra_data.team_1_total}
+                  </>
+                :
+                tournament_table.solo ? match.match.extra_data.score
+                  && `${match.match.extra_data.score.reduce(
+                    (total, set) => total + (set.p1_score < set.p2_score ? 1 : 0),
+                    0
+                  )}`
+                  :
+                  <>
+                    {match.match.extra_data.team_2_total}
+                  </>
+              }
             </span>
           )}
         </div>
@@ -239,7 +258,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           )}
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 4xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
             {filteredData.length > 0 ? (
               filteredData.map((match) => (
                 <Card
@@ -247,7 +266,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                   className={cn(
                     "w-full sm:w-full p-4 hover:shadow-md transition-shadow",
                     match.match.state === MatchState.ONGOING &&
-                      "bg-green-50 border-green-200"
+                    "bg-green-50 border-green-200"
                   )}
                 >
                   <div className="flex flex-col gap-1">
@@ -268,14 +287,14 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
 
                         {tournament_table.type ===
                           GroupType.CHAMPIONS_LEAGUE && (
-                          <p className="text-xs">
-                            {formatDateGetDayMonthYear(match.match.start_date)}{" "}
-                            -
-                            <span className="font-bold">
-                              {formatDateGetHours(match.match.start_date)}
-                            </span>
-                          </p>
-                        )}
+                            <p className="text-xs">
+                              {formatDateGetDayMonthYear(match.match.start_date)}{" "}
+                              -
+                              <span className="font-bold">
+                                {formatDateGetHours(match.match.start_date)}
+                              </span>
+                            </p>
+                          )}
                         <p className="text-xs pt-1">{match.match.location}</p>
                       </div>
                       {match.match.state === MatchState.CREATED ? (
@@ -284,8 +303,20 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                         </div>
                       ) : (
                         <p className="text-3xl">
-                          {match.match.extra_data.team_1_total}:
-                          {match.match.extra_data.team_2_total}
+                          {tournament_table.solo ? match.match.extra_data.score
+                            ? `${match.match.extra_data.score.reduce(
+                              (total, set) => total + (set.p1_score > set.p2_score ? 1 : 0),
+                              0
+                            )}:${match.match.extra_data.score.reduce(
+                              (total, set) => total + (set.p2_score > set.p1_score ? 1 : 0),
+                              0
+                            )}`
+                            : "0:0"
+                            :
+                            <>
+                              {match.match.extra_data.team_1_total}:{match.match.extra_data.team_2_total}
+                            </>
+                          }
                         </p>
                       )}
                     </div>
@@ -308,14 +339,14 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
 
                     <div className="mt-4">
                       {match.match.state !== MatchState.FINISHED ? (
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        disabled={match.p1.id === "" || match.p2.id === ""}
-                        onClick={() => handleCardClick(match)}
-                      >
-                        <ClipboardPenLine/>
-                      </Button>
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          disabled={match.p1.id === "" || match.p2.id === ""}
+                          onClick={() => handleCardClick(match)}
+                        >
+                          <ClipboardPenLine />
+                        </Button>
                       ) : (<div className="flex items-center justify-center text-xs">Match ended</div>)
                       }
                     </div>

@@ -30,6 +30,8 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
         }
     }, [debouncedSearchTerm]);
 
+    console.log("TERE", form.getValues(), form.formState.errors)
+
     return (
         <>
             {((participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT)) && (
@@ -92,7 +94,9 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                             }
                                         }}
                                         onFocus={() => {
+                                            console.log("resetting")
                                             if (selectedGroupInput !== groupId) {
+                                                console.log("RESETING OFR USURE")
                                                 form.reset({
                                                     players: [{
                                                         name: "",

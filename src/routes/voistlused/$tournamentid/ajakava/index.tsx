@@ -52,12 +52,10 @@ function RouteComponent() {
     return null
   }
 
-  console.log(tournamentTables?.data)
-
   if (!matchesData || !matchesData.data) {
     return <div className="p-6 text-center rounded-sm">
-    <p className="text-stone-500">{t("competitions.errors.no_groups")}</p>
-  </div>
+      <p className="text-stone-500">{t("competitions.errors.no_groups")}</p>
+    </div>
   }
 
   const safeMatches = Array.isArray(matchesData.data) ? getUniqueMatches(matchesData.data) : [];

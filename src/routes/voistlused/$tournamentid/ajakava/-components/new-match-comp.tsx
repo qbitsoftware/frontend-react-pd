@@ -18,7 +18,6 @@ const ITTFMatchComponent = ({ match, table_data }: ITTFMatchComponentProps) => {
         return <Skeleton className='h-20 w-full' />
     }
 
-    console.log(match.match)
     return (
         <Card className='w-[300px] sm:w-[300px] xl:w-[350px] p-4'>
             <div className='flex flex-col gap-1'>

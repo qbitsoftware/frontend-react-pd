@@ -165,7 +165,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         editForm.reset({
             name: participant.name,
             order: participant.order,
-            tournament_id: 30,
+            tournament_id: tournament_id,
             class: participant.extra_data.class,
             sport_type: participant.sport_type || "tabletennis",
             players: players.map((player) => ({
@@ -213,21 +213,21 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     class: "",
                     sport_type: "tabletennis",
                     players: [
-                        // {
-                        //     name: "",
-                        //     user_id: 0,
-                        //     first_name: "",
-                        //     last_name: "",
-                        //     sport_type: "tabletennis",
-                        //     sex: "",
-                        //     extra_data: {
-                        //         rate_order: 0,
-                        //         club: "",
-                        //         rate_points: 0,
-                        //         eltl_id: 0,
-                        //         class: "",
-                        //     },
-                        // },
+                        {
+                            name: "",
+                            user_id: 0,
+                            first_name: "",
+                            last_name: "",
+                            sport_type: "tabletennis",
+                            sex: "",
+                            extra_data: {
+                                rate_order: 0,
+                                club: "",
+                                rate_points: 0,
+                                eltl_id: 0,
+                                class: "",
+                            },
+                        },
                     ],
                 },
                 { keepValues: false }
@@ -405,18 +405,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                 tournament_id: tournament_id,
                 group: newGroupId,
                 sport_type: "tabletennis",
-                players: [{
-                    name: "empty",
-                    sport_type: "tabletennis",
-                    sex: "",
-                    extra_data: {
-                        rate_points: 0,
-                        club: "",
-                        eltl_id: 0,
-                        rate_order: 0,
-                        class: ""
-                    }
-                }],
+                players: [],
             });
         } else {
             await handleAddOrUpdateParticipant({
