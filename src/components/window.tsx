@@ -103,6 +103,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="xl:pt-24" key={index}>
                 <DoubleElimBracket
+                tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
                   starting_y={previousTop}
@@ -115,6 +116,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="" key={index}>
                 <SingleElimBracket
+                tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
                   starting_y={previousTop}

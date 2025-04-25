@@ -1,11 +1,13 @@
 import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
 import MatchComponent from "./match";
 import { EliminationBracket } from "@/types/brackets";
+import { TournamentTable } from "@/types/groups";
 
 interface BracketProps {
   starting_x: number;
   starting_y: number;
   index: number;
+  tournament_table: TournamentTable
   data: EliminationBracket;
 }
 
@@ -13,6 +15,7 @@ const DoubleElimBracket = ({
   data,
   starting_x,
   starting_y,
+  tournament_table,
   index,
 }: BracketProps) => {
   const WIDTH = 220;
@@ -66,6 +69,7 @@ const DoubleElimBracket = ({
           return (
             <MatchComponent
               key={index}
+              tournament_table={tournament_table}
               WIDTH={WIDTH}
               HEIGHT={HEIGHT}
               match={match}

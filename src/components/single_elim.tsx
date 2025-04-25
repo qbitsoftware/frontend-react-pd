@@ -2,8 +2,10 @@ import { CalculateSVGHeight, CalculateSVGWidth } from "@/lib/utils";
 import { EliminationBracket } from "@/types/brackets";
 import { useTranslation } from "react-i18next";
 import MatchComponent from "./match";
+import { TournamentTable } from "@/types/groups";
 
 interface BracketProps {
+  tournament_table: TournamentTable
   starting_x: number;
   starting_y: number;
   data: EliminationBracket;
@@ -21,6 +23,7 @@ interface BracketProps {
 }
 
 const SingleElimBracket = ({
+  tournament_table,
   data,
   starting_x,
   starting_y,
@@ -67,6 +70,7 @@ const SingleElimBracket = ({
           match.match.topCoord = topCoord;
           return (
             <MatchComponent
+              tournament_table={tournament_table}
               key={index}
               WIDTH={WIDTH}
               HEIGHT={HEIGTH}
