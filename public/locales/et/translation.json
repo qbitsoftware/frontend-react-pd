@@ -166,7 +166,7 @@
       "standings_missing": "Kohad pole veel välja mängitud",
       "no_games": "Mänge pole selles klassis sel päeval",
       "winner_unknown": "Teadmata",
-      "no_groups": "Tulemused puuduvad",
+      "no_groups": "Mängude ajakava pole veel saadaval",
       "no_table": "Tabel pole veel saadaval"
     },
     "navbar": {
@@ -431,8 +431,10 @@
         "category_placeholder": "Sisestage kategooria",
         "number_of_tables": "Laudade arv",
         "number_of_tables_placeholder": "Sisestage laudade arv",
+        "number_of_groups_placeholder": "Sisestage alagruppide arv",
+        "group_amount": "Alagrupid",
         "class": "Grupi nimi",
-        "class_placeholder": "Sisestage grupp",
+        "class_placeholder": "Sisestage grupi nimi",
         "tournament_size": "Tabeli suurus (osalejate/meeskondade arv)",
         "min_team_size": "Minimaalne tiimi suurus",
         "additional_information": "Lisa-informatsioon",
@@ -571,9 +573,10 @@
         "participants": {
           "teams": "Meeskonnad",
           "groups": "Grupid",
+          "subgroups": "Alagrupid",
           "players": "Mängijad",
           "change_me": "MUUDA MIND",
-          "new_group": "Uus grupp",
+          "new_group": "Uus alagrupp",
           "team_placeholder": "Tiim",
           "regroup": {
             "title_regroup": "Mängu regrupeering",

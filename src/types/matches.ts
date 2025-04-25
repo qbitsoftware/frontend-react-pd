@@ -66,6 +66,7 @@ export type Match = {
   topCoord: number // for front end purposes
   table_type: string
   state: MatchState;
+  readable_id: number;
 }
 
 export type MatchWrapper = {

@@ -225,12 +225,12 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                 />
                 {form.watch("type") === GroupType.ROUND_ROBIN || form.watch("type") === GroupType.ROUND_ROBIN_FULL_PLACEMENT ? (
                   <FormItem>
-                    <FormLabel>{t("admin.tournaments.create_tournament.tournament_size")}</FormLabel>
+                    <FormLabel>{t("admin.tournaments.create_tournament.group_amount")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         id="tournamentSize"
-                        placeholder={initial_data?.size?.toString() || "Enter tournament size"}
+                        placeholder={initial_data?.size?.toString() || t("admin.tournaments.create_tournament.number_of_groups_placeholder")}
                         value={customSize}
                         onChange={(e) => {
                           const numValue = parseInt(e.target.value, 10) || 0;
@@ -274,7 +274,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   control={form.control}
                   name="solo"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 mb-3">
                       <div className="space-y-0.5">
                         <FormLabel className="text-base">{t("admin.tournaments.create_tournament.team")}</FormLabel>
                         <FormDescription>{t("admin.tournaments.create_tournament.team_description")}</FormDescription>
@@ -339,8 +339,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-              </div>
-              <FormField
+                <FormField
                 control={form.control}
                 name="woman_weight"
                 render={({ field }) => (
@@ -383,6 +382,8 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   </FormItem>
                 )}
               />
+              </div>
+              
 
               <div className="flex justify-between gap-4 mt-10">
                 {initial_data && (

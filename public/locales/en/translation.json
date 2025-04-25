@@ -166,7 +166,7 @@
       "standings_missing": "No standings data available yet",
       "no_games": "No games available for that group",
       "winner_unknown": "Unknown",
-      "no_groups": "No results available",
+      "no_groups": "No scheduled games yet",
       "no_table": "Table not available yet"
     },
     "navbar": {
@@ -411,7 +411,7 @@
         },
         "back": "Back",
         "edit_group": "Edit Group",
-        "create_group": "Create Group",
+        "create_group": "Create a Tournament Group",
         "woman_weight": "Woman rating weight",
         "woman_weight_description": "Woman rating will be multiplied by this number",
         "title_create": "Create Tournament",
@@ -431,8 +431,10 @@
         "category_placeholder": "Type a Category",
         "number_of_tables": "Number of tables",
         "number_of_tables_placeholder": "Enter number of tables",
+        "number_of_groups_placeholder": "Enter the number of subgroups",
+        "group_amount": "Number of subgroups",
         "class": "Group",
-        "class_placeholder": "Type a Group",
+        "class_placeholder": "Group name",
         "tournament_size": "Tournament Size (amount of participants/teams)",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
@@ -571,10 +573,11 @@
         "participants": {
           "teams": "Teams",
           "groups": "Groups",
+          "subgroups": "Subgroups",
           "players": "Players",
           "change_me": "CHANGE ME",
           "team_placeholder": "Team",
-          "new_group": "New group",
+          "new_group": "New subgroup",
           "regroup": {
             "title_regroup": "Regroup",
             "title_finals": "Finals",

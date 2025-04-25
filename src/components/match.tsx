@@ -128,6 +128,9 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
               {match.match.extra_data.table}
             </div>
           )}
+        <div className="absolute top-[0px] left-[200px] w-[60px] text-left text-[10px] pdf-game-court">
+          {match.match.readable_id}
+        </div>
         {match.participant_1.id != "empty" &&
           match.participant_2.id != "empty" && (
             <div className="absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]">

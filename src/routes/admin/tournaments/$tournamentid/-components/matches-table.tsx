@@ -90,6 +90,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
     return filtered.filter((match) => match.p1.id !== "" && match.p2.id !== "");
   }, [data, filterValue]);
 
+  console.log("games, ", filteredData)
+
   const handleCardClick = (match: MatchWrapper) => {
     setSelectedMatch(match);
     setIsOpen(true);

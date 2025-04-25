@@ -78,7 +78,7 @@ const SeedingHeader = ({
   return (
     <CardHeader className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between  space-y-0">
       <div className="flex gap-2 items-center">
-        <h5 className="font-medium">{t("admin.tournaments.info.participants")}</h5>
+        <h5 className="font-medium">{(table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) ? t("admin.tournaments.groups.participants.subgroups") : t("admin.tournaments.info.participants")}</h5>
         <p className="bg-[#FBFBFB] font-medium px-3 py-1 rounded-full border border-[#EAEAEA] ">
           {((table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) && Object.keys(groupedTeams).length) || (participants_length && participants_length)} / {table_data.size}{" "}
         </p>

@@ -17,6 +17,8 @@ const ITTFMatchComponent = ({ match, table_data }: ITTFMatchComponentProps) => {
     if (!table_data) {
         return <Skeleton className='h-20 w-full' />
     }
+
+    console.log(match.match)
     return (
         <Card className='w-[300px] sm:w-[300px] xl:w-[350px] p-4'>
             <div className='flex flex-col gap-1'>
@@ -27,7 +29,8 @@ const ITTFMatchComponent = ({ match, table_data }: ITTFMatchComponentProps) => {
                         {table_data.type == GroupType.CHAMPIONS_LEAGUE && <p className='text-xs'>{formatDateGetDayMonthYear(match.match.start_date)} - <span className='font-bold'>{formatDateGetHours(match.match.start_date)}</span>{match.match.extra_data.table ? ` | Laud ${match.match.extra_data.table}` : ""}</p>}
                         <p className='text-xs pt-1'>{match.match.location}</p>
                     </div>
-                    <p className='text-3xl'>{match.match.extra_data.team_1_total}:{match.match.extra_data.team_2_total}</p>
+                    <p className='text-3xl'>{match.match.winner_id !== "" ? `${match.match.extra_data.team_1_total}:${match.match.extra_data.team_2_total}` : <Skeleton className='h-8 w-12' />
+                }</p>
                 </div>
 
                 <div className='flex flex-col gap-2'>

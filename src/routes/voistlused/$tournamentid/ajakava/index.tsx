@@ -52,8 +52,12 @@ function RouteComponent() {
     return null
   }
 
+  console.log(tournamentTables?.data)
+
   if (!matchesData || !matchesData.data) {
-    return <div>{t('competitions.errors.no_groups')}</div>
+    return <div className="p-6 text-center rounded-sm">
+    <p className="text-stone-500">{t("competitions.errors.no_groups")}</p>
+  </div>
   }
 
   const safeMatches = Array.isArray(matchesData.data) ? getUniqueMatches(matchesData.data) : [];
@@ -128,12 +132,28 @@ function RouteComponent() {
             <TabsContent value='matches'>
               <div className='flex justify-center'>
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 md:gap-y-12 gap-x-4 my-8 max-h-[75vh] overflow-y-scroll'>
-                  {filteredMatches.map((match, key) => {
+                  {/* First render matches that are associated with round robin tables */}
+                  {matchesData?.data && Array.isArray(matchesData.data) && matchesData.data.filter(match => {
+                    const table = getMatchTTTable(match);
+                    return table && table.type === "round_robin";
+                  }).map((match, key) => {
                     return (
-                      <div key={key} className='px-2 py-6'>
+                      <div key={`round-robin-${key}`} className='px-2 py-6'>
                         <ITTFMatchComponent match={match} table_data={getMatchTTTable(match)} />
                       </div>
-                    )
+                    );
+                  })}
+
+                  {/* Then render the filtered matches for non-round robin tables */}
+                  {filteredMatches.filter(match => {
+                    const table = getMatchTTTable(match);
+                    return !table || table.type !== "round_robin";
+                  }).map((match, key) => {
+                    return (
+                      <div key={`filtered-${key}`} className='px-2 py-6'>
+                        <ITTFMatchComponent match={match} table_data={getMatchTTTable(match)} />
+                      </div>
+                    );
                   })}
                 </div>
               </div>
