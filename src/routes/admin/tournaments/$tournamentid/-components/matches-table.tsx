@@ -1,20 +1,6 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import MatchDialog from "@/components/match-dialog";
 import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, formatDateGetDayMonthYear, formatDateGetHours } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -24,13 +10,20 @@ import {
 } from "@/components/ui/select";
 import ReGrouping from "./regrouping";
 import TimeEditingModal from "./time-editing-modal";
-import { createColumns } from "./matches-table-columns";
 import { useTranslation } from "react-i18next";
-import { MatchState, MatchWrapper } from "@/types/matches";
+import { GroupType, MatchState, MatchWrapper } from "@/types/matches";
 import { TournamentTable } from "@/types/groups";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProtocolModalProvider } from "@/providers/protocolProvider";
 import { TableTennisProtocolModal } from "./tt-modal/tt-modal";
+import MatchDialog from "@/components/match-dialog";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { AvatarFallback } from "@radix-ui/react-avatar";
+import placeholderImg from "@/assets/placheolderImg.svg";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Participant } from "@/types/participants";
+import { TableNumberForm } from "./table-number-form";
+import { ClipboardPenLine } from "lucide-react";
 
 interface MatchesTableProps {
   data: MatchWrapper[] | [];
@@ -94,21 +87,94 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
         filtered = data;
     }
 
-    // Then filter out matches with empty players
     return filtered.filter((match) => match.p1.id !== "" && match.p2.id !== "");
   }, [data, filterValue]);
 
-  const columns = useMemo(() => createColumns(t), [t]);
-
-  const table = useReactTable({
-    data: filteredData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  const handleRowClick = (match: MatchWrapper) => {
+  const handleCardClick = (match: MatchWrapper) => {
     setSelectedMatch(match);
     setIsOpen(true);
+  };
+
+
+  const MatchPlayer = ({
+    participant,
+    match,
+    isWinner,
+  }: {
+    participant: Participant;
+    match: MatchWrapper;
+    isWinner: boolean;
+  }) => {
+    if (!participant || participant.id === "") {
+      return (
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-6" />
+          </div>
+          <div className="flex gap-3">
+            <div className="flex gap-2">
+              {Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Skeleton className="h-4 w-4" />
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage
+              src={
+                tournament_table.solo
+                  ? participant.players[0]?.extra_data?.image_url
+                  : participant.extra_data?.image_url
+              }
+              className="cursor-pointer object-cover"
+            />
+            <AvatarFallback>
+              <img
+                src={placeholderImg}
+                className="rounded-full h-8 w-8"
+                alt="Player"
+              />
+            </AvatarFallback>
+          </Avatar>
+          <p className={cn(isWinner ? "font-bold" : "", "md:w-32")}>
+            {participant.name}
+          </p>
+          {match.match.state !== MatchState.CREATED && (
+            <span className={cn(isWinner ? "font-bold" : "")}>
+              {match.p1.id === participant.id
+                ? match.match.extra_data.team_1_total
+                : match.match.extra_data.team_2_total}
+            </span>
+          )}
+        </div>
+        <div className="flex">
+          <div className="flex gap-2">
+            {match.match.state !== MatchState.CREATED &&
+              match.match.extra_data?.score?.map((set, index) => (
+                <div key={index} className="flex gap-2 justify-end">
+                  {match.p1.id === participant.id ? (
+                    <p>{set.p1_score}</p>
+                  ) : (
+                    <p>{set.p2_score}</p>
+                  )}
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (data.length > 0) {
@@ -138,12 +204,11 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
             </SelectContent>
           </Select>
 
-          {tournament_table.type == "champions_league" && (
+          {tournament_table.type === "champions_league" && (
             <div className="flex gap-1 border bg-[#FAFCFE] py-1 px-1 rounded-md">
               <Button
                 variant="ghost"
                 size="sm"
-                className=""
                 onClick={() => {
                   setInitialTab("regrouping");
                   setIsRegroupingModalOpen(true);
@@ -154,8 +219,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-
-                className=""
                 onClick={() => {
                   setInitialTab("finals");
                   setIsRegroupingModalOpen(true);
@@ -166,8 +229,6 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-
-                className=""
                 onClick={() => setIsTimeEditingModalOpen(true)}
               >
                 {t("admin.tournaments.groups.change_time")}
@@ -176,115 +237,118 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
           )}
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border" >
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id} className="whitespace-nowrap">
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                      className={cn(
-                        "!h-auto",
-                        row.original.match.state === MatchState.ONGOING &&
-                        "bg-green-100"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 4xl:grid-cols-4 gap-4">
+            {filteredData.length > 0 ? (
+              filteredData.map((match) => (
+                <Card
+                  key={match.match.id}
+                  className={cn(
+                    "w-full sm:w-full p-4 hover:shadow-md transition-shadow",
+                    match.match.state === MatchState.ONGOING &&
+                      "bg-green-50 border-green-200"
+                  )}
+                >
+                  <div className="flex flex-col gap-1">
+                    {/* Header */}
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="">
+                        <div className="flex flex-row items-center mb-2">
+                          {match.match.state !== MatchState.FINISHED && (
+                            <TableNumberForm
+                              match={match.match}
+                              initialTableNumber={
+                                match.match.extra_data &&
+                                match.match.extra_data.table
+                              }
+                            />
+                          )}
+                        </div>
+
+                        {tournament_table.type ===
+                          GroupType.CHAMPIONS_LEAGUE && (
+                          <p className="text-xs">
+                            {formatDateGetDayMonthYear(match.match.start_date)}{" "}
+                            -
+                            <span className="font-bold">
+                              {formatDateGetHours(match.match.start_date)}
+                            </span>
+                          </p>
+                        )}
+                        <p className="text-xs pt-1">{match.match.location}</p>
+                      </div>
+                      {match.match.state === MatchState.CREATED ? (
+                        <div className="flex items-center">
+                          <Skeleton className="h-8 w-12" />
+                        </div>
+                      ) : (
+                        <p className="text-3xl">
+                          {match.match.extra_data.team_1_total}:
+                          {match.match.extra_data.team_2_total}
+                        </p>
                       )}
-                    >
-                      {row.getVisibleCells().map((cell, cellIndex) => {
-                        if (cell.column.id === "actions") {
-                          return (
-                            <TableCell key={cellIndex}>
-                              <Button
-                                disabled={
-                                  row.original.p1.id == "" ||
-                                  row.original.p2.id == ""
-                                }
-                                variant="outline"
-                                onClick={() => handleRowClick(row.original)}
-                              >
-                                {t("admin.tournaments.matches.table.modify")}
-                              </Button>
-                            </TableCell>
-                          );
-                        }
-                        if (cell.column.id === "p1_score") {
-                          return (
-                            <TableCell key={cellIndex} className="text-center">
-                              {row.original.match.extra_data.team_1_total}
-                            </TableCell>
-                          );
-                        }
+                    </div>
 
-                        if (cell.column.id === "p2_score") {
-                          return (
-                            <TableCell key={cellIndex} className="text-center">
-                              {row.original.match.extra_data.team_2_total}
-                            </TableCell>
-                          );
-                        }
-
-                        return (
-                          <TableCell
-                            className="py-0 !h-auto w-auto whitespace-nowrap"
-                            key={cell.id}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
+                    <div
+                      className="flex flex-col gap-2"
+                      onClick={() => handleCardClick(match)}
                     >
-                      {t("admin.tournaments.groups.no_results")}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                      <MatchPlayer
+                        participant={match.p1}
+                        match={match}
+                        isWinner={match.match.winner_id === match.p1.id}
+                      />
+                      <MatchPlayer
+                        participant={match.p2}
+                        match={match}
+                        isWinner={match.match.winner_id === match.p2.id}
+                      />
+                    </div>
+
+                    <div className="mt-4">
+                      {match.match.state !== MatchState.FINISHED ? (
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        disabled={match.p1.id === "" || match.p2.id === ""}
+                        onClick={() => handleCardClick(match)}
+                      >
+                        <ClipboardPenLine/>
+                      </Button>
+                      ) : (<div className="flex items-center justify-center text-xs">Match ended</div>)
+                      }
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full p-12 text-center">
+                <p className="text-stone-500">
+                  {t("admin.tournaments.groups.no_results")}
+                </p>
+              </div>
+            )}
           </div>
-          {selectedMatch
-            && tournament_table.solo
-            ? <MatchDialog
+          {selectedMatch && tournament_table.solo ? (
+            <MatchDialog
               open={isOpen}
               onClose={() => setIsOpen(false)}
               match={selectedMatch}
               tournament_id={tournament_id}
-            /> : selectedMatch && !tournament_table.solo &&
-            <ProtocolModalProvider
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-              tournament_id={tournament_id}
-              match={selectedMatch}
-              player_count={player_count}
-            >
-              <TableTennisProtocolModal />
-            </ProtocolModalProvider>}
+            />
+          ) : (
+            selectedMatch &&
+            !tournament_table.solo && (
+              <ProtocolModalProvider
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                tournament_id={tournament_id}
+                match={selectedMatch}
+                player_count={player_count}
+              >
+                <TableTennisProtocolModal />
+              </ProtocolModalProvider>
+            )
+          )}
         </CardContent>
         <ReGrouping
           tournament_id={tournament_id}

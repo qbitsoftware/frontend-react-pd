@@ -145,7 +145,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
+      <DialogContent className="max-w-2xl p-0 overflow-y-scroll bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
         <DialogHeader className="py-10 pb-2 rounded-t-lg text-2xl font-bold text-center mx-auto">
           <DialogTitle>{t('protocol.title')}</DialogTitle>
         </DialogHeader>
