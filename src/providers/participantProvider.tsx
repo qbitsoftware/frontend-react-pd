@@ -11,6 +11,7 @@ import { TournamentTable } from '@/types/groups';
 import { UseChangeSubgroupName } from '@/queries/participants';
 import { toast } from "sonner";
 import { useTranslation } from 'react-i18next';
+import { DEFAULT_PLAYER } from '@/types/players';
 
 interface ParticipantContextType {
     handleAddOrUpdateParticipant: (
@@ -194,6 +195,9 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
     ) => {
         try {
             if (participantId) {
+                if (!values.players || values.players.length === 0) {
+                    values.players = [DEFAULT_PLAYER]
+                }
                 await updateParticipant.mutateAsync({
                     formData: values,
                     participantId,

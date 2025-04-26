@@ -68,7 +68,7 @@ function RouteComponent() {
     Number(activeTab)
   );
 
-  const addGameDay = () => {
+  const addGameDay = async () => {
     try {
       const now = new Date();
       const formattedDate = `${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()}`;
@@ -81,7 +81,7 @@ function RouteComponent() {
         images: [],
       };
 
-      postGamedayMutation.mutateAsync(gameday);
+      await postGamedayMutation.mutateAsync(gameday);
       toast.message(t("admin.tournaments.groups.images.toasts.success_add"));
     } catch (error) {
       toast.error(t("admin.tournaments.groups.images.toasts.error_add"));
@@ -94,11 +94,11 @@ function RouteComponent() {
     setDeleteConfirmOpen(true);
   };
 
-  const removeGameDay = () => {
+  const removeGameDay = async () => {
     if (gamedayToDelete === null) return;
 
     try {
-      removeGameDayMutation.mutateAsync(gamedayToDelete);
+      await removeGameDayMutation.mutateAsync(gamedayToDelete);
       toast.message(t("admin.tournaments.groups.images.toasts.success_remove"));
     } catch (error) {
       toast.error(t("admin.tournaments.groups.images.toasts.error_remove"));
@@ -114,7 +114,7 @@ function RouteComponent() {
     setEditName(day.name);
   };
 
-  const saveTabName = (e: React.FormEvent) => {
+  const saveTabName = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingGameday !== null) {
       const updatedGameday: Gameday = {
@@ -125,7 +125,7 @@ function RouteComponent() {
       };
 
       try {
-        patchGamedayMutation.mutateAsync({
+        await patchGamedayMutation.mutateAsync({
           formData: updatedGameday,
           gameday_id: editingGameday.id,
         });

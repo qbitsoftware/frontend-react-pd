@@ -23,9 +23,9 @@ const ResetSeeding = ({
   const { t } = useTranslation();
   const resetSeedingMutation = UsePostOrderReset(tournament_id, table_id);
 
-  const handleReset = () => {
+  const handleReset = async () => {
     try {
-      resetSeedingMutation.mutateAsync();
+      await resetSeedingMutation.mutateAsync();
     } catch (error) {
       void error;
     }

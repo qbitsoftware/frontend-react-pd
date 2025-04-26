@@ -67,7 +67,7 @@ const SeedingHeader = ({
       return;
     }
     try {
-      updateOrdering.mutateAsync({ order });
+      await updateOrdering.mutateAsync({ order });
       toast.message(t('toasts.participants.seeding_success'))
     } catch (error) {
       void error;

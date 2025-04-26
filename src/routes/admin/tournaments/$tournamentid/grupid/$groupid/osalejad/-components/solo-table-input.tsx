@@ -31,6 +31,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
         }
     }, [debouncedSearchTerm]);
 
+    console.log("WTFFF", form.getValues())
 
     return (
         <>
