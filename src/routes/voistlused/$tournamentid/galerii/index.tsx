@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useGetGamedaysQuery } from "@/queries/images";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImageModal } from "../mangijad/-components/image-modal"
 
@@ -13,6 +13,7 @@ function RouteComponent() {
   const params = Route.useParams();
   const { data: gamedaysData } = useGetGamedaysQuery(Number(params.tournamentid))
   const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState<string>("");
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
@@ -23,6 +24,22 @@ function RouteComponent() {
   const closeModal = () => {
     setSelectedImage(null)
   }
+
+  useEffect(() => {
+    if (gamedaysData?.data && gamedaysData.data.length > 0) {
+      const sortedGamedays = [...gamedaysData.data].sort((a, b) => {
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return dateA - dateB;
+      });
+
+      // Only set activeTab if it hasn't been set yet or if the current value isn't valid
+      if (!activeTab || !sortedGamedays.some(day => day.id.toString() === activeTab)) {
+        setActiveTab(sortedGamedays[0].id.toString());
+      }
+    }
+  }, [gamedaysData, activeTab]);
+
 
   if (!gamedaysData || !gamedaysData.data) {
     return (
@@ -41,11 +58,6 @@ function RouteComponent() {
     return dateA - dateB;
   });
 
-  const [activeTab, setActiveTab] = useState(() => {
-    return gamedays.length > 0 ? gamedays[0].id.toString() : "";
-  });
-
-  // If no gamedays
   if (gamedays.length === 0) {
     return (
       <div className="p-6 text-center rounded-sm">
