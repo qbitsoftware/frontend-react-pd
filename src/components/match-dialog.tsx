@@ -124,6 +124,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
         table: match.match.extra_data.table,
         parent_match_id: "",
       },
+      readable_id: match.match.readable_id,
       topCoord: 0,
       table_type: match.match.table_type,
     };

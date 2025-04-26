@@ -11,7 +11,7 @@ export const playerFormSchema = z.object({
     id: z.string().optional(),
     user_id: z.number().optional(),
     first_name: z.string().min(1, "First name is required"),
-    last_name: z.string().min(1, "Last name is required"),
+    last_name: z.string().optional(),
     name: z.string(),
     sport_type: z.string().default("tabletennis"),
     sex: z.string().default("M"),

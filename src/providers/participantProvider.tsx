@@ -212,23 +212,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     tournament_id: values.tournament_id,
                     class: "",
                     sport_type: "tabletennis",
-                    players: [
-                        {
-                            name: "",
-                            user_id: 0,
-                            first_name: "",
-                            last_name: "",
-                            sport_type: "tabletennis",
-                            sex: "",
-                            extra_data: {
-                                rate_order: 0,
-                                club: "",
-                                rate_points: 0,
-                                eltl_id: 0,
-                                class: "",
-                            },
-                        },
-                    ],
+                    players: [],
                 },
                 { keepValues: false }
             );

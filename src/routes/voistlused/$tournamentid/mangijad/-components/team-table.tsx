@@ -107,8 +107,8 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                 {selectedTeam.players
                   .slice()
                   .sort((a, b) => {
-                    const aIsForeign = a.extra_data.club.toLowerCase() === "välismängija";
-                    const bIsForeign = b.extra_data.club.toLowerCase() === "välismängija";
+                    const aIsForeign = a.extra_data.club.toLowerCase().trim() === "välismängija";
+                    const bIsForeign = b.extra_data.club.toLowerCase().trim() === "välismängija";
 
                     if (aIsForeign !== bIsForeign) {
                       return aIsForeign ? 1 : -1;

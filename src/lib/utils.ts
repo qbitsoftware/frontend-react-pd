@@ -459,3 +459,21 @@ export const getDateForDay = (startDate: string, dayIndex: number): string => {
   return date.toISOString();
 };
 
+export const playerFullNameFromName = (name: string) => {
+  const lastIndex = name.lastIndexOf(" ")
+
+  let firstName = name;
+  let lastName = "";
+
+  if (lastIndex !== -1) {
+    firstName = name.substring(
+      0,
+      lastIndex
+    );
+    lastName = name.substring(
+      lastIndex + 1
+    )
+  }
+
+  return {firstName, lastName}
+}

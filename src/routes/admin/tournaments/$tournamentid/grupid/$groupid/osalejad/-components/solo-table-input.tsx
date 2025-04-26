@@ -2,10 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { TableCell } from '@/components/ui/table';
-import { capitalize } from '@/lib/utils';
+import { capitalize, playerFullNameFromName } from '@/lib/utils';
 import { useParticipantForm } from '@/providers/participantProvider';
 import { TournamentTable } from '@/types/groups';
 import { GroupType } from '@/types/matches';
+import { DEFAULT_PLAYER } from '@/types/players';
 import { PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +31,6 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
         }
     }, [debouncedSearchTerm]);
 
-    console.log("TERE", form.getValues(), form.formState.errors)
 
     return (
         <>
@@ -61,14 +61,29 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                         type="text"
                                         value={groupId === selectedGroupInput ? (table_data.solo ? form.watch("name") ?? "" : form.watch("players.0.name") ?? "") : ""}
                                         onChange={(e) => {
+                                            const { firstName, lastName } = playerFullNameFromName(e.target.value)
+                                            form.setValue("players.0.first_name", firstName)
+                                            form.setValue("players.0.last_name", lastName)
                                             form.setValue(
                                                 "players.0.name",
                                                 e.target.value
                                             );
+
                                             setSearchTerm(e.target.value);
                                             if (table_data.solo) {
                                                 form.setValue("name", e.target.value);
                                             }
+
+                                            if (!form.getValues("players.0.extra_data")) {
+                                                form.setValue("players.0.extra_data", {
+                                                    rate_points: 0,
+                                                    club: "",
+                                                    eltl_id: 0,
+                                                    rate_order: 0,
+                                                    class: ""
+                                                });
+                                            }
+
                                             form.setValue("group", groupId)
                                             form.setValue("group_name", groupNames[groupId])
                                             if (isPlayerChosen) {
@@ -94,21 +109,9 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                                             }
                                         }}
                                         onFocus={() => {
-                                            console.log("resetting")
                                             if (selectedGroupInput !== groupId) {
-                                                console.log("RESETING OFR USURE")
                                                 form.reset({
-                                                    players: [{
-                                                        name: "",
-                                                        sex: "",
-                                                        extra_data: {
-                                                            rate_points: 0,
-                                                            club: "",
-                                                            eltl_id: 0,
-                                                            rate_order: 0,
-                                                            class: ""
-                                                        }
-                                                    }],
+                                                    players: [DEFAULT_PLAYER],
                                                     name: "",
                                                     group: groupId,
                                                     group_name: groupNames[groupId],

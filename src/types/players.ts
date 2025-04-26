@@ -1,3 +1,20 @@
+import { PlayerFormValues } from "@/routes/admin/tournaments/$tournamentid/-components/participant-forms/form-utils";
+
+export const DEFAULT_PLAYER: PlayerFormValues = {
+  first_name: "",
+  last_name: "",
+  name: "",
+  sport_type: "tabletennis",
+  sex: "M",
+  extra_data: {
+    rate_order: 0,
+    club: "",
+    rate_points: 0,
+    eltl_id: 0,
+    class: ""
+  }
+}
+
 export type Player = {
     id: string;
     user_id: number

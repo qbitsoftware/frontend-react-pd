@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { capitalize } from '@/lib/utils'
+import { capitalize, playerFullNameFromName } from '@/lib/utils'
 import { useParticipantForm } from '@/providers/participantProvider'
 import { Participant } from '@/types/participants'
 import { MoreHorizontal, Pencil, PlusCircle, Trash } from 'lucide-react'
@@ -36,6 +36,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
             setPopoverOpen(false);
         }
     }, [debouncedSearchTerm]);
+
 
     return (
         <React.Fragment>
@@ -453,21 +454,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
 
                                             }
                                             onClick={() => {
-                                                const lastSpaceIndex =
-                                                    searchTerm.lastIndexOf(" ");
-
-                                                let first_name = searchTerm;
-                                                let last_name = "";
-
-                                                if (lastSpaceIndex !== -1) {
-                                                    first_name = searchTerm.substring(
-                                                        0,
-                                                        lastSpaceIndex
-                                                    );
-                                                    last_name = searchTerm.substring(
-                                                        lastSpaceIndex + 1
-                                                    );
-                                                }
+                                                const {firstName, lastName} = playerFullNameFromName(searchTerm)
 
 
                                                 const existingPlayers =
@@ -482,10 +469,11 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                         ...existingPlayers,
                                                         {
                                                             name: searchTerm,
-                                                            first_name: first_name,
-                                                            last_name: last_name,
+                                                            first_name: firstName,
+                                                            last_name: lastName,
                                                             sport_type: "tabletennis",
                                                             extra_data: { rate_points: 0 },
+                                                            sex: ""
                                                         },
                                                     ],
                                                 };

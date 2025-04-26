@@ -125,6 +125,7 @@ export const ProtocolModalProvider = ({
             bracket: match.match.bracket,
             forfeit: match.match.forfeit,
             extra_data: updatedExtraData,
+            readable_id: match.match.readable_id,
             topCoord: 0,
             table_type: match.match.table_type,
         };
