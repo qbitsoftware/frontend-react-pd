@@ -28,8 +28,8 @@ const ITTFMatchComponent = ({ match, table_data }: ITTFMatchComponentProps) => {
                         {table_data.type == GroupType.CHAMPIONS_LEAGUE && <p className='text-xs'>{formatDateGetDayMonthYear(match.match.start_date)} - <span className='font-bold'>{formatDateGetHours(match.match.start_date)}</span>{match.match.extra_data.table ? ` | Laud ${match.match.extra_data.table}` : ""}</p>}
                         <p className='text-xs pt-1'>{match.match.location}</p>
                     </div>
-                    <p className='text-3xl'>{match.match.winner_id !== "" ? `${match.match.extra_data.team_1_total}:${match.match.extra_data.team_2_total}` : <Skeleton className='h-8 w-12' />
-                }</p>
+                    <div className='text-3xl'>{match.match.winner_id !== "" ? `${match.match.extra_data.team_1_total}:${match.match.extra_data.team_2_total}` : <Skeleton className='h-8 w-12' />
+                }</div>
                 </div>
 
                 <div className='flex flex-col gap-2'>

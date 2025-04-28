@@ -86,29 +86,47 @@ function RouteComponent() {
 
   useEffect(() => {
     if (initialSetupDone.current) return;
-    const today = new Date();
-    let closestDayIndex = 0;
 
-    const gameDayDates = uniqueGamedays.map(day => new Date(day));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let upcomingDayIndex = -1;
+
+    const lookAheadPeriod = 7;
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + lookAheadPeriod);
+
+    const gameDayDates = uniqueGamedays.map(day => {
+      const date = new Date(day);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    });
 
     for (let i = 0; i < gameDayDates.length; i++) {
       const gameDate = gameDayDates[i];
 
-      if (gameDate.toDateString() === today.toDateString()) {
-        closestDayIndex = i;
-        break;
-      }
+      if (gameDate.getTime() === today.getTime()) continue;
 
-      if (gameDate <= today) {
-        closestDayIndex = i;
-      }
-
-      if (gameDate > today) {
+      if (gameDate > today && gameDate <= maxDate) {
+        upcomingDayIndex = i;
         break;
       }
     }
 
-    setActiveDay(closestDayIndex);
+    if (upcomingDayIndex === -1) {
+      for (let i = 0; i < gameDayDates.length; i++) {
+        const gameDate = gameDayDates[i];
+        if (gameDate > today) {
+          upcomingDayIndex = i;
+          break;
+        }
+      }
+    }
+
+    if (upcomingDayIndex === -1) {
+      upcomingDayIndex = 0;
+    }
+
+    setActiveDay(upcomingDayIndex);
     initialSetupDone.current = true;
   }, [uniqueGamedays, setActiveDay]);
 

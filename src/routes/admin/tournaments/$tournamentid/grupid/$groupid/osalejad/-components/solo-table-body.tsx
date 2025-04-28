@@ -12,11 +12,12 @@ import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { TournamentTable } from '@/types/groups';
 import { useParticipantForm } from '@/providers/participantProvider';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface FieldProps {
     path: string;
     valueAsNumber: boolean;
-    getValue: (participant: Participant) => string | number
+    getValue: (participant: Participant) => string | number | boolean
 }
 
 interface InputCellProps {
@@ -73,6 +74,16 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
             getValue: (participant: Participant) => participant.players[0].extra_data.rate_order
         },
         {
+            path: "players.0.nationality",
+            valueAsNumber: false,
+            getValue: (participant: Participant) => participant.players[0].nationality
+        },
+        {
+            path: "players.0.extra_data.foreign_player",
+            valueAsNumber: false,
+            getValue: (participant: Participant) => participant.players[0].extra_data.foreign_player
+        },
+        {
             path: "players.0.extra_data.class",
             valueAsNumber: false,
             getValue: (participant: Participant) => participant.players[0].extra_data.class
@@ -81,17 +92,42 @@ const SoloTableBody = ({ participant, idx, tournament_table_data }: SoloTableBod
 
 
     const InputCell = ({ field, participant, editingParticipant }: InputCellProps) => {
-        const isEditing = editingParticipant?.id === participant.id
-        return (
+        const isEditing = editingParticipant?.id === participant.id;
+        const isBooleanField = field.path === "players.0.extra_data.foreign_player";
 
-            <>
-                {participant.players &&
-                    <TableCell>
-                        {isEditing ? (<Input {...editForm.register(field.path as Path<ParticipantFormValues>, field.valueAsNumber ? { valueAsNumber: true } : { valueAsNumber: false })} />) : (field.getValue(participant))}
-                    </TableCell>
-                }
-            </>
-        )
+        let fieldValue;
+        try {
+            fieldValue = participant.players ? field.getValue(participant) : "";
+        } catch (error) {
+            // console.error(`Error getting field value for ${field.path}:`, error);
+            fieldValue = isBooleanField ? false : "";
+        }
+
+        return (
+            <TableCell>
+                {isEditing ? (
+                    isBooleanField ? (
+                        <Checkbox
+                            checked={(editForm.watch(field.path as Path<ParticipantFormValues>) as boolean) || false}
+                            onCheckedChange={(checked) => {
+                                editForm.setValue(field.path as Path<ParticipantFormValues>, checked === true);
+                            }}
+                        />
+                    ) : (
+                        <Input
+                            {...editForm.register(
+                                field.path as Path<ParticipantFormValues>,
+                                field.valueAsNumber ? { valueAsNumber: true } : {}
+                            )}
+                        />
+                    )
+                ) : (
+                    isBooleanField ?
+                        <Checkbox checked={fieldValue === true} disabled /> :
+                        (fieldValue !== undefined && fieldValue !== null ? fieldValue : "")
+                )}
+            </TableCell>
+        );
     }
 
     return (

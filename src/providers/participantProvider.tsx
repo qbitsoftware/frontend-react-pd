@@ -65,7 +65,7 @@ interface ParticipantContextType {
     setGroupNames: React.Dispatch<React.SetStateAction<Record<number, string>>>;
 
     activeGroupId: number | null;
-    setActiveGroupId: React.Dispatch<React.SetStateAction<number| null>>
+    setActiveGroupId: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 const ParticipantContext = createContext<ParticipantContextType | undefined>(undefined);
@@ -168,22 +168,24 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
             order: participant.order,
             tournament_id: tournament_id,
             class: participant.extra_data.class,
-            sport_type: participant.sport_type || "tabletennis",
+            sport_type: "tabletennis",
             players: players.map((player) => ({
                 id: player.id,
                 user_id: player.user_id,
                 first_name: player.first_name,
                 last_name: player.last_name,
                 name: `${player.first_name} ${player.last_name}`,
-                sport_type: player.sport_type || "tabletennis",
+                sport_type: "tabletennis",
                 sex: player.sex,
                 number: player.number,
+                nationality: player.nationality,
                 extra_data: {
                     rate_order: player.extra_data.rate_order,
                     club: player.extra_data.club,
                     rate_points: player.extra_data.rate_points,
                     eltl_id: player.extra_data.eltl_id,
                     class: player.extra_data.class,
+                    foreign_player: player.extra_data.foreign_player,
                 },
             })),
         });
@@ -194,8 +196,10 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         participantId?: string
     ) => {
         try {
+            console.log("TERE", participantId, values)
             if (participantId) {
-                if (!values.players || values.players.length === 0) {
+                if (!values.players || values.players.length < 1) {
+                    console.log("KUIDAS MA SIIN")
                     values.players = [DEFAULT_PLAYER]
                 }
                 await updateParticipant.mutateAsync({
@@ -273,12 +277,14 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     last_name: player.last_name,
                     user_id: player.user_id,
                     sex: player.sex,
+                    nationality: player.nationality,
                     extra_data: {
                         rate_order: player.extra_data.rate_order,
                         club: player.extra_data.club,
                         rate_points: player.extra_data.rate_points,
                         eltl_id: player.extra_data.eltl_id,
                         class: player.extra_data.class,
+                        foreign_player: player.extra_data.foreign_player,
                     },
                 }))
                 .filter((_, index) => index !== playerIndex),
@@ -324,12 +330,14 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     last_name: player.last_name,
                     user_id: player.user_id,
                     sex: player.sex,
+                    nationality: player.nationality,
                     extra_data: {
                         rate_order: player.extra_data.rate_order,
                         club: player.extra_data.club,
                         rate_points: player.extra_data.rate_points,
                         eltl_id: player.extra_data.eltl_id,
                         class: player.extra_data.class,
+                        foreign_player: player.extra_data.foreign_player,
                     },
                 };
             }),

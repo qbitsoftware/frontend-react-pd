@@ -47,6 +47,16 @@ const SoloTableHead = () => {
             </TableHead>
             <TableHead className="">
                 {t(
+                    "admin.tournaments.groups.participants.table.nationality"
+                )}
+            </TableHead>
+            <TableHead className="">
+                {t(
+                    "admin.tournaments.groups.participants.table.foreign_player"
+                )}
+            </TableHead>
+            <TableHead className="">
+                {t(
                     "admin.tournaments.groups.participants.table.class"
                 )}
             </TableHead>

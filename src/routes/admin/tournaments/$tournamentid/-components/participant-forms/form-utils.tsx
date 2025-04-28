@@ -16,6 +16,7 @@ export const playerFormSchema = z.object({
     sport_type: z.string().default("tabletennis"),
     sex: z.string().default("M"),
     number: z.number().optional(),
+    nationality: z.string().default("EE").optional(),
     extra_data: z
         .object({
             rate_order: z.number().default(0).optional(),
@@ -23,6 +24,7 @@ export const playerFormSchema = z.object({
             rate_points: z.number().default(0),
             eltl_id: z.number().default(0).optional(),
             class: z.string().default("").optional(),
+            foreign_player: z.boolean().default(false).optional(),
         })
         .optional(),
 });

@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { TableCell } from '@/components/ui/table';
@@ -37,7 +38,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
         <>
             {((participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT)) && (
                 <>
-                    <TableCell>
+                    <TableCell className=''>
                         {(participantsState && participantsState.length > 0
                             ? participantsState.length
                             : 0) + 1}
@@ -178,7 +179,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     </TableCell>
                     <TableCell>
                         <Input
-                            className="w-[100px]"
+                            className="w-[80px]"
                             type="number"
                             value={groupId === selectedGroupInput ? (form.watch("players.0.number") ?? "") : ""}
                             onChange={(e) => {
@@ -189,7 +190,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     </TableCell>
                     <TableCell>
                         <Input
-                            className="w-[100px]"
+                            className="w-[50px]"
                             type="text"
                             value={groupId === selectedGroupInput ? (form.watch("players.0.sex") ?? "") : ""}
                             onChange={(e) => {
@@ -213,7 +214,7 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                     <TableCell>
                         <Input
                             disabled
-                            className="w-[100px] border-none"
+                            className="w-[50px] border-none"
                             type="number"
                             onChange={(e) => {
                                 form.setValue("players.0.extra_data.eltl_id", Number(e.target.value))
@@ -232,6 +233,26 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
                             }}
                             value={groupId === selectedGroupInput ? (form.watch("players.0.extra_data.rate_order") ?? "") : ""}
                             placeholder="Koht Reitingus"
+                        />
+                    </TableCell>
+                    <TableCell>
+                        <Input
+                            className="w-[50px]"
+                            type="text"
+                            value={groupId === selectedGroupInput ? (form.watch("players.0.nationality") ?? "") : ""}
+                            onChange={(e) => {
+                                form.setValue("players.0.nationality", e.target.value)
+                            }}
+                            placeholder="Rahvus"
+                        />
+                    </TableCell>
+                    <TableCell className=''>
+                        <Checkbox
+                            className=''
+                            checked={(groupId === selectedGroupInput || table_data.solo) ? (form.watch("players.0.extra_data.foreign_player") ?? false) : false}
+                            onCheckedChange={(checked) => {
+                                form.setValue("players.0.extra_data.foreign_player", checked === true)
+                            }}
                         />
                     </TableCell>
                     <TableCell>

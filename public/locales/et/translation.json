@@ -122,6 +122,8 @@
         "player_count": "Mängijate arv",
         "rating_placement": "Asetus reitingus",
         "class": "Klass",
+        "nationality": "Riik",
+        "foreign_player": "Välismängija",
         "club": "Klubi",
         "sex": "Sugu",
         "id": "ID"
@@ -662,7 +664,9 @@
             "class": "Klass",
             "eltl_id": "ELTL ID",
             "rating": "Koht reitingus",
-            "actions": "Tegevused"
+            "actions": "Tegevused",
+            "nationality": "Riik",
+            "foreign_player": "Välismängija"
           }
         }
       },
@@ -903,7 +907,9 @@
       "title": "Midagi läks valesti",
       "description": "Vabandame, kuid midagi läks valesti. Palun proovige uuesti.",
       "retry": "Proovi uuesti",
-      "home": "Kodulehele"
+      "home": "Kodulehele",
+      "value_yes": "Jah",
+      "value_no": "Ei"
     }
   },
   "gallery": {

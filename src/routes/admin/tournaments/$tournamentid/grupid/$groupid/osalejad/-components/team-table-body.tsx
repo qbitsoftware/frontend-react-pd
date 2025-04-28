@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Player } from '@/types/players'
 import { TournamentTable } from '@/types/groups'
 import { GroupType } from '@/types/matches'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface TeamTableBodyProps {
     participant: Participant
@@ -216,6 +217,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                     number: 0,
                                                     rank: user.rate_pl_points,
                                                     sex: user.sex,
+                                                    nationality: "EE",
                                                     extra_data: {
                                                         rate_order: user.rate_order,
                                                         club: user.club_name,
@@ -223,6 +225,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                         eltl_id: user.eltl_id,
                                                         class: "",
                                                         image_url: "",
+                                                        foreign_player: false,
                                                     },
                                                     created_at: "",
                                                     updated_at: "",
@@ -302,6 +305,23 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                 editingPlayerInfo.playerIndex ===
                                 playerIdx ? (
                                 <Input
+                                    defaultValue={player.nationality}
+                                    onChange={(e) =>
+                                    (player.nationality =
+                                        e.target.value)
+                                    }
+                                    className="w-16"
+                                />
+                            ) : (
+                                player.nationality
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {editingPlayerInfo &&
+                                editingPlayerInfo.teamId === participant.id &&
+                                editingPlayerInfo.playerIndex ===
+                                playerIdx ? (
+                                <Input
                                     type="number"
                                     defaultValue={player.extra_data.eltl_id}
                                     onChange={(e) =>
@@ -334,6 +354,28 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                 />
                             ) : (
                                 player.extra_data.rate_order
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {editingPlayerInfo &&
+                                editingPlayerInfo.teamId === participant.id &&
+                                editingPlayerInfo.playerIndex ===
+                                playerIdx ? (
+                                <Checkbox
+                                    checked={player.extra_data.foreign_player === true}
+                                    onCheckedChange={(checked) => {
+                                        (player.extra_data.foreign_player = checked === true)
+                                        setEditingPlayerInfo({ ...editingPlayerInfo });
+                                    }
+                                    }
+                                    className=""
+                                />
+                            ) : (
+                                <Checkbox
+                                    checked={player.extra_data.foreign_player}
+                                    disabled
+                                    className=""
+                                />
                             )}
                         </TableCell>
                         <TableCell>
@@ -454,7 +496,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
 
                                             }
                                             onClick={() => {
-                                                const {firstName, lastName} = playerFullNameFromName(searchTerm)
+                                                const { firstName, lastName } = playerFullNameFromName(searchTerm)
 
 
                                                 const existingPlayers =
@@ -542,6 +584,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                                 last_name: player.last_name,
                                                                 user_id: player.user_id,
                                                                 sex: player.sex,
+                                                                nationality: player.nationality,
                                                                 extra_data: {
                                                                     rate_order:
                                                                         player.extra_data
@@ -556,6 +599,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                                             .eltl_id,
                                                                     class:
                                                                         player.extra_data.class,
+                                                                    foreign_player: player.extra_data.foreign_player,
                                                                 },
                                                             })),
                                                             {

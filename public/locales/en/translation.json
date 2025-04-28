@@ -123,6 +123,8 @@
         "rating_placement": "Placement in rating",
         "class": "Class",
         "club": "Club",
+        "nationality": "Country",
+        "foreign_player": "Foreigner",
         "sex": "Sex",
         "id": "ID"
       }
@@ -662,7 +664,9 @@
             "class": "Class",
             "eltl_id": "ELTL ID",
             "rating": "Placement in rating",
-            "actions": "Actions"
+            "actions": "Actions",
+            "nationality": "Country",
+            "foreign_player": "Foreigner"
           }
         }
       },
@@ -903,7 +907,9 @@
       "title": "Something went wrong",
       "description": "An error occurred while fetching the page.",
       "retry": "Retry",
-      "home": "Home"
+      "home": "Home",
+      "value_yes": "Yes",
+      "value_no": "No"
     }
   },
   "gallery": {

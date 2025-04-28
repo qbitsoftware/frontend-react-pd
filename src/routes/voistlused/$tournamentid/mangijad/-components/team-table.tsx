@@ -8,12 +8,15 @@ import clubPlaceholder from "@/assets/clubPlaceholder.svg"
 import { useTranslation } from "react-i18next"
 import { ImageModal } from "./image-modal"
 import { Participant } from "@/types/participants"
+import { TournamentTable } from "@/types/groups"
+import { GroupType } from "@/types/matches"
 
 interface TeamTableProps {
   participants: Participant[] | null
+  table_data: TournamentTable
 }
 
-const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
+const TeamTable: React.FC<TeamTableProps> = ({ participants, table_data }) => {
   const [selectedTeam, setSelectedTeam] = useState<Participant | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { t } = useTranslation()
@@ -94,11 +97,13 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>{t('competitions.participants.table.nationality')}</TableHead>
                   <TableHead>{t('competitions.participants.table.image')}</TableHead>
                   <TableHead>{t('competitions.participants.table.name')}</TableHead>
                   <TableHead>{t('competitions.participants.table.rating_placement')}</TableHead>
                   <TableHead>{t('competitions.participants.table.class')}</TableHead>
                   <TableHead>{t('competitions.participants.table.club')}</TableHead>
+                  <TableHead>{t('competitions.participants.table.foreign_player')}</TableHead>
                   <TableHead>{t('competitions.participants.table.sex')}</TableHead>
                   <TableHead>{t('competitions.participants.table.id')}</TableHead>
                 </TableRow>
@@ -106,6 +111,10 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
               <TableBody>
                 {selectedTeam.players
                   .slice()
+                  .filter(player =>
+                    table_data.type == GroupType.CHAMPIONS_LEAGUE ?
+                      player.extra_data.image_url :
+                      true)
                   .sort((a, b) => {
                     const aIsForeign = a.extra_data.club.toLowerCase().trim() === "välismängija";
                     const bIsForeign = b.extra_data.club.toLowerCase().trim() === "välismängija";
@@ -121,6 +130,9 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                   })
                   .map((player) => (
                     <TableRow key={player.id}>
+                      <TableCell>
+                        {player.nationality == "" ? "-" : player.nationality}
+                      </TableCell>
                       <TableCell>
                         <Avatar onClick={(e) => {
                           e.stopPropagation();
@@ -138,6 +150,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ participants }) => {
                       <TableCell>{player.extra_data.rate_order == 0 ? "-" : player.extra_data.rate_order}</TableCell>
                       <TableCell>{player.extra_data.class}</TableCell>
                       <TableCell>{player.extra_data.club}</TableCell>
+                      <TableCell>{player.extra_data.foreign_player ? t('errors.general.value_yes') : t('errors.general.value_no')}</TableCell>
                       <TableCell>{player.sex}</TableCell>
                       <TableCell>{player.extra_data.eltl_id == 0 ? "?" : player.extra_data.eltl_id}</TableCell>
                     </TableRow>
