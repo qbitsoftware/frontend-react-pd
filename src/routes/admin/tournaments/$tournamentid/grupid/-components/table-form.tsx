@@ -339,11 +339,14 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-                <FormField
+                
+              </div>
+
+              <FormField
                 control={form.control}
                 name="woman_weight"
                 render={({ field }) => (
-                  < FormItem >
+                  < FormItem className="w-[1/2]">
                     <FormLabel>{t("admin.tournaments.create_tournament.woman_weight")}</FormLabel>
                     <div className="grid grid-cols-[1fr,80px] items-center gap-4">
                       <FormControl>
@@ -382,7 +385,6 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   </FormItem>
                 )}
               />
-              </div>
               
 
               <div className="flex justify-between gap-4 mt-10">

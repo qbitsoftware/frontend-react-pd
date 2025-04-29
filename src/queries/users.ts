@@ -107,7 +107,7 @@ export const UseGetUsersDebounce = (searchTerm: string) => {
     queryKey: ["users", searchTerm],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
-        `/api/v1/users?search=${searchTerm}`,
+        `/api/v1/user_suggestions?search=${searchTerm}`,
         {
           withCredentials: true,
         },
@@ -164,7 +164,7 @@ export function useUsersCount() {
   const { data, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await axiosInstance.get("/api/v1/users", {
+      const response = await axiosInstance.get("/api/v1/user_suggestions", {
         withCredentials: true,
       });
       return response.data;

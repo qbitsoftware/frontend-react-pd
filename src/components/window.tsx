@@ -90,6 +90,50 @@ export const Window: React.FC<WindowProps> = ({
 
     return (
       <div className="mt-0 h-screen" key={"test"}>
+        {/* {data.eliminations.map((elimination, index1) => {
+          return (
+            <>
+              {elimination.elimination.map((table, index) => {
+                if (index1 !== 0 && index1 >= 1) {
+                  previousTop += CalculateSVGHeight(
+                    table.matches,
+                    140,
+                    40,
+                  );
+                }
+                if (table.name === "Miinusring") {
+                  return (
+                    <div className="xl:pt-24" key={index}>
+                      <DoubleElimBracket
+                        tournament_table={tournament_table}
+                        key={index}
+                        starting_x={0}
+                        starting_y={previousTop}
+                        data={table}
+                        index={index}
+                      />
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="" key={index}>
+                      <SingleElimBracket
+                        tournament_table={tournament_table}
+                        key={index}
+                        starting_x={0}
+                        starting_y={previousTop}
+                        data={table}
+                        isEditingMode={isEditingMode}
+                        selectedPlayer={selectedPlayer}
+                        onPlayerSelect={handlePlayerSelect}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            </>
+          )
+        })} */}
         {data.eliminations[bracket].elimination.map((table, index) => {
           if (index !== 0 && index >= 1) {
             previousTop += CalculateSVGHeight(
@@ -103,7 +147,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="xl:pt-24" key={index}>
                 <DoubleElimBracket
-                tournament_table={tournament_table}
+                  tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
                   starting_y={previousTop}
@@ -116,7 +160,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="" key={index}>
                 <SingleElimBracket
-                tournament_table={tournament_table}
+                  tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
                   starting_y={previousTop}

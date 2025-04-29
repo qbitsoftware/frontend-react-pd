@@ -17,6 +17,8 @@ export enum GroupType {
   SINGLE_ELIM_BRONZE = "single_elimination_bronze",
   DOUBLE_ELIM_FULL_PLACEMENT = "double_elimination_full_placement",
   DOUBLE_ELIM_FULL_PLACEMENT_TOP_HEAVY = "double_elimination_full_placement_top_heavy",
+  DOUBLE_ELIM_TABLETENNIS = "double_elimination_tabletennis",
+  DOUBLE_ELIM_TABLETENNIS_TOP_HEAVY = "double_elimination_tabletennis_top_heavy",
   CHAMPIONS_LEAGUE = "champions_league",
   ROUND_ROBIN = "round_robin",
   FREE_FOR_ALL = "free_for_all",

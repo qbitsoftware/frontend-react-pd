@@ -132,9 +132,15 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
               {match.match.extra_data.table}
             </div>
           )}
-        {/* <div className="absolute top-[0px] left-[200px] w-[60px] text-left text-[10px] pdf-game-court">
+        <div className="absolute top-[20px] left-[200px] w-[60px] text-left text-[10px] pdf-game-court">
           {match.match.readable_id}
-        </div> */}
+        </div>
+        <div className="absolute top-[30px] left-[0px] w-[60px] text-left text-[10px] pdf-game-court">
+          {match.match.previous_match_readable_id_1 == 0 ? "" : match.match.previous_match_readable_id_1}
+        </div>
+        <div className="absolute top-[0px] left-[0px] w-[60px] text-left text-[10px] pdf-game-court">
+          {match.match.previous_match_readable_id_2 == 0 ? "" : match.match.previous_match_readable_id_2}
+        </div>
         {match.participant_1.id != "empty" &&
           match.participant_2.id != "empty" && (
             <div className="absolute left-[0px] text-right top-[-20px] w-[100px] text-[10px]">

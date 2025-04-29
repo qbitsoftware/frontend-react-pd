@@ -16,6 +16,7 @@ import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
 
 
+
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   errorComponent: () => <ErrorPage />,

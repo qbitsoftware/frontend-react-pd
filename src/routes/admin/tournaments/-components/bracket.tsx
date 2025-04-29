@@ -8,6 +8,7 @@ import { Printer } from "lucide-react";
 import { TournamentTable } from "@/types/groups";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 interface BracketComponentProps {
   bracket: BracketReponse;
@@ -30,11 +31,16 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
     Array.isArray(bracket.data.round_robins) &&
     bracket.data.round_robins.length > 0;
 
-  const handlePrint = () => {
-    const title = tournament_table
-      ? `${tournament_table.class} Tournament`
-      : "Tournament Bracket";
-    PrintPDF("bracket-container", title, true);
+  const handlePrint = async () => {
+    try {
+      const title = tournament_table
+        ? `${tournament_table.class} Tournament`
+        : "Tournament Bracket";
+      await PrintPDF("bracket-container", title, true);
+    } catch (error) {
+      console.log(error)
+      toast.error("Failed to print brackets")
+    }
   };
 
   const [isEditingMode, setIsEditingMode] = useState(false);
