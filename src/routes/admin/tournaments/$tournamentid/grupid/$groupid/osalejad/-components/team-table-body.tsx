@@ -599,6 +599,7 @@ const TeamTableBody = ({ participant, tournament_table, idx }: TeamTableBodyProp
                                                                             .eltl_id,
                                                                     class:
                                                                         player.extra_data.class,
+                                                                    image_url: player.extra_data.image_url,
                                                                     foreign_player: player.extra_data.foreign_player,
                                                                 },
                                                             })),

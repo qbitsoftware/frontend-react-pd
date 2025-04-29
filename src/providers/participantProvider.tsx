@@ -186,6 +186,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                     eltl_id: player.extra_data.eltl_id,
                     class: player.extra_data.class,
                     foreign_player: player.extra_data.foreign_player,
+                    image_url: player.extra_data.image_url,
                 },
             })),
         });
@@ -196,10 +197,8 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
         participantId?: string
     ) => {
         try {
-            console.log("TERE", participantId, values)
             if (participantId) {
                 if (!values.players || values.players.length < 1) {
-                    console.log("KUIDAS MA SIIN")
                     values.players = [DEFAULT_PLAYER]
                 }
                 await updateParticipant.mutateAsync({
@@ -285,6 +284,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                         eltl_id: player.extra_data.eltl_id,
                         class: player.extra_data.class,
                         foreign_player: player.extra_data.foreign_player,
+                        image_url: player.extra_data.image_url,
                     },
                 }))
                 .filter((_, index) => index !== playerIndex),
@@ -338,6 +338,7 @@ export const ParticipantProvider = ({ children, tournament_id, tournament_table_
                         eltl_id: player.extra_data.eltl_id,
                         class: player.extra_data.class,
                         foreign_player: player.extra_data.foreign_player,
+                        image_url: player.extra_data.image_url,
                     },
                 };
             }),
