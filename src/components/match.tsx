@@ -132,14 +132,14 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
               {match.match.extra_data.table}
             </div>
           )}
-        <div className="absolute top-[20px] left-[200px] w-[60px] text-left text-[10px] pdf-game-court">
+        <div className="absolute top-[15px] left-[220px] w-[60px] text-left text-[8px] pdf-game-court">
           {match.match.readable_id}
         </div>
-        <div className="absolute top-[30px] left-[0px] w-[60px] text-left text-[10px] pdf-game-court">
-          {match.match.previous_match_readable_id_1 == 0 ? "" : match.match.previous_match_readable_id_1}
+        <div className="absolute top-[35px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
+          {match.match.previous_match_readable_id_1 >= 0 ? "" : match.match.previous_match_readable_id_1}
         </div>
-        <div className="absolute top-[0px] left-[0px] w-[60px] text-left text-[10px] pdf-game-court">
-          {match.match.previous_match_readable_id_2 == 0 ? "" : match.match.previous_match_readable_id_2}
+        <div className="absolute top-[5px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
+          {match.match.previous_match_readable_id_2 >= 0 ? "" : match.match.previous_match_readable_id_2}
         </div>
         {match.participant_1.id != "empty" &&
           match.participant_2.id != "empty" && (
@@ -155,7 +155,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
           {match.participant_1.id == "empty" ? (
             <>
               <div className="text-center px-2">{""}</div>
-              <div className="w-full text-gray-500 pdf-participant">(Bye)</div>
+              <div className="w-full text-gray-500 ml-4 pdf-participant">(Bye)</div>
               <div className="text-right pr-4">{""}</div>
             </>
           ) : match.participant_1.id === "" ? (
@@ -218,7 +218,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
           {match.participant_2.id == "empty" ? (
             <>
               <div className="text-center px-2">{""}</div>
-              <div className="w-full text-gray-500 pdf-participant">(Bye)</div>
+              <div className="w-full text-gray-500 ml-4 pdf-participant">(Bye)</div>
               <div className="text-right pr-4">{""}</div>
             </>
           ) : match.participant_2.id === "" ? (

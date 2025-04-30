@@ -406,6 +406,8 @@
           "single_elimination_bronze": "Single Elimination",
           "double_elimination_full_placement": "Double Elimination Full",
           "double_elimination_full_placement_top_heavy": "Double Elimination (Semi-final losers for 3rd)",
+          "double_elimination_tabletennis": "Double Elimination (table tennis)",
+          "double_elimination_tabletennis_top_heavy": "Double Elimination (Semi-final losers for 3rd) (table tennis)",
           "champions_league": "Team Champions League",
           "free_for_all": "Solo Free-for-all",
           "round_robin_full_placement": "Round Robin (Placement matches included)",

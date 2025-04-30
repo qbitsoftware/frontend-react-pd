@@ -69,6 +69,8 @@ export type Match = {
   table_type: string
   state: MatchState;
   readable_id: number;
+  previous_match_readable_id_1: number
+  previous_match_readable_id_2: number
 }
 
 export type MatchWrapper = {

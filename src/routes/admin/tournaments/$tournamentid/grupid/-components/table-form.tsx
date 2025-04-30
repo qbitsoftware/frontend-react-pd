@@ -212,11 +212,13 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                               <Loader />
                             </SelectItem>
                           )}
-                          {tournament_types?.data?.map((type) => (
-                            <SelectItem key={type.id} value={type.name}>
-                              {t(`admin.tournaments.create_tournament.tournament_tables.${type.name}`)}
-                            </SelectItem>
-                          ))}
+                          {tournament_types && tournament_types.data && tournament_types.data.map((type) => {
+                            return (
+                              <SelectItem key={type.id} value={type.name}>
+                                {t(`admin.tournaments.create_tournament.tournament_tables.${type.name}`)}
+                              </SelectItem>
+                            )
+                          })}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -259,11 +261,16 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                             <Loader />
                           </SelectItem>
                         )}
-                        {tournament_sizes?.data?.map((size) => (
-                          <SelectItem key={size.id} value={String(size.size)}>
-                            {size.size}
-                          </SelectItem>
-                        ))}
+                        {tournament_sizes && tournament_sizes.data && tournament_sizes.data.map((size) => {
+                          if (size.size == 24 && !(form.watch("type") == GroupType.DOUBLE_ELIM_TABLETENNIS || form.watch("type") == GroupType.DOUBLE_ELIM_TABLETENNIS_TOP_HEAVY)) {
+                            return null
+                          }
+                          return (
+                            <SelectItem key={size.id} value={String(size.size)}>
+                              {size.size}
+                            </SelectItem>
+                          )
+                        })}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -339,7 +346,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                     </FormItem>
                   )}
                 />
-                
+
               </div>
 
               <FormField
@@ -385,7 +392,7 @@ export const TournamentTableForm: React.FC<TableFormProps> = ({ initial_data }) 
                   </FormItem>
                 )}
               />
-              
+
 
               <div className="flex justify-between gap-4 mt-10">
                 {initial_data && (

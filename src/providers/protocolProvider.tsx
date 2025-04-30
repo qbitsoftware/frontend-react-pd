@@ -128,6 +128,8 @@ export const ProtocolModalProvider = ({
             readable_id: match.match.readable_id,
             topCoord: 0,
             table_type: match.match.table_type,
+            previous_match_readable_id_1: match.match.previous_match_readable_id_1,
+            previous_match_readable_id_2: match.match.previous_match_readable_id_2,
         };
 
         await updateMatch(sendMatch);

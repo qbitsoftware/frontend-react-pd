@@ -17,7 +17,6 @@ import {
 import { Input } from "./ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { UsePatchMatch } from "@/queries/match";
-import { useLocation, useRouter } from "@tanstack/react-router";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Match, MatchWrapper, Score } from "@/types/matches";
 import { toast } from "sonner";
@@ -51,8 +50,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
   match,
   tournament_id,
 }) => {
-  const location = useLocation();
-  const router = useRouter();
   const form = useForm<MatchFormValues>({
     resolver: zodResolver(matchFormSchema),
     defaultValues: {
@@ -127,15 +124,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       readable_id: match.match.readable_id,
       topCoord: 0,
       table_type: match.match.table_type,
+      previous_match_readable_id_1: 0,
+      previous_match_readable_id_2: 0,
     };
 
     try {
       await usePatchMatch.mutateAsync(sendMatch);
-      router.navigate({
-        to: location.pathname,
-        replace: true,
-      });
-
       toast.message(t("toasts.protocol_modals.updated_match_score"))
     } catch (error) {
       void error;

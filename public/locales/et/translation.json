@@ -406,6 +406,8 @@
           "single_elimination_bronze": "Üksikeliminatsioon (kolmanda koha väljamängimisega)",
           "double_elimination_full_placement": "Klassikaline Kaksikeliminatsioon",
           "double_elimination_full_placement_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale)",
+          "double_elimination_tabletennis": "Klassikaline Kaksikeliminatsioon (lauatennis)",
+          "double_elimination_tabletennis_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale) (lauatennis)",
           "champions_league": "Võistkondlikud liigad",
           "free_for_all": "Tänavapinks",
           "round_robin_full_placement": "Round Robin (2 roundiga)",
