@@ -196,9 +196,7 @@ function RouteComponent() {
       <Table className="">
         <TableHeader>
           <TableRow>
-          <TableHead className="">
-              {t("admin.clubs.table.actions")}
-            </TableHead>
+            <TableHead className="">{t("admin.clubs.table.actions")}</TableHead>
             <TableHead>{t("admin.clubs.table.image")}</TableHead>
             <TableHead>{t("admin.clubs.table.name")}</TableHead>
             <TableHead>{t("admin.clubs.table.contact_person")}</TableHead>
@@ -206,66 +204,69 @@ function RouteComponent() {
             <TableHead>{t("admin.clubs.table.phone")}</TableHead>
             <TableHead>{t("admin.clubs.table.address")}</TableHead>
             <TableHead>{t("admin.clubs.table.website")}</TableHead>
-            
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clubs.map((club) => (
-            <TableRow key={club.id}>
-              <TableCell className="">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className=" px-2 py-1">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSelectedClub(club);
-                        setIsEditDialogOpen(true);
-                      }}
-                    >
-                      {t("admin.clubs.dropdown.edit")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => {
-                        setSelectedClub(club);
-                        setIsDeleteDialogOpen(true);
-                      }}
-                    >
-                      {t("admin.clubs.dropdown.delete")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-              <TableCell>
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={club.image_url} alt={club.name} />
-                  <AvatarFallback>
-                    {club.name.substring(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-              </TableCell>
-              <TableCell className="font-medium">{club.name}</TableCell>
-              <TableCell className="truncate">{club.contact_person}</TableCell>
-              <TableCell className="truncate">{club.email}</TableCell>
-              <TableCell className="truncate">{club.phone}</TableCell>
-              <TableCell className="truncate">{club.address}</TableCell>
-              <TableCell>
-                <a
-                  href={club.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  {club.website.replace(/^https?:\/\//, "")}
-                </a>
-              </TableCell>
-              
-            </TableRow>
-          ))}
+          {clubs
+            .slice()
+            .reverse()
+            .map((club) => (
+              <TableRow key={club.id}>
+                <TableCell className="">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className=" px-2 py-1">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedClub(club);
+                          setIsEditDialogOpen(true);
+                        }}
+                      >
+                        {t("admin.clubs.dropdown.edit")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => {
+                          setSelectedClub(club);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                      >
+                        {t("admin.clubs.dropdown.delete")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+                <TableCell>
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={club.image_url} alt={club.name} />
+                    <AvatarFallback>
+                      {club.name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell className="font-medium">{club.name}</TableCell>
+                <TableCell className="truncate">
+                  {club.contact_person}
+                </TableCell>
+                <TableCell className="truncate">{club.email}</TableCell>
+                <TableCell className="truncate">{club.phone}</TableCell>
+                <TableCell className="truncate">{club.address}</TableCell>
+                <TableCell>
+                  <a
+                    href={club.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {club.website.replace(/^https?:\/\//, "")}
+                  </a>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 
@@ -529,3 +530,4 @@ function RouteComponent() {
     </div>
   );
 }
+

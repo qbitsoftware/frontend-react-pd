@@ -17,9 +17,12 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredClubs = clubs.filter((club) => {
-    return club.name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const filteredClubs = clubs
+    .filter((club) => {
+      return club.name.toLowerCase().includes(searchQuery.toLowerCase());
+    })
+    // Reverse the order of clubs after filtering
+    .reverse();
 
   return (
     <div className="rounded-t-lg p-6 space-y-6">
@@ -32,7 +35,6 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
         />
         <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredClubs.map((club, index) => (
           <Card
@@ -66,6 +68,7 @@ export function ClubGrid({ clubs }: ClubTableProps = { clubs: [] }) {
     </div>
   );
 }
+
 function truncateName(name: string, maxLength = 15) {
   if (name.length <= maxLength) return name;
   return name.slice(0, maxLength) + "..";
