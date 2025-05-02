@@ -3,6 +3,7 @@ import { EliminationBracket } from "@/types/brackets";
 import { useTranslation } from "react-i18next";
 import MatchComponent from "./match";
 import { TournamentTable } from "@/types/groups";
+import { MatchWrapper } from "@/types/matches";
 
 interface BracketProps {
   tournament_table: TournamentTable
@@ -15,6 +16,7 @@ interface BracketProps {
     playerId: string | number;
     position: "home" | "away";
   } | null;
+  handleSelectMatch?: (match: MatchWrapper) => void
   onPlayerSelect?: (
     matchId: string,
     playerId: string,
@@ -29,6 +31,7 @@ const SingleElimBracket = ({
   starting_y,
   isEditingMode = false,
   selectedPlayer = null,
+  handleSelectMatch,
   onPlayerSelect = () => { },
 }: BracketProps) => {
   const WIDTH = 220;
@@ -70,6 +73,7 @@ const SingleElimBracket = ({
           match.match.topCoord = topCoord;
           return (
             <MatchComponent
+              handleSelectMatch={handleSelectMatch}
               tournament_table={tournament_table}
               key={index}
               WIDTH={WIDTH}

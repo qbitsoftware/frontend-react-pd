@@ -7,6 +7,7 @@ import { Separator } from "./ui/separator";
 import { TournamentTable } from "@/types/groups";
 import { Bracket, PlayerSwitch } from "@/types/brackets";
 import { UsePostPlayerSwitch } from "@/queries/brackets";
+import { MatchWrapper } from "@/types/matches";
 
 interface WindowProps {
   data: Bracket;
@@ -14,6 +15,7 @@ interface WindowProps {
   toggleEditingMode?: () => void;
   isEditingMode?: boolean;
   setIsEditingMode?: (edit: boolean) => void;
+  handleSelectMatch?: (match: MatchWrapper) => void
   selectedPlayer?: {
     matchId: string;
     playerId: string;
@@ -34,6 +36,7 @@ export const Window: React.FC<WindowProps> = ({
   isEditingMode,
   selectedPlayer,
   setSelectedPlayer,
+  handleSelectMatch
 }) => {
   const [bracket, setBracket] = useState(0);
   const bracketRef = useRef<HTMLDivElement | null>(null);
@@ -147,6 +150,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="xl:pt-24" key={index}>
                 <DoubleElimBracket
+                  handleSelectMatch={handleSelectMatch}
                   tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
@@ -160,6 +164,7 @@ export const Window: React.FC<WindowProps> = ({
             return (
               <div className="" key={index}>
                 <SingleElimBracket
+                  handleSelectMatch={handleSelectMatch}
                   tournament_table={tournament_table}
                   key={index}
                   starting_x={0}
@@ -185,7 +190,6 @@ export const Window: React.FC<WindowProps> = ({
             <h1 className="text-base font-medium">{tournament_table.class}</h1>
             <p
               className="text-xs underline cursor-pointer"
-              onClick={() => console.log()}
             >
               {/* Download */}
             </p>

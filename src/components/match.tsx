@@ -4,7 +4,7 @@ import { useLocation, useParams } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { TournamentTable } from "@/types/groups";
-import { GroupType } from "@/types/matches";
+import { GroupType, MatchWrapper } from "@/types/matches";
 
 interface MatchComponentProps {
   match: TableMatch;
@@ -17,6 +17,7 @@ interface MatchComponentProps {
   starting_y: number;
   starting_x: number;
   isEditingMode?: boolean;
+  handleSelectMatch?: (match: MatchWrapper) => void;
   selectedPlayer?: {
     matchId: string | number;
     playerId: string | number;
@@ -67,6 +68,7 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
   tournament_table,
   isEditingMode = false,
   selectedPlayer = null,
+  handleSelectMatch,
   onPlayerSelect = () => { },
 }) => {
   const isHomeSelected =
@@ -86,6 +88,19 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
       onPlayerSelect(match.match.id, playerId, position);
     }
   };
+
+  const handleMatchClick = () => {
+    if (handleSelectMatch) {
+      const match_wrapper: MatchWrapper = {
+        match: match.match,
+        p1: match.participant_1,
+        p2: match.participant_2,
+        class: ""
+      }
+
+      handleSelectMatch(match_wrapper)
+    }
+  }
 
   const firstRound = match.match.round == 0;
 
@@ -108,7 +123,11 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
   const { p1_sets, p2_sets } = setScore(match);
 
   return (
-    <div key={index}>
+    <div
+      key={index}
+      onClick={() => handleMatchClick()}
+      className={cn(!!match.match.winner_id && "cursor-pointer")}
+      >
       <div
         key={match.match.id}
         style={{
