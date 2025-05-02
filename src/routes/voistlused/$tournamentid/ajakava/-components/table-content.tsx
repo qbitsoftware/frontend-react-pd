@@ -90,4 +90,3 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
 };
 
 export default TableContent;
-
