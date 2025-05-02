@@ -32,8 +32,6 @@ const SoloTableInput = ({ table_data, groupId }: SoloTableInputProps) => {
         }
     }, [debouncedSearchTerm]);
 
-    console.log("WTFFF", form.getValues())
-
     return (
         <>
             {((participantsState && table_data.size > participantsState.length) || (table_data.type == GroupType.ROUND_ROBIN || table_data.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT)) && (

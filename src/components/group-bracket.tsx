@@ -61,7 +61,6 @@ export default function GroupBracket({
     );
 
     if (!team1 || !team2 || !team1.matches) return [];
-    console.log(team1.matches);
 
     return team1.matches
       .filter(
