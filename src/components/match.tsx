@@ -34,7 +34,7 @@ const setScore = (match: TableMatch | undefined) => {
   let p1_sets = 0;
   let p2_sets = 0;
 
-  if (match && match.match.extra_data.score) {
+  if (match && match.match.extra_data.score && match.match.extra_data.score.length > 0) {
     match.match.extra_data.score.forEach((set) => {
       const player1Points = set.p1_score;
       const player2Points = set.p2_score;
