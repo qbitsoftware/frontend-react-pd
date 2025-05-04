@@ -1,21 +1,18 @@
 import {
   createFileRoute,
-  Link,
   Outlet,
   useLocation,
 } from "@tanstack/react-router";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { redirect } from "@tanstack/react-router";
 import { useUser } from "@/providers/userProvider";
 import { UseGetCurrentUser } from "@/queries/users";
 import ErrorPage from "@/components/error";
 import { ErrorResponse } from "@/types/errors";
 import {
-  SidebarInset,
+  
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import AdminSidebar from "./-components/admin-sidebar";
 import AdminBottomNav from "./-components/admin-bottom-nav";
@@ -49,7 +46,6 @@ export const Route = createFileRoute("/admin")({
 function RouteComponent() {
   const router = useRouter();
   const location = useLocation();
-  const { t } = useTranslation();
   const { user } = useUser();
   
   // Get the default state from the cookie

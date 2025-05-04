@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 import { LanguageDropdown } from './languageSelector'
 import { useTranslation } from 'react-i18next'
 import { AuthButton } from './ui/auth-button'
-import { MobileMenuSidebarTrigger, SidebarTrigger } from './ui/sidebar'
+import { MobileMenuSidebarTrigger } from './ui/sidebar'
 import { useUser } from '@/providers/userProvider'
 
 export default function Navbar() {

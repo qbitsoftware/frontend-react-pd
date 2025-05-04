@@ -15,7 +15,6 @@ import { Route as AdminLayoutImport } from './routes/admin/layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as VoistlusedIndexImport } from './routes/voistlused/index'
 import { Route as UudisedIndexImport } from './routes/uudised/index'
-import { Route as TestingIndexImport } from './routes/testing/index'
 import { Route as ReitingIndexImport } from './routes/reiting/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as ReeglidIndexImport } from './routes/reeglid/index'
@@ -78,12 +77,6 @@ const VoistlusedIndexRoute = VoistlusedIndexImport.update({
 const UudisedIndexRoute = UudisedIndexImport.update({
   id: '/uudised/',
   path: '/uudised/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TestingIndexRoute = TestingIndexImport.update({
-  id: '/testing/',
-  path: '/testing/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -416,13 +409,6 @@ declare module '@tanstack/react-router' {
       path: '/reiting'
       fullPath: '/reiting'
       preLoaderRoute: typeof ReitingIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/testing/': {
-      id: '/testing/'
-      path: '/testing'
-      fullPath: '/testing'
-      preLoaderRoute: typeof TestingIndexImport
       parentRoute: typeof rootRoute
     }
     '/uudised/': {
@@ -783,7 +769,6 @@ export interface FileRoutesByFullPath {
   '/reeglid': typeof ReeglidIndexRoute
   '/register': typeof RegisterIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/testing': typeof TestingIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
@@ -828,7 +813,6 @@ export interface FileRoutesByTo {
   '/reeglid': typeof ReeglidIndexRoute
   '/register': typeof RegisterIndexRoute
   '/reiting': typeof ReitingIndexRoute
-  '/testing': typeof TestingIndexRoute
   '/uudised': typeof UudisedIndexRoute
   '/voistlused': typeof VoistlusedIndexRoute
   '/admin/blog': typeof AdminBlogIndexRoute
@@ -873,7 +857,6 @@ export interface FileRoutesById {
   '/reeglid/': typeof ReeglidIndexRoute
   '/register/': typeof RegisterIndexRoute
   '/reiting/': typeof ReitingIndexRoute
-  '/testing/': typeof TestingIndexRoute
   '/uudised/': typeof UudisedIndexRoute
   '/voistlused/': typeof VoistlusedIndexRoute
   '/admin/tournaments/$tournamentid': typeof AdminTournamentsTournamentidLayoutRouteWithChildren
@@ -921,7 +904,6 @@ export interface FileRouteTypes {
     | '/reeglid'
     | '/register'
     | '/reiting'
-    | '/testing'
     | '/uudised'
     | '/voistlused'
     | '/admin/tournaments/$tournamentid'
@@ -965,7 +947,6 @@ export interface FileRouteTypes {
     | '/reeglid'
     | '/register'
     | '/reiting'
-    | '/testing'
     | '/uudised'
     | '/voistlused'
     | '/admin/blog'
@@ -1008,7 +989,6 @@ export interface FileRouteTypes {
     | '/reeglid/'
     | '/register/'
     | '/reiting/'
-    | '/testing/'
     | '/uudised/'
     | '/voistlused/'
     | '/admin/tournaments/$tournamentid'
@@ -1055,7 +1035,6 @@ export interface RootRouteChildren {
   ReeglidIndexRoute: typeof ReeglidIndexRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
   ReitingIndexRoute: typeof ReitingIndexRoute
-  TestingIndexRoute: typeof TestingIndexRoute
   UudisedIndexRoute: typeof UudisedIndexRoute
   VoistlusedIndexRoute: typeof VoistlusedIndexRoute
 }
@@ -1073,7 +1052,6 @@ const rootRouteChildren: RootRouteChildren = {
   ReeglidIndexRoute: ReeglidIndexRoute,
   RegisterIndexRoute: RegisterIndexRoute,
   ReitingIndexRoute: ReitingIndexRoute,
-  TestingIndexRoute: TestingIndexRoute,
   UudisedIndexRoute: UudisedIndexRoute,
   VoistlusedIndexRoute: VoistlusedIndexRoute,
 }
@@ -1099,7 +1077,6 @@ export const routeTree = rootRoute
         "/reeglid/",
         "/register/",
         "/reiting/",
-        "/testing/",
         "/uudised/",
         "/voistlused/"
       ]
@@ -1158,9 +1135,6 @@ export const routeTree = rootRoute
     },
     "/reiting/": {
       "filePath": "reiting/index.tsx"
-    },
-    "/testing/": {
-      "filePath": "testing/index.tsx"
     },
     "/uudised/": {
       "filePath": "uudised/index.tsx"

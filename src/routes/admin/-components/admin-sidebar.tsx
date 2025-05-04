@@ -9,25 +9,18 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import {
-  FileText,
-  House,
-  LayoutDashboard,
-  MessagesSquare,
-  PersonStanding,
-  Trophy,
-} from "lucide-react";
+import { House } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import sidebarLogo from "@/assets/sidebar-logo.png";
 import { Button } from "@/components/ui/button";
 import { LanguageDropdown } from "@/components/languageSelector";
-import {getAdminNavigationItems} from "./admin-nav-items"
+import { getAdminNavigationItems } from "./admin-nav-items";
 
 const AdminSidebar = () => {
   const { t } = useTranslation();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
-  const menuItems = getAdminNavigationItems(t)
+  const menuItems = getAdminNavigationItems(t);
 
   return (
     <Sidebar collapsible="icon">
@@ -87,8 +80,11 @@ const AdminSidebar = () => {
         {!isCollapsed && (
           <>
             <Link to="/">
-              <Button variant="ghost" className="w-full flex flex-row items-center justify-center mt-1 ">
-                <House/>
+              <Button
+                variant="ghost"
+                className="w-full flex flex-row items-center justify-center mt-1 "
+              >
+                <House />
               </Button>
             </Link>
             <LanguageDropdown />

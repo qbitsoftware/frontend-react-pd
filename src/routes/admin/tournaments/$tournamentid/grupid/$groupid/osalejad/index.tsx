@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
 import { UseGetTournamentTable } from '@/queries/tables'
-import { ParticipantsForm } from '../../../-components/participant-forms/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
