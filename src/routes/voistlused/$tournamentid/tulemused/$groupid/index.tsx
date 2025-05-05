@@ -7,14 +7,12 @@ import { UseGetTournamentTable } from "@/queries/tables";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StatisticsCard } from "./-components/protocol";
-import { GroupStatisticsCard } from "./-components/group-stage-protocol";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
 import GroupStageBracket from "@/components/group-stage-bracket";
 import { GroupType, MatchWrapper } from "@/types/matches";
 import StandingsProtocol from "./-components/standings-protocol";
 import Loader from "@/components/loader";
+import Protocol from "./-components/protocol";
 
 export const Route = createFileRoute(
   "/voistlused/$tournamentid/tulemused/$groupid/"
@@ -29,6 +27,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { params } = Route.useLoaderData();
   const { t } = useTranslation();
+
 
   const [activeTab, setActiveTab] = useState<string>("bracket");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -196,6 +195,7 @@ function RouteComponent() {
               <Window
                 data={bracketQuery.data.data}
                 tournament_table={tableQuery.data.data}
+                handleSelectMatch={handleSelectMatch}
               />
             ) : (
               <div className="text-center text-stone-700">
@@ -211,37 +211,19 @@ function RouteComponent() {
           </TabsContent>
         </Tabs>
       </div>
-
       {/* Match details modal */}
-      <Dialog open={isModalOpen} onOpenChange={handleModalChange}>
-        <DialogContent
-          aria-describedby={`match-protocol-${selectedMatch?.match.id}`}
-          className="max-w-[1200px] h-[90vh] px-1 md:p-4 mx-auto flex flex-col"
-        >
-          <DialogTitle className="text-lg text-center font-semibold">
-            {t("competitions.timetable.match_details")}
-          </DialogTitle>
-
-          <div className="flex-1 overflow-auto">
-            {isRoundRobinFull && selectedMatch && (
-              <GroupStatisticsCard
-                tournament_id={tournamentId}
-                group_id={groupId}
-                match_id={selectedMatch.match.id}
-                index={selectedMatch.match.round}
-              />
-            )}
-            {isMeistrikad && selectedMatch && (
-              <StatisticsCard
-                tournament_id={tournamentId}
-                group_id={groupId}
-                match_id={selectedMatch.match.id}
-                index={selectedMatch.match.round}
-              />
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {selectedMatch &&  (
+          <Protocol
+            tournamentId={tournamentId}
+            groupId={groupId}
+            isRoundRobinFull={isRoundRobinFull}
+            isMeistrikad={isMeistrikad}
+            isModalOpen={isModalOpen}
+            handleModalChange={handleModalChange}
+            selectedMatch={selectedMatch}
+          />
+        )
+      }
     </div>
   );
 }
