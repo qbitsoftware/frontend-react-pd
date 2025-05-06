@@ -14,34 +14,44 @@ import {
 import { Participant } from "@/types/participants"
 import { CSS } from '@dnd-kit/utilities'
 import { Check, GripVertical, Pencil, Trash, X } from "lucide-react"
-import { useParticipantForm } from "@/providers/participantProvider"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useEffect, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { capitalize, useDebounce } from "@/lib/utils"
+import { capitalize, formatDateStringYearMonthDay, useDebounce } from "@/lib/utils"
 import { UseGetUsersDebounce } from "@/queries/users"
+import { ParticipantsResponse } from "@/queries/participants"
+import { Checkbox } from "@/components/ui/checkbox"
 
 
-export const NewSolo = () => {
-    const { participantsState } = useParticipantForm()
-    const participants = participantsState ? participantsState : []
+interface NewSoloProps {
+    participant_data: ParticipantsResponse
+}
+
+export const NewSolo = ({ participant_data }: NewSoloProps) => {
+
+    const [participants, setParticipantsState] = useState<Participant[]>([])
+    useEffect(() => {
+        if (participant_data && participant_data.data) {
+            setParticipantsState(participant_data.data)
+        }
+    }, [participant_data])
 
     const [disableOrderring, setDisableOrdering] = useState(false)
 
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
-        console.log(active.id, over?.id)
-        // if (active.id !== over?.id) {
-        //     const updatedParticipants = arrayMove(participants,
-        //         participants.findIndex((item) => item.id === active.id),
-        //         participants.findIndex((item) => item.id === over?.id)
-        //     )
-        //     participants = updatedParticipants
-        // }
+
+        if (active.id !== over?.id && over) {
+            const activeIndex = participants.findIndex(p => p.id === active.id)
+            const overIndex = participants.findIndex(p => p.id === over.id)
+
+            if (activeIndex !== -1 && overIndex !== -1) {
+                const updatedParticipants = arrayMove([...participants], activeIndex, overIndex)
+                setParticipantsState(updatedParticipants)
+            }
+        }
     }
-
-
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -51,7 +61,7 @@ export const NewSolo = () => {
         })
     )
     return (
-        <div className="mt-10">
+        <div className="mt-6">
             <div className='flex flex-col mt-6'>
                 <DndContext
                     sensors={sensors}
@@ -67,22 +77,22 @@ export const NewSolo = () => {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="">Pos.</TableHead>
-                                    <TableHead>Muuda</TableHead>
+                                    <TableHead>#</TableHead>
                                     <TableHead>Nimi</TableHead>
-                                    <TableHead>ID</TableHead>
-                                    <TableHead>Reiting</TableHead>
-                                    <TableHead>Sugu</TableHead>
+                                    <TableHead>ELTL ID</TableHead>
+                                    <TableHead>Koht reitingus</TableHead>
                                     <TableHead>Synniaasta</TableHead>
+                                    <TableHead>Valismangija</TableHead>
                                     <TableHead>Klubi</TableHead>
+                                    <TableHead>Riik</TableHead>
+                                    <TableHead>Sugu</TableHead>
                                 </TableRow>
                             </TableHeader>
 
                             <TableBody>
-
                                 {participants && participants.map((participant, key) => (
                                     <ParticipantDND key={participant.id} participant={participant} index={key} disableOrdering={disableOrderring} setDisableOrdering={setDisableOrdering} />
                                 ))}
-
                             </TableBody>
 
 
@@ -109,6 +119,7 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
     const [participantState, setParticipantState] = useState<Participant>(participant)
 
     const updateField = (field: string, value: any) => {
+        console.log("Updating field", field, value)
         setParticipantState((prevState) => {
             if (!field.includes(".")) {
                 return {
@@ -132,6 +143,7 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
                         extra_data: {
                             ...newState.players[playerIndex].extra_data,
                             [extraDataField]: value
+
                         }
                     };
                 }
@@ -144,6 +156,7 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
                 }
             }
 
+            console.log("Newstate", newState)
             return newState;
         })
     }
@@ -178,6 +191,7 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
 
     const handleSubmit = () => {
         console.log('submitting change')
+        console.log("State", participantState)
         handleStopEditing()
     }
 
@@ -272,8 +286,12 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
                                         updateField("players.0.extra_data.club", user.club_name)
                                         updateField("players.0.extra_data.eltl_id", user.eltl_id)
                                         updateField("players.0.extra_data.rate_points", user.rate_points)
-                                        updateField("rank", user.rate_points)
                                         updateField("players.0.sex", user.sex)
+                                        updateField("rank", user.rate_order)
+                                        const formattedDate = formatDateStringYearMonthDay(user.birth_date)
+                                        updateField(`players.0.created_at`, formattedDate)
+                                        updateField(`players.0.nationality`, "EE")
+                                        updateField(`players.0.extra_data.foreign_player`, false)
                                     }}
                                 >
                                     {capitalize(user.first_name)}{" "}
@@ -286,11 +304,29 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
                 </Popover>
             </TableCell>
             <TableCell className="text-center">
-                <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled placeholder="ELTL ID" value={participantState.players[0].extra_data.eltl_id} />
-
+                <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled placeholder="ELTL ID" value={participantState.players[0].extra_data.eltl_id || 0} />
             </TableCell>
             <TableCell className="text-center">
-                <Input className="w-[60px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Rank" onChange={(e) => updateField("rank", Number(e.target.value))} value={participantState.rank} />
+                <Input className="w-[60px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Rank" onChange={(e) => updateField("rank", Number(e.target.value))} value={participantState.rank || 0} />
+            </TableCell>
+            <TableCell className="text-center">
+                <Input className="w-[120px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" type="date" disabled={!editing} placeholder="YOB" onChange={(e) => updateField("players.0.created_at", e.target.value)} value={participantState.players[0].created_at || ''} />
+            </TableCell>
+            <TableCell>
+                <Checkbox
+                    checked={participantState.players[0].extra_data.foreign_player === true}
+                    onCheckedChange={(checked) => {
+                        updateField(`players.0.extra_data.foreign_player`, checked === true)
+                    }
+                    }
+                    className=""
+                />
+            </TableCell>
+            <TableCell className="text-center">
+                <Input className="w-[160px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Club name" onChange={(e) => updateField("players.0.extra_data.club", e.target.value)} value={participantState.players[0].extra_data.club || ""} />
+            </TableCell>
+            <TableCell className="text-center">
+                <Input className="w-[60px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Riik" onChange={(e) => updateField("players.0.nationality", e.target.value)} value={participantState.players[0].nationality || ""} />
             </TableCell>
             <TableCell className="text-center">
                 <Select value={participantState.players[0].sex} disabled={!editing} onValueChange={(value) => updateField("players.0.sex", value)}>
@@ -306,13 +342,7 @@ function ParticipantDND({ participant, index, disableOrdering, setDisableOrderin
                     </SelectContent>
                 </Select>
             </TableCell>
-            <TableCell className="text-center">
-                <Input className="w-[120px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" type="date" disabled={!editing} placeholder="YOB" onChange={(e) => updateField("players.0.created_at", e.target.value)} value={participantState.players[0].created_at} />
 
-            </TableCell>
-            <TableCell className="text-center">
-                <Input className="w-[160px] disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Club name" onChange={(e) => updateField("players.0.extra_data.club", e.target.value)} value={participantState.players[0].extra_data.club} />
-            </TableCell>
         </TableRow>
     )
 }
