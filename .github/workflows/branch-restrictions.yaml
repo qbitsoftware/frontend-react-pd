@@ -5,7 +5,6 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - main
-      - staging
 
 jobs:
   branch-flow-check:
@@ -24,8 +23,7 @@ jobs:
             console.log(`Pull request from ${headRef} to ${baseRef}`);
             
             const allowedMerges = {
-              'main': ['staging'],
-              'staging': ['development']
+              'main': ['development'],
             };
             
             if (allowedMerges[baseRef] && !allowedMerges[baseRef].includes(headRef)) {
