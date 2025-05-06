@@ -1,0 +1,69 @@
+name: Branch Naming Convention Check
+
+on:
+  create:
+    branches:
+      - '**'  
+
+jobs:
+  check-branch-name:
+    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/staging' && github.ref != 'refs/heads/development'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if (context.eventName !== 'create' || context.payload.ref_type !== 'branch') {
+              console.log('This event is not a branch creation event. Skipping check.');
+              return;
+            }
+            
+            const branchName = context.payload.ref;
+            console.log(`Checking branch name: ${branchName}`);
+            
+            const taskPattern = /^ELTL-\d+-.*$/;
+            const hotfixPattern = /^ELTL-hotfix-.*$/;
+            
+            const isValidName = taskPattern.test(branchName) || hotfixPattern.test(branchName);
+            
+            if (!isValidName) {
+              console.log(`Branch name "${branchName}" does not follow the naming convention.`);
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Invalid branch name: ${branchName}`,
+                body: `
+                The branch \`${branchName}\` was created but does not follow the required naming convention.
+                
+                Allowed patterns:
+                - \`ELTL-[task-number]-*\` (e.g., ELTL-123-add-login-form)
+                - \`ELTL-hotfix-*\` (e.g., ELTL-hotfix-fix-payment-bug)
+                
+                Please rename your branch to follow one of these patterns.
+                
+                You can rename your branch with these commands:
+                \`\`\`bash
+                # Rename locally
+                git branch -m ${branchName} ELTL-[appropriate-name]
+                
+                # Delete the remote branch
+                git push origin --delete ${branchName}
+                
+                # Push the renamed branch
+                git push origin ELTL-[appropriate-name]
+                \`\`\`
+                
+                If you've already pushed commits, you'll need to force push:
+                \`\`\`bash
+                git push origin -f ELTL-[appropriate-name]
+                \`\`\`
+                `
+              });
+              
+              core.setFailed(`Branch name "${branchName}" does not follow the naming convention. Please use either ELTL-[task-number]-* or ELTL-hotfix-* pattern.`);
+            } else {
+              console.log(`Branch name "${branchName}" follows the naming convention. All good!`);
+            }
