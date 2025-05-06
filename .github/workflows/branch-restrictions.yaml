@@ -1,0 +1,56 @@
+name: Branch Restrictions
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-branch-restrictions:
+    runs-on: ubuntu-latest
+    name: Check Branch Restrictions
+    steps:
+      - name: Validate branch restrictions
+        id: validate
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const baseRef = context.payload.pull_request.base.ref;
+            const headRef = context.payload.pull_request.head.ref;
+            
+            console.log(`Pull request from ${headRef} to ${baseRef}`);
+            
+            const allowedMerges = {
+              'main': ['staging'],
+              'staging': ['development']
+            };
+            
+            if (allowedMerges[baseRef] && !allowedMerges[baseRef].includes(headRef)) {
+              const allowedBranches = allowedMerges[baseRef].join(', ');
+              core.setFailed(`Branch "${headRef}" cannot be merged into "${baseRef}". Only these branches can be merged into "${baseRef}": ${allowedBranches}`);
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: `⚠️ **Branch Restriction Error**: Branch \`${headRef}\` cannot be merged into \`${baseRef}\`. Only these branches can be merged into \`${baseRef}\`: \`${allowedBranches}\`.`
+              });
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['invalid-branch-flow']
+              });
+              
+              return;
+            }
+            
+            console.log(`Branch "${headRef}" can be merged into "${baseRef}"`);
+            
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['valid-branch-flow']
+            });
