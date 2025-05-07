@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
 import { UseGetTournamentTable } from '@/queries/tables'
-import { ParticipantsForm } from '../../../-components/participant-forms/participants-form'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
-import { ParticipantProvider } from '@/providers/participantProvider'
 import { NewSolo } from './-components/new-solo'
 import { NewTeams } from './-components/new-teams'
 import { UseGetParticipantsQuery } from '@/queries/participants'
+import ResetSeeding from '../../../-components/reset-seeding'
+import SeedingHeader from './-components/seeding-header'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -57,10 +57,19 @@ function RouteComponent() {
 
                 {tournament_data && table_data && participant_data && participant_data.data &&
                     <>
+                        <SeedingHeader
+                            tournament_id={Number(tournamentid)}
+                            table_data={table_data.data}
+                            participants={participant_data.data}
+                        />
+
+                        <div className="flex justify-end pb-1">
+                            <ResetSeeding tournament_id={Number(tournamentid)} table_id={table_data.data.id} />
+                        </div>
                         {table_data.data.solo ?
-                            <NewSolo participant_data={participant_data} />
+                            <NewSolo participant_data={participant_data} tournament_id={Number(tournamentid)} tournament_table={table_data.data} />
                             :
-                            <NewTeams participant_data={participant_data} />
+                            <NewTeams participant_data={participant_data} tournament_id={Number(tournamentid)} tournament_table={table_data.data} />
                         }
                     </>
                 }

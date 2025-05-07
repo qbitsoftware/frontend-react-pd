@@ -6,9 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 
-// Allowed image formats
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-// Maximum file size in bytes (10MB)
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 interface EditImgModalProps {

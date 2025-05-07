@@ -50,8 +50,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
             {tables ? tables.map((table) => {
               let participants = table.participants.length
               if (table.type === GroupType.ROUND_ROBIN || table.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT) {
-                const uniqueGroups = new Set(table.participants.map(participant => participant.group));
-                participants = uniqueGroups.size;
+                participants = table.participants.filter((participant) => participant.type === "round_robin").length
 
               }
               return (

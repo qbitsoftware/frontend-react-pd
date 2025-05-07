@@ -664,10 +664,12 @@
             "sex": "Sugu",
             "club": "Klubi",
             "class": "Klass",
+            "yob": "Sünniaasta",
             "eltl_id": "ELTL ID",
             "rating": "Koht reitingus",
             "actions": "Tegevused",
             "nationality": "Riik",
+            "image": "Pilt",
             "foreign_player": "Välismängija"
           }
         }

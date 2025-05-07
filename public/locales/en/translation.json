@@ -665,9 +665,11 @@
             "club": "Club",
             "class": "Class",
             "eltl_id": "ELTL ID",
+            "yob": "YOB",
             "rating": "Placement in rating",
             "actions": "Actions",
             "nationality": "Country",
+            "image": "Image",
             "foreign_player": "Foreigner"
           }
         }
