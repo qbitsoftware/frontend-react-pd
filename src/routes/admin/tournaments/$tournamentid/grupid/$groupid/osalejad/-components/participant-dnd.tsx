@@ -22,9 +22,10 @@ interface Props {
     setDisableOrdering: (value: boolean) => void
     tournament_id: number
     tournament_table_id: number
+    participants_len: number
 }
 
-export default function ParticipantDND({ participant, index, disableOrdering, setDisableOrdering, tournament_id, tournament_table_id }: Props) {
+export default function ParticipantDND({ participant, index, disableOrdering, setDisableOrdering, tournament_id, tournament_table_id, participants_len }: Props) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: participant.id })
 
     const { addOrUpdateParticipant, deleteParticipant } = useParticipantUtils(tournament_id, tournament_table_id)
@@ -32,6 +33,10 @@ export default function ParticipantDND({ participant, index, disableOrdering, se
     const [editing, setIsEditing] = useState(false)
 
     const [participantState, setParticipantState] = useState<Participant>(participant)
+
+    useEffect(() => {
+        setParticipantState(participant);
+    }, [participant]);
 
     const updateField = (field: string, value: any) => {
         setParticipantState((prevState) => {
@@ -120,7 +125,13 @@ export default function ParticipantDND({ participant, index, disableOrdering, se
 
     const handleSubmit = () => {
         try {
-            addOrUpdateParticipant(participantState, participantState.id)
+            const updatedParticipant = { ...participantState };
+
+            if (Number(updatedParticipant.order) === 0) {
+                updatedParticipant.order = participant.order;
+            }
+
+            addOrUpdateParticipant(updatedParticipant, updatedParticipant.id);
             toast.message(t("toasts.participants.updated"))
         } catch (error) {
             void error;
@@ -139,8 +150,21 @@ export default function ParticipantDND({ participant, index, disableOrdering, se
             <TableCell className='text-center'>
                 { }
                 {disableOrdering ? <div className="flex items-center justify-center hover:bg-indigo-50 gap-1 p-2 rounded-sm">
-                    {/* <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Pos" value={participantState.order} onChange={(e) => updateField("order", Number(e.target.value))} /> */}
-                    {index + 1}
+                    <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Pos" value={participantState.order}
+                        onChange={(e) => {
+                            const newValue = Number(e.target.value);
+                            if (newValue <= 0) {
+                                updateField("order", "");
+                            }
+                            if (newValue > participants_len) {
+                                updateField("order", participants_len);
+                            }
+                            if (!isNaN(newValue) && newValue > 0 && newValue <= participants_len) {
+                                updateField("order", newValue);
+                            }
+                        }}
+                    />
+                    {/* {index + 1} */}
                     <GripVertical className="h-4 w-4" />
                 </div>
                     :
@@ -149,7 +173,6 @@ export default function ParticipantDND({ participant, index, disableOrdering, se
                         {...listeners}
                     >
                         {/* <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing} placeholder="Pos" value={participantState.order} onChange={(e) => updateField("order", Number(e.target.value))} /> */}
-
                         {index + 1}
                         <GripVertical className="h-4 w-4" />
                     </div>

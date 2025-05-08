@@ -1,6 +1,5 @@
-import { Window } from "@/components/window";
 import { BracketReponse } from "@/queries/tournaments";
-import React, { useState } from "react";
+import React from "react";
 import GroupStageBracket from "@/components/group-stage-bracket";
 import { Button } from "@/components/ui/button";
 import { PrintPDF } from "@/components/print-pdf";
@@ -9,7 +8,7 @@ import { TournamentTable } from "@/types/groups";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { EliminationBrackets } from "@/components/window2";
+import { Window } from "@/components/window";
 
 interface BracketComponentProps {
   bracket: BracketReponse;
@@ -39,30 +38,30 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
         : "Tournament Bracket";
       await PrintPDF("bracket-container", title, true);
     } catch (error) {
-      console.log(error)
+      void error
       toast.error("Failed to print brackets")
     }
   };
 
-  const [isEditingMode, setIsEditingMode] = useState(false);
+  // const [isEditingMode, setIsEditingMode] = useState(false);
 
-  const toggleEditingMode = () => {
-    setIsEditingMode(!isEditingMode);
-    setSelectedPlayer(null);
-  };
+  // const toggleEditingMode = () => {
+  //   setIsEditingMode(!isEditingMode);
+  //   setSelectedPlayer(null);
+  // };
 
-  const [selectedPlayer, setSelectedPlayer] = useState<{
-    matchId: string;
-    playerId: string;
-    position: "home" | "away";
-  } | null>(null);
+  // const [selectedPlayer, setSelectedPlayer] = useState<{
+  //   matchId: string;
+  //   playerId: string;
+  //   position: "home" | "away";
+  // } | null>(null);
 
   return (
     <div className="w-full h-full">
       <Card className="border-stone-100">
         <div id="bracket-container" className="flex flex-col">
           <CardHeader className="flex-col-reverse md:flex-row gap-4 justify-between items-start md:items-center space-y-0">
-            <Button
+            {/* <Button
               onClick={toggleEditingMode}
               className={`w-full md:w-auto bg-midnightTable transition-colors ${isEditingMode
                 ? " bg-stone-700 border border-dashed"
@@ -77,7 +76,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
                   ? t('admin.tournaments.groups.tables.editing.select_p2')
                   : t('admin.tournaments.groups.tables.editing.select_p1')}
               </div>
-            )}
+            )} */}
             <Button
               variant="outline"
               className="self-end"
@@ -89,10 +88,18 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
           </CardHeader>
           <CardContent className="p-0">
             {hasEliminations ? (
-              // <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer} />
-              <EliminationBrackets
+              <Window
                 data={bracket.data}
-                tournament_table={tournament_table} />
+                tournament_table={tournament_table}
+              // toggleEditingMode={toggleEditingMode}
+              // isEditingMode={isEditingMode}
+              // setIsEditingMode={setIsEditingMode}
+              // selectedPlayer={selectedPlayer}
+              // setSelectedPlayer={setSelectedPlayer} 
+              />
+              // <EliminationBrackets
+              //   data={bracket.data}
+              //   tournament_table={tournament_table} />
             ) : hasRoundRobins ? (
               <GroupStageBracket
                 brackets={bracket.data.round_robins[0]}

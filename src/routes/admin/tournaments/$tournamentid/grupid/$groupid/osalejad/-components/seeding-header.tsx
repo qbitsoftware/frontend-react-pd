@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { MatchesResponse, UseGetMatchesQuery } from "@/queries/match";
-import { UsePostOrder } from "@/queries/participants";
+import { UsePostOrder, UsePostSeeding } from "@/queries/participants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import seeds3 from "@/assets/seeds3.png";
@@ -33,7 +33,8 @@ const SeedingHeader = ({
     table_data.id
   );
 
-  const updateOrdering = UsePostOrder(tournament_id, table_data.id);
+  const updateSeeding = UsePostSeeding(tournament_id, table_data.id);
+  const updateOrder = UsePostOrder(tournament_id, table_data.id);
 
   const [disabled, setDisabled] = useState(false);
   const isDisabled = (data: MatchesResponse | undefined): boolean => {
@@ -60,18 +61,28 @@ const SeedingHeader = ({
     string | undefined
   >();
 
-  const handleOrder = async (order: string | undefined) => {
+  const handleSeeding = async (order: string | undefined) => {
     if (!order) {
       return;
     }
     try {
-      await updateOrdering.mutateAsync({ order });
+      await updateSeeding.mutateAsync({ order });
       toast.message(t('toasts.participants.seeding_success'))
     } catch (error) {
       void error;
       toast.error(t("toasts.participants.seeding_error"))
     }
   };
+
+  const handleOrder = async () => {
+    try {
+      await updateOrder.mutateAsync();
+      toast.message(t('toasts.participants.order_success'))
+    } catch (error) {
+      void error;
+      toast.error(t("toasts.participants.order_error"))
+    }
+  }
 
   return (
     <CardHeader className="flex flex-col md:flex-row items-start gap-4 md:items-center justify-between  space-y-0">
@@ -84,8 +95,12 @@ const SeedingHeader = ({
 
 
       <div className="flex flex-col gap-4 space-y-0">
-
         <div className="flex gap-4">
+          <Button onClick={handleOrder} disabled={disabled}>
+            {t("admin.tournaments.groups.order.order_by_rating")}
+          </Button>
+
+
           <Select
             onValueChange={setSelectedOrderValue}
             defaultValue={selectedOrderValue}
@@ -97,9 +112,9 @@ const SeedingHeader = ({
               />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="random">
+              {/* <SelectItem value="random">
                 {t("admin.tournaments.groups.order.random")}
-              </SelectItem>
+              </SelectItem> */}
               <SelectItem value="rating">
                 {t("admin.tournaments.groups.order.by_rating")}
               </SelectItem>
@@ -110,7 +125,7 @@ const SeedingHeader = ({
           </Select>
           <Button
             disabled={!selectedOrderValue}
-            onClick={() => handleOrder(selectedOrderValue)}
+            onClick={() => handleSeeding(selectedOrderValue)}
             className="flex p-0 justify-between items-center px-4 bg-midnightTable"
           >
             <div className="flex flex-row pr-6 gap-2">

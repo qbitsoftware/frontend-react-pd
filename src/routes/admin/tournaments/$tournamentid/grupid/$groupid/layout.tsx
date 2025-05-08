@@ -1,20 +1,30 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router"
-import { UseGetTournamentTable } from "@/queries/tables"
-import { cn } from "@/lib/utils"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useTranslation } from "react-i18next"
-import ErrorPage from "@/components/error"
-import { ErrorResponse } from "@/types/errors"
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useLocation,
+} from '@tanstack/react-router'
+import { UseGetTournamentTable } from '@/queries/tables'
+import { cn } from '@/lib/utils'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useTranslation } from 'react-i18next'
+import ErrorPage from '@/components/error'
+import { ErrorResponse } from '@/types/errors'
 
-export const Route = createFileRoute("/admin/tournaments/$tournamentid/grupid/$groupid")({
+export const Route = createFileRoute(
+  '/admin/tournaments/$tournamentid/grupid/$groupid',
+)({
   component: RouteComponent,
-    errorComponent: () => <ErrorPage />,
+  errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient }, params }) => {
     let table_data
 
     try {
       table_data = await queryClient.ensureQueryData(
-        UseGetTournamentTable(Number(params.tournamentid), Number(params.groupid)),
+        UseGetTournamentTable(
+          Number(params.tournamentid),
+          Number(params.groupid),
+        ),
       )
     } catch (error) {
       const err = error as ErrorResponse
@@ -36,17 +46,21 @@ function RouteComponent() {
     return <></>
   }
 
-  const pathSegments = location.pathname.split("/")
-  const currentTab = pathSegments[pathSegments.length - 1] === groupid ? "/" : pathSegments.pop() || "/"
+  const pathSegments = location.pathname.split('/')
+  const currentTab =
+    pathSegments[pathSegments.length - 1] === groupid
+      ? '/'
+      : pathSegments.pop() || '/'
 
   const tabs = [
-    { value: "/", label: t("admin.tournaments.groups.layout.info") },
-    { value: "osalejad", label: t("admin.tournaments.groups.layout.participants") },
-    { value: "mangud", label: t("admin.tournaments.groups.layout.matches") },
-    { value: "tabelid", label: t("admin.tournaments.groups.layout.tables") },
+    { value: '/', label: t('admin.tournaments.groups.layout.info') },
+    {
+      value: 'osalejad',
+      label: t('admin.tournaments.groups.layout.participants'),
+    },
+    { value: 'mangud', label: t('admin.tournaments.groups.layout.matches') },
+    { value: 'tabelid', label: t('admin.tournaments.groups.layout.tables') },
   ]
-
-
 
   return (
     <div className="">
@@ -59,15 +73,15 @@ function RouteComponent() {
             {tabs.map((tab) => (
               <Link
                 key={tab.value}
-                to={`/admin/tournaments/${tournamentid}/grupid/${groupid}${tab.value === "/" ? "" : `/${tab.value}`}`}
-
+                to={`/admin/tournaments/${tournamentid}/grupid/${groupid}${tab.value === '/' ? '' : `/${tab.value}`}`}
               >
                 <TabsTrigger
                   value={tab.value}
                   className={cn(
-                    "w-full sm:w-[7rem] py-[6px]",
-                    currentTab === tab.value && "bg-secondary text-white hover:bg-secondary/90",
-                    currentTab !== tab.value && "hover:bg-secondary/10",
+                    'w-full sm:w-[7rem] py-[6px]',
+                    currentTab === tab.value &&
+                      'bg-secondary text-white hover:bg-secondary/90',
+                    currentTab !== tab.value && 'hover:bg-secondary/10',
                   )}
                 >
                   {tab.label}

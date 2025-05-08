@@ -221,13 +221,13 @@ export default function GroupRow({ participant, index, tournament_id, tournament
                                 </div>
                             }
                         </div>
-
                         <div onClick={(e) => { e.stopPropagation() }}>
                             <EditImgModal id={participantState.id} playerName={participantState.name} img={participant.extra_data.image_url} type="participant" />
                         </div>
                     </div>
 
                 </AccordionTrigger>
+
                 <AccordionContent className="px-4 pt-2 pb-4">
                     <div className="px-4">
                         <Table>

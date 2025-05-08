@@ -150,9 +150,9 @@ const EditImgModal = ({ id, playerName, img, onSuccess, type }: EditImgModalProp
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <div className='py-2 px-4 border border-solid rounded-md cursor-pointer'>
           {t("admin.tournaments.groups.img_modal.title")}
-        </Button>
+        </div>
       </DialogTrigger>
 
       <DialogContent>

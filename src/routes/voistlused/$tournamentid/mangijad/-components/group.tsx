@@ -20,7 +20,7 @@ const Group: React.FC<GroupProps> = ({ group }) => {
                 </div>
             </div>
             <div className="mt-4 overflow-y-scroll max-h-[400px]">
-                {group.solo ? <SoloTable participants={group.participants} /> : <TeamTable participants={group.participants} table_data={group} />}
+                {group.solo ? <SoloTable participants={group.participants} table_data={group} /> : <TeamTable participants={group.participants} table_data={group} />}
             </div>
         </div>
     )

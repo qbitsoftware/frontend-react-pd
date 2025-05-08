@@ -117,7 +117,7 @@ export default function SoloParticipants({ participants, group_participant, tour
                             <ParticipantHeader />
                             <TableBody>
                                 {participants && participants.map((participant, key) => (
-                                    <ParticipantDND key={participant.id} participant={participant} index={key} disableOrdering={disableOrderring} setDisableOrdering={setDisableOrdering} tournament_id={tournament_id} tournament_table_id={tournament_table.id} />
+                                    <ParticipantDND key={participant.id} participant={participant} index={key} disableOrdering={disableOrderring} setDisableOrdering={setDisableOrdering} tournament_id={tournament_id} tournament_table_id={tournament_table.id} participants_len={participants.length} />
                                 ))}
 
                                 {(tournament_table.size > participants.length || group_participant) && <TableRow>

@@ -13,12 +13,15 @@ import placeholderImg from "@/assets/placheolderImg.svg";
 import { useTranslation } from "react-i18next";
 import { ImageModal } from "./image-modal";
 import { Participant } from "@/types/participants";
+import { TournamentTable } from "@/types/groups";
+import { GroupType } from "@/types/matches";
 
 interface SoloTableProps {
   participants: Participant[] | null;
+  table_data: TournamentTable
 }
 
-const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
+const SoloTable: React.FC<SoloTableProps> = ({ participants, table_data }) => {
   const { t } = useTranslation();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -31,9 +34,11 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
     setSelectedImage(null);
   };
 
+  const filteredParticipants = participants && participants.filter((participant) => ((table_data.type === GroupType.ROUND_ROBIN || table_data.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT) ? participant.group_id != "" : participant))
+
   return (
     <div className="h-full bg-white rounded-md">
-      {participants && participants.length > 0 ? (
+      {filteredParticipants && filteredParticipants.length > 0 ? (
         <div className="rounded-md border h-full overflow-y-auto">
           <Table className="bg-white h-full ">
             <TableHeader>
@@ -60,7 +65,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {participants.map((participant) => (
+              {filteredParticipants.map((participant) => (
                 <TableRow
                   key={participant.id}
                   className="bg-white bg-[#F9F9FB]/40 "
@@ -70,8 +75,7 @@ const SoloTable: React.FC<SoloTableProps> = ({ participants }) => {
                       className="cursor-pointer"
                       onClick={() =>
                         participant.extra_data.image_url
-                          && openModal(participant.extra_data.image_url)
-                          
+                        && openModal(participant.extra_data.image_url)
                       }
                     >
                       <AvatarImage

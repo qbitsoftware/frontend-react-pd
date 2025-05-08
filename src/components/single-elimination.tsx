@@ -22,7 +22,6 @@ export const SingleElimination = ({
             {Object.entries(matches).map(([round, roundMatches], roundIndex) => {
                 const gap = calculateRoundGap(Number(round), matches, BracketType.PLUSSRRING)
                 const isLastRound = roundIndex === Object.entries(matches).length - 1;
-                console.log("TEREEE",data.name, isLastRound)
                 return (
                     <div className="flex h-full">
                         {!isLastRound || isLastRound && roundMatches.length == 1 ? (
@@ -66,7 +65,7 @@ export const SingleElimination = ({
                                 className="h-full flex flex-col items-start"
                                 style={{ gap: `${BRACKET_CONSTANTS.CONNECTOR_SPACING}px` }}
                             >
-                                {roundMatches.map((_, matchIndex) => {
+                                {roundMatches.map((match, matchIndex) => {
                                     const isEven = matchIndex % 2 === 0;
                                     const connectorHeight = calculateConnectorHeight(gap);
 
@@ -78,6 +77,7 @@ export const SingleElimination = ({
                                                 marginTop: matchIndex > 0 && matchIndex % 2 === 0 ? `${gap}px` : undefined,
                                             }}
                                         >
+                                            {/* <div className="absolute top-0">{match.match.readable_id}</div> */}
                                             <div className={cn("py-[27px]", isEven ? 'self-start' : 'self-end')}>
                                                 <div className={cn("w-4 h-[1px] bg-gray-500 self-start", isEven ? 'self-start' : 'self-end')} />
                                             </div>
@@ -102,3 +102,15 @@ export const SingleElimination = ({
         </div>
     );
 };
+
+
+
+{/* <div className="absolute top-[15px] left-[220px] w-[60px] text-left text-[8px] pdf-game-court">
+{match.match.readable_id}
+</div>
+<div className="absolute top-[35px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
+{match.match.previous_match_readable_id_1 >= 0 ? "" : match.match.previous_match_readable_id_1}
+</div>
+<div className="absolute top-[5px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
+{match.match.previous_match_readable_id_2 >= 0 ? "" : match.match.previous_match_readable_id_2}
+</div> */}

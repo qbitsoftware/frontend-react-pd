@@ -526,7 +526,7 @@
         "solo": "Üksik",
         "team": "Meeskondadega",
         "reset_seeding": {
-          "title": "Lähtesta asetused",
+          "title": "Lähtesta matšid",
           "subtitle": "Kas olete kindel? Pärast kinnitamist ei saa seda tagasi võtta."
         },
         "regroup": "Regrupeeri",
@@ -535,10 +535,11 @@
         "change_time": "Aegade muutmine",
         "order": {
           "title": "Genereeri mängud",
-          "placeholder": "Järjesta",
+          "order_by_rating": "Järjesta reitingu järgi",
+          "placeholder": "Asetus",
           "random": "Suvaliselt",
-          "by_rating": "Reitingu järgi",
-          "by_order": "Järjekorra järgi"
+          "by_rating": "Lauatennis",
+          "by_order": "Järjekord"
         },
         "tables": {
           "no_data": "Tabeleid pole hetkel saadaval",
@@ -965,7 +966,9 @@
       "time_change_success": "Aegade muutmine õnnestus",
       "time_change_error": "Aegade muutmine nurjus. Palun proovige uuesti",
       "seeding_success": "Osalejate asetamine õnnestus",
-      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti"
+      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti",
+      "order_success": "Osalejate järjekorda panemine õnnestus",
+      "order_error": "Osalejate järjekorda panemine nurjus. Palun proovige uuesti"
     },
     "protocol_modals": {
       "updated_match_score": "Mängu skoore on muudetud",

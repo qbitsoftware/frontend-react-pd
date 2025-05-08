@@ -526,7 +526,7 @@
         "solo": "Solo",
         "team": "Teams",
         "reset_seeding": {
-          "title": "Reset seeding",
+          "title": "Reset matches",
           "subtitle": "Are you sure you want to reset the seeding? This action cannot be undone."
         },
         "regroup": "Regroup",
@@ -534,11 +534,12 @@
         "change_time": "Change time",
         "no_results": "No results",
         "order": {
+          "order_by_rating": "Order by rating",
           "title": "Generate matches",
-          "placeholder": "Sort by",
+          "placeholder": "Seeding",
           "random": "Random",
-          "by_rating": "By rating",
-          "by_order": "By order"
+          "by_rating": "Tabletennis",
+          "by_order": "In order"
         },
         "tables": {
           "no_data": "No tables available",
@@ -965,7 +966,9 @@
       "time_change_success": "Round time updated successfully",
       "time_change_error": "Round time update failed. Please try again",
       "seeding_success": "Seeding successful",
-      "seeding_error": "Seeding failed. Please try again"
+      "seeding_error": "Seeding failed. Please try again",
+      "order_success": "Order updated successfully",
+      "order_error": "Order update failed. Please try again"
     },
     "protocol_modals": {
       "updated_match_score": "Match score updated successfully",

@@ -179,11 +179,11 @@ export type Order = {
     order: string
 }
 
-export function UsePostOrder(tournament_id: number, table_id: number) {
+export function UsePostSeeding(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (order: Order) => {
-            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/order`, order, {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/seed`, order, {
                 withCredentials: true,
             })
             return data;
@@ -195,6 +195,23 @@ export function UsePostOrder(tournament_id: number, table_id: number) {
         },
     })
 }
+
+export function UsePostOrder(tournament_id: number, table_id: number) {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.post(`/api/v1/tournaments/${tournament_id}/tables/${table_id}/participants/order?order=rating`, {}, {
+                withCredentials: true,
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.resetQueries({ queryKey: ["participants", table_id] })
+        },
+    })
+}
+
+
 
 export function UsePostOrderReset(tournament_id: number, table_id: number) {
     const queryClient = useQueryClient()

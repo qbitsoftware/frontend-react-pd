@@ -1,4 +1,9 @@
-import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useLocation,
+} from '@tanstack/react-router'
 import {
   LayoutDashboard,
   Trophy,
@@ -14,8 +19,6 @@ import { useUser } from '@/providers/userProvider'
 import { UseGetCurrentUser } from '@/queries/users'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
-
-
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
@@ -36,17 +39,16 @@ export const Route = createFileRoute('/admin')({
 })
 
 function RouteComponent() {
-
   const router = useRouter()
   const location = useLocation()
   const { t } = useTranslation()
   const { user } = useUser()
   if (!user || user.role != 'admin') {
-    router.navigate({ to: "/" })
+    router.navigate({ to: '/' })
   }
 
   useEffect(() => {
-    if (location.pathname === '/admin' || location.pathname === "/admin/") {
+    if (location.pathname === '/admin' || location.pathname === '/admin/') {
       router.navigate({
         to: '/admin/dashboard',
       })
@@ -56,7 +58,6 @@ function RouteComponent() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-
 
   const menuItems = [
     {
