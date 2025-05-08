@@ -1,6 +1,22 @@
 import { Match, MatchWrapper } from "./matches"
 import { Participant } from "./participants"
 
+export const BRACKET_CONSTANTS = {
+  INITIAL_GAP: 30,
+  BOX_HEIGHT: 60,
+  BOX_WIDTH: 220,
+  
+  CONNECTOR_LINE_HEIGHT: 1,
+  CONNECTOR_LINE_WIDTH: 1,
+  CONNECTOR_SPACING: 4,
+  CONNECTOR_VERTICAL_OFFSET: 34 
+};
+
+export enum BracketType  {
+  MIINUSRING = "Miinusring",
+  PLUSSRRING = "Plussring"
+}
+
 export type Round = {
   name: string,
 }

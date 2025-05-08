@@ -9,6 +9,7 @@ import { TournamentTable } from "@/types/groups";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { EliminationBrackets } from "@/components/window2";
 
 interface BracketComponentProps {
   bracket: BracketReponse;
@@ -88,7 +89,10 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
           </CardHeader>
           <CardContent className="p-0">
             {hasEliminations ? (
-              <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer} />
+              // <Window data={bracket.data} tournament_table={tournament_table} toggleEditingMode={toggleEditingMode} isEditingMode={isEditingMode} setIsEditingMode={setIsEditingMode} selectedPlayer={selectedPlayer} setSelectedPlayer={setSelectedPlayer} />
+              <EliminationBrackets
+                data={bracket.data}
+                tournament_table={tournament_table} />
             ) : hasRoundRobins ? (
               <GroupStageBracket
                 brackets={bracket.data.round_robins[0]}
