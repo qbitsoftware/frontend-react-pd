@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import ErrorPage from "@/components/error";
 import GroupBracket from "@/components/group-bracket";
-import { Window } from "@/components/window";
 import { UseGetBracket } from "@/queries/brackets";
 import { UseGetTournamentTable } from "@/queries/tables";
 import { createFileRoute } from "@tanstack/react-router";
@@ -13,6 +12,7 @@ import { GroupType, MatchWrapper } from "@/types/matches";
 import StandingsProtocol from "./-components/standings-protocol";
 import Loader from "@/components/loader";
 import Protocol from "./-components/protocol";
+import { EliminationBrackets } from "@/components/window2";
 
 export const Route = createFileRoute(
   "/voistlused/$tournamentid/tulemused/$groupid/"
@@ -192,7 +192,7 @@ function RouteComponent() {
               Array.isArray(bracketQuery.data.data.eliminations) &&
               bracketQuery.data.data.eliminations.length > 0 &&
               bracketQuery.data.data.eliminations[0]?.elimination ? (
-              <Window
+              <EliminationBrackets
                 data={bracketQuery.data.data}
                 tournament_table={tableQuery.data.data}
                 handleSelectMatch={handleSelectMatch}
