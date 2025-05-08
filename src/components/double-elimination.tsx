@@ -65,7 +65,7 @@ export const DoubleElimination = ({
                                 className="h-full flex flex-col items-start"
                                 style={{ gap: `${BRACKET_CONSTANTS.CONNECTOR_SPACING}px` }}
                             >
-                                {roundMatches.map((_, matchIndex) => {
+                                {roundMatches.map((match, matchIndex) => {
                                     const isEven = matchIndex % 2 === 0;
                                     const connectorHeight = calculateConnectorHeight(gap);
                                     if (roundIndex % 2 != 0) {
@@ -77,6 +77,8 @@ export const DoubleElimination = ({
                                                     marginTop: matchIndex > 0 && matchIndex % 2 === 0 ? `${gap}px` : undefined,
                                                 }}
                                             >
+
+                                                <div className={cn("absolute text-[8px]", isEven ? 'top-4' : "bottom-7")}>{match.match.readable_id}</div>
                                                 <div className={cn("py-[27px]", isEven ? 'self-start' : 'self-end')}>
                                                     <div className={cn("w-4 h-[1px] bg-gray-500 self-start", isEven ? 'self-start' : 'self-end')} />
                                                 </div>
@@ -101,10 +103,12 @@ export const DoubleElimination = ({
                                                     marginTop: matchIndex > 0 && matchIndex % 2 === 0 ? `${gap}px` : undefined,
                                                 }}
                                             >
+
+                                                <div className={cn("absolute text-[8px]", isEven ? 'top-4' : "bottom-7")}>{match.match.readable_id}</div>
                                                 <div className={cn("py-[27px]", isEven ? 'self-start' : 'self-end')}>
                                                     <div className={cn("w-4 h-[1px] bg-gray-500 self-start", isEven ? 'self-start' : 'self-end')} />
                                                 </div>
-                                               
+
                                             </div>
                                         )
                                     }

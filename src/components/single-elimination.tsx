@@ -77,7 +77,7 @@ export const SingleElimination = ({
                                                 marginTop: matchIndex > 0 && matchIndex % 2 === 0 ? `${gap}px` : undefined,
                                             }}
                                         >
-                                            {/* <div className="absolute top-0">{match.match.readable_id}</div> */}
+                                            <div className={cn("absolute text-[8px]", isEven ? 'top-4' : "bottom-7")}>{match.match.readable_id}</div>
                                             <div className={cn("py-[27px]", isEven ? 'self-start' : 'self-end')}>
                                                 <div className={cn("w-4 h-[1px] bg-gray-500 self-start", isEven ? 'self-start' : 'self-end')} />
                                             </div>
@@ -102,15 +102,3 @@ export const SingleElimination = ({
         </div>
     );
 };
-
-
-
-{/* <div className="absolute top-[15px] left-[220px] w-[60px] text-left text-[8px] pdf-game-court">
-{match.match.readable_id}
-</div>
-<div className="absolute top-[35px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
-{match.match.previous_match_readable_id_1 >= 0 ? "" : match.match.previous_match_readable_id_1}
-</div>
-<div className="absolute top-[5px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
-{match.match.previous_match_readable_id_2 >= 0 ? "" : match.match.previous_match_readable_id_2}
-</div> */}
