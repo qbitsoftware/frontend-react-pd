@@ -1,13 +1,9 @@
 import { BracketReponse } from "@/queries/tournaments";
 import React from "react";
 import GroupStageBracket from "@/components/group-stage-bracket";
-import { Button } from "@/components/ui/button";
-import { PrintPDF } from "@/components/print-pdf";
-import { Printer } from "lucide-react";
 import { TournamentTable } from "@/types/groups";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import { EliminationBrackets } from "@/components/window2";
 
 interface BracketComponentProps {

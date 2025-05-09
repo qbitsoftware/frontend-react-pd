@@ -97,10 +97,10 @@ export const EliminationBrackets = ({
 
             <div ref={scrollContainerRef} className="bg-[#F8F9FA] relative h-[70vh] flex flex-col overflow-auto">
                 <div className="flex flex-col gap-10 px-10">
-                    {data.eliminations.map((eliminations, index) => {
+                    {data.eliminations.map((eliminations, index2) => {
                         return (
                             eliminations.elimination.map((table, index) => (
-                                <div key={index}>
+                                <div key={index2}>
                                     <div className="font-bold text-xl py-4">{table.name}</div>
                                     {table.name !== BracketType.MIINUSRING ? (
                                         <div className="" id={eliminations.elimination[0].name} key={index}>
