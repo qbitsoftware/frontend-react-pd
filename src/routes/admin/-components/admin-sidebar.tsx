@@ -30,19 +30,22 @@ const AdminSidebar = () => {
             <SidebarTrigger />
           </div>
         ) : (
-          <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-transparent"
-          >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-white text-sidebar-primary-foreground">
-              <img src={sidebarLogo} alt="ELTL" />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">ELTL</span>
-              <span className="truncate text-xs">Admin</span>
-            </div>
+          <div className="flex items-center">
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-transparent"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-white text-sidebar-primary-foreground">
+                <img src={sidebarLogo} alt="ELTL" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">ELTL</span>
+                <span className="truncate text-xs">Admin</span>
+              </div>
+            </SidebarMenuButton>
+
             <SidebarTrigger className="ml-2" />
-          </SidebarMenuButton>
+          </div>
         )}
       </SidebarHeader>
       <SidebarContent>
@@ -54,15 +57,13 @@ const AdminSidebar = () => {
               key={item.id}
               to={item.to}
               className={`w-full flex items-center rounded-md text-sm transition-colors duration-150 
-                ${
-                  isCollapsed
-                    ? "justify-center p-2"
-                    : "justify-start px-3 py-2.5"
+                ${isCollapsed
+                  ? "justify-center p-2"
+                  : "justify-start px-3 py-2.5"
                 }
-                ${
-                  location.pathname.includes(item.to)
-                    ? "bg-sidebar-accent "
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                ${location.pathname.includes(item.to)
+                  ? "bg-sidebar-accent "
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 }
               `}
             >

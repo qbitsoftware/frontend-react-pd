@@ -97,34 +97,34 @@ export const EliminationBrackets = ({
 
             <div ref={scrollContainerRef} className="bg-[#F8F9FA] relative h-[70vh] flex flex-col overflow-auto">
                 <div className="flex flex-col gap-10 px-10">
-                    {data.eliminations.map((eliminations, index2) => {
-                        return (
-                            eliminations.elimination.map((table, index) => (
-                                <div key={index2}>
+                    {data.eliminations.map((eliminations, eliminationIndex) => {
+                        return eliminations.elimination.map((table, tableIndex) => {
+                            const uniqueKey = `elimination-${eliminationIndex}-table-${tableIndex}`;
+                            const uniqueId = `${eliminations.elimination[0].name}`;
+
+                            return (
+                                <div key={uniqueKey}>
                                     <div className="font-bold text-xl py-4">{table.name}</div>
                                     {table.name !== BracketType.MIINUSRING ? (
-                                        <div className="" id={eliminations.elimination[0].name} key={index}>
+                                        <div className="" id={uniqueId}>
                                             <SingleElimination
                                                 tournament_table={tournament_table}
-                                                key={index}
                                                 data={table}
                                                 handleSelectMatch={handleSelectMatch}
                                             />
                                         </div>
                                     ) : (
-                                        <div className="" key={index} id={eliminations.elimination[0].name}>
+                                        <div className="" id={uniqueId}>
                                             <DoubleElimination
                                                 tournament_table={tournament_table}
-                                                key={index}
                                                 data={table}
                                                 handleSelectMatch={handleSelectMatch}
                                             />
                                         </div>
-                                    )
-                                    }
+                                    )}
                                 </div>
-                            ))
-                        )
+                            );
+                        });
                     })}
                 </div>
             </div>

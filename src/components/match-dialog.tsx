@@ -67,10 +67,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       reset({
         tableReferee: match.match.extra_data?.table_referee || "",
         mainReferee: match.match.extra_data?.head_referee || "",
-        scores: (match.match.extra_data?.score || []).map((s: Score) => ({
-          player1: s.p1_score,
-          player2: s.p2_score,
-        })) || [{ player1: 0, player2: 0 }],
+        scores: Array.isArray(match.match.extra_data?.score) && match.match.extra_data.score.length > 0
+          ? match.match.extra_data.score.map((s: Score) => ({
+            player1: typeof s.p1_score === 'number' ? s.p1_score : 0,
+            player2: typeof s.p2_score === 'number' ? s.p2_score : 0,
+          }))
+          : [{ player1: 0, player2: 0 }],
       });
     }
   }, [match, reset, open]);

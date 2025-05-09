@@ -1,13 +1,12 @@
 import {
   createFileRoute,
-  Link,
   Outlet,
   redirect,
   useLocation,
   useRouter,
 } from '@tanstack/react-router'
 import {
-  
+
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import AdminSidebar from "./-components/admin-sidebar";
@@ -48,10 +47,10 @@ function RouteComponent() {
   const router = useRouter();
   const location = useLocation();
   const { user } = useUser();
-  
+
   // Get the default state from the cookie
   const defaultOpen = getCookie("sidebar:state") !== "false";
-  
+
   if (!user || user.role != "admin") {
     router.navigate({ to: "/" });
   }
@@ -69,7 +68,7 @@ function RouteComponent() {
   }, []);
 
   return (
-    <div className="flex flex-col max-w-[1440px] mx-auto bg-[#F8F9F9]">
+    <div className="flex flex-col mx-auto bg-[#F8F9F9]">
       <div className="overflow-hidden">
         <SidebarProvider defaultOpen={defaultOpen}>
           <AdminSidebar />
@@ -78,7 +77,7 @@ function RouteComponent() {
             <Outlet />
           </div>
         </SidebarProvider>
-        <AdminBottomNav/>
+        <AdminBottomNav />
       </div>
     </div>
   );
