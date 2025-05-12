@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
-import { UseGetTournamentTable } from '@/queries/tables'
+import { UseGetTournamentTableQuery } from '@/queries/tables'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
@@ -17,7 +17,6 @@ export const Route = createFileRoute(
     errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
         let tournament_data
-        let table_data
         try {
             tournament_data = await queryClient.ensureQueryData(
                 UseGetTournament(Number(params.tournamentid)),
@@ -29,27 +28,15 @@ export const Route = createFileRoute(
             }
         }
 
-        try {
-            table_data = await queryClient.ensureQueryData(
-                UseGetTournamentTable(
-                    Number(params.tournamentid),
-                    Number(params.groupid),
-                ),
-            )
-        } catch (error) {
-            const err = error as ErrorResponse
-            if (err.response.status !== 404) {
-                throw error
-            }
-        }
-        return { tournament_data, table_data }
+        return { tournament_data }
     },
 })
 
 function RouteComponent() {
-    const { tournament_data, table_data } = Route.useLoaderData()
+    const { tournament_data } = Route.useLoaderData()
     const { tournamentid, groupid } = Route.useParams()
     const { data: participant_data } = UseGetParticipantsQuery(Number(tournamentid), Number(groupid), false)
+    const { data: table_data } = UseGetTournamentTableQuery(Number(tournamentid), Number(groupid))
 
     if (tournament_data && tournament_data.data && table_data && table_data.data) {
         return (

@@ -226,6 +226,7 @@ export function UsePostOrderReset(tournament_id: number, table_id: number) {
             queryClient.resetQueries({ queryKey: ["participants", table_id] })
             queryClient.resetQueries({ queryKey: ["bracket", table_id] })
             queryClient.resetQueries({ queryKey: ["matches", table_id] })
+            queryClient.resetQueries({ queryKey: ["tournament_table", table_id] })
         },
     })
 }

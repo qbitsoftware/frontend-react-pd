@@ -34,6 +34,28 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
             queryClient.refetchQueries({ queryKey: ['bracket', id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
             queryClient.invalidateQueries({ queryKey: ['venues', id] })
+            queryClient.invalidateQueries({ queryKey: ['tournament_table', group_id] })
+            queryClient.refetchQueries({ queryKey: ['tournament_table', group_id] })
+        }
+    })
+}
+
+export const UsePatchMatchReset = (tournament_id: number, group_id: number, match_id: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/match/${match_id}/reset`, {}, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.invalidateQueries({ queryKey: ['venues', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['tournament_table', group_id] })
+            queryClient.refetchQueries({ queryKey: ['tournament_table', group_id] })
         }
     })
 }

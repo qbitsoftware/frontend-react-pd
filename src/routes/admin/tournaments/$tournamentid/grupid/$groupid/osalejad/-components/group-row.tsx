@@ -25,9 +25,10 @@ interface GroupRowProps {
     tournament_table_id: number
     globalEdit: boolean
     setGlobalEdit: (value: boolean) => void
+    forceDisableOrdering: boolean
 }
 
-export default function GroupRow({ participant, index, tournament_id, tournament_table_id, globalEdit, setGlobalEdit }: GroupRowProps) {
+export default function GroupRow({ participant, index, tournament_id, tournament_table_id, globalEdit, setGlobalEdit, forceDisableOrdering }: GroupRowProps) {
     const { addOrUpdateParticipant, deleteParticipant } = useParticipantUtils(tournament_id, tournament_table_id)
     const { t } = useTranslation()
 
@@ -150,23 +151,38 @@ export default function GroupRow({ participant, index, tournament_id, tournament
                 <AccordionTrigger className="hover:no-underline px-4 py-2 [&>svg]:ml-auto [&>svg]:mr-0 flex w-full items-center justify-between  "
                 >
                     <div className="flex items-center space-x-4">
-                        {!globalEdit ? <div
+                        {!globalEdit && !forceDisableOrdering ? <div
                             className="flex items-center justify-center hover:bg-indigo-50 gap-3 p-2 rounded-sm cursor-grab"
                             {...attributes}
                             {...listeners}
                         >
                             <GripVertical className="h-4 w-4" />
                             {index + 1}
+
                         </div>
                             :
                             <div
-                                className="flex items-center justify-center hover:bg-indigo-50 gap-3 p-2 rounded-sm cursor-grab"
+                                className="flex items-center justify-center hover:bg-indigo-50 gap-3 p-2 rounded-sm cursor-default"
                             >
                                 <GripVertical className="h-4 w-4" />
-                                {index + 1}
+                                <Input className="w-[40px] p-0 disabled:p-0 disabled:bg-transparent disabled:border-none disabled:opacity-100 disabled:cursor-default disabled:text-stone-900" disabled={!editing || forceDisableOrdering} placeholder="Pos" value={participantState.order}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={(e) => {
+                                        const newValue = Number(e.target.value);
+                                        const participants_len = 10
+                                        if (newValue <= 0) {
+                                            updateField("order", "");
+                                        }
+                                        if (newValue > participants_len) {
+                                            updateField("order", participants_len);
+                                        }
+                                        if (!isNaN(newValue) && newValue > 0 && newValue <= participants_len) {
+                                            updateField("order", newValue);
+                                        }
+                                    }}
+                                />
                             </div>
                         }
-
                         <Input
                             className={`w-[180px] cursor-pointer no-underline `}
                             type="text"

@@ -3,7 +3,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import { axiosInstance } from "./axiosconf";
 import TournamentTableForm from "@/routes/admin/tournaments/$tournamentid/grupid/-components/table-form";
 
-interface TournamentTableResponse {
+export interface TournamentTableResponse {
     data: TournamentTable | null
     message: string;
     error: string | null;

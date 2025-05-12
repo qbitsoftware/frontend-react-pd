@@ -3,12 +3,12 @@ import { TournamentTable } from "@/types/groups"
 import { Participant } from "@/types/participants"
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ParticipantFormValues } from "../../../../-components/participant-forms/form-utils"
 import { toast } from 'sonner'
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
-import { GroupType } from "@/types/matches"
+import { GroupType, TTState } from "@/types/matches"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
@@ -25,10 +25,16 @@ interface NewTeamProps {
 export default function TeamParticipants({ tournament_id, tournament_table, participants, setParticipantsState, group_participant }: NewTeamProps) {
     const { addOrUpdateParticipant } = useParticipantUtils(tournament_id, tournament_table.id)
     const [globalEdit, setGlobalEdit] = useState(false)
+    const [forceDisableOrdering, setForceDisableOrdering] = useState(false)
 
     const [newParticipantName, setNewParticipantName] = useState<string>("")
     const { t } = useTranslation()
 
+    useEffect(() => {
+        if (tournament_table.state >= TTState.TT_STATE_STARTED) {
+            setForceDisableOrdering(true)
+        }
+    }, [tournament_table])
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -119,7 +125,7 @@ export default function TeamParticipants({ tournament_id, tournament_table, part
                         strategy={verticalListSortingStrategy}
                     >
                         {participants && participants.map((participant, key) => (
-                            <GroupRow key={participant.id} participant={participant} index={key} tournament_id={tournament_id} tournament_table_id={tournament_table.id} globalEdit={globalEdit} setGlobalEdit={setGlobalEdit} />
+                            <GroupRow key={participant.id} participant={participant} index={key} tournament_id={tournament_id} tournament_table_id={tournament_table.id} globalEdit={globalEdit} setGlobalEdit={setGlobalEdit} forceDisableOrdering={forceDisableOrdering} />
                         ))}
 
                     </SortableContext>

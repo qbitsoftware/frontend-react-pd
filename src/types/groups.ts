@@ -7,6 +7,7 @@ export type TournamentTable = {
   updated_at: string;
   tournament_id: number;
   class: string;
+  state: number;
   type: string;
   solo: boolean;
   min_team_size: number;

@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import ParticipantDND from './participant-dnd'
 import ParticipantHeader from './table-header'
+import { TTState } from '@/types/matches'
 
 interface SoloParticipantsProps {
     participants: Participant[]
@@ -30,6 +31,7 @@ interface SoloParticipantsProps {
 export default function SoloParticipants({ participants, group_participant, tournament_id, tournament_table, setParticipantsState, addOrUpdateParticipant }: SoloParticipantsProps) {
     const { t } = useTranslation()
 
+    const [forceDisableOrdering, setForceDisableOrdering] = useState(false)
     const [disableOrderring, setDisableOrdering] = useState(false)
 
     const [searchTerm, setSearchTerm] = useState("")
@@ -38,6 +40,12 @@ export default function SoloParticipants({ participants, group_participant, tour
 
     const { data: playerSuggestions } =
         UseGetUsersDebounce(debouncedSearchTerm);
+
+    useEffect(() => {
+        if (tournament_table.state >= TTState.TT_STATE_STARTED) {
+            setForceDisableOrdering(true)
+        }
+    }, [tournament_table])
 
     useEffect(() => {
         if (debouncedSearchTerm) {
@@ -117,7 +125,7 @@ export default function SoloParticipants({ participants, group_participant, tour
                             <ParticipantHeader />
                             <TableBody>
                                 {participants && participants.map((participant, key) => (
-                                    <ParticipantDND key={participant.id} participant={participant} index={key} disableOrdering={disableOrderring} setDisableOrdering={setDisableOrdering} tournament_id={tournament_id} tournament_table_id={tournament_table.id} participants_len={participants.length} />
+                                    <ParticipantDND key={participant.id} participant={participant} index={key} disableOrdering={disableOrderring} setDisableOrdering={setDisableOrdering} tournament_id={tournament_id} tournament_table_id={tournament_table.id} participants_len={participants.length} forceDisableOrdering={forceDisableOrdering} />
                                 ))}
 
                                 {(tournament_table.size > participants.length || group_participant) && <TableRow>

@@ -132,8 +132,8 @@ export default function PlayerRow({ participant, index, player, updateField, tou
                             <Trash className="h-4 w-4 cursor-pointer" />
                         </div>
                     </div> :
-                    <div className="w-8 h-8 flex items-center justify-center bg-stone-100 rounded-sm">
-                        <Pencil className="h-4 w-4 cursor-pointer" onClick={handleStartEditing} />
+                    <div className="w-8 h-8 flex items-center justify-center bg-stone-100 rounded-sm" onClick={handleStartEditing} >
+                        <Pencil className="h-4 w-4 cursor-pointer" />
                     </div>
                 }
             </TableCell>
