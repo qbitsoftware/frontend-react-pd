@@ -897,6 +897,7 @@
     "final_score": "Lõpp skoor",
     "download": "Lae protokoll alla",
     "start_game": "Alusta mängu",
+    "reset_game": "Lähtesta mäng",
     "finish_game": "Lõpeta mäng",
     "game_finished": "Mäng lõpetatud",
     "choose_player": "Vali mängija"
@@ -982,7 +983,9 @@
       "match_finish_error": "Mängu lõpetamine nurjus. Palun proovige uuesti",
       "forfeit_error": "Loobumisvõidu määramine nurjus. Palun proovige uuesti",
       "forfeit_delete_error": "Loobumisvõidu kustutamine nurjus. Palun proovige uuesti",
-      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti"
+      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti",
+      "match_reset_success": "Mäng lähtestatud edukalt",
+      "match_reset_error": "Mängu lähtestamine nurjus. Palun proovige uuesti"
     },
     "auth": {
       "login_success": "Sisselogimine õnnestus"

@@ -897,6 +897,7 @@
     "final_score": "Final score",
     "download": "Download protocol",
     "start_game": "Start game",
+    "reset_game": "Reset game",
     "finish_game": "Finish game",
     "game_finished": "Game finished",
     "choose_player": "Choose player"
@@ -982,7 +983,9 @@
       "match_finish_error": "Match finish failed. Please try again",
       "forfeit_error": "Forfeit assignment failed. Please try again",
       "forfeit_delete_error": "Forfeit deletion failed. Please try again",
-      "table_number_change_error": "Table number change failed. Please try again"
+      "table_number_change_error": "Table number change failed. Please try again",
+      "match_reset_success": "Match reset successfully",
+      "match_reset_error": "Match reset failed. Please try again"
     },
     "auth": {
       "login_success": "Login successful"

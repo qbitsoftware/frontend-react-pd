@@ -1,4 +1,4 @@
-import { MatchesResponse, UseGetChildMatchesQuery, UsePatchMatch, UsePatchMatchSwitch, UseStartMatch } from "@/queries/match";
+import { MatchesResponse, UseGetChildMatchesQuery, UsePatchMatch, UsePatchMatchReset, UsePatchMatchSwitch, UseStartMatch } from "@/queries/match";
 import { Match, MatchWrapper, PlayerKey, TableTennisExtraData } from "@/types/matches";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react"
 import { toast } from "sonner";
@@ -38,6 +38,7 @@ interface ProtocolModalContextValues {
     handlePlayerChange: (playerKey: string, playerId: string, playerKeys: PlayerKey[], pairKeys: PlayerKey[]) => void
     handleCaptainChange: (captainKey: string, value: string) => void
     handleMatchStart: () => void
+    handleMatchReset: () => void
     handleMatchFinish: () => void
     handleForfeitMatch: (match: MatchWrapper) => void
     handleNotesChange: (value: string) => void
@@ -64,6 +65,16 @@ export const ProtocolModalProvider = ({
     const [headReferee, setHeadReferee] = useState<string>("")
     const [forfeitMatch, setForfeitMatch] = useState<MatchWrapper | null>(null);
 
+    // Initialize state
+    useEffect(() => {
+        setNotes(extraData.notes || "")
+        setTeamACaptain(extraData.captain_a || "")
+        setTeamBCaptain(extraData.captain_b || "")
+        setTableReferee(extraData.table_referee || "")
+        setHeadReferee(extraData.head_referee || "")
+        setForfeitMatch(null)
+    }, [extraData])
+
     // Queries
     const { data: childMatches, isLoading } = UseGetChildMatchesQuery(
         tournament_id,
@@ -83,6 +94,12 @@ export const ProtocolModalProvider = ({
     )
 
     const { mutateAsync: switchParticipants } = UsePatchMatchSwitch(
+        tournament_id,
+        match.match.tournament_table_id,
+        match.match.id
+    )
+
+    const { mutateAsync: resetMatch } = UsePatchMatchReset(
         tournament_id,
         match.match.tournament_table_id,
         match.match.id
@@ -239,6 +256,16 @@ export const ProtocolModalProvider = ({
         }
     }
 
+    const handleMatchReset = async () => {
+        try {
+            await resetMatch()
+            toast.success(t("toasts.protocol_modals.match_reset_success"))
+        } catch (error) {
+            void error
+            toast.error(t("toasts.protocol_modals.match_reset_error"))
+        }
+    }
+
     const handleMatchFinish = async () => {
         try {
             const match_payload: Match = {
@@ -300,6 +327,7 @@ export const ProtocolModalProvider = ({
         handlePlayerChange,
         handleCaptainChange,
         handleMatchStart,
+        handleMatchReset,
         handleMatchFinish,
         handleForfeitMatch,
         handleNotesChange,

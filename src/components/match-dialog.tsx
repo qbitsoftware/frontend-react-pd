@@ -16,7 +16,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { UsePatchMatch } from "@/queries/match";
+import { UsePatchMatch, UsePatchMatchReset } from "@/queries/match";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Match, MatchWrapper, Score } from "@/types/matches";
 import { toast } from "sonner";
@@ -87,6 +87,22 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
     match.match.tournament_table_id,
     match.match.id,
   );
+
+  const useResetMatch = UsePatchMatchReset(
+    tournament_id,
+    match.match.tournament_table_id,
+    match.match.id,
+  )
+
+  const resetMatch = async () => {
+    try {
+      await useResetMatch.mutateAsync()
+      toast.success(t("toasts.protocol_modals.match_reset_success"))
+    } catch (error) {
+      void error
+      toast.error(t("toasts.protocol_modals.match_reset_error"))
+    }
+  }
 
   const { append, remove } = useFieldArray({
     name: "scores",
@@ -345,20 +361,32 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
               </div>
             </ScrollArea>
             <DialogFooter className="p-6 pt-2 bg-gray-50 dark:bg-gray-900 rounded-b-lg">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onClose(false)}
-                className="bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md"
-              >
-                {t('protocol.actions.cancel')}
-              </Button>
-              <Button
-                type="submit"
-                className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 rounded-md"
-              >
-                {t('protocol.actions.save')}
-              </Button>
+              <div>
+                <Button
+                  type="button"
+                  className="bg-black/90"
+                  onClick={resetMatch}
+                >
+                  {t('protocol.reset_game')}
+                </Button>
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onClose(false)}
+                  className="bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md"
+                >
+                  {t('protocol.actions.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 rounded-md"
+                >
+                  {t('protocol.actions.save')}
+                </Button>
+
+              </div>
             </DialogFooter>
           </form>
         </Form>
