@@ -126,24 +126,24 @@ export function findEnemyName(
 }
 
 export function formatDateStringYearMonthDay(dateStr: string): string {
-    if (!dateStr) return '';
-    
-    try {
-        const match = dateStr.match(/^(\d{4}-\d{2}-\d{2})/);
-        if (match) {
-            return match[1];
-        }
-        
-        const date = new Date(dateStr);
-        if (!isNaN(date.getTime())) {
-            return date.toISOString().split('T')[0];
-        }
-        
-        return '';
-    } catch (error) {
-        console.error("Error formatting date:", error);
-        return '';
+  if (!dateStr) return '';
+
+  try {
+    const match = dateStr.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (match) {
+      return match[1];
     }
+
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().split('T')[0];
+    }
+
+    return '';
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return '';
+  }
 }
 
 export const formatDateString = (date: string) => {
@@ -232,6 +232,13 @@ const getLocalizedOrdinalSuffix = (day: number, locale: string): string => {
 
 export const formatDateTimeBracket = (dateTime: string) => {
   const date = new Date(dateTime);
+
+  if (isNaN(date.getTime())) return '';
+
+  if (date.getTime() <= 86400000) {
+    return '';
+  }
+
 
   return date.toLocaleString(i18n.language, {
     day: "numeric",
@@ -496,5 +503,14 @@ export const playerFullNameFromName = (name: string) => {
     )
   }
 
-  return {firstName, lastName}
+  return { firstName, lastName }
+}
+
+export function capitalizeWords(text: string): string {
+  if (!text) return '';
+
+  return text
+    .split(' ')
+    .map(word => capitalize(word))
+    .join(' ');
 }

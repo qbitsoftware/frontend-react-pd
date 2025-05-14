@@ -1,6 +1,6 @@
 import { TableMatch } from "@/types/brackets"
 import { TournamentTable } from "@/types/groups"
-import { cn } from "@/lib/utils"
+import { capitalizeWords, cn } from "@/lib/utils"
 import { extractMatchSets } from "./utils/utils"
 
 interface EliminationMatchProps {
@@ -47,7 +47,7 @@ const EliminationMatch = ({
                         <span className="px-2 font-medium w-[30px]">
                             {`${(match.match.type == "winner" && match.match.round == 0) ? match.participant_1.order : ""}`}
                         </span>
-                        <p className={cn("w-full text-xs", p1_sets > p2_sets && "font-semibold")}>{match.participant_1.name}</p>
+                        <p className={cn("w-full text-xs", p1_sets > p2_sets && "font-semibold")}>{capitalizeWords(match.participant_1.name)}</p>
                         <p className={cn("px-3 h-full flex items-center", p1_sets > p2_sets && "bg-[#F3F9FC] font-semibold")}>{p1_sets}</p>
                     </>
                 )}
@@ -69,7 +69,7 @@ const EliminationMatch = ({
                         <span className="px-2 font-medium w-[30px]">
                             {`${(match.match.type == "winner" && match.match.round == 0) ? match.participant_2.order : ""}`}
                         </span>
-                        <p className={cn("w-full text-xs", p2_sets > p1_sets && "font-semibold")}>{match.participant_2.name}</p>
+                        <p className={cn("w-full text-xs", p2_sets > p1_sets && "font-semibold")}>{capitalizeWords(match.participant_2.name)}</p>
                         <p className={cn("px-3 h-full flex items-center", p2_sets > p1_sets && "bg-[#F3F9FC]")}>{p2_sets}</p>
                     </>
                 )}

@@ -3,7 +3,7 @@ import { Participant } from '@/types/participants'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ParticipantFormValues } from '../../../../-components/participant-forms/form-utils'
 import { useTranslation } from 'react-i18next'
-import { capitalize, useDebounce } from '@/lib/utils'
+import { capitalizeWords, useDebounce } from '@/lib/utils'
 import { UseGetUsersDebounce } from '@/queries/users'
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -170,7 +170,7 @@ export default function SoloParticipants({ participants, group_participant, tour
                                                                 setPopoverOpen(false)
                                                                 const new_player = NewPlayer(user)
                                                                 const new_participant: ParticipantFormValues = {
-                                                                    name: `${capitalize(user.first_name)} ${capitalize(user.last_name)}`,
+                                                                    name: `${capitalizeWords(user.first_name)} ${capitalizeWords(user.last_name)}`,
                                                                     players: [new_player],
                                                                     sport_type: "tabletennis",
                                                                     group: 0,
@@ -191,8 +191,8 @@ export default function SoloParticipants({ participants, group_participant, tour
                                                                 }
                                                             }}
                                                         >
-                                                            {capitalize(user.first_name)}{" "}
-                                                            {capitalize(user.last_name)}{" "}
+                                                            {capitalizeWords(user.first_name)}{" "}
+                                                            {capitalizeWords(user.last_name)}{" "}
                                                             {user.eltl_id}
                                                         </div>
                                                     ))}
@@ -214,7 +214,7 @@ export default function SoloParticipants({ participants, group_participant, tour
                                                     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
                                                     const newPlayer = NewPlayerFromName(searchTerm)
                                                     const new_participant: ParticipantFormValues = {
-                                                        name: `${capitalize(firstName)} ${capitalize(lastName)}`,
+                                                        name: `${capitalizeWords(firstName)} ${capitalizeWords(lastName)}`,
                                                         players: [newPlayer],
                                                         sport_type: "tabletennis",
                                                         group: 0,

@@ -131,9 +131,10 @@
     },
     "results": {
       "finished": "Lõppenud",
-      "teams": "Meeskonnad",
+      "teams": "Meeskond",
+      "solo_team": "Võistleja",
       "total_points": "Punktid kokku",
-      "placement": "Asetus",
+      "placement": "Paremusjärjestus",
       "no_results": "Tulemusi pole"
     },
     "standings": {

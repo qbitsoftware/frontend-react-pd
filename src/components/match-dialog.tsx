@@ -370,7 +370,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                   {t('protocol.reset_game')}
                 </Button>
               </div>
-              <div>
+              <div className="flex gap-2">
                 <Button
                   type="button"
                   variant="outline"

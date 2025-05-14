@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useParticipantUtils } from "@/hooks/useParticipantUtils"
-import { capitalize, useDebounce } from "@/lib/utils"
+import { capitalizeWords, useDebounce } from "@/lib/utils"
 import { UseGetUsersDebounce } from "@/queries/users"
 import { Participant } from "@/types/participants"
 import { useSortable } from "@dnd-kit/sortable"
@@ -308,8 +308,8 @@ export default function GroupRow({ participant, index, tournament_id, tournament
                                                                 }
                                                             }}
                                                         >
-                                                            {capitalize(user.first_name)}{" "}
-                                                            {capitalize(user.last_name)}{" "}
+                                                            {capitalizeWords(user.first_name)}{" "}
+                                                            {capitalizeWords(user.last_name)}{" "}
                                                             {user.eltl_id}
                                                         </div>
                                                     ))}

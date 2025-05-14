@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { useParticipantUtils } from "@/hooks/useParticipantUtils"
-import { capitalize, formatDateStringYearMonthDay, useDebounce } from "@/lib/utils"
+import { capitalizeWords, formatDateStringYearMonthDay, useDebounce } from "@/lib/utils"
 import { UseGetUsersDebounce } from "@/queries/users"
 import { Participant } from "@/types/participants"
 import { Player } from "@/types/players"
@@ -193,8 +193,8 @@ export default function PlayerRow({ participant, index, player, updateField, tou
                                         updateField(`players.${index}.extra_data.foreign_player`, false)
                                     }}
                                 >
-                                    {capitalize(user.first_name)}{" "}
-                                    {capitalize(user.last_name)}{" "}
+                                    {capitalizeWords(user.first_name)}{" "}
+                                    {capitalizeWords(user.last_name)}{" "}
                                     {user.eltl_id}
                                 </div>
                             ))}

@@ -177,6 +177,7 @@ function RouteComponent() {
                   brackets={bracketQuery.data.data.round_robins[0]}
                   onMatchSelect={handleSelectMatch}
                   name={tableQuery.data.data.class}
+                  tournament_table={tableQuery.data.data}
                 />
               )}
             </TabsContent>

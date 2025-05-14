@@ -73,7 +73,7 @@ export const ProtocolModalProvider = ({
         setTableReferee(extraData.table_referee || "")
         setHeadReferee(extraData.head_referee || "")
         setForfeitMatch(null)
-    }, [extraData])
+    }, [isOpen, match.match.id])
 
     // Queries
     const { data: childMatches, isLoading } = UseGetChildMatchesQuery(

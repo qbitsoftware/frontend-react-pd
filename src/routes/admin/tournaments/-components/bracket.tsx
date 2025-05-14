@@ -38,6 +38,7 @@ const BracketComponent: React.FC<BracketComponentProps> = ({
                 tournament_table={tournament_table} />
             ) : hasRoundRobins ? (
               <GroupStageBracket
+              tournament_table={tournament_table}
                 brackets={bracket.data.round_robins[0]}
                 onMatchSelect={() => { }}
                 name={tournament_table.class}

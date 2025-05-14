@@ -147,6 +147,24 @@ export default function TeamParticipants({ tournament_id, tournament_table, part
 
                 </div>
                 }
+                {(tournament_table.type == GroupType.ROUND_ROBIN || tournament_table.type == GroupType.ROUND_ROBIN_FULL_PLACEMENT) &&
+                    <div className="flex gap-3">
+                        <Input
+                            type="text"
+                            autoComplete='off'
+                            placeholder={t("admin.tournaments.groups.participants.actions.add_team")}
+                            value={newParticipantName}
+                            onChange={(e) => setNewParticipantName(e.target.value)}
+                        />
+                        <Button
+                            onClick={handleAddParticipant}
+                        >
+                            {t("admin.tournaments.groups.participants.actions.submit")}{" "}
+                            <PlusCircle />
+                        </Button>
+
+                    </div>
+                }
             </div>
 
         </div >

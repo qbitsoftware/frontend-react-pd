@@ -81,7 +81,10 @@ function RouteComponent() {
         images: [],
       };
 
-      await postGamedayMutation.mutateAsync(gameday);
+      const response = await postGamedayMutation.mutateAsync(gameday);
+      if (gamedays.length === 0 && response.data) {
+        setActiveTab(response.data.id.toString());
+      }
       toast.message(t("admin.tournaments.groups.images.toasts.success_add"));
     } catch (error) {
       toast.error(t("admin.tournaments.groups.images.toasts.error_add"));

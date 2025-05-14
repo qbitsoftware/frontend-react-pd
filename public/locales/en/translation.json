@@ -132,8 +132,9 @@
     "results": {
       "finished": "Finished",
       "teams": "Teams",
+      "solo_team": "Player",
       "total_points": "Total points",
-      "placement": "Placement",
+      "placement": "Live placement",
       "no_results": "No results"
     },
     "standings": {
@@ -472,7 +473,7 @@
           "info": "Info",
           "participants": "Participants",
           "matches": "Matches",
-          "tables": "Tables"
+          "tables": "Brackets"
         },
         "images": {
           "title": "Image groups",
