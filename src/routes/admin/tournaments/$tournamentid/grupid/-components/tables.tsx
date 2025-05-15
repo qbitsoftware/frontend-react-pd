@@ -22,7 +22,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
   const navigate = useNavigate()
   const { t } = useTranslation()
   return (
-    <Card className="w-full border-none shadow-none ">
+    <Card className="w-full border-none shadow-none bg-transparent">
       <CardHeader className="px-0 flex-col gap-4 md:gap-0 md:flex-row md:justify-between items-start md:items-center space-y-0">
         <h5 className="font-medium">
           {t("admin.tournaments.groups.title")}
@@ -50,8 +50,7 @@ export const TournamentTables: React.FC<TournamentTablesProps> = ({ tables }) =>
             {tables ? tables.map((table) => {
               let participants = table.participants.length
               if (table.type === GroupType.ROUND_ROBIN || table.type === GroupType.ROUND_ROBIN_FULL_PLACEMENT) {
-                const uniqueGroups = new Set(table.participants.map(participant => participant.group));
-                participants = uniqueGroups.size;
+                participants = table.participants.filter((participant) => participant.type === "round_robin").length
 
               }
               return (

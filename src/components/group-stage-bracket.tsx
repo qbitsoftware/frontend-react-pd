@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -9,20 +8,14 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 import { RoundRobinBracket, RoundRobins } from "@/types/brackets";
 import { MatchWrapper } from "@/types/matches";
+import { TournamentTable } from "@/types/groups";
 
 interface GroupStageBracketProps {
     brackets: RoundRobins;
+    tournament_table: TournamentTable
     onMatchSelect?: (match: MatchWrapper) => void;
     name: string;
 }
@@ -30,10 +23,9 @@ interface GroupStageBracketProps {
 export default function GroupStageBracket({
     brackets,
     onMatchSelect,
-    name,
+    tournament_table,
 }: GroupStageBracketProps) {
     const { t } = useTranslation();
-    const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
     if (!brackets.round_robin || !brackets.round_robin.length) {
         return (
@@ -78,6 +70,188 @@ export default function GroupStageBracket({
             onMatchSelect(match);
         }
     };
+
+    const resolveTies = (teams: RoundRobinBracket[]): RoundRobinBracket[] => {
+        const initialSort = [...teams].sort((a, b) =>
+            (b.total_points || 0) - (a.total_points || 0)
+        );
+
+        const tiedGroups: RoundRobinBracket[][] = [];
+        let currentGroup: RoundRobinBracket[] = [];
+        let currentPoints: number | undefined = undefined;
+
+        initialSort.forEach((team) => {
+            if (team.participant.group_id === "") return;
+
+            if (currentPoints === team.total_points) {
+                currentGroup.push(team);
+            } else {
+                if (currentGroup.length > 1) {
+                    tiedGroups.push([...currentGroup]);
+                }
+                currentGroup = [team];
+                currentPoints = team.total_points;
+            }
+        });
+
+        if (currentGroup.length > 1) {
+            tiedGroups.push([...currentGroup]);
+        }
+
+        tiedGroups.forEach(tiedTeams => {
+            resolveSpecificTie(tiedTeams);
+        });
+
+        return initialSort;
+    };
+
+    // Function to resolve ties between specific teams
+    const resolveSpecificTie = (
+        tiedTeams: RoundRobinBracket[],
+    ): void => {
+        const teamsForfeitStatus = checkForfeitMatches(tiedTeams);
+        if (teamsForfeitStatus.resolved) return;
+
+        const headToHeadResults = compareHeadToHead(tiedTeams);
+        if (headToHeadResults.resolved) return;
+
+        // 3. For 3+ teams, compare sets and points in matches between tied teams
+        // if (tiedTeams.length >= 3) {
+        //     const setComparison = compareSets(tiedTeams);
+        //     if (setComparison.resolved) return;
+
+        //     const pointComparison = comparePoints(tiedTeams);
+        //     if (pointComparison.resolved) return;
+        // }
+
+        // 4. Final resort: check cards
+        // compareCards(tiedTeams);
+    };
+
+    const checkForfeitMatches = (tiedTeams: RoundRobinBracket[]) => {
+        // Count forfeit losses per team
+        const forfeitLossCount: Record<string, number> = {};
+
+        // Initialize all teams with 0 forfeits
+        tiedTeams.forEach(team => {
+            if (team.participant.id) {
+                forfeitLossCount[team.participant.id] = 0;
+            }
+        });
+
+        // Count forfeit losses in all matches between tied teams
+        tiedTeams.forEach(team => {
+            if (!team.matches) return;
+
+            team.matches.forEach(match => {
+                // Only consider matches between tied teams
+                const isMatchBetweenTiedTeams = tiedTeams.some(t =>
+                    t.participant.id === match.match.p1_id
+                ) && tiedTeams.some(t =>
+                    t.participant.id === match.match.p2_id
+                );
+
+                if (isMatchBetweenTiedTeams && match.match.forfeit) {
+                    // Increment forfeit count for the team that lost
+                    if (match.match.winner_id === match.p1.id) {
+                        // p2 forfeited
+                        forfeitLossCount[match.p2.id] = (forfeitLossCount[match.p2.id] || 0) + 1;
+                    } else if (match.match.winner_id === match.p2.id) {
+                        // p1 forfeited
+                        forfeitLossCount[match.p1.id] = (forfeitLossCount[match.p1.id] || 0) + 1;
+                    }
+                }
+            });
+        });
+
+        // Sort teams based on their forfeit count (fewer forfeits ranks higher)
+        tiedTeams.sort((a, b) => {
+            const aForfeits = forfeitLossCount[a.participant.id] || 0;
+            const bForfeits = forfeitLossCount[b.participant.id] || 0;
+
+            return aForfeits - bForfeits; // Ascending order (fewer forfeits = better rank)
+        });
+
+        // Check if the forfeits criterion resolved the tie
+        // This is true if at least two teams have different forfeit counts
+        const uniqueForfeitCounts = new Set(Object.values(forfeitLossCount));
+        console.log('forfeitLossCount', forfeitLossCount);
+        return {
+            resolved: uniqueForfeitCounts.size > 1,
+            forfeitCounts: forfeitLossCount // Optionally return this for debugging
+        };
+    };
+
+    // const checkForfeitMatches = (tiedTeams: RoundRobinBracket[]) => {
+    //     const forfeitTeams: Record<string, boolean> = {};
+
+    //     tiedTeams.forEach(team => {
+    //         if (!team.matches) return;
+
+    //         team.matches.forEach(match => {
+    //             if (match.match.forfeit) {
+    //                 if (match.match.winner_id === match.p1.id) {
+    //                     forfeitTeams[match.p2.id] = true;
+    //                 } else {
+    //                     forfeitTeams[match.p1.id] = true;
+    //                 }
+    //             }
+    //         });
+    //     });
+
+    //     tiedTeams.sort((a, b) => {
+    //         const aForfeited = forfeitTeams[a.participant.id] || false;
+    //         const bForfeited = forfeitTeams[b.participant.id] || false;
+
+    //         if (aForfeited && !bForfeited) return 1;
+    //         if (!aForfeited && bForfeited) return -1;
+    //         return 0;
+    //     });
+
+    //     return { resolved: Object.keys(forfeitTeams).length > 0 };
+    // };
+
+    const compareHeadToHead = (tiedTeams: RoundRobinBracket[]) => {
+        if (tiedTeams.length !== 2) return { resolved: false };
+
+        const teamA = tiedTeams[0];
+        const teamB = tiedTeams[1];
+
+        // Find matches between these two teams
+        const matches = teamA.matches?.filter(m =>
+            (m.match.p1_id === teamA.participant.id && m.match.p2_id === teamB.participant.id) ||
+            (m.match.p1_id === teamB.participant.id && m.match.p2_id === teamA.participant.id)
+        );
+
+        if (!matches || matches.length === 0) return { resolved: false };
+
+        let teamAWins = 0;
+        let teamBWins = 0;
+
+        matches.forEach(match => {
+            if (match.match.winner_id === teamA.participant.id) {
+                teamAWins++;
+            } else if (match.match.winner_id === teamB.participant.id) {
+                teamBWins++;
+            }
+        });
+
+        if (teamAWins > teamBWins) {
+            // Team A wins the tiebreaker, already in correct order
+            return { resolved: true };
+        } else if (teamBWins > teamAWins) {
+            // Team B wins the tiebreaker, swap positions
+            [tiedTeams[0], tiedTeams[1]] = [tiedTeams[1], tiedTeams[0]];
+            return { resolved: true };
+        }
+
+        return { resolved: false };
+    };
+
+    // Additional comparison functions would be implemented here
+    // compareSets, comparePoints, compareCards...
+
+
 
     const renderMatchCell = (
         roundRobinBracket: RoundRobinBracket[],
@@ -139,83 +313,78 @@ export default function GroupStageBracket({
         roundRobinBracket: RoundRobinBracket[],
         groupIndex: number
     ) => {
+        const group_participant = roundRobinBracket.find((bracket) => bracket.participant.group_id === "")
+        const group_name = group_participant ? group_participant.participant.name : `Group ${groupIndex + 1}`
         return (
-            <div key={groupIndex} className="my-10 mx-auto flex-col max-w-3xl">
-                <h3 className="font-bold mb-4">{roundRobinBracket.length > 0 && roundRobinBracket[0].participant.group_name != "" ? roundRobinBracket[0].participant.group_name : `Group ${groupIndex + 1}`}</h3>
-                <div className="md:hidden mb-4">
-                    <Select onValueChange={(value) => setSelectedTeam(value)}>
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Vali tiim" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {roundRobinBracket.map((bracket, index) => (
-                                <SelectItem key={index} value={bracket.participant.id}>
-                                    {bracket.participant.name || `Team ${index + 1}`}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                <ScrollArea className="w-full">
-                    <div className="min-w-[640px]">
-                        <Table className="w-full border-collapse">
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[150px] text-center bg-primary text-primary-foreground">
-                                        {t('competitions.results.teams')}
+            <div key={groupIndex} className="flex items-center my-10 mx-auto flex-col w-full overflow-x-auto px-4">
+                <h3 className="font-bold mb-4">{group_name}</h3>
+                <Table className="table-fixed min-w-max rounded-lg">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[150px] text-center bg-gray-600 text-primary-foreground">
+                                {tournament_table.solo ? t('competitions.results.solo_team') : t('competitions.results.teams')}
+                            </TableHead>
+                            {roundRobinBracket.map((team, index) => {
+                                if (team.participant.group_id === "") return null
+                                return (
+                                    <TableHead
+                                        key={index}
+                                        className=" text-center bg-primary text-primary-foreground"
+                                    >
+                                        {team.participant.name || (
+                                            <Skeleton className="h-6 w-20 mx-auto" />
+                                        )}
                                     </TableHead>
-                                    {roundRobinBracket.map((team, index) => (
-                                        <TableHead
-                                            key={index}
-                                            className="w-[120px] text-center bg-primary text-primary-foreground"
-                                        >
-                                            {team?.participant.name || (
+                                )
+                            })}
+                            <TableHead className=" text-center bg-gray-600 text-primary-foreground">
+                                {t('competitions.results.total_points')}
+                            </TableHead>
+
+                            <TableHead className="text-center bg-gray-600 text-primary-foreground">
+                                {t('competitions.results.placement')}
+                            </TableHead>
+
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {(() => {
+                            //if we have a tie
+
+                            // 1. check all the matches and if you have forfeit lose, and other team doesn't then you automatically lose
+                            // 2. check the game between the two teams and determine winner that way. with 3 and more teams its again their matches and sets and if sets are equal then check points
+                            // 3. if all else fails then check red or yellow cards, if those are also equal then we are fcked
+
+                            const sortedTeams = resolveTies(roundRobinBracket.filter(t => t.participant.group_id !== ""));
+
+                            const rankMap: Record<string, number> = {};
+                            sortedTeams.forEach((team, index) => {
+                                if (team.participant.id) {
+                                    rankMap[team.participant.id] = index + 1;
+                                }
+                            });
+
+                            return roundRobinBracket.map((team, rowIndex) => {
+                                if (team.participant.group_id === "") return null
+                                return (
+                                    <TableRow
+                                        key={rowIndex}
+                                        className={cn(
+                                            rowIndex % 2 === 0 ? "bg-secondary/20" : "bg-background",
+                                        )}
+                                    >
+                                        <TableCell className="font-medium border text-center">
+                                            {team.participant.name || (
                                                 <Skeleton className="h-6 w-20 mx-auto" />
                                             )}
-                                        </TableHead>
-                                    ))}
-                                    <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        {t('competitions.results.total_points')}
-                                    </TableHead>
-
-                                    <TableHead className="w-[120px] text-center bg-primary text-primary-foreground">
-                                        {t('competitions.results.placement')}
-                                    </TableHead>
-
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {(() => {
-                                    const sortedTeams = [...roundRobinBracket].sort((a, b) =>
-                                        (b?.total_points || 0) - (a?.total_points || 0)
-                                    );
-
-                                    const rankMap: Record<string, number> = {};
-                                    sortedTeams.forEach((team, index) => {
-                                        if (team?.participant?.id) {
-                                            rankMap[team.participant.id] = index + 1;
-                                        }
-                                    });
-
-                                    return roundRobinBracket.map((team, rowIndex) => (
-                                        <TableRow
-                                            key={rowIndex}
-                                            className={cn(
-                                                rowIndex % 2 === 0 ? "bg-secondary/20" : "bg-background",
-                                                selectedTeam === team?.participant.id ? "bg-blue-100" : ""
-                                            )}
-                                        >
-                                            <TableCell className="font-medium border text-center">
-                                                {team?.participant.name || (
-                                                    <Skeleton className="h-6 w-20 mx-auto" />
-                                                )}
-                                            </TableCell>
-                                            {roundRobinBracket.map((colTeam, colIndex) => (
+                                        </TableCell>
+                                        {roundRobinBracket.map((colTeam, colIndex) => {
+                                            if (colTeam.participant.group_id === "") return null
+                                            return (
                                                 <TableCell
                                                     key={colIndex}
                                                     className={cn(
-                                                        "p-2 border",
+                                                        "border",
                                                         rowIndex === colIndex ? "bg-gray-200" : ""
                                                     )}
                                                 >
@@ -229,37 +398,34 @@ export default function GroupStageBracket({
                                                         )
                                                     )}
                                                 </TableCell>
-                                            ))}
-                                            <TableCell className="font-bold border text-center bg-secondary/30">
-                                                {team?.total_points !== undefined ? (
-                                                    team.total_points
-                                                ) : (
-                                                    <Skeleton className="h-6 w-12 mx-auto" />
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="font-bold border text-center bg-secondary/30">
-                                                {team?.total_points !== undefined ? (
-                                                    rankMap[team.participant.id]
-                                                ) : (
-                                                    <Skeleton className="h-6 w-12 mx-auto" />
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    ));
-                                })()}
-                            </TableBody>
-                        </Table>
-                    </div>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+                                            )
+                                        })}
+                                        <TableCell className="font-bold border text-center bg-secondary/30">
+                                            {team?.total_points !== undefined ? (
+                                                team.total_points
+                                            ) : (
+                                                <Skeleton className="h-6 w-12 mx-auto" />
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="font-bold border text-center bg-secondary/30">
+                                            {team?.total_points !== undefined ? (
+                                                rankMap[team.participant.id]
+                                            ) : (
+                                                <Skeleton className="h-6 w-12 mx-auto" />
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            });
+                        })()}
+                    </TableBody>
+                </Table>
             </div>
         );
     };
 
     return (
         <div className="container mx-auto">
-            <h2 className="text-center text-xl font-medium">{name}</h2>
-
             {roundRobins.map((roundRobinBracket, index) =>
                 renderGroupTable(roundRobinBracket, index)
             )}

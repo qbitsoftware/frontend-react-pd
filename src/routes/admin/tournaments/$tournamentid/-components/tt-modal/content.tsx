@@ -20,6 +20,7 @@ export function Content() {
     forfeitMatch,
     handleSwitchParticipants,
     handleMatchStart,
+    handleMatchReset,
     handleMatchFinish,
     handleTableRefereeChange,
     handleNotesChange,
@@ -73,6 +74,7 @@ export function Content() {
             <Button
               onClick={handleSwitchParticipants}
               variant="outline"
+              disabled={match.match.winner_id !== ""}
               size="sm"
               className=""
             >
@@ -86,13 +88,23 @@ export function Content() {
           <div className="mt-4">
             <div className="flex items-center justify-between mb-1">
               <h6 className="font-semibold text-sm">{t('protocol.notes')}</h6>
-              <Button
-                onClick={handleMatchStart}
-                size="sm"
-                className="h-8 px-3 text-xs"
-              >
-                {t("protocol.start_game")}
-              </Button>
+              <div className="flex gap-5">
+                <Button
+                  onClick={handleMatchStart}
+                  size="sm"
+                  className="h-8 px-3 text-xs"
+                >
+                  {t("protocol.start_game")}
+                </Button>
+                <Button
+                  onClick={handleMatchReset}
+                  size="sm"
+                  className="h-8 px-3 text-xs"
+                >
+                  {t("protocol.reset_game")}
+                </Button>
+
+              </div>
             </div>
             <Textarea
               placeholder={t("protocol.notes_placeholder")}

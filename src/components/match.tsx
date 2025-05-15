@@ -155,10 +155,10 @@ const MatchComponent: React.FC<MatchComponentProps> = ({
           {match.match.readable_id}
         </div>
         <div className="absolute top-[35px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
-          {match.match.previous_match_readable_id_1 >= 0 ? "" : match.match.previous_match_readable_id_1}
+          {match.match.previous_match_readable_id_2 >= 0 ? "" : match.match.previous_match_readable_id_2}
         </div>
         <div className="absolute top-[5px] left-[5px] w-[60px] text-left text-[8px] pdf-game-court">
-          {match.match.previous_match_readable_id_2 >= 0 ? "" : match.match.previous_match_readable_id_2}
+          {match.match.previous_match_readable_id_1 >= 0 ? "" : match.match.previous_match_readable_id_1}
         </div>
         {match.participant_1.id != "empty" &&
           match.participant_2.id != "empty" && (

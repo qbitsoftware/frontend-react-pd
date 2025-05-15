@@ -131,9 +131,10 @@
     },
     "results": {
       "finished": "Lõppenud",
-      "teams": "Meeskonnad",
+      "teams": "Meeskond",
+      "solo_team": "Võistleja",
       "total_points": "Punktid kokku",
-      "placement": "Asetus",
+      "placement": "Paremusjärjestus",
       "no_results": "Tulemusi pole"
     },
     "standings": {
@@ -526,7 +527,7 @@
         "solo": "Üksik",
         "team": "Meeskondadega",
         "reset_seeding": {
-          "title": "Lähtesta asetused",
+          "title": "Lähtesta matšid",
           "subtitle": "Kas olete kindel? Pärast kinnitamist ei saa seda tagasi võtta."
         },
         "regroup": "Regrupeeri",
@@ -535,10 +536,11 @@
         "change_time": "Aegade muutmine",
         "order": {
           "title": "Genereeri mängud",
-          "placeholder": "Järjesta",
+          "order_by_rating": "Järjesta reitingu järgi",
+          "placeholder": "Asetus",
           "random": "Suvaliselt",
-          "by_rating": "Reitingu järgi",
-          "by_order": "Järjekorra järgi"
+          "by_rating": "Lauatennis",
+          "by_order": "Järjekord"
         },
         "tables": {
           "no_data": "Tabeleid pole hetkel saadaval",
@@ -664,10 +666,12 @@
             "sex": "Sugu",
             "club": "Klubi",
             "class": "Klass",
+            "yob": "Sünniaasta",
             "eltl_id": "ELTL ID",
             "rating": "Koht reitingus",
             "actions": "Tegevused",
             "nationality": "Riik",
+            "image": "Pilt",
             "foreign_player": "Välismängija"
           }
         }
@@ -894,6 +898,7 @@
     "final_score": "Lõpp skoor",
     "download": "Lae protokoll alla",
     "start_game": "Alusta mängu",
+    "reset_game": "Lähtesta mäng",
     "finish_game": "Lõpeta mäng",
     "game_finished": "Mäng lõpetatud",
     "choose_player": "Vali mängija"
@@ -963,7 +968,9 @@
       "time_change_success": "Aegade muutmine õnnestus",
       "time_change_error": "Aegade muutmine nurjus. Palun proovige uuesti",
       "seeding_success": "Osalejate asetamine õnnestus",
-      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti"
+      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti",
+      "order_success": "Osalejate järjekorda panemine õnnestus",
+      "order_error": "Osalejate järjekorda panemine nurjus. Palun proovige uuesti"
     },
     "protocol_modals": {
       "updated_match_score": "Mängu skoore on muudetud",
@@ -977,7 +984,9 @@
       "match_finish_error": "Mängu lõpetamine nurjus. Palun proovige uuesti",
       "forfeit_error": "Loobumisvõidu määramine nurjus. Palun proovige uuesti",
       "forfeit_delete_error": "Loobumisvõidu kustutamine nurjus. Palun proovige uuesti",
-      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti"
+      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti",
+      "match_reset_success": "Mäng lähtestatud edukalt",
+      "match_reset_error": "Mängu lähtestamine nurjus. Palun proovige uuesti"
     },
     "auth": {
       "login_success": "Sisselogimine õnnestus"

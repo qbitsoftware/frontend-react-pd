@@ -1,11 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { UseGetTournament } from '@/queries/tournaments'
-import { UseGetTournamentTable } from '@/queries/tables'
-import { ParticipantsForm } from '../../../-components/participant-forms/participants-form'
+import { UseGetTournamentTableQuery } from '@/queries/tables'
 import Loader from '@/components/loader'
 import ErrorPage from '@/components/error'
 import { ErrorResponse } from '@/types/errors'
-import { ParticipantProvider } from '@/providers/participantProvider'
+import { NewSolo } from './-components/new-solo'
+import { NewTeams } from './-components/new-teams'
+import { UseGetParticipantsQuery } from '@/queries/participants'
+import ResetSeeding from '../../../-components/reset-seeding'
+import SeedingHeader from './-components/seeding-header'
 
 export const Route = createFileRoute(
     '/admin/tournaments/$tournamentid/grupid/$groupid/osalejad/',
@@ -14,7 +17,6 @@ export const Route = createFileRoute(
     errorComponent: () => <ErrorPage />,
     loader: async ({ context: { queryClient }, params }) => {
         let tournament_data
-        let table_data
         try {
             tournament_data = await queryClient.ensureQueryData(
                 UseGetTournament(Number(params.tournamentid)),
@@ -26,38 +28,37 @@ export const Route = createFileRoute(
             }
         }
 
-        try {
-            table_data = await queryClient.ensureQueryData(
-                UseGetTournamentTable(
-                    Number(params.tournamentid),
-                    Number(params.groupid),
-                ),
-            )
-        } catch (error) {
-            const err = error as ErrorResponse
-            if (err.response.status !== 404) {
-                throw error
-            }
-        }
-        return { tournament_data, table_data }
+        return { tournament_data }
     },
 })
 
 function RouteComponent() {
-    const { tournament_data, table_data } = Route.useLoaderData()
+    const { tournament_data } = Route.useLoaderData()
     const { tournamentid, groupid } = Route.useParams()
+    const { data: participant_data } = UseGetParticipantsQuery(Number(tournamentid), Number(groupid), false)
+    const { data: table_data } = UseGetTournamentTableQuery(Number(tournamentid), Number(groupid))
 
     if (tournament_data && tournament_data.data && table_data && table_data.data) {
         return (
             <div className=''>
 
-                {tournament_data && table_data &&
-                    <ParticipantProvider tournament_id={Number(tournamentid)} tournament_table_id={Number(groupid)}>
-                        <ParticipantsForm
-                            tournament_data={tournament_data.data}
+                {tournament_data && table_data && participant_data && participant_data.data &&
+                    <>
+                        <SeedingHeader
+                            tournament_id={Number(tournamentid)}
                             table_data={table_data.data}
+                            participants={participant_data.data}
                         />
-                    </ParticipantProvider>
+
+                        <div className="flex justify-end pb-1">
+                            <ResetSeeding tournament_id={Number(tournamentid)} table_id={table_data.data.id} />
+                        </div>
+                        {table_data.data.solo ?
+                            <NewSolo participant_data={participant_data} tournament_id={Number(tournamentid)} tournament_table={table_data.data} />
+                            :
+                            <NewTeams participant_data={participant_data} tournament_id={Number(tournamentid)} tournament_table={table_data.data} />
+                        }
+                    </>
                 }
             </div>
         )

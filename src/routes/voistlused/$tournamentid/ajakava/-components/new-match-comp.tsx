@@ -109,10 +109,11 @@ const ITTFMatchUserComponent = ({
             />
           </AvatarFallback>
         </Avatar>
-        <p className={cn(isWinner ? "font-bold" : "", "md:w-32")}>
+        <p className={cn(isWinner ? "font-bold" : "", "md:w-24")}>
           {truncateName(participant.name)}
         </p>
-        {match.p1.id == participant.id ? (
+              </div>
+              {match.p1.id == participant.id ? (
           <span className={cn(isWinner ? "font-bold" : "")}>
             {match.match.extra_data.team_1_total}
           </span>
@@ -121,17 +122,16 @@ const ITTFMatchUserComponent = ({
             {match.match.extra_data.team_2_total}
           </span>
         )}
-      </div>
       <div className="flex">
-        <div className="flex gap-2 j">
+        <div className="flex gap-2 justify-end">
           {match.match.extra_data.score &&
             match.match.extra_data.score.map((set, index) => {
               return (
-                <div key={index} className="flex gap-2 justify-end">
+                <div key={index} className="w-2 text-center mx-1 text-gray-600">
                   {match.p1.id == participant.id ? (
                     <p>{set.p1_score}</p>
                   ) : (
-                    <p>{set.p1_score}</p>
+                    <p>{set.p2_score}</p>
                   )}
                 </div>
               );

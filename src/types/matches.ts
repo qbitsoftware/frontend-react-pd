@@ -23,7 +23,14 @@ export enum GroupType {
   ROUND_ROBIN = "round_robin",
   FREE_FOR_ALL = "free_for_all",
   ROUND_ROBIN_FULL_PLACEMENT = "round_robin_full_placement",
+}
 
+export enum TTState {
+  TT_STATE_CREATED = 0,       // Just tournament table is created - matches have been resetted or just no matches generated yet
+  TT_STATE_MATCHES_CREATED,   // 1
+  TT_STATE_MATCHES_ASSIGNED,  // 2 - participants are assigned to matches
+  TT_STATE_STARTED,           // 3 - Atleast one score has been modified
+  TT_STATE_FINISHED           // 4 - all the matches have winner id
 }
 
 export type TableTennisExtraData = {

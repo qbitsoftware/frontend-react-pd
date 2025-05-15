@@ -59,24 +59,59 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
         }
     }
 
+    //test
     return (
         <>
             {setScores.map((set: Score) => (
                 <TableCell key={match.match.id + set.number}>
                     <div className='flex items-center gap-1'>
                         <Input
-                            type="number"
+                            type="text"
                             value={set.p1_score === null ? '' : match.match.forfeit ? 0 : set.p1_score}
-                            onChange={(e) => handleScoreChange(set.number, 'p1_score', e.target.value)}
+                            // onChange={(e) => handleScoreChange(set.number, 'p1_score', e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+
+                                if (value === "") {
+                                    handleScoreChange(set.number, 'p1_score', "0")
+                                    return;
+                                }
+
+                                if (!/^\d*$/.test(value)) {
+                                    return;
+                                }
+
+                                const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                handleScoreChange(set.number, 'p1_score', numberValue.toString())
+                            }}
                             className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}
                         />
                         <span>:</span>
                         <Input
-                            type="number"
+                            type="text"
                             value={set.p2_score === null ? '' : match.match.forfeit ? 0 : set.p2_score}
-                            onChange={(e) => handleScoreChange(set.number, 'p2_score', e.target.value)}
+                            // onChange={(e) => handleScoreChange(set.number, 'p2_score', e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+
+                                if (value === "") {
+                                    handleScoreChange(set.number, 'p2_score', "0")
+                                    return;
+                                }
+
+                                if (!/^\d*$/.test(value)) {
+                                    return;
+                                }
+
+                                const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                handleScoreChange(set.number, 'p2_score', numberValue.toString())
+                            }}
                             className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}

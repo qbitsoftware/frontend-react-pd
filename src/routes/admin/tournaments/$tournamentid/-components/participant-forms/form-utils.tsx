@@ -39,7 +39,9 @@ export const participantSchema = z.object({
     tournament_id: z.number().min(1),
     sport_type: z.string().default("tabletennis"),
     group: z.number().optional(),
+    type: z.string().optional(),
     group_name: z.string().optional(),
+    group_id: z.string().optional(),
     players: z.array(playerFormSchema),
     class: z.string().optional(),
 })

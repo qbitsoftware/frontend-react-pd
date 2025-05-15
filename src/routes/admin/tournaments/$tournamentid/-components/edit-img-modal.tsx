@@ -6,9 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 
-// Allowed image formats
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-// Maximum file size in bytes (10MB)
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 interface EditImgModalProps {
@@ -152,9 +150,9 @@ const EditImgModal = ({ id, playerName, img, onSuccess, type }: EditImgModalProp
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <div className='py-2 px-4 border border-solid rounded-md cursor-pointer'>
           {t("admin.tournaments.groups.img_modal.title")}
-        </Button>
+        </div>
       </DialogTrigger>
 
       <DialogContent>
