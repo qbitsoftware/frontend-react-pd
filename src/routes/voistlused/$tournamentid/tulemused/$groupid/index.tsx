@@ -213,17 +213,17 @@ function RouteComponent() {
         </Tabs>
       </div>
       {/* Match details modal */}
-      {selectedMatch &&  (
-          <Protocol
-            tournamentId={tournamentId}
-            groupId={groupId}
-            isRoundRobinFull={isRoundRobinFull}
-            isMeistrikad={isMeistrikad}
-            isModalOpen={isModalOpen}
-            handleModalChange={handleModalChange}
-            selectedMatch={selectedMatch}
-          />
-        )
+      {selectedMatch && (
+        <Protocol
+          tournamentId={tournamentId}
+          groupId={groupId}
+          isRoundRobinFull={isRoundRobinFull}
+          isMeistrikad={isMeistrikad}
+          isModalOpen={isModalOpen}
+          handleModalChange={handleModalChange}
+          selectedMatch={selectedMatch}
+        />
+      )
       }
     </div>
   );

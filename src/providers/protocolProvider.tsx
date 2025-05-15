@@ -287,21 +287,6 @@ export const ProtocolModalProvider = ({
         if (childMatches && childMatches.data) {
             setPlayerMatches(childMatches.data)
         }
-        if (match.match.extra_data.head_referee) {
-            setHeadReferee(match.match.extra_data.head_referee)
-        }
-        if (match.match.extra_data.table_referee) {
-            setTableReferee(match.match.extra_data.table_referee)
-        }
-        if (match.match.extra_data.notes) {
-            setNotes(match.match.extra_data.notes)
-        }
-        if (match.match.extra_data.captain_a) {
-            setTeamACaptain(match.match.extra_data.captain_a)
-        }
-        if (match.match.extra_data.captain_b) {
-            setTeamBCaptain(match.match.extra_data.captain_b)
-        }
     }, [childMatches, match.match.extra_data])
 
     const ProtocolModalValues: ProtocolModalContextValues = {

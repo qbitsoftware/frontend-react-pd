@@ -175,7 +175,6 @@ export default function GroupStageBracket({
         // Check if the forfeits criterion resolved the tie
         // This is true if at least two teams have different forfeit counts
         const uniqueForfeitCounts = new Set(Object.values(forfeitLossCount));
-        console.log('forfeitLossCount', forfeitLossCount);
         return {
             resolved: uniqueForfeitCounts.size > 1,
             forfeitCounts: forfeitLossCount // Optionally return this for debugging
