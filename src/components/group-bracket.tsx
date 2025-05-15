@@ -85,7 +85,7 @@ export default function GroupBracket({
 
     return (
       <div className="flex flex-col space-y-2">
-        <h4>{}</h4>
+        <h4>{ }</h4>
         {[0, 1].map((_, index) => (
           <div
             onClick={() =>
