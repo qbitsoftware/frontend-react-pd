@@ -1,26 +1,22 @@
-'use client'
-
-import { useToastNotification } from '@/components/toast-notification'
 import { Input } from '@/components/ui/input'
 import { TableCell } from '@/components/ui/table'
-import { useToast } from '@/hooks/use-toast'
 import { UsePatchMatch } from '@/queries/match'
-import { MatchWrapper, Score } from '@/types/types'
+import { MatchWrapper, Score } from '@/types/matches'
 import { useParams } from '@tanstack/react-router'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner';
 
-// Interface for the SetScore type
 interface MatchSetProps {
     match: MatchWrapper
 }
 
 export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
     const [setScores, setSetScores] = useState<Score[]>([])
-
-    const toast = useToast()
     const { tournamentid } = useParams({ strict: false })
-    const { successToast, errorToast } = useToastNotification(toast)
-    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id ,match.match.id)
+    const updateMatchMutation = UsePatchMatch(Number(tournamentid), match.p1.tournament_table_id, match.match.id)
+
+    const { t } = useTranslation()
 
     useEffect(() => {
         const backendScores = match.match.extra_data.score
@@ -55,33 +51,67 @@ export const MatchSets: React.FC<MatchSetProps> = ({ match }) => {
                 },
             }
             try {
-                const result = await updateMatchMutation.mutateAsync(updatedMatch)
-                successToast(result.message)
+                await updateMatchMutation.mutateAsync(updatedMatch)
             } catch (error) {
                 void error
-                errorToast("Something went wrong")
+                toast.error(t('toasts.protocol_modals.updated_match_score_error'))
             }
         }
     }
 
+    //test
     return (
         <>
             {setScores.map((set: Score) => (
                 <TableCell key={match.match.id + set.number}>
                     <div className='flex items-center gap-1'>
                         <Input
-                            type="number"
+                            type="text"
                             value={set.p1_score === null ? '' : match.match.forfeit ? 0 : set.p1_score}
-                            onChange={(e) => handleScoreChange(set.number, 'p1_score', e.target.value)}
+                            // onChange={(e) => handleScoreChange(set.number, 'p1_score', e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+
+                                if (value === "") {
+                                    handleScoreChange(set.number, 'p1_score', "0")
+                                    return;
+                                }
+
+                                if (!/^\d*$/.test(value)) {
+                                    return;
+                                }
+
+                                const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                handleScoreChange(set.number, 'p1_score', numberValue.toString())
+                            }}
                             className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}
                         />
                         <span>:</span>
                         <Input
-                            type="number"
+                            type="text"
                             value={set.p2_score === null ? '' : match.match.forfeit ? 0 : set.p2_score}
-                            onChange={(e) => handleScoreChange(set.number, 'p2_score', e.target.value)}
+                            // onChange={(e) => handleScoreChange(set.number, 'p2_score', e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+
+                                if (value === "") {
+                                    handleScoreChange(set.number, 'p2_score', "0")
+                                    return;
+                                }
+
+                                if (!/^\d*$/.test(value)) {
+                                    return;
+                                }
+
+                                const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                handleScoreChange(set.number, 'p2_score', numberValue.toString())
+                            }}
                             className="min-w-[60px] text-center"
                             min="0"
                             disabled={match.match.forfeit}

@@ -11,12 +11,11 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import {
   filterByAgeClass,
-  modifyTitleDependingOnFilter,
 } from "@/lib/rating-utils";
-import { UserNew } from "@/types/types";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { User } from "@/types/users";
 
 // interface Player extends User {
 //   ID: number;
@@ -36,7 +35,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // }
 
 interface UserTableProps {
-  users: UserNew[];
+  users: User[];
 }
 
 export function Reiting({ users }: UserTableProps = { users: [] }) {
@@ -74,7 +73,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
 
   const getTableContainer = () => document.getElementById(tableContainerId);
 
-  const handleModalOpen = (user: UserNew) => {
+  const handleModalOpen = (user: User) => {
     const container = getTableContainer();
     if (container) {
       setScrollPosition(container.scrollTop);
@@ -127,7 +126,7 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
       <div className="lg:rounded-lg bg-white px-4 lg:px-12 py-6">
         <div className="space-y-4">
           <h2 className="font-bold">
-            {modifyTitleDependingOnFilter(t, showCombined, sex, ageClass)}
+          Pipedrive's Ranking
           </h2>
           <p className="font-medium pb-1">
             {t("rating.last_updated")}:{" "}
@@ -157,17 +156,17 @@ export function Reiting({ users }: UserTableProps = { users: [] }) {
                 className="w-full"
               >
                 <TabsList className="justify-start w-full rounded-[2px] py-2 gap-1">
-                  <TabsTrigger value="women" className="rounded-[4px] flex-1">
-                    {t("rating.filtering.buttons.women")}
+                  <TabsTrigger value="combined" className="rounded-[4px] flex-1">
+                    {t("rating.filtering.buttons.tallinn")}
                   </TabsTrigger>
                   <TabsTrigger value="men" className="rounded-[4px] flex-1">
-                    {t("rating.filtering.buttons.men")}
+                    {t("rating.filtering.buttons.tartu")}
                   </TabsTrigger>
                   <TabsTrigger
-                    value="combined"
+                    value="lisbon"
                     className="rounded-[4px] flex-1"
                   >
-                    {t("rating.filtering.buttons.combined")}
+                    {t("rating.filtering.buttons.portugal")}
                   </TabsTrigger>
                 </TabsList>
               </Tabs>

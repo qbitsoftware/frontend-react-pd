@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
-import { Tournament } from '@/types/types';
 import { useRouter } from '@tanstack/react-router';
 import { cn } from "@/lib/utils"
 import SfumatoBackground from '@/components/sfumato/sfumatoBg';
 import { useTranslation } from 'react-i18next';
+import { Tournament } from '@/types/tournaments';
 
 
 interface Props {

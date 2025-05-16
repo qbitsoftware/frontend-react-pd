@@ -9,7 +9,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <div>
+    <div className='px-10 py-4'>
       <TournamentTableForm initial_data={undefined} />
     </div>
   )

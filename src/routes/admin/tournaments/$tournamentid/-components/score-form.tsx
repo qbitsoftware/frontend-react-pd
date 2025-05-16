@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Match, Score } from "@/types/types"
+import { Match, Score } from "@/types/matches"
 import { useEffect, useState } from "react";
 
 interface ScoreFormProps {

@@ -1,18 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, Cpu, UserRound, Calendar } from "lucide-react";
-import { useTranslation } from "react-i18next";
 export const Route = createFileRoute("/kontakt/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { t } = useTranslation();
-
   return (
     <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-gray-900 mb-8">
-        {t("contactpage.title")}
+        Contact
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <Card>

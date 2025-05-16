@@ -1,9 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlayerRankingChangeGraph } from "./rating-chart";
 import { useTranslation } from "react-i18next";
-import { Profile } from "@/types/types";
 import { formatDateToNumber } from "@/lib/utils";
 import { LastMatch } from "./last-matches";
+import { Profile } from "@/types/users";
 
 interface PlayerProfileDataProps {
   profile: Profile;

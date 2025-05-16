@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/voistlused/$tournamentid/sponsorid/')({
   component: RouteComponent,
@@ -15,9 +16,10 @@ const sponsors = [
 
 
 function RouteComponent() {
+  const { t } = useTranslation()
   return (
     <div className="px-4 md:px-12 py-4 md:py-8">
-      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">Meie sponsorid</h5>
+      <h5 className="font-bold mb-4 md:mb-8 text-center md:text-left">{t('sponsors.description')}</h5>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sponsors.map((sponsor, index) => (
           <Card key={index} className="flex flex-col h-full">

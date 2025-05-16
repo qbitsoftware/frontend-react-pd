@@ -1,18 +1,16 @@
-"use client"
-
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import React, { useEffect, useState } from 'react'
 import { DndContext, DragEndEvent, KeyboardSensor, PointerSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/hooks/use-toast'
-import { useToastNotification } from '@/components/toast-notification'
-import { Participant } from '@/types/types'
 import RegroupDND from './regroup-dnd'
 import { UseGetParticipantsQuery } from '@/queries/participants'
 import { useParams } from '@tanstack/react-router'
 import { UseRegroupMatches } from '@/queries/match'
+import { Participant } from '@/types/participants'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 interface ReGroupingProps {
     isOpen: boolean
@@ -28,19 +26,13 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
     const useRegroupMutation = UseRegroupMatches(tournament_id, Number(params.groupid), true)
     const useFinalsMutation = UseRegroupMatches(tournament_id, Number(params.groupid), false, true)
 
-    const toast = useToast()
-    const { successToast, errorToast } = useToastNotification(toast)
-
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (data?.data) {
             setParticipants(data.data)
         }
     }, [isOpen, data?.data])
-
-    // if (!participants) {
-
-    // }
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
@@ -65,16 +57,15 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
     const onSubmit = async () => {
         try {
             if (state == "finals") {
-                const data = await useFinalsMutation.mutateAsync(participants)
-                successToast(data?.message)
+                await useFinalsMutation.mutateAsync(participants)
             } else if (state == "regrouping") {
-                const data = await useRegroupMutation.mutateAsync(participants)
-                successToast(data?.message)
+                await useRegroupMutation.mutateAsync(participants)
             }
+            toast.message(t('toasts.participants.regroup_success'))
             onClose()
         } catch (error) {
             void error
-            errorToast("Something went wrong")
+            toast.error(t('toasts.participants.regroup_error'))
         }
     }
 
@@ -85,12 +76,12 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
             <DialogContent className="max-w-4xl max-h-[80vh] md:max-h-[90vh] overflow-y-auto px-0 sm:px-2 md:px-4">
                 <DialogHeader>
                     {state == "regrouping" ?
-                        <DialogTitle>Mängu regrupeering</DialogTitle>
+                        <DialogTitle>{t('admin.tournaments.groups.participants.regroup.title_regroup')}</DialogTitle>
                         : state == "finals" ?
-                            <DialogTitle>Mängu finaalid</DialogTitle> : ""
+                            <DialogTitle>{t('admin.tournaments.groups.participants.regroup.title_finals')}</DialogTitle> : ""
                     }
                     <DialogDescription>
-                        Kuvasime juhuslikult tiimid. Tiimide liigutamiseks lohistage nupust.
+                        {t('admin.tournaments.groups.participants.regroup.description')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-col mt-6'>
@@ -113,7 +104,7 @@ const ReGrouping: React.FC<ReGroupingProps> = ({ isOpen, onClose, tournament_id,
                     </DndContext>
                 </div>
                 <Button onClick={onSubmit}>
-                    {state == "regrouping" ? "Regrupeeri" : state == "finals" ? "Finaalid" : ""}
+                    {state == "regrouping" ? t('admin.tournaments.groups.participants.regroup.regroup_button') : state == "finals" ? t('admin.tournaments.groups.participants.regroup.final_button') : ""}
                 </Button>
             </DialogContent>
         </Dialog>

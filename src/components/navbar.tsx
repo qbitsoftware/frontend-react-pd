@@ -66,7 +66,7 @@ export default function Navbar() {
               <Link href="/">
                 <img
                   className="h-10 lg:h-8 xl:h-8 w-auto"
-                  src="/tournament10_lightblue.png"
+                  src="/t10logo_text.svg"
                   alt="ELTA Logo"
                 />
               </Link>

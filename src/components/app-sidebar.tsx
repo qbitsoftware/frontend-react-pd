@@ -75,7 +75,7 @@ export function AppSidebar() {
           <Link href="/">
             <img
               className="h-5 w-auto"
-              src="/tournament10_lightblue.png"
+              src="/t10logo_text.svg"
               alt="ELTA Logo"
             />
           </Link>

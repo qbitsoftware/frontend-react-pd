@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { MatchWrapper } from "@/types/types";
+import { MatchWrapper } from "@/types/matches";
 
 interface TableContentProps {
   match: MatchWrapper;
@@ -52,7 +52,7 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
       )}
       <TableCell className="font-medium">
         {match.match.extra_data.score &&
-          match.match.extra_data.score?.length > 0 ? (
+        match.match.extra_data.score?.length > 0 ? (
           <p>
             <span
               className={cn(
@@ -90,4 +90,3 @@ const TableContent: React.FC<TableContentProps> = ({ match }) => {
 };
 
 export default TableContent;
-

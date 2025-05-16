@@ -2,21 +2,15 @@
   "eltl": {
     "name": "Estonian Table Tennis Association"
   },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
   "navbar": {
     "language": {
       "estonian": "Estonian",
       "english": "English",
       "choose": "🇬🇧 "
-    },
-    "tournament": {
-      "information": "Information",
-      "timetable": "Timetable",
-      "results": "Results",
-      "players": "Players",
-      "gallery": "Gallery",
-      "rules": "Rules",
-      "sponsors": "Sponsors",
-      "media": "Media"
     },
     "menu": {
       "news": {
@@ -27,7 +21,7 @@
         "results": "Results"
       },
       "eltl": "ELTL",
-      "competition": "Competitions",
+    "competition": "Competitions",
       "calendar": "Calendar",
       "clubs": "Clubs",
       "young_sport": "Youths",
@@ -37,7 +31,7 @@
       "contact": "Contact",
       "admin": "Admin Panel"
     },
-    "login": "Admin Login",
+    "login": "Log in",
     "logout": "Log out"
   },
   "footer": {
@@ -54,15 +48,11 @@
     },
     "links": "Quick links"
   },
-  "contactpage": {
-    "title": "Points of contact"
-  },
   "homepage": {
     "title": "Estonian Table Tennis Association",
     "title_button": "Check tournaments",
     "description": "Empowering Estonian Table Tennis",
     "upcoming_tournaments": "Upcoming Tournaments",
-    "no_upcoming_tournaments": "No upcoming tournaments",
     "latest_news": "Latest News",
     "details": "Details",
     "tournaments": {
@@ -76,12 +66,19 @@
       "error": "Error retrieving latest matches. Please try again later.",
       "no_matches": "There are currently no latest matches to display."
     },
+    "news": {
+      "name": "News",
+      "missing": "No blog posts yet",
+      "view_all": "View all",
+      "read_more": "Read more"
+    },
     "calendar": {
       "name": "Calendar",
-      "view_all": "View all"
+      "view_all": "View all",
+      "no_tournaments": "No tournaments scheduled"
     },
     "ranking": {
-      "name": "Top Pipedrivers",
+      "name": "Ranking",
       "view_all": "View all"
     },
     "best_performers": {
@@ -97,9 +94,14 @@
   },
   "news": {
     "title": "News",
+    "all_news": "All news",
+    "published": "Published on",
+    "loading": "Loading...",
     "search_category": "Search by category:",
     "search_content": "Search by content",
     "no_image": "No image available",
+    "no_news": "No blog posts created",
+    "no_news_subtitle": "There are currently no blog posts created.",
     "categories": {
       "all": "All",
       "competitions": "Competitions",
@@ -108,13 +110,115 @@
       "results": "Results"
     }
   },
+  "competitions": {
+    "category": "Category",
+    "dates": "Dates",
+    "location": "Location",
+    "tables": "Total tables",
+    "bracket": "Bracket",
+    "play_off": "Play-off",
+    "participants": {
+      "search": "Search",
+      "title": "Participants",
+      "no_players_found_search": "No players found matching ",
+      "no_players": "No participants yet",
+      "team_players": "Team players",
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "team": "Team",
+        "player_count": "Players",
+        "rating_placement": "Placement in rating",
+        "class": "Class",
+        "club": "Club",
+        "nationality": "Country",
+        "foreign_player": "Foreigner",
+        "sex": "Sex",
+        "id": "ID"
+      }
+    },
+    "results": {
+      "finished": "Finished",
+      "teams": "Teams",
+      "solo_team": "Player",
+      "total_points": "Total points",
+      "placement": "Live placement",
+      "no_results": "No results"
+    },
+    "standings": {
+      "placement": "Placement",
+      "participants": "Participants"
+    },
+    "timetable": {
+      "table": "Table",
+      "search_placeholder": "Search by name",
+      "all_groups": "All groups",
+      "gameday": "Gameday",
+      "match_details": "Match Details",
+      "player_1": "Player 1",
+      "player_2": "Player 2",
+      "group": "Group",
+      "round": "Round",
+      "type": "Type",
+      "play_off": "Play-off",
+      "group_match": "Group match",
+      "status": "Status",
+      "status_completed": "Completed",
+      "status_pending": "Ongoing",
+      "bracket": "Bracket",
+      "final": "Final",
+      "winner": "Winner",
+      "matches": "Matches",
+      "timetable": "Timetable"
+    },
+    "errors": {
+      "info_missing": "No tournament information available",
+      "no_schedule": "No schedule available",
+      "standings_missing": "No standings data available yet",
+      "no_games": "No games available for that group",
+      "winner_unknown": "Unknown",
+      "no_groups": "No scheduled games yet",
+      "no_table": "Table not available yet"
+    },
+    "navbar": {
+      "info": "Info",
+      "timetable": "Timetable",
+      "standings": "Standings",
+      "results": "Results",
+      "participants": "Participants",
+      "gallery": "Gallery",
+      "guide": "Guide",
+      "sponsors": "Sponsors",
+      "media": "Media"
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "all_categories": "All categories",
-    "no_tournaments": "No tournaments",
+    "no_tournaments": "No tournaments scheduled",
+    "no_tournaments_subtitle": "There are currently no tournaments scheduled in the calendar.",
     "search_placeholder": "Find a tournament...",
     "upcoming": "Upcoming",
-    "finished": "Finished"
+    "finished": "Finished",
+    "3_months": "3M",
+    "full_year": "FY",
+    "game_day": "Gameday",
+    "play_off": "Play-off",
+    "multiple_tournaments_placeholder": "More than 1 tournament",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
   },
   "tournaments": {
     "header": "Tournaments",
@@ -132,19 +236,19 @@
   },
   "rating": {
     "component": {
-      "missing": "No data available"
+      "missing": "No players to display"
     },
-    "header": "Pipedrive Ranking",
+    "header": "National Ranking",
     "header_prefix": {
-      "men": "Lisbon",
+      "men": "Men's",
       "senior_men": "Senior Men's",
-      "women": "Tartu",
+      "women": "Women's",
       "senior_women": "Senior Women's",
       "junior_boys": "Junior Boys",
       "cadet_boys": "Cadet Boys",
       "junior_girls": "Junior Girls",
       "cadet_girls": "Cadet Girls",
-      "combined": "Tallinn"
+      "combined": "Combined"
     },
     "last_updated": "Last updated",
     "filtering": {
@@ -169,11 +273,12 @@
     "table": {
       "head": {
         "first_name": "First Name",
-        "last_name": "Username",
+        "last_name": "Surname",
         "birthyear": "YOB",
         "profile": "Profile",
         "club": "Club",
-        "player": "Player"
+        "player": "Player",
+        "sex": "Sex"
       },
       "body": {
         "profile_button": "Player profile"
@@ -188,24 +293,40 @@
         "latest_matches": {
           "title": "Latest matches"
         },
-        "player_profile": {
-          "title": "Player profile"
+        "temp_placeholder": {
+          "title": "Player information"
         },
         "rating_change_graph": {
-          "title": "Ranking change graph"
+          "title": "Rank trend"
         }
       }
     }
   },
   "clubs": {
     "header": "Active Estonian Clubs",
+    "search_placeholder": "Search club by name",
+    "loading_club_data": "Loading club data...",
+    "no_players": "No players found for this club",
+    "club_players": "Club players",
     "club_card": {
       "button": "Club profile"
     }
   },
+  "login": {
+    "title": "Welcome back",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "login_progress": "Logging in...",
+    "login_error": "Incorrect email or password",
+    "form_errors": {
+      "email": "Invalid email address",
+      "password_min": "Password must be at least 5 characters long"
+    }
+  },
   "register": {
     "form": {
-      "heading": "Register as a participant",
+      "heading": "Register user",
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",
@@ -215,10 +336,8 @@
       "register_progress": "Registering...",
       "date_of_birth": "Date of birth",
       "username": "Username",
-      "create_profile": "Auto-signup for Pipedrive FFA tournament",
+      "create_profile": "Create profile",
       "sex": "Sex",
-      "location": "Location",
-      "select_location": "Select location",
       "sex_options": {
         "male": "Male",
         "female": "Female",
@@ -230,33 +349,14 @@
         "email": "Email is required",
         "sex": "Sex is required",
         "date_of_birth": "Date of birth is required",
-        "duplicate_username": "Username is already taken",
         "username": "Username is required",
         "password": "Password must be alteast 8 characters long",
-        "password_confirmation": "Passwords must match",
-        "location": "Location must be selected"
+        "password_confirmation": "Passwords must match"
       }
     },
     "successful_registration": "Registration was successful",
     "registration_error": "Registration failed",
     "already_have_account": "Already have an account? Login"
-  },
-  "login": {
-    "title": "Welcome back",
-    "email": "Email",
-    "password": "Password",
-    "login": "Log in",
-    "login_progress": "Logging in..."
-  },
-  "tournament_info": {
-    "category": "Category",
-    "date": "Date",
-    "location": "Venue",
-    "brackets": "Brackets",
-    "additional_information": "Additional information",
-    "timetable": "Timetable",
-    "timetable_missing": "Timetable missing",
-    "players": "Players"
   },
   "admin": {
     "layout": {
@@ -264,9 +364,11 @@
         "dashboard": "Dashboard",
         "tournaments": "Tournaments",
         "blogs": "Blogs",
-        "settings": "Settings"
+        "clubs": "Clubs",
+        "feedback": "Feedback"
       },
       "info": "Info",
+      "tables": "Tables",
       "groups": "Groups",
       "media": "Media",
       "images": "Images",
@@ -275,8 +377,11 @@
     },
     "dashboard": {
       "name": "Dashboard",
+      "missing": "Dashboard unavailable",
+      "missing_subtitle": "Dashboard unavailable. Create and manage tournaments to view the dashboard.",
       "total_tournaments": "Total tournaments",
       "active_tournaments": "Active tournaments",
+      "users_in_db": "Players in database",
       "upcoming_tournaments": "Upcoming tournaments",
       "upcoming_tournaments_description": "Overview of upcoming tournaments",
       "recently_created_tournaments": "Recently created tournaments",
@@ -295,9 +400,33 @@
       "add_new": "New Tournament",
       "delete": "Delete a tournament",
       "create_tournament": {
+        "errors": {
+          "location": "Location is required",
+          "name_min": "Tournament name must be at least 4 characters long",
+          "name_max": "Tournament name must be at most 40 characters long",
+          "start_date": "Start date is required",
+          "sport": "Sport is required",
+          "end_date": "End date is required",
+          "total_tables": "Total tables must be at least 1",
+          "category": "Category is required"
+        },
+        "tournament_tables": {
+          "single_elimination": "Single Elimination (No bronze)",
+          "single_elimination_bronze": "Single Elimination",
+          "double_elimination_full_placement": "Double Elimination Full",
+          "double_elimination_full_placement_top_heavy": "Double Elimination (Semi-final losers for 3rd)",
+          "double_elimination_tabletennis": "Double Elimination (table tennis)",
+          "double_elimination_tabletennis_top_heavy": "Double Elimination (Semi-final losers for 3rd) (table tennis)",
+          "champions_league": "Team Champions League",
+          "free_for_all": "Solo Free-for-all",
+          "round_robin_full_placement": "Round Robin (Placement matches included)",
+          "round_robin": "Round Robin"
+        },
         "back": "Back",
         "edit_group": "Edit Group",
-        "create_group": "Create Group",
+        "create_group": "Create a Tournament Group",
+        "woman_weight": "Woman rating weight",
+        "woman_weight_description": "Woman rating will be multiplied by this number",
         "title_create": "Create Tournament",
         "title_edit": "Edit Tournament",
         "title_create_table": "Create Group",
@@ -315,9 +444,11 @@
         "category_placeholder": "Type a Category",
         "number_of_tables": "Number of tables",
         "number_of_tables_placeholder": "Enter number of tables",
-        "class": "Class",
-        "class_placeholder": "Type a Class",
-        "tournament_size": "Tournament Size",
+        "number_of_groups_placeholder": "Enter the number of subgroups",
+        "group_amount": "Number of subgroups",
+        "class": "Group",
+        "class_placeholder": "Group name",
+        "tournament_size": "Tournament Size (amount of participants/teams)",
         "min_team_size": "Minimum Team Size",
         "additional_information": "Additional Information",
         "sport": "Sport",
@@ -333,38 +464,223 @@
         "max_team_size": "Maximum Team Size",
         "private": "Private Tournament",
         "private_description": "Make this tournament private (only seen to admins)",
+        "ranking": "Include ranking",
+        "ranking_description": "Enable ranking for this tournament",
         "team": "Tournament with teams",
         "team_description": "Enable tournament with teams"
+      },
+      "tables": {
+        "no_tables": "No tables have been assigned yet",
+        "title": "Table management",
+        "taken": "Occupied",
+        "free": "Free",
+        "empty_placeholder": "Table available for matches"
       },
       "groups": {
         "layout": {
           "info": "Info",
           "participants": "Participants",
           "matches": "Matches",
-          "tables": "Tables"
+          "tables": "Brackets"
+        },
+        "images": {
+          "title": "Image groups",
+          "new": "New image group",
+          "uploading": "Remaining",
+          "dialog": {
+            "confirmation": "Are you sure?",
+            "description": "This action cannot be undone. This will permanently delete the data.",
+            "cancel": "Cancel",
+            "delete": "Delete"
+          },
+          "no_gamedays": "There are no image groups yet",
+          "no_gamedays_description": "Create a new image group to upload and manage images",
+          "no_images": "There are currently no images",
+          "edit": "Edit",
+          "delete": "Delete",
+          "add_image": "Add images",
+          "remove_all": "Remove all",
+          "save": "Save",
+          "toasts": {
+            "success_add": "Image group added",
+            "error_add": "Failed to add image group",
+            "success_remove": "Image group removed successfully",
+            "error_remove": "Failed to remove image group",
+            "success_edit": "Image group edited successfully",
+            "error_edit": "Failed to edit image group",
+            "success_remove_image": "Image removed successfully",
+            "error_remove_image": "Failed to remove image",
+            "uploading_images": "Uploading images might take some time. Do not close the page.",
+            "upload_success": "Image uploaded successfully.",
+            "upload_error": "Image upload failed. Please try again."
+          },
+          "loading": {
+            "games": "Loading..."
+          }
         },
         "table": {
           "group": "Group",
-          "number_and_team_size": "Participants / Tabel size",
+          "number_and_team_size": "Participants / Table size",
           "type": "Table type",
           "format": "Format"
         },
         "add_new": "Add new",
         "no_tables": "No groups created yet",
         "title": "Tournament Groups",
+        "errors": {
+          "class": "Group name is required",
+          "type": "Tournament type is required",
+          "min_team_size": "Minimum team size is 2"
+        },
+        "solo": "Solo",
+        "team": "Teams",
+        "reset_seeding": {
+          "title": "Reset matches",
+          "subtitle": "Are you sure you want to reset the seeding? This action cannot be undone."
+        },
+        "regroup": "Regroup",
+        "finals": "Finals assignment",
+        "change_time": "Change time",
+        "no_results": "No results",
+        "order": {
+          "order_by_rating": "Order by rating",
+          "title": "Generate matches",
+          "placeholder": "Seeding",
+          "random": "Random",
+          "by_rating": "Tabletennis",
+          "by_order": "In order"
+        },
+        "tables": {
+          "no_data": "No tables available",
+          "editing": {
+            "title": "Editing mode",
+            "enter": "Enter editing mode",
+            "exit": "Exit editing mode",
+            "select_p1": "Select first player",
+            "select_p2": "Select second player to switch",
+            "player_selected": "Player selected"
+          },
+          "print": "Print bracket"
+        },
+        "img_modal": {
+          "title": "Edit image",
+          "description": "Add or replace player image here. Click save when done",
+          "choose_img": "Choose image",
+          "file_types": "Upload JPG, JPEG, PNG, WebP, or GIF (max 10MB)",
+          "cancel": "Cancel",
+          "save": "Save",
+          "sentence_1": {
+            "1": "Edit",
+            "2": "'s image"
+          },
+          "errors": {
+            "invalid_type": "Invalid file type. Only JPG, JPEG, PNG, WebP, and GIF are allowed.",
+            "file_too_large": "File is too large. Maximum size is 10MB.",
+            "upload_failed": "Image upload failed. Please try again.",
+            "no_image": "No image"
+          },
+          "notifications": {
+            "upload_success": "Image uploaded successfully.",
+            "uploading": "Uploading..."
+          }
+        },
         "participants": {
+          "teams": "Teams",
+          "groups": "Groups",
+          "subgroups": "Subgroups",
+          "players": "Players",
+          "change_me": "CHANGE ME",
+          "team_placeholder": "Team",
+          "new_group": "New subgroup",
+          "regroup": {
+            "title_regroup": "Regroup",
+            "title_finals": "Finals",
+            "description": "Teams are organized randomly. Drag and drop to change the order.",
+            "regroup_button": "Generate regrouping",
+            "final_button": "Generate finals",
+            "table": {
+              "place": "Rank",
+              "team": "Team",
+              "points": "Points",
+              "drag_here": "Drag HERE"
+            }
+          },
+          "change_time": {
+            "title": "Change round time",
+            "round": "Round",
+            "play_off": "Play-off",
+            "date": "Date",
+            "time": "Time",
+            "location": "Location",
+            "save": "Save",
+            "cancel": "Cancel"
+          },
+          "toasts": {
+            "team_updated": "Club successfully created",
+            "team_updated_error": "Issue updating team",
+            "team_created_error": "Issue creating team",
+            "team_deleted_error": "Issue deleting team",
+            "player_updated": "Player data successfully updated",
+            "player_updated_error": "Issue updating player data",
+            "player_removed_error": "Player successfully removed",
+            "player_added": "Player successfully added",
+            "max_players": "Exceeding maximum set team size"
+          },
+          "actions": {
+            "save": "Save",
+            "edit": "Edit",
+            "delete": "Delete",
+            "confirm": {
+              "delete": "Are you sure you want to delete?",
+              "reminder": "This action is non-reversible."
+            },
+            "cancel": "Cancel",
+            "edit_team": "Edit team",
+            "delete_team": "Delete team",
+            "update_team": "Update team",
+            "add_team": "Add team",
+            "submit": "Submit",
+            "unfilled_slot": "Unfilled slot",
+            "add_team_title": "Add a new team",
+            "edit_team_title": "Edit team",
+            "team_dialog_description": "This team will be added to the selected group.",
+            "team_name": "Team name",
+            "team_name_placeholder": "Insert team name",
+            "add_player": {
+              "add": "Add player",
+              "title": "Add player to team",
+              "dialog_description": "Player will be added to specified team.",
+              "first_name": "First name",
+              "last_name": "Last name",
+              "sex": "Gender",
+              "genders": {
+                "male": "Male",
+                "female": "Female"
+              },
+              "club": "Club (Optional)"
+            },
+            "edit_player": {
+              "edit": "Edit player info",
+              "title": "Modify player info",
+              "dialog_description": "Valitud mängija andmed uuendatakse."
+            }
+          },
           "table": {
             "serial_number": "SN",
-            "position": "Position",
+            "position": "Pos.",
             "team": "Team",
             "name": "Name",
-            "rank": "Placement",
+            "rank": "RP",
             "sex": "Sex",
             "club": "Club",
             "class": "Class",
             "eltl_id": "ELTL ID",
+            "yob": "YOB",
             "rating": "Placement in rating",
-            "actions": "Actions"
+            "actions": "Actions",
+            "nationality": "Country",
+            "image": "Image",
+            "foreign_player": "Foreigner"
           }
         }
       },
@@ -446,6 +762,7 @@
       },
       "matches": {
         "table": {
+          "modify": "Modify",
           "serial_number": "SN.",
           "round": "Round",
           "class": "Class",
@@ -469,7 +786,7 @@
     "blogs": {
       "title": "Blogs",
       "description": "Manage blogs",
-      "add_new": "Add new",
+      "add_new": "New Post",
       "delete": "Delete a blog",
       "text": "Start writing a blog",
       "search": "Search for blogs...",
@@ -486,12 +803,84 @@
         "actions": "Actions"
       },
       "not_found": "No blogs found",
+      "not_found_subtitle": "No blog posts created. Create the first blog post.",
       "load_failed": "Failed to load blogs. Please try again.",
       "load_failed_description": "An error occurred while fetching blogs. Please try again.",
       "refresh": "Refresh the page"
+    },
+    "clubs": {
+      "toast": {
+        "club_created": "Club created successfully",
+        "club_updated": "Club updated successfully",
+        "club_deleted": "Club deleted successfully",
+        "club_created_error": "Failed to create club. Please try again",
+        "club_updated_error": "Failed to update club. Please try again",
+        "club_deleted_error": "Failed to delete club. Please try again"
+      },
+      "loading": "Loading...",
+      "error": "No club data available",
+      "title": "Clubs",
+      "subtitle": "Create and manage clubs",
+      "add_new": "Add new club",
+      "add_new_details": "Enter the details for the new club",
+      "edit": "Edit Club",
+      "edit_details": "Update the club details",
+      "clubs": "clubs",
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "contact_person": "Contact person",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "website": "Website",
+        "actions": "Actions"
+      },
+      "dropdown": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "cancel": "Cancel",
+      "creating": "Creating...",
+      "create": "Create Club",
+      "updating": "Updating...",
+      "update": "Update Club",
+      "delete": "Delete Club",
+      "deleting": "Deleting...",
+      "alert_dialog": {
+        "confirmation": "Are you sure?",
+        "description": "This action cannot be undone. This will permanently delete the club"
+      }
+    },
+    "media": {
+      "title": "Media",
+      "save_button": "Save changes",
+      "save_progress": "Saving..."
     }
   },
   "protocol": {
+    "title": "Protocol",
+    "round": "Round",
+    "referees": "Referees",
+    "players": "Participants",
+    "winner": "Winner",
+    "no_players": "No players available",
+    "actions": {
+      "title": "Actions",
+      "add_set": "Add set",
+      "cancel": "Cancel",
+      "save": "Save",
+      "optional": "Optional"
+    },
+    "forfeit": {
+      "title": "Forfeit",
+      "description": "Choose a winner",
+      "delete": "Delete forfeit",
+      "delete_confirm": "Confirm forfeit",
+      "back": "Back",
+      "no_player_chosen": "No player chosen",
+      "select_winner_error": "Select a winner"
+    },
     "loading": "Loading...",
     "error": "Error",
     "date": "Date",
@@ -501,13 +890,26 @@
       "sets": "Sets",
       "score": "Score",
       "total": "Total",
-      "doubles": "Doubles"
+      "doubles": "Doubles",
+      "solo_game": "Solo game",
+      "double_game": "Double game",
+      "forfeit": "Forfeit"
     },
+    "captain": "Captain",
     "notes": "Notes",
+    "notes_placeholder": "Enter notes here",
     "notes_missing": "No notes available",
     "table_referee": "Table referee",
+    "table_referee_placeholder": "Enter table referee name",
     "head_referee": "Head referee",
-    "final_score": "Final score"
+    "head_referee_placeholder": "Enter head referee name",
+    "final_score": "Final score",
+    "download": "Download protocol",
+    "start_game": "Start game",
+    "reset_game": "Reset game",
+    "finish_game": "Finish game",
+    "game_finished": "Game finished",
+    "choose_player": "Choose player"
   },
   "errors": {
     "not_found": {
@@ -520,7 +922,82 @@
       "title": "Something went wrong",
       "description": "An error occurred while fetching the page.",
       "retry": "Retry",
-      "home": "Home"
+      "home": "Home",
+      "value_yes": "Yes",
+      "value_no": "No"
+    }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "description": "Check out the latest images from our tournaments",
+    "no_images": "No images",
+    "no_images_subtitle": "Currently there are no images"
+  },
+  "sponsors": {
+    "title": "Sponsors",
+    "description": "Our sponsors"
+  },
+  "media": {
+    "no_content": "No media content available"
+  },
+  "toasts": {
+    "media": {
+      "save_success": "Media saved successfully",
+      "save_error": "Failed to save media"
+    },
+    "tournaments": {
+      "created": "Tournament created successfully",
+      "updated": "Tournament updated successfully",
+      "deleted": "Tournament deleted successfully",
+      "created_error": "Tournament creation failed. Please try again",
+      "updated_error": "Tournament update failed. Please try again",
+      "deleted_error": "Tournament deletion failed. Please try again"
+    },
+    "tournament_tables": {
+      "created": "Tournament table created successfully",
+      "updated": "Tournament table updated successfully",
+      "deleted": "Tournament table deleted successfully",
+      "created_error": "Tournament table creation failed. Please try again",
+      "updated_error": "Tournament table update failed. Please try again",
+      "deleted_error": "Tournament table deletion failed. Please try again"
+    },
+    "participants": {
+      "created": "Participant added successfully",
+      "updated": "Participant updated successfully",
+      "deleted": "Participant deleted successfully",
+      "created_error": "Participant addition failed. Please try again",
+      "updated_error": "Participant update failed. Please try again",
+      "deleted_error": "Participant deletion failed. Please try again",
+      "group_name_updated": "Group name updated successfully",
+      "group_name_updated_error": "Group name update failed. Please try again",
+      "regroup_success": "Group updated successfully",
+      "regorup_error": "Group update failed. Please try again",
+      "round_process_error": "Round process failed. Please try again",
+      "time_change_success": "Round time updated successfully",
+      "time_change_error": "Round time update failed. Please try again",
+      "seeding_success": "Seeding successful",
+      "seeding_error": "Seeding failed. Please try again",
+      "order_success": "Order updated successfully",
+      "order_error": "Order update failed. Please try again"
+    },
+    "protocol_modals": {
+      "updated_match_score": "Match score updated successfully",
+      "updated_match_score_error": "Match score update failed. Please try again",
+      "switch_participant_error": "Switching participants failed. Please try again",
+      "player_assign_error": "Player assignment failed. Please try again",
+      "update_error": "Match update failed. Please try again",
+      "match_start_error": "Match start failed. Please try again",
+      "match_start_success": "Match started successfully",
+      "match_finish_success": "Match finished successfully",
+      "match_finish_error": "Match finish failed. Please try again",
+      "forfeit_error": "Forfeit assignment failed. Please try again",
+      "forfeit_delete_error": "Forfeit deletion failed. Please try again",
+      "table_number_change_error": "Table number change failed. Please try again",
+      "match_reset_success": "Match reset successfully",
+      "match_reset_error": "Match reset failed. Please try again"
+    },
+    "auth": {
+      "login_success": "Login successful"
     }
   }
 }

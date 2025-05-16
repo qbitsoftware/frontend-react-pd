@@ -2,17 +2,11 @@
   "eltl": {
     "name": "Eesti lauatenniseliit"
   },
+  "common": {
+    "cancel": "Katkesta",
+    "confirm": "Kinnita"
+  },
   "navbar": {
-    "tournament": {
-      "information": "Info",
-      "timetable": "Ajakava",
-      "results": "Tulemused",
-      "players": "Mängijad",
-      "gallery": "Galerii",
-      "rules": "Juhend",
-      "sponsors": "Sponsorid",
-      "media": "Meedia"
-    },
     "language": {
       "estonian": "Eesti",
       "english": "Inglise",
@@ -37,7 +31,7 @@
       "contact": "Kontakt",
       "admin": "Admin Paneel"
     },
-    "login": "Admin Login",
+    "login": "Logi sisse",
     "logout": "Logi välja"
   },
   "footer": {
@@ -54,15 +48,11 @@
     },
     "links": "Menüü"
   },
-  "contactpage": {
-    "title": "Kontaktisikud"
-  },
   "homepage": {
     "title": "Eesti Lauatenniseliit",
     "title_button": "Uuri võistlusi",
     "description": "Eesti lauatennise spordi tugevdamine",
     "upcoming_tournaments": "Tulevased võistlused",
-    "no_upcoming_tournaments": "Ühtegi võistlust tulemas pole",
     "latest_news": "Viimased uudised",
     "details": "Üksikasjad",
     "tournaments": {
@@ -76,12 +66,19 @@
       "error": "Viimaseid kohtumisi ei leitud",
       "no_matches": "Viimaseid kohtumisi ei leitud"
     },
+    "news": {
+      "name": "Uudised",
+      "missing": "Blogi postitused puuduvad",
+      "view_all": "Kõik uudised",
+      "read_more": "Loe lähemalt"
+    },
     "calendar": {
       "name": "Kalender",
-      "view_all": "Vaata kõiki"
+      "view_all": "Vaata kõiki",
+      "no_tournaments": "Ühtegi võistlust tulemas ei ole"
     },
     "ranking": {
-      "name": "Parimad Pipedriverid",
+      "name": "Edetabel",
       "view_all": "Kogu edetabel"
     },
     "best_performers": {
@@ -97,9 +94,14 @@
   },
   "news": {
     "title": "Uudised",
+    "all_news": "Kõik uudised",
+    "published": "Avaldatud",
+    "loading": "Laadimine...",
     "search_category": "Otsi kategooria järgi:",
     "search_content": "Otsi sisu järgi",
     "no_image": "Pilt pole saadaval",
+    "no_news": "Blogi postitused puuduvad",
+    "no_news_subtitle": "Hetkel ei ole ühtegi blogi postitust.",
     "categories": {
       "all": "Kõik",
       "news": "Teadaanded",
@@ -108,13 +110,115 @@
       "results": "Tulemused"
     }
   },
+  "competitions": {
+    "category": "Kategooria",
+    "dates": "Kuupäevad",
+    "location": "Toimumiskoht",
+    "tables": "Laudu kokku",
+    "bracket": "Tabelid",
+    "play_off": "Kohamängud",
+    "participants": {
+      "search": "Otsi",
+      "title": "Mängijad",
+      "no_players_found_search": "Mängijaid ei leitud - ",
+      "no_players": "Mängijaid pole",
+      "team_players": "Tiimi mängijad",
+      "table": {
+        "image": "Pilt",
+        "name": "Nimi",
+        "team": "Meeskond",
+        "player_count": "Mängijate arv",
+        "rating_placement": "Asetus reitingus",
+        "class": "Klass",
+        "nationality": "Riik",
+        "foreign_player": "Välismängija",
+        "club": "Klubi",
+        "sex": "Sugu",
+        "id": "ID"
+      }
+    },
+    "results": {
+      "finished": "Lõppenud",
+      "teams": "Meeskond",
+      "solo_team": "Võistleja",
+      "total_points": "Punktid kokku",
+      "placement": "Paremusjärjestus",
+      "no_results": "Tulemusi pole"
+    },
+    "standings": {
+      "placement": "Koht",
+      "participants": "Osalejad"
+    },
+    "timetable": {
+      "table": "Laud",
+      "search_placeholder": "Otsi nime",
+      "all_groups": "Kõik grupid",
+      "gameday": "Mängupäev",
+      "match_details": "Mängu detailid",
+      "player_1": "Mängija 1",
+      "player_2": "Mängija 2",
+      "group": "Grupp",
+      "round": "Ring",
+      "type": "Tüüp",
+      "play_off": "Play-off",
+      "group_match": "Tiimi matš",
+      "status": "Staatus",
+      "status_completed": "Läbi",
+      "status_pending": "Käimas",
+      "bracket": "Koht",
+      "final": "Finaal",
+      "winner": "Võitja",
+      "matches": "Matšid",
+      "timetable": "Ajakava"
+    },
+    "errors": {
+      "info_missing": "Turniiri info puudub",
+      "no_schedule": "Ajakava puudub",
+      "standings_missing": "Kohad pole veel välja mängitud",
+      "no_games": "Mänge pole selles klassis sel päeval",
+      "winner_unknown": "Teadmata",
+      "no_groups": "Mängude ajakava pole veel saadaval",
+      "no_table": "Tabel pole veel saadaval"
+    },
+    "navbar": {
+      "info": "Info",
+      "timetable": "Ajakava",
+      "standings": "Kohad",
+      "results": "Tulemused",
+      "participants": "Osalejad",
+      "gallery": "Galerii",
+      "guide": "Juhend",
+      "sponsors": "Sponsorid",
+      "media": "Meedia"
+    }
+  },
   "calendar": {
     "title": "Kalender",
     "all_categories": "Kõik kategooriad",
     "no_tournaments": "Turniirid puuduvad",
+    "no_tournaments_subtitle": "Hetkel ei ole kalendris ühtki turniiri.",
     "search_placeholder": "Otsi turniiri...",
     "upcoming": "Tulemas",
-    "finished": "Lõppenud"
+    "finished": "Lõppenud",
+    "3_months": "Kuude lõikes",
+    "game_day": "Mängupäev",
+    "play_off": "Kohamängud",
+    "full_year": "Aasta lõikes",
+    "multiple_tournaments_placeholder": "Rohkem kui 1 turniir",
+    "months": {
+      "january": "Jaanuar",
+      "february": "Veebruar",
+      "march": "Märts",
+      "april": "Aprill",
+      "may": "Mai",
+      "june": "Juuni",
+      "july": "Juuli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktoober",
+      "november": "November",
+      "december": "Detsember"
+    }
   },
   "tournaments": {
     "header": "Turniirid",
@@ -134,17 +238,17 @@
     "component": {
       "missing": "Edetabel hetkel puudub"
     },
-    "header": "Pipedrivei Reiting",
+    "header": "Reiting",
     "header_prefix": {
-      "men": "Lissaboni",
+      "men": "Meeste",
       "senior_men": "Seeniorite Meeste",
       "junior_boys": "Juuniorite Noormeeste",
       "cadet_boys": "Kadettide Poiste",
-      "women": "Tartu",
+      "women": "Naiste",
       "senior_women": "Seeniorite Naiste",
       "junior_girls": "Juuniorite Neiude",
       "cadet_girls": "Kadettide Tüdrukute",
-      "combined": "Tallinna"
+      "combined": "Ühine"
     },
     "last_updated": "Viimati uuendatud",
     "filtering": {
@@ -169,11 +273,12 @@
     "table": {
       "head": {
         "first_name": "Eesnimi",
-        "last_name": "Mängijanimi",
+        "last_name": "Perenimi",
         "birthyear": "SA",
         "profile": "Profiil",
         "club": "Klubi",
-        "player": "Mängija"
+        "player": "Mängija",
+        "sex": "Sugu"
       },
       "body": {
         "profile_button": "Mängija profiil"
@@ -186,19 +291,23 @@
       },
       "menus": {
         "latest_matches": {
-          "title": "Hiljutised kohtumised"
+          "title": "Viimased mängud"
         },
         "player_profile": {
-          "title": "Mängija profiil"
+          "title": "Mängija Profiil"
         },
         "rating_change_graph": {
-          "title": "Reitingu muutuse graafik"
+          "title": "Vorm"
         }
       }
     }
   },
   "clubs": {
     "header": "Aktiivsed Eesti Klubid",
+    "search_placeholder": "Otsi klubi",
+    "loading_club_data": "Klubi andmed laadimisel...",
+    "no_players": "Mängijaid pole",
+    "club_players": "Klubi mängijad",
     "club_card": {
       "button": "Klubi profiil"
     }
@@ -208,21 +317,16 @@
     "email": "E-posti aadress",
     "password": "Parool",
     "login": "Logi sisse",
-    "login_progress": "Sisselogimine..."
-  },
-  "tournament_info": {
-    "category": "Kategooria",
-    "date": "Kuupäev",
-    "location": "Asukoht",
-    "brackets": "Tabeleid",
-    "additional_information": "Additional information",
-    "timetable": "Ajakava",
-    "timetable_missing": "Ajakava puudub",
-    "players": "Mängijad"
+    "login_progress": "Sisselogimine...",
+    "login_error": "Vale parool või e-posti aadress",
+    "form_errors": {
+      "email": "Vigane e-posti aadress",
+      "password_min": "Parool peab olema vähemalt 5 tähemärki pikk"
+    }
   },
   "register": {
     "form": {
-      "heading": "Registreeri mängijaks",
+      "heading": "Registreeri kasutaja",
       "first_name": "Eesnimi",
       "last_name": "Perenimi",
       "password": "Parool",
@@ -232,9 +336,7 @@
       "register_progress": "Registreerimine...",
       "date_of_birth": "Sünnikuupäev",
       "username": "Kasutajanimi",
-      "location": "Koht",
-      "select_location": "Vali asukoht",
-      "create_profile": "Automaatselt registreeri Pipedrive FFA turniirile",
+      "create_profile": "Loo mängija profiil",
       "sex": "Sugu",
       "sex_options": {
         "male": "Mees",
@@ -247,11 +349,9 @@
         "email": "E-posti aadress on kohustuslik",
         "sex": "Sugu on kohustuslik",
         "date_of_birth": "Sünnikuupäev on kohustuslik",
-        "duplicate_username": "Kasutajanimi on juba kasutusel",
         "username": "Kasutajanimi on kohustuslik",
         "password": "Parool peab olema vähemalt 8 tähemärki pikk",
-        "password_confirmation": "Paroolid peavad kattuma",
-        "location": "Asukoht peab olema valitud"
+        "password_confirmation": "Paroolid peavad kattuma"
       }
     },
     "successful_registration": "Registreerimine oli edukas.",
@@ -263,26 +363,31 @@
       "sidebar": {
         "dashboard": "Töölaud",
         "tournaments": "Turniirid",
-        "blogs": "Blogid",
-        "settings": "Sätted"
+        "blogs": "Blogi",
+        "clubs": "Klubid",
+        "feedback": "Tagasiside"
       },
       "info": "Info",
       "groups": "Grupid",
       "media": "Meedia",
+      "tables": "Lauad",
       "images": "Pildid",
       "title": "Turniirihaldus",
       "description": "Administreerimine"
     },
     "dashboard": {
       "name": "Töölaud",
+      "missing": "Töölaud puudub",
+      "missing_subtitle": "Töölauda pole. Loo ja vii läbi turniire, et töölauda näha.",
       "total_tournaments": "Turniire kokku",
       "active_tournaments": "Aktiivseid turniire",
+      "users_in_db": "Mängijaid andmebaasis",
       "upcoming_tournaments": "Tulevased turniirid",
       "upcoming_tournaments_description": "Ülevaade tulevastest turniiridest",
       "recently_created_tournaments": "Hiljuti loodud turniirid",
       "recently_created_tournaments_description": "Ülevaade viimati loodud turniiridest",
-      "tournament_activity": "Turniirid kuu lõikes",
-      "tournament_activity_description": "Turniiride arv kuu lõikes",
+      "tournament_activity": "Turniirid kuude lõikes",
+      "tournament_activity_description": "Turniiride arv kuude lõikes",
       "utils": {
         "name": "Nimi",
         "status": "Staatus",
@@ -291,14 +396,38 @@
     },
     "tournaments": {
       "title": "Turniirid",
-      "description": "Halda turniire siit",
-      "add_new": "Lisa Uus",
+      "description": "Turniiride loomine ja haldamine",
+      "add_new": "Uus Turniir",
       "delete": "Kustuta turniir",
       "create_tournament": {
+        "errors": {
+          "location": "Asukoht on kohustuslik",
+          "name_min": "Turniiri nimi peab olema vähemalt 4 tähemärki pikk",
+          "name_max": "Turniiri nimi peab olema maksimaalselt 40 tähemärki pikk",
+          "sport": "Sport on kohustuslik",
+          "start_date": "Alguskuupäev on kohustuslik",
+          "end_date": "Lõppkuupäev on kohustuslik",
+          "total_tables": "Laudade arv peab olema suurem kui 1",
+          "category": "Kategooria on kohustuslik"
+        },
+        "tournament_tables": {
+          "single_elimination": "Klassikaline Üksikeliminatsioon",
+          "single_elimination_bronze": "Üksikeliminatsioon (kolmanda koha väljamängimisega)",
+          "double_elimination_full_placement": "Klassikaline Kaksikeliminatsioon",
+          "double_elimination_full_placement_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale)",
+          "double_elimination_tabletennis": "Klassikaline Kaksikeliminatsioon (lauatennis)",
+          "double_elimination_tabletennis_top_heavy": "Kaksikeliminatsioon (poolfinaali kaotajad kolmanda koha peale) (lauatennis)",
+          "champions_league": "Võistkondlikud liigad",
+          "free_for_all": "Tänavapinks",
+          "round_robin_full_placement": "Round Robin (2 roundiga)",
+          "round_robin": "Round Robin"
+        },
         "back": "Tagasi",
-        "edit_group": "Muuda gruppi",
+        "edit_group": "Muuda grupi seadistusi",
         "create_group": "Loo grupp",
         "title_create": "Loo uus turniir",
+        "woman_weight": "Naiste reitingu kaal",
+        "woman_weight_description": "Naiste reiting korrutatakse selle kaaluga",
         "title_edit": "Muuda turniiri",
         "title_create_table": "Loo grupp",
         "title_edit_table": "Muuda gruppi",
@@ -315,11 +444,13 @@
         "category_placeholder": "Sisestage kategooria",
         "number_of_tables": "Laudade arv",
         "number_of_tables_placeholder": "Sisestage laudade arv",
-        "class": "Klass",
-        "class_placeholder": "Sisestage klass",
-        "tournament_size": "Turniiri suurus",
+        "number_of_groups_placeholder": "Sisestage alagruppide arv",
+        "group_amount": "Alagrupid",
+        "class": "Grupi nimi",
+        "class_placeholder": "Sisestage grupi nimi",
+        "tournament_size": "Tabeli suurus (osalejate/meeskondade arv)",
         "min_team_size": "Minimaalne tiimi suurus",
-        "additional_information": "Lisa informatisoon",
+        "additional_information": "Lisa-informatsioon",
         "sport": "Sport",
         "sport_placeholder": "Vali spordiala",
         "sport_value": {
@@ -328,13 +459,22 @@
         },
         "end_date": "Lõppkuupäev",
         "start_date_placeholder": "Pick a date",
-        "type": "Turniiri tüüp",
+        "type": "Tabeli tüüp",
         "type_placeholder": "Vali turniiri tüüp",
         "max_team_size": "Maksimaalne tiimi suurus",
         "private": "Privaatne turniir",
         "private_description": "Muuda turniir ainult adminitele nähtavaks",
+        "ranking": "Reitinguga turniir",
+        "ranking_description": "Reiting arvutatakse iga esmaspäeva hommikul",
         "team": "Meeskondadega turniir",
         "team_description": "Luba meeskondadega turniir"
+      },
+      "tables": {
+        "no_tables": "Laudu pole veel lisatud",
+        "title": "Laudade haldamine",
+        "taken": "Võetud",
+        "free": "Vaba",
+        "empty_placeholder": "Laud on mänguks vaba"
       },
       "groups": {
         "layout": {
@@ -342,6 +482,41 @@
           "participants": "Osalejad",
           "matches": "Matšid",
           "tables": "Tabelid"
+        },
+        "images": {
+          "title": "Pildigrupid",
+          "new": "Uus pildigrupp",
+          "uploading": "Lõpuni jäänud",
+          "dialog": {
+            "confirmation": "Oled kindel",
+            "description": "Peale toimingut kustutatakse pildigrupp ja seda ei saa tagasi võtta",
+            "cancel": "Katkesta",
+            "delete": "Kustuta"
+          },
+          "no_gamedays": "Pildigruppe pole",
+          "no_gamedays_description": "Loo uus pildigrupp, et alustada piltide haldamist",
+          "no_images": "Pilte pole",
+          "edit": "Muuda",
+          "delete": "Kustuta",
+          "add_image": "Lisa pildid",
+          "remove_all": "Eemalda kõik",
+          "save": "Salvesta",
+          "toasts": {
+            "success_add": "Pildigrupp loodud edukalt",
+            "error_add": "Pildigrupi loomine nurjus",
+            "success_remove": "Pildigrupp eemaldati edukalt",
+            "error_remove": "Pildigrupi eemaldamine nurjus",
+            "success_edit": "Pildigruppi muudeti edukalt",
+            "error_edit": "Pildigrupi muutmine nurjus",
+            "success_remove_image": "Pilt eemaldatud edukalt",
+            "error_remove_image": "Pildi eemaldamine nurjus",
+            "uploading_images": "Piltide laadimine võib võtta mõne hetke. Ärge sulgege veebilehte.",
+            "upload_success": "Piltide üleslaadimine õnnestus",
+            "upload_error": "Piltide üleslaadimine nurjus"
+          },
+          "loading": {
+            "games": "Laadimine..."
+          }
         },
         "table": {
           "group": "Grupp",
@@ -352,19 +527,160 @@
         "add_new": "Lisa uus",
         "no_tables": "Gruppe pole veel lisatud",
         "title": "Turniiri grupid",
+        "errors": {
+          "class": "Grupi nimi on kohustuslik",
+          "type": "Turniiri tüüp on kohustuslik",
+          "min_team_size": "Minimaalne tiimi suurus on 2"
+        },
+        "solo": "Üksik",
+        "team": "Meeskondadega",
+        "reset_seeding": {
+          "title": "Lähtesta matšid",
+          "subtitle": "Kas olete kindel? Pärast kinnitamist ei saa seda tagasi võtta."
+        },
+        "regroup": "Regrupeeri",
+        "finals": "Finaalid",
+        "no_results": "Tulemusi pole",
+        "change_time": "Aegade muutmine",
+        "order": {
+          "title": "Genereeri mängud",
+          "order_by_rating": "Järjesta reitingu järgi",
+          "placeholder": "Asetus",
+          "random": "Suvaliselt",
+          "by_rating": "Lauatennis",
+          "by_order": "Järjekord"
+        },
+        "tables": {
+          "no_data": "Tabeleid pole hetkel saadaval",
+          "editing": {
+            "title": "Muutmine",
+            "enter": "Mine muutma",
+            "exit": "Lõpeta muutmine",
+            "select_p1": "Vali esimene mängija",
+            "select_p2": "Vali teine mängija vahetamiseks",
+            "player_selected": "Mängija valitud"
+          },
+          "print": "Prindi tabel"
+        },
+        "img_modal": {
+          "title": "Muuda pilti",
+          "description": "Vali või muuda pilti. Vajuta salvesta, et salvestada muudatused.",
+          "choose_img": "Vali pilt",
+          "file_types": "Sobivad formaadid: JPG, JPEG, PNG, WebP, GIF (max 10MB)",
+          "cancel": "Katkesta",
+          "save": "Salvesta",
+          "sentence_1": {
+            "1": "Muuda",
+            "2": " pilti"
+          },
+          "errors": {
+            "invalid_type": "Faili formaat ei sobi! Sobivad formaadid: JPG, JPEG, PNG, WebP, GIF",
+            "file_too_large": "Fail on liiga suur. Maksimaalne suurus on 10MB",
+            "upload_failed": "Pildi üleslaadimine nurjus. Proovige uuesti.",
+            "no_image": "Pilt puudub"
+          },
+          "notifications": {
+            "upload_success": "Pildi üleslaadimine õnnestus",
+            "uploading": "Pildi üleslaadimine..."
+          }
+        },
         "participants": {
+          "teams": "Meeskonnad",
+          "groups": "Grupid",
+          "subgroups": "Alagrupid",
+          "players": "Mängijad",
+          "change_me": "MUUDA MIND",
+          "new_group": "Uus alagrupp",
+          "team_placeholder": "Tiim",
+          "regroup": {
+            "title_regroup": "Mängu regrupeering",
+            "title_finals": "Mängu finaalid",
+            "description": "Kuvasime juhuslikult tiimid. Tiimide liigutamiseks lohistage nupust",
+            "regroup_button": "Regrupeeri",
+            "final_button": "Finaalid",
+            "table": {
+              "place": "Koht",
+              "team": "Meeskond",
+              "points": "Punktisumma",
+              "drag_here": "Lohista SIIT"
+            }
+          },
+          "change_time": {
+            "title": "Muuda voorude aegu",
+            "round": "Voor",
+            "play_off": "Kohamängud",
+            "date": "Kuupäev",
+            "time": "Kellaaeg",
+            "location": "Asukoht",
+            "save": "Salvesta",
+            "cancel": "Katkesta"
+          },
+          "toasts": {
+            "team_updated": "Klubi loodud edukalt",
+            "team_updated_error": "Meeskonna uuendamisel ilmnes viga",
+            "team_created_error": "Meeskonna loomisel ilmnes viga",
+            "team_deleted_error": "Meeskonna kustutamisel ilmnes viga",
+            "player_updated": "Mängija andmed edukalt uuendatud",
+            "player_updated_error": "Mängija uuendamisel ilmnes viga",
+            "player_removed_error": "Mängija kustutamisel ilmnes viga",
+            "player_added": "Mängija edukalt lisatud",
+            "max_players": "Maksimaalne mängijate arv meeskonnas on täis"
+          },
+          "actions": {
+            "save": "Salvesta",
+            "edit": "Muuda",
+            "delete": "Kustuta",
+            "confirm": {
+              "delete": "Kas oled kindel et tahad kustutada?",
+              "reminder": "Seda käsklust ei saa tagasi võtta."
+            },
+            "cancel": "Katkesta",
+            "edit_team": "Muuda meeskonda",
+            "delete_team": "Kustuta meeskond",
+            "update_team": "Uuenda meeskond",
+            "add_team": "Lisa meeskond",
+            "submit": "Lisa",
+            "unfilled_slot": "Vaba lahter",
+            "add_team_title": "Lisa uus meeskond",
+            "edit_team_title": "Muuda meeskonda",
+            "team_dialog_description": "See meeskond lisatakse antud grupi alla.",
+            "team_name": "Meeskonna nimi",
+            "team_name_placeholder": "Lisa meeskonna nimi",
+            "add_player": {
+              "add": "Lisa mängija",
+              "title": "Lisa meeskonda mängija",
+              "dialog_description": "Mängija lisatakse valitud meeskonda",
+              "first_name": "Eesnimi",
+              "last_name": "Perekonnanimi",
+              "sex": "Sugu",
+              "genders": {
+                "male": "Mees",
+                "female": "Naine"
+              },
+              "club": "Klubi (Valikuline)"
+            },
+            "edit_player": {
+              "edit": "Muuda andmed",
+              "title": "Muuda meeskonna mängija infot",
+              "dialog_description": "Valitud mängija andmed uuendatakse."
+            }
+          },
           "table": {
             "serial_number": "JKNR.",
-            "position": "Positsioon",
+            "position": "Pos.",
             "team": "Meeskond",
             "name": "Nimi",
-            "rank": "Koht",
+            "rank": "RP",
             "sex": "Sugu",
             "club": "Klubi",
             "class": "Klass",
+            "yob": "Sünniaasta",
             "eltl_id": "ELTL ID",
             "rating": "Koht reitingus",
-            "actions": "Tegevused"
+            "actions": "Tegevused",
+            "nationality": "Riik",
+            "image": "Pilt",
+            "foreign_player": "Välismängija"
           }
         }
       },
@@ -427,7 +743,7 @@
       },
       "errors": {
         "not_found": {
-          "title": "Turniiri ei leitud",
+          "title": "Turniire pole",
           "description": "Hetkel ei ole turniire, mida kuvada. Alustamiseks lisage uus turniir."
         },
         "network": {
@@ -446,6 +762,7 @@
       },
       "matches": {
         "table": {
+          "modify": "Muuda",
           "serial_number": "JKNR.",
           "round": "Ring",
           "class": "Grupp",
@@ -467,12 +784,12 @@
       }
     },
     "blogs": {
-      "title": "Blogid",
-      "description": "Halda blogisid siit",
-      "add_new": "Lisa Uus",
-      "delete": "Kustuta blogi",
-      "text": "Alusta esimese blogiga",
-      "search": "Otsi blogisid...",
+      "title": "Blogi",
+      "description": "Halda kõiki uudiseid siin",
+      "add_new": "Uus postitus",
+      "delete": "Kustuta",
+      "text": "Alusta esimese blogipostitusega",
+      "search": "Otsi blogipostitust...",
       "status_published": "Avaldatud",
       "status_draft": "Mustand",
       "edit": "Muuda",
@@ -485,13 +802,85 @@
         "status": "Staatus",
         "actions": "Tegevused"
       },
-      "not_found": "Blogisid ei leitud",
-      "load_failed": "Blogisid ei õnnestunud laadida",
-      "load_failed_description": "Blogisid ei õnnestunud laadida. Palun proovige uuesti.",
+      "not_found": "Blogipostitusi ei leitud",
+      "not_found_subtitle": "Ühtegi blogipostitust ei ole. Loo esimene postitus.",
+      "load_failed": "Blogi ei õnnestunud laadida",
+      "load_failed_description": "Blogi ei õnnestunud laadida. Palun proovige uuesti.",
       "refresh": "Uuenda lehte"
+    },
+    "clubs": {
+      "toast": {
+        "club_created": "Klubi loodud edukalt",
+        "club_updated": "Klubi uuendatud edukalt",
+        "club_deleted": "Klubi kustutatud edukalt",
+        "club_created_error": "Klubi loomine ebaõnnestus. Palun proovige uuesti",
+        "club_updated_error": "Klubi uuendamine ebaõnnestus. Palun proovige uuesti",
+        "club_deleted_error": "Klubi kustutamine ebaõnnestus. Palun proovige uuesti"
+      },
+      "loading": "Laadimine...",
+      "error": "Viga",
+      "title": "Klubid",
+      "subtitle": "Loo ja halda klubisid",
+      "add_new": "Lisa uus klubi",
+      "add_new_details": "Sisestage uue klubi andmed",
+      "edit": "Muuda klubi",
+      "edit_details": "Muuda klubi andmeid",
+      "clubs": "klubi",
+      "table": {
+        "image": "Pilt",
+        "name": "Nimi",
+        "contact_person": "Kontakt isik",
+        "phone": "Tel nr",
+        "email": "E-mail",
+        "address": "Aadress",
+        "website": "Veebileht",
+        "actions": "Tegevused"
+      },
+      "dropdown": {
+        "edit": "Muuda",
+        "delete": "Kustuta"
+      },
+      "cancel": "Katkesta",
+      "creating": "Loomine...",
+      "create": "Loo klubi",
+      "updating": "Uuendamine...",
+      "update": "Uuenda klubi",
+      "delete": "Kustuta klubi",
+      "deleting": "Kustutamine...",
+      "alert_dialog": {
+        "confirmation": "Oled kindel?",
+        "description": "Peale toimingut on klubi kustutatud ja seda ei saa tagasi võtta. Kustutamisele kuulub "
+      }
+    },
+    "media": {
+      "title": "Meedia",
+      "save_button": "Salvesta",
+      "save_progress": "Salvestamine..."
     }
   },
   "protocol": {
+    "title": "Mängu protokoll",
+    "round": "Ring",
+    "referees": "Kohtunikud",
+    "players": "Mängijad",
+    "winner": "Võitja",
+    "no_players": "Mängijaid pole saadaval",
+    "actions": {
+      "title": "Tegevused",
+      "add_set": "Lisa set",
+      "cancel": "Katkesta",
+      "save": "Salvesta",
+      "optional": "Valikuline"
+    },
+    "forfeit": {
+      "title": "Loobumisvõit",
+      "description": "Märgi võitja",
+      "delete": "Kustuta loobumisvõit",
+      "delete_confirm": "Kinnita loobumisvõit",
+      "back": "Tagasi",
+      "no_player_chosen": "Mängijat pole valitud",
+      "select_winner_error": "Vali mängija, kes võitis loobumisega"
+    },
     "loading": "Laadimine...",
     "error": "Viga",
     "date": "Kuupäev",
@@ -501,13 +890,26 @@
       "sets": "Setid",
       "score": "Skoor",
       "total": "Kokku",
-      "doubles": "Paar"
+      "doubles": "Paar",
+      "solo_game": "Üksik mäng",
+      "double_game": "Paarismäng",
+      "forfeit": "Loobumine"
     },
+    "captain": "Kapten",
     "notes": "Märkused",
+    "notes_placeholder": "Sisesta märkused",
     "notes_missing": "Märkused puuduvad",
     "table_referee": "Lauakohtunik",
+    "table_referee_placeholder": "Sisesta lauakohtuniku nimi",
     "head_referee": "Peakohtunik",
-    "final_score": "Lõpp skoor"
+    "head_referee_placeholder": "Sisesta peakohtuniku nimi",
+    "final_score": "Lõpp skoor",
+    "download": "Lae protokoll alla",
+    "start_game": "Alusta mängu",
+    "reset_game": "Lähtesta mäng",
+    "finish_game": "Lõpeta mäng",
+    "game_finished": "Mäng lõpetatud",
+    "choose_player": "Vali mängija"
   },
   "errors": {
     "not_found": {
@@ -520,7 +922,82 @@
       "title": "Midagi läks valesti",
       "description": "Vabandame, kuid midagi läks valesti. Palun proovige uuesti.",
       "retry": "Proovi uuesti",
-      "home": "Kodulehele"
+      "home": "Kodulehele",
+      "value_yes": "Jah",
+      "value_no": "Ei"
+    }
+  },
+  "gallery": {
+    "title": "Galerii",
+    "description": "Vaadake meie galeriid",
+    "no_images": "Pilte pole",
+    "no_images_subtitle": "Hetkel pole galeriis ühtegi pilti."
+  },
+  "sponsors": {
+    "title": "Sponsors",
+    "description": "Meie sponsorid"
+  },
+  "media": {
+    "no_content": "Meedia puudub"
+  },
+  "toasts": {
+    "media": {
+      "save_success": "Meedia edukalt salvestatud",
+      "save_error": "Meedia salvestamine nurjus"
+    },
+    "tournaments": {
+      "created": "Turniir loodud edukalt",
+      "updated": "Turniir uuendatud edukalt",
+      "deleted": "Turniir kustutatud edukalt",
+      "created_error": "Turniiri loomine nurjus. Palun proovige uuesti",
+      "updated_error": "Turniiri uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Turniiri kustutamine nurjus. Palun proovige uuesti"
+    },
+    "tournament_tables": {
+      "created": "Grupp on loodud edukalt",
+      "updated": "Grupp on uuendatud edukalt",
+      "deleted": "Grupp on kustutatud edukalt",
+      "created_error": "Grupi loomine nurjus. Palun proovige uuesti",
+      "updated_error": "Grupi uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Group kustutamine nurjus. Palun proovige uuesti"
+    },
+    "participants": {
+      "created": "Osaleja lisatud edukalt",
+      "updated": "Osaleja uuendatud edukalt",
+      "deleted": "Osaleja eemaldatud edukalt",
+      "created_error": "Osaleja lisamine nurjus. Palun proovige uuesti",
+      "updated_error": "Osaleja uuendamine nurjus. Palun proovige uuesti",
+      "deleted_error": "Osaleja eemaldamine nurjus. Palun proovige uuesti",
+      "group_name_updated": "Grupi nimi uuendatud edukalt",
+      "group_name_updated_error": "Grupi nime uuendamine nurjus. Palun proovige uuesti",
+      "regroup_success": "Grupid uuendatud edukalt",
+      "regorup_error": "Grupi uuendamine nurjus. Palun proovige uuesti",
+      "round_process_error": "Ringide töötlemine nurjus. Palun proovige uuesti",
+      "time_change_success": "Aegade muutmine õnnestus",
+      "time_change_error": "Aegade muutmine nurjus. Palun proovige uuesti",
+      "seeding_success": "Osalejate asetamine õnnestus",
+      "seeding_error": "Osalejate asetamine nurjus. Palun proovige uuesti",
+      "order_success": "Osalejate järjekorda panemine õnnestus",
+      "order_error": "Osalejate järjekorda panemine nurjus. Palun proovige uuesti"
+    },
+    "protocol_modals": {
+      "updated_match_score": "Mängu skoore on muudetud",
+      "updated_match_score_error": "Mängu skooride uuendamine nurjus. Palun proovige uuesti",
+      "switch_participant_error": "Osalejate vahetamine nurjus. Palun proovige uuesti",
+      "player_assign_error": "Mängija määramine nurjus. Palun proovige uuesti",
+      "update_error": "Protokolli uuendamine nurjus. Palun proovige uuesti",
+      "match_start_error": "Mängu algatamine nurjus. Palun proovige uuesti",
+      "match_start_success": "Mäng algatatud edukalt",
+      "match_finish_success": "Mäng lõpetatud edukalt",
+      "match_finish_error": "Mängu lõpetamine nurjus. Palun proovige uuesti",
+      "forfeit_error": "Loobumisvõidu määramine nurjus. Palun proovige uuesti",
+      "forfeit_delete_error": "Loobumisvõidu kustutamine nurjus. Palun proovige uuesti",
+      "table_number_change_error": "Lauanumbri muutmine nurjus. Palun proovige uuesti",
+      "match_reset_success": "Mäng lähtestatud edukalt",
+      "match_reset_error": "Mängu lähtestamine nurjus. Palun proovige uuesti"
+    },
+    "auth": {
+      "login_success": "Sisselogimine õnnestus"
     }
   }
 }

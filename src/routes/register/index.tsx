@@ -11,9 +11,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import ErrorPage from "@/components/error";
 import { useTranslation } from "react-i18next";
-import { createRegisterSchema, RegisterFormData } from "@/types/types";
+// import { createRegisterSchema, RegisterFormData } from "@/types/types";
 import { useCreateUser } from "@/queries/users";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { createRegisterSchema, RegisterFormData } from "@/types/users";
 
 export const Route = createFileRoute("/register/")({
   component: RouteComponent,

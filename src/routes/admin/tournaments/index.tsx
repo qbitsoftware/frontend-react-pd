@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { UseGetTournaments } from '@/queries/tournaments'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import { AlertCircle } from 'lucide-react'
-import { ErrorResponse } from '@/types/types'
+import { AlertCircle, PlusCircle } from 'lucide-react'
+import { ErrorResponse } from '@/types/errors'
 import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
@@ -28,18 +28,20 @@ function RouteComponent() {
 
     if (tournaments_data && tournaments_data.data) {
         return (
-            <div className='p-4'>
+            <div className='py-8 px-2 md:p-8'>
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8">
                     <div className='flex items-center justify-center flex-col text-center mb-4 md:mb-0 md:justify-start md:items-start'>
-                        <h1 className="text-2xl font-bold text-gray-900">
+                        <h3 className="font-bold text-gray-900">
                             {t('admin.tournaments.title')}
-                        </h1>
+                        </h3>
                         <p className="text-gray-600 mt-1">
                             {t('admin.tournaments.description')}
                         </p>
                     </div>
                     <Link href='/admin/tournaments/new'>
-                        <Button className='mt-2 px-6'>
+                        <Button className=' px-4'>
+                        <PlusCircle className="w-4 h-4 mr-1" />
+
                             {t('admin.tournaments.add_new')}
                         </Button>
                     </Link>
@@ -52,7 +54,7 @@ function RouteComponent() {
         const err = error as ErrorResponse
         if (err.response.status == 404) {
             return (
-                <div className="flex flex-col items-center justify-center min-h-[400px] bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <div className="flex flex-col items-center justify-center min-h-[400px] m-8 space-y-2  rounded-lg border-2 border-dashed border-gray-200 ">
                     <Trophy className="w-16 h-16 text-gray-300 mb-4" />
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('admin.tournaments.errors.not_found.title')}</h3>
                     <p className="text-gray-500 text-center max-w-md">

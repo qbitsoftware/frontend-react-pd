@@ -3,8 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Plus, Minus } from "lucide-react";
 import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
-import { useToastNotification } from "./toast-notification";
 import { Dialog, DialogContent, DialogHeader, DialogFooter } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
@@ -18,10 +16,11 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Score, Match, MatchWrapper } from "@/types/types";
-import { UsePatchMatch } from "@/queries/match";
-import { useLocation, useRouter } from "@tanstack/react-router";
+import { UsePatchMatch, UsePatchMatchReset } from "@/queries/match";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Match, MatchWrapper, Score } from "@/types/matches";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface MatchDialogProps {
   open: boolean;
@@ -51,10 +50,6 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
   match,
   tournament_id,
 }) => {
-  const toast = useToast();
-  const { errorToast, successToast } = useToastNotification(toast);
-  const location = useLocation();
-  const router = useRouter();
   const form = useForm<MatchFormValues>({
     resolver: zodResolver(matchFormSchema),
     defaultValues: {
@@ -64,6 +59,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
     },
   });
 
+  const { t } = useTranslation()
   const { reset } = form;
 
   useEffect(() => {
@@ -71,10 +67,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       reset({
         tableReferee: match.match.extra_data?.table_referee || "",
         mainReferee: match.match.extra_data?.head_referee || "",
-        scores: (match.match.extra_data?.score || []).map((s: Score) => ({
-          player1: s.p1_score,
-          player2: s.p2_score,
-        })) || [{ player1: 0, player2: 0 }],
+        scores: Array.isArray(match.match.extra_data?.score) && match.match.extra_data.score.length > 0
+          ? match.match.extra_data.score.map((s: Score) => ({
+            player1: typeof s.p1_score === 'number' ? s.p1_score : 0,
+            player2: typeof s.p2_score === 'number' ? s.p2_score : 0,
+          }))
+          : [{ player1: 0, player2: 0 }],
       });
     }
   }, [match, reset, open]);
@@ -90,7 +88,23 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
     match.match.id,
   );
 
-  const { fields, append, remove } = useFieldArray({
+  const useResetMatch = UsePatchMatchReset(
+    tournament_id,
+    match.match.tournament_table_id,
+    match.match.id,
+  )
+
+  const resetMatch = async () => {
+    try {
+      await useResetMatch.mutateAsync()
+      toast.success(t("toasts.protocol_modals.match_reset_success"))
+    } catch (error) {
+      void error
+      toast.error(t("toasts.protocol_modals.match_reset_error"))
+    }
+  }
+
+  const { append, remove } = useFieldArray({
     name: "scores",
     control: form.control,
   });
@@ -101,6 +115,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       p1_score: score.player1,
       p2_score: score.player2,
     }));
+
 
     const sendMatch: Match = {
       id: match.match.id,
@@ -113,9 +128,10 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
       order: match.match.order,
       sport_type: match.match.sport_type,
       location: match.match.location,
-      start_date: new Date().toString(),
+      start_date: new Date().toISOString(),
       bracket: match.match.bracket,
       forfeit: match.match.forfeit,
+      state: match.match.state,
       extra_data: {
         head_referee: data.mainReferee,
         table_referee: data.tableReferee,
@@ -123,60 +139,58 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
         table: match.match.extra_data.table,
         parent_match_id: "",
       },
+      readable_id: match.match.readable_id,
       topCoord: 0,
       table_type: match.match.table_type,
+      previous_match_readable_id_1: 0,
+      previous_match_readable_id_2: 0,
     };
 
     try {
       await usePatchMatch.mutateAsync(sendMatch);
-      router.navigate({
-        to: location.pathname,
-        replace: true,
-      });
-
-      successToast("Successfully updated match scores");
+      toast.message(t("toasts.protocol_modals.updated_match_score"))
     } catch (error) {
       void error;
-      errorToast("Something went wrong");
+      toast.error(t("toasts.protocol_modals.updated_match_score_error"))
     }
     handleClose();
   };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
+      <DialogContent className="max-w-2xl p-0 overflow-y-scroll bg-white dark:bg-gray-800 rounded-lg shadow-lg border-none">
         <DialogHeader className="py-10 pb-2 rounded-t-lg text-2xl font-bold text-center mx-auto">
-          <DialogTitle>Match Details</DialogTitle>
+          <DialogTitle>{t('protocol.title')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <ScrollArea className="h-[60vh]">
               <div className="p-6 space-y-6">
-                    <div className="flex justify-center items-center gap-4">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Round:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {match.match.round + 1}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 items-center py-4">
-                      <div className="text-right pr-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p1.name}
-                        </span>
-                      </div>
-                      <div className="text-center font-bold text-lg">VS</div>
-                      <div className="text-left pl-4">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {match.p2.name}
-                        </span>
-                      </div>
-                    </div>
+                <div className="flex justify-center items-center gap-4">
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    {t('protocol.round')}:
+                  </span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {match.match.round + 1}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 items-center py-4">
+                  <div className="text-right pr-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p1.name}
+                    </span>
+                  </div>
+                  <div className="text-center font-bold text-lg">VS</div>
+                  <div className="text-left pl-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {match.p2.name}
+                    </span>
+                  </div>
+                </div>
                 <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                   <CardHeader className="bg-gray-50 dark:bg-gray-900 rounded-t-lg">
                     <CardTitle className="text-lg text-gray-900 dark:text-white">
-                      Scores
+                      {t('protocol.table.sets')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-4">
@@ -188,9 +202,9 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                         {match.p2.name}
                       </div>
                     </div>
-                    {fields.map((field, index) => (
+                    {form.watch("scores").map((_, index) => (
                       <div
-                        key={field.id}
+                        key={index}
                         className="flex items-start space-x-2"
                       >
                         <FormField
@@ -200,11 +214,26 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                             <FormItem className="flex-1">
                               <FormControl>
                                 <Input
-                                  type="number"
+                                  type="text"
+                                  {...field}
                                   value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseInt(e.target.value))
-                                  }
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+
+                                    if (value === "") {
+                                      field.onChange(0);
+                                      return;
+                                    }
+
+                                    if (!/^\d*$/.test(value)) {
+                                      return;
+                                    }
+
+                                    const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                    const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                    field.onChange(numberValue);
+                                  }}
                                   className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                 />
                               </FormControl>
@@ -219,11 +248,26 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                             <FormItem className="flex-1">
                               <FormControl>
                                 <Input
-                                  type="number"
+                                  type="text"
+                                  {...field}
                                   value={field.value}
-                                  onChange={(e) =>
-                                    field.onChange(parseInt(e.target.value))
-                                  }
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+
+                                    if (value === "") {
+                                      field.onChange(0);
+                                      return;
+                                    }
+
+                                    if (!/^\d*$/.test(value)) {
+                                      return;
+                                    }
+
+                                    const cleanedValue = value.replace(/^0+(\d)/, '$1');
+                                    const numberValue = cleanedValue === '' ? 0 : Number.parseInt(cleanedValue);
+
+                                    field.onChange(numberValue);
+                                  }}
                                   className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                                 />
                               </FormControl>
@@ -251,7 +295,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                           {form.formState.errors.scores.root.message}
                         </p>
                       )}
-                    {fields.length < 7 && (
+                    {form.watch("scores").length < 7 && (
                       <Button
                         type="button"
                         variant="outline"
@@ -259,7 +303,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                         onClick={() => append({ player1: 0, player2: 0 })}
                         className="bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 rounded-md"
                       >
-                        <Plus className="h-4 w-4 mr-2" /> Add Set
+                        <Plus className="h-4 w-4 mr-2" /> {t('protocol.actions.add_set')}
                       </Button>
                     )}
                   </CardContent>
@@ -268,7 +312,7 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                 <Card className="bg-white dark:bg-gray-800 shadow-sm rounded-lg">
                   <CardHeader className="bg-gray-50 dark:bg-gray-900 rounded-t-lg">
                     <CardTitle className="text-lg text-gray-900 dark:text-white">
-                      Referees
+                      {t("protocol.referees")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-4">
@@ -278,12 +322,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Table Referee{" "}
-                            <span className="text-gray-400">(Optional)</span>
+                            {t('protocol.table_referee')}{" "}
+                            <span className="text-gray-400">({t("protocol.actions.optional")})</span>
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Enter table referee name"
+                              placeholder={t('protocol.table_referee_placeholder')}
                               {...field}
                               className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                             />
@@ -298,12 +342,12 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Main Referee{" "}
-                            <span className="text-gray-400">(Optional)</span>
+                            {t('protocol.head_referee')}{" "}
+                            <span className="text-gray-400">({t('protocol.actions.optional')})</span>
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Enter main referee name"
+                              placeholder={t('protocol.head_referee_placeholder')}
                               {...field}
                               className="bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md"
                             />
@@ -317,20 +361,32 @@ const MatchDialog: React.FC<MatchDialogProps> = ({
               </div>
             </ScrollArea>
             <DialogFooter className="p-6 pt-2 bg-gray-50 dark:bg-gray-900 rounded-b-lg">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onClose(false)}
-                className="bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 rounded-md"
-              >
-                Save
-              </Button>
+              <div>
+                <Button
+                  type="button"
+                  className="bg-black/90"
+                  onClick={resetMatch}
+                >
+                  {t('protocol.reset_game')}
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onClose(false)}
+                  className="bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md"
+                >
+                  {t('protocol.actions.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 rounded-md"
+                >
+                  {t('protocol.actions.save')}
+                </Button>
+
+              </div>
             </DialogFooter>
           </form>
         </Form>

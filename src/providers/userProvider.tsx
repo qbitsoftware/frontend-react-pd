@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { UserLogin } from '@/types/types';
 import { useGetCurrentUserQuery } from '@/queries/users';
+import { UserLogin } from '@/types/users';
 
 interface UserContextType {
   user: UserLogin | null;

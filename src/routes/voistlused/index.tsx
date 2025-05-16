@@ -1,9 +1,10 @@
 import { UseGetTournaments } from '@/queries/tournaments'
 import { createFileRoute } from '@tanstack/react-router'
-import TournamentList from './-components/tournamentList'
+// import TournamentList from '../../../oldcomponents/tournamentList'
 import ErrorPage from '@/components/error'
 import { XCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import TournamentList from './$tournamentid/tulemused/-components/tournamentList'
 
 export const Route = createFileRoute('/voistlused/')({
   errorComponent: () => {

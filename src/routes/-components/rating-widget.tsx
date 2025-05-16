@@ -10,10 +10,10 @@ import {
 import { PlayerProfileModal } from "../reiting/-components/player-profile-modal";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserNew } from "@/types/types";
+import { User } from "@/types/users";
 
 interface Props {
-  users: UserNew[] | null;
+  users: User[] | null;
 }
 
 const RatingWidget = ({ users }: Props) => {

@@ -1,5 +1,4 @@
 import TournamentCard from './TournamentCard';
-import { Tournament } from '@/types/types';
 import { useTranslation } from 'react-i18next';
 import { Search } from "lucide-react";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { useMemo, useState } from 'react';
 import { UseGetTournamentCategories } from '@/queries/tournaments';
+import { Tournament } from '@/types/tournaments';
 
 
 interface CalendarViewProps {

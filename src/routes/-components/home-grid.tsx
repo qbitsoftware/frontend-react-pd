@@ -3,13 +3,14 @@ import WidgetWrapper from "./widget-wrapper";
 import CalendarWidget from "./calendar-widget";
 import RatingWidget from "./rating-widget";
 import Adboard from "./adboard";
-import { Tournament, UserNew } from "@/types/types";
 import { useTranslation } from "react-i18next";
 import LatestMatchWidget from "./matches-widget";
+import { Tournament } from "@/types/tournaments";
+import { User } from "@/types/users";
 
 interface Props {
   tournaments: Tournament[] | null;
-  users: UserNew[] | null;
+  users: User[] | null;
   // articles: Blog[] | null;
 }
 

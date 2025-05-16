@@ -1,4 +1,3 @@
-import { MatchWrapper, Tournament } from "@/types/types"
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator"
 import { UseGetTournamentMatches } from "@/queries/match";
@@ -6,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatDate } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { Tournament } from "@/types/tournaments";
+import { MatchWrapper } from "@/types/matches";
 
 interface Props {
   tournaments: Tournament[] | null

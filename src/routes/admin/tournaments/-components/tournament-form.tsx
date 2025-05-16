@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { format } from "date-fns"
-import { CalendarIcon, ChevronLeft, Loader2 } from "lucide-react"
+import { CalendarIcon, Loader2 } from "lucide-react"
 import { useRouter } from "@tanstack/react-router"
 
 import { Button } from "@/components/ui/button"
@@ -13,16 +13,13 @@ import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Tournament } from "@/types/types"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   UsePostTournament,
   UsePatchTournament,
   UseDeleteTournament,
   UseGetTournamentCategories,
 } from "@/queries/tournaments"
-import { useToast } from "@/hooks/use-toast"
-import { useToastNotification } from "@/components/toast-notification"
 import { useTranslation } from "react-i18next"
 import { useState as useStateOriginal } from "react"
 import {
@@ -37,22 +34,24 @@ import {
 } from "@/components/ui/alert-dialog"
 import { YooptaContentValue } from "@yoopta/editor"
 import Editor from "../../-components/yooptaeditor"
-import { useNavigate } from "@tanstack/react-router"
-import { t } from "i18next"
+import { t, TFunction } from "i18next"
+import { Tournament } from "@/types/tournaments"
+import { toast } from "sonner"
 
-const formSchema = z.object({
-  name: z.string().min(4).max(40),
-  start_date: z.date(),
-  end_date: z.date(),
-  sport: z.string(),
-  total_tables: z.number().min(1),
-  category: z.string(),
-  location: z.string().min(1, { message: "Location is required" }),
+const createFormSchema = (t: TFunction) => z.object({
+  name: z.string().min(4, { message: t("admin.tournaments.create_tournament.errors.name_min") }).max(40, { message: t("admin.tournaments.create_tournament.errors.name_max") }),
+  start_date: z.date({ message: t("admin.tournaments.create_tournament.errors.start_date") }),
+  end_date: z.date({ message: t("admin.tournaments.create_tournament.errors.end_date") }),
+  sport: z.string({ message: t("admin.tournaments.create_tournament.errors.sport") }),
+  total_tables: z.number().min(1, { message: t("admin.tournaments.create_tournament.errors.total_tables") }),
+  category: z.string({ message: t("admin.tournaments.create_tournament.errors.category") }),
+  location: z.string().min(1, { message: t("admin.tournaments.create_tournament.errors.location") }),
   information: z.any(),
   private: z.boolean(),
+  calc_rating: z.boolean(),
 })
 
-export type TournamentFormValues = z.infer<typeof formSchema>
+export type TournamentFormValues = z.infer<ReturnType<typeof createFormSchema>>
 
 interface TournamentFormProps {
   initial_data: Tournament | undefined | null
@@ -63,6 +62,7 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const [value, setValue] = useState<YooptaContentValue | undefined>(
     initial_data && initial_data.information ? JSON.parse(initial_data?.information) : undefined
   );
+  const formSchema = createFormSchema(t)
 
   const form = useForm<TournamentFormValues>({
     resolver: zodResolver(formSchema),
@@ -76,22 +76,19 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         name: "",
         start_date: new Date(),
         end_date: new Date(),
+        total_tables: 1,
         sport: "",
         location: "",
         category: "",
         information: "",
         private: false,
+        calc_rating: false,
       },
   })
 
-  const navigate = useNavigate()
   const [showDeleteDialog, setShowDeleteDialog] = useStateOriginal(false)
   const deleteMutation = UseDeleteTournament(initial_data?.id)
   const { data: tournament_categories } = UseGetTournamentCategories()
-
-
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
   const router = useRouter()
 
   let postMutation = UsePostTournament()
@@ -108,21 +105,23 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
   const onSubmit = async (values: TournamentFormValues) => {
     try {
       values.information = JSON.stringify(value)
-      const res = await postMutation.mutateAsync(values)
+      const result = await postMutation.mutateAsync(values)
       if (initial_data) {
-        successToast("Turniir edukalt uuendatud")
+        toast.message(t('toasts.tournaments.updated'))
       } else {
-        successToast("Turniir edukalt lisatud")
+        if (result.data) {
+          router.navigate({ to: `/admin/tournaments/${result.data.id}`, replace: true })
+        } else {
+          router.navigate({ to: `/admin/tournaments`, replace: true })
+        }
+        toast.error(t('toasts.tournaments.created'))
       }
-      router.navigate({
-        to: `/admin/tournaments/${res.data.id}`,
-      })
     } catch (error) {
       void error
       if (initial_data) {
-        errorToast("Turniiri uuendamisel tekkis viga")
+        toast.message(t('toasts.tournaments.updated_error'))
       } else {
-        errorToast("Turniiri loomisel tekkis viga")
+        toast.error(t('toasts.tournaments.created_error'))
       }
     }
   }
@@ -134,13 +133,14 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
         to: `/admin/tournaments`,
         replace: true,
       })
-      successToast("Turniir on edukalt kustutatud")
+      toast.message(t('toasts.tournaments.deleted'))
       setShowDeleteDialog(false)
     } catch (error) {
-      errorToast("Turniiri kustutamine ebaõnnestus")
-      console.error(error)
+      void error;
+      toast.error(t('toasts.tournaments.deleted_error'))
     }
   }
+
 
   return (
     <div className="">
@@ -171,19 +171,16 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
       </AlertDialog>
 
 
-      <Card className="w-full border-none shadow-none px-10">
-        <CardHeader className="px-0">
-          <Button variant="ghost" className="hover:bg-transparent" size="icon" onClick={() => navigate({ to: ".." })}>
-            <ChevronLeft className="w-5 h-5" />
-            {t("admin.tournaments.create_tournament.back")}
-          </Button>
-          <CardTitle className="text-lg">
+      <Card className="w-full shadow-none border-none bg-transparent ">
+        <CardHeader className="px-0 ">
+
+          <h5 className="font-medium">
             {initial_data
               ? t("admin.tournaments.create_tournament.title_edit")
               : t("admin.tournaments.create_tournament.title_create")}
-          </CardTitle>
+          </h5>
         </CardHeader>
-        <CardContent className="px-2">
+        <CardContent className="p-4 rounded-lg bg-card border border-stone-100 shadow-sm">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -318,13 +315,40 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
                         type="number"
                         placeholder={t("admin.tournaments.create_tournament.number_of_tables_placeholder")}
                         {...field}
-                        onChange={(e) => field.onChange(Number.parseInt(e.target.value))}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === "") {
+                            field.onChange(0);
+                          } else {
+                            const cleanedValue = value.replace(/^0+/, '');
+                            field.onChange(cleanedValue === '' ? 0 : Number.parseInt(cleanedValue));
+                          }
+                        }}
+                        value={field.value === 0 ? '' : field.value}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="calc_rating"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">{t("admin.tournaments.create_tournament.ranking")}</FormLabel>
+                      <FormDescription>
+                        {t("admin.tournaments.create_tournament.ranking_description")}
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="private"
@@ -344,12 +368,12 @@ export const TournamentForm: React.FC<TournamentFormProps> = ({ initial_data }) 
               />
 
               {/* Pane siiia */}
-              <div className="w-full flex flex-col gap-4 ">
+              <div className="w-full flex flex-col gap-4">
                 <p className="text-sm">{t("admin.tournaments.create_tournament.additional_information")} </p>
 
                 <Editor value={value} setValue={setValue} readOnly={false} />
               </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col-reverse gap-10 md:gap-4 md:flex-row md:justify-between ">
                 {initial_data && (
                   <Button type="button" className="text-red-600" onClick={() => setShowDeleteDialog(true)} variant={"outline"}>
                     {t("admin.tournaments.delete")}

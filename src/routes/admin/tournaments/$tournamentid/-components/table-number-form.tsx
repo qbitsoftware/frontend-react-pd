@@ -1,64 +1,58 @@
 import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
-import { UseGetTournamentQuery } from "@/queries/tournaments"
 import { useParams } from "@tanstack/react-router"
 import { UsePatchMatch } from "@/queries/match"
-import { useToast } from "@/hooks/use-toast"
-import { useToastNotification } from "@/components/toast-notification"
-import { Match } from "@/types/types"
+import { Match } from "@/types/matches"
+import { UseGetFreeVenues } from "@/queries/venues"
+import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
+import { Label } from "@/components/ui/label"
 
 interface TableNumberFormProps {
   match: Match
-  initialTableNumber: number
+  initialTableNumber: string
 }
 
 export function TableNumberForm({ match, initialTableNumber }: TableNumberFormProps) {
-  const [tableNumber, setTableNumber] = useState(initialTableNumber)
-  const toast = useToast()
-  const { successToast, errorToast } = useToastNotification(toast)
-
   const params = useParams({ strict: false })
-  const { data: tournament_data, isLoading: isTournamentLoading } = UseGetTournamentQuery(Number(params.tournamentid))
+  const { data: freeVenues, isLoading, isError } = UseGetFreeVenues(Number(params.tournamentid))
+  const { t } = useTranslation()
+
+  const [tableNumber, setTableNumber] = useState<string>(initialTableNumber)
+
   const matchMutation = UsePatchMatch(Number(params.tournamentid), match.tournament_table_id, match.id)
 
   const handleChange = async (value: string) => {
-    const newTableNumber = Number(value)
-    setTableNumber(newTableNumber)
+    setTableNumber(value)
     try {
-      const data: Match = { ...match, extra_data: { ...match.extra_data, table: newTableNumber } }
-      const res = await matchMutation.mutateAsync(data)
-      successToast(res.message)
+      const data: Match = { ...match, extra_data: { ...match.extra_data, table: value.trim() } }
+      await matchMutation.mutateAsync(data)
     } catch (error) {
       void error
-      errorToast("Lauanumbri muutmine ebaõnnestus")
+      toast.error(t('toasts.protocol_modals.table_number_change_error'))
     }
   }
 
-  if (isTournamentLoading) {
+  if (isLoading) {
     return <div></div>
   }
 
-  if (!tournament_data?.data) {
-    return <div>0</div>
+  if (isError) {
+    return <div></div>
   }
 
-  const totalTables = tournament_data.data.total_tables || 20
-
-  const allTables = Array.from({ length: totalTables }, (_, i) => i + 1)
-
-  const availableTables = allTables
-
   return (
-    <div>
+    <div className="flex items-center gap-3">
+      <Label>{t("admin.tournaments.matches.table.table")}</Label>
       <Select value={String(tableNumber)} onValueChange={handleChange}>
-        <SelectTrigger>
+        <SelectTrigger className="h-8">
           <span>{tableNumber}</span>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem className="min-h-[30px]" value="0"></SelectItem>
-          {availableTables.map((table) => (
-            <SelectItem key={table} value={String(table)}>
-              Laud {table}
+          <SelectItem className="min-h-[30px]" value=" "></SelectItem>
+          {freeVenues && freeVenues.data && freeVenues.data.map((table) => (
+            <SelectItem key={table.name} value={String(table.name)}>
+              {table.name}
             </SelectItem>
           ))}
         </SelectContent>

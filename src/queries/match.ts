@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation, queryOptions, useQuery } from "@tanstack/react-query"
 import { axiosInstance } from "./axiosconf"
-import { Match, MatchTimeUpdate, MatchWrapper, Participant } from "@/types/types"
+import { Match, MatchTimeUpdate, MatchWrapper } from "@/types/matches"
+import { Participant } from "@/types/participants"
 
 export interface MatchesResponse {
     data: MatchWrapper[] | null
@@ -24,6 +25,46 @@ export const UsePatchMatch = (id: number, group_id: number, match_id: string) =>
     return useMutation({
         mutationFn: async (formData: Match) => {
             const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}/tables/${group_id}/match/${match_id}`, formData, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.invalidateQueries({ queryKey: ['venues', id] })
+            queryClient.invalidateQueries({ queryKey: ['tournament_table', group_id] })
+            queryClient.refetchQueries({ queryKey: ['tournament_table', group_id] })
+        }
+    })
+}
+
+export const UsePatchMatchReset = (tournament_id: number, group_id: number, match_id: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async () => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/match/${match_id}/reset`, {}, {
+                withCredentials: true
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
+            queryClient.invalidateQueries({ queryKey: ['venues', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['tournament_table', group_id] })
+            queryClient.refetchQueries({ queryKey: ['tournament_table', group_id] })
+        }
+    })
+}
+
+export const UsePatchMatchSwitch = (id: number, group_id: number, match_id: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (formData: Match) => {
+            const { data } = await axiosInstance.patch(`/api/v1/tournaments/${id}/tables/${group_id}/match/${match_id}?rotate=true`, formData, {
                 withCredentials: true
             })
             return data;
@@ -69,10 +110,11 @@ export const UseGetTournamentMatches = (tournament_id: number) => {
                 withCredentials: true
             })
             return data;
-        }
+        },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
     })
 }
-
 
 export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
     return useQuery<MatchesResponse>({
@@ -85,6 +127,20 @@ export const UseGetMatchesQuery = (tournament_id: number, group_id: number) => {
         }
     })
 }
+
+export const UseGetMatchesAllQuery = (tournament_id: number, group_id: number) => {
+    return useQuery<MatchesResponse>({
+        queryKey: ['matches_time_modal', group_id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/api/v1/tournaments/${tournament_id}/tables/${group_id}/time_matches`, {
+                withCredentials: true
+            })
+            return data;
+        }
+    })
+}
+
+
 
 export const UseGetChildMatchesQuery = (tournament_id: number, group_id: number, match_id: string) => {
     return useQuery<MatchesResponse>({
@@ -134,7 +190,6 @@ export const UseRegroupMatches = (tournament_id: number, group_id: number, regro
     })
 }
 
-
 export const UseUpdateMatchTime = (tournament_id: number, group_id: number) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -147,8 +202,11 @@ export const UseUpdateMatchTime = (tournament_id: number, group_id: number) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['bracket', tournament_id] })
             queryClient.refetchQueries({ queryKey: ['bracket', tournament_id] })
+            queryClient.invalidateQueries({ queryKey: ['matches_time_modal', group_id] })
+            queryClient.resetQueries({ queryKey: ['matches_time_modal', group_id] })
             queryClient.invalidateQueries({ queryKey: ['matches', group_id] })
             queryClient.resetQueries({ queryKey: ['matches', group_id] })
+
         }
     })
 }

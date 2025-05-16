@@ -1,19 +1,12 @@
-import { Profile, User } from "@/types/types"
-import { queryOptions, useQuery} from "@tanstack/react-query"
-import {axiosInstance} from "./axiosconf"
+import { Profile, User } from "@/types/users"
+import { queryOptions, useQuery } from "@tanstack/react-query"
+import { axiosInstance } from "./axiosconf"
 
 export interface PlayerResponse {
     error: string
     data: User[]
     message: string
 }
-
-export interface ProfileResponse {
-    error: string
-    data: Profile
-    message: string
-}
-
 
 export const UseGetPlayers = () => {
     return queryOptions<PlayerResponse>({
@@ -23,6 +16,12 @@ export const UseGetPlayers = () => {
             return data
         }
     })
+}
+
+export interface ProfileResponse {
+    error: string
+    data: Profile
+    message: string
 }
 
 export const UseGetUserProfile = (id: number) => {

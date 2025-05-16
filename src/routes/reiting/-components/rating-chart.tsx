@@ -14,9 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-import { mockRatingChartData } from "@/lib/mock_data/rating_mocks";
-import { Player } from "@/types/types";
+import { Player } from "@/types/players";
 
 const chartConfig = {
   ratingPoints: {
@@ -48,7 +46,7 @@ export function PlayerRankingChangeGraph({ stats }: Props) {
         <ChartContainer config={chartConfig} className="relative h-64">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={chartData.length > 0 ? chartData : mockRatingChartData}
+              data={chartData.length > 0 ? chartData : []}
               margin={{
                 top: 10,
                 right: 15,

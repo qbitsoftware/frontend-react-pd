@@ -2,10 +2,10 @@ import type React from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "@tanstack/react-router"
 import { MapPin, Calendar } from "lucide-react"
-import type { Tournament } from "@/types/types"
 import { formatDateString } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Tournament } from "@/types/tournaments"
 
 interface TournamentTableProps {
   tournaments: Tournament[]
@@ -44,16 +44,16 @@ export const TournamentTable: React.FC<TournamentTableProps> = ({ tournaments })
             <TableCell>
               <Badge variant={tournament.state === "started" ? "outline" : "destructive"}>{tournament.state}</Badge>
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               {formatDateString(tournament.start_date)} - {formatDateString(tournament.end_date)}
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               <div className="flex items-center">
                 <MapPin className="w-4 h-4 mr-2 text-red-500" />
                 {tournament.location}
               </div>
             </TableCell>
-            <TableCell className="truncate">
+            <TableCell className="">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-purple-500" />
                 {getDurationDays(tournament.start_date, tournament.end_date) + 1} days

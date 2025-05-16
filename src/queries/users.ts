@@ -1,4 +1,3 @@
-import { UserLogin, UserNew, RegisterFormData } from "@/types/types";
 import {
   queryOptions,
   useMutation,
@@ -7,6 +6,9 @@ import {
 } from "@tanstack/react-query";
 import { LoginFormData } from "@/routes/login";
 import { axiosInstance } from "./axiosconf";
+import { User, UserLogin } from "@/types/users";
+// import { RegisterFormData } from "@/routes/register";
+import { RegisterFormData } from "@/types/users";
 
 export interface LoginResponse {
   data: UserLogin;
@@ -15,7 +17,7 @@ export interface LoginResponse {
 }
 
 export interface UsersResponse {
-  data: UserNew[];
+  data: User[];
   message: string;
   error: string | null;
 }
@@ -106,7 +108,7 @@ export const UseGetUsersDebounce = (searchTerm: string) => {
     queryKey: ["users", searchTerm],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
-        `/api/v1/users?search=${searchTerm}`,
+        `/api/v1/user_suggestions?search=${searchTerm}`,
         {
           withCredentials: true,
         },
@@ -136,9 +138,7 @@ export const UseGetUsers = (searchTerm?: string) => {
   });
 };
 
-export const fetchUserByName = async (
-  name: string,
-): Promise<UserNew | null> => {
+export const fetchUserByName = async (name: string): Promise<User | null> => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users?search=${name}`, {
       withCredentials: true,
@@ -159,5 +159,38 @@ export const useCreateUser = () => {
       return data;
     },
   });
+};
+
+export function useUsersCount() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/api/v1/user_suggestions", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+  });
+
+  return {
+    count: data?.data?.length || 0,
+    isLoading,
+  };
+}
+
+export interface FeedbackForm {
+  name: string;
+  title: string;
+  body: string;
+}
+
+export const sendUserFeedback = async (feedback: FeedbackForm) => {
+  try {
+    await axiosInstance.post("/api/v1/feedback", feedback);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to send feedback:", error);
+    return { success: false, error };
+  }
 };
 

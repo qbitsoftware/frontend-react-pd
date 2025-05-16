@@ -1,117 +1,84 @@
-import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import {
-  LayoutDashboard,
-  Trophy,
-  FileText,
-} from 'lucide-react'
-import { useRouter } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { redirect } from '@tanstack/react-router'
-import { ErrorResponse } from '@/types/types'
-import { useUser } from '@/providers/userProvider'
-import { UseGetCurrentUser } from '@/queries/users'
-import ErrorPage from '@/components/error'
+  createFileRoute,
+  Outlet,
+  redirect,
+  useLocation,
+  useRouter,
+} from '@tanstack/react-router'
+import {
 
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import AdminSidebar from "./-components/admin-sidebar";
+import AdminBottomNav from "./-components/admin-bottom-nav";
+import { useEffect } from 'react';
+import ErrorPage from '@/components/error';
+import { UseGetCurrentUser } from '@/queries/users';
+import { ErrorResponse } from '@/types/errors';
+import { useUser } from '@/providers/userProvider';
 
-export const Route = createFileRoute('/admin')({
+// Helper function to get cookie value
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+  return undefined;
+}
+
+export const Route = createFileRoute("/admin")({
   component: RouteComponent,
   errorComponent: () => <ErrorPage />,
   loader: async ({ context: { queryClient } }) => {
     try {
-      await queryClient.ensureQueryData(UseGetCurrentUser())
+      await queryClient.ensureQueryData(UseGetCurrentUser());
     } catch (error) {
-      const err = error as ErrorResponse
+      const err = error as ErrorResponse;
       if (err.response.status === 401) {
         throw redirect({
-          to: '/',
-        })
+          to: "/",
+        });
       }
-      throw error
+      throw error;
     }
   },
-})
+});
 
 function RouteComponent() {
+  const router = useRouter();
+  const location = useLocation();
+  const { user } = useUser();
 
-  const router = useRouter()
-  const location = useLocation()
-  const { t } = useTranslation()
-  const { user } = useUser()
-  if (!user || user.role != 'admin') {
-    router.navigate({ to: "/" })
+  // Get the default state from the cookie
+  const defaultOpen = getCookie("sidebar:state") !== "false";
+
+  if (!user || user.role != "admin") {
+    router.navigate({ to: "/" });
   }
 
   useEffect(() => {
-    if (location.pathname === '/admin' || location.pathname === "/admin/") {
+    if (location.pathname === "/admin" || location.pathname === "/admin/") {
       router.navigate({
-        to: '/admin/dashboard',
-      })
+        to: "/admin/dashboard",
+      });
     }
-  }, [location.pathname, router])
+  }, [location.pathname, router]);
 
-
-
-  const menuItems = [
-    {
-      id: 'dashboard',
-      label: t('admin.layout.sidebar.dashboard'),
-      icon: <LayoutDashboard className="w-4 h-4 sm:mr-2" />,
-      to: '/admin/dashboard',
-    },
-    {
-      id: 'tournaments',
-      label: t('admin.layout.sidebar.tournaments'),
-      icon: <Trophy className="w-4 h-4 sm:mr-2" />,
-      to: '/admin/tournaments',
-    },
-    {
-      id: 'blog',
-      label: t('admin.layout.sidebar.blogs'),
-      icon: <FileText className="w-4 h-4 sm:mr-2" />,
-      to: '/admin/blog',
-    },
-    // {
-    //   id: 'settings',
-    //   label: t('admin.layout.sidebar.settings'),
-    //   icon: <Settings className="w-4 h-4 sm:mr-2" />,
-    //   to: '/admin/settings',
-    // },
-  ]
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <div className="flex flex-col sm:flex-row max-w-[1440px] mx-auto  bg-[#F8F9F9]">
-      {/* Sidebar */}
-      <div className="w-16 md:w-56">
-        <div className=" p-2 sm:p-4 md:p-6">
-          <h1 className="hidden md:block text-xl font-bold text-gray-900">
-            {t('admin.layout.title')}
-          </h1>
-          <p className="hidden md:block text-sm text-gray-500 mt-1">
-            {t('admin.layout.description')}
-          </p>
-        </div>
-        <nav className="p-2 flex sm:flex-col justify-between w-screen sm:w-full">
-          {menuItems.map((item) => (
-            <Link
-              key={item.id}
-              to={item.to}
-              className={`w-full flex flex-col sm:flex-row items-center justify-center md:justify-start px-2 md:px-6 py-3 text-sm transition-colors duration-150 ${location.pathname.includes(item.to)
-                ? 'bg-blue-50 text-blue-600 sm:border-r-4 border-b-4 sm:border-b-0 border-blue-600 font-medium'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
-            >
-              {item.icon}
-              <span className="sm:hidden md:inline">{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 bg-white overflow-hidden sm:border border-[#EFEFEF] rounded-[3px] sm:mx-4 sm:my-3">
-        <Outlet />
+    <div className="flex flex-col mx-auto bg-[#F8F9F9]">
+      <div className="overflow-hidden">
+        <SidebarProvider defaultOpen={defaultOpen}>
+          <AdminSidebar />
+          {/* Main Content */}
+          <div className="w-full overflow-x-auto">
+            <Outlet />
+          </div>
+        </SidebarProvider>
+        <AdminBottomNav />
       </div>
     </div>
-  )
+  );
 }

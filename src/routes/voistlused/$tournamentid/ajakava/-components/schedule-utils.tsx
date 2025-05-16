@@ -1,4 +1,5 @@
-import { MatchWrapper, MatchTimeUpdate } from '@/types/types';
+import i18n from '@/i18n';
+import { MatchWrapper } from '@/types/matches';
 
 /**
  * Remove duplicate matches based on match ID
@@ -82,10 +83,11 @@ export function getUniqueClasses(matches: MatchWrapper[]): string[] {
  */
 export function getFormattedDate(dateString: string): string {
   if (!dateString) return 'TBD';
+  const locale = i18n.language || 'en';
 
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('et-EE', {
+    return date.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
@@ -157,22 +159,23 @@ export function generateTimeSlotsForGameday(matches: MatchWrapper[]): {
 /**
  * Get all unique table IDs from matches
  */
-export function getUniqueTables(matches: MatchWrapper[]): number[] {
+export function getUniqueTables(matches: MatchWrapper[]): string[] {
   const tables = matches
     .filter(match => match.match && match.match.extra_data && match.match.extra_data.table)
     .map(match => match.match.extra_data.table)
     .filter(Boolean);
 
-  return [...new Set(tables)].sort((a, b) => a - b);
+  return [...new Set(tables)].sort((a, b) => Number(a) - Number(b));
 }
+//
 
 /**
  * Distribute matches by table and time slot
  */
 export function distributeMatchesByTable(
   matches: MatchWrapper[]
-): Record<number, Record<string, MatchWrapper[]>> {
-  const distribution: Record<number, Record<string, MatchWrapper[]>> = {};
+): Record<string, Record<string, MatchWrapper[]>> {
+  const distribution: Record<string, Record<string, MatchWrapper[]>> = {};
 
   matches.forEach(match => {
     if (!match.match || !match.match.start_date || !match.match.extra_data || !match.match.extra_data.table) {
@@ -198,16 +201,4 @@ export function distributeMatchesByTable(
   });
 
   return distribution;
-}
-
-/**
- * Create a matchTimeUpdate from a date and time string
- */
-export function createMatchTimeUpdate(matchId: string, dateStr: string, timeStr: string): MatchTimeUpdate {
-  const dateTime = new Date(`${dateStr}T${timeStr}:00`);
-
-  return {
-    match_id: matchId,
-    start_date: dateTime.toISOString()
-  };
 }

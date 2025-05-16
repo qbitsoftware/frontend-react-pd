@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tournament } from '@/types/types'
 import { formatDateString } from '@/lib/utils'
 
 import {
@@ -10,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
+import { Tournament } from '@/types/tournaments'
 
 interface TournamentCardProps {
     tournament: Tournament
@@ -59,12 +59,12 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                                 label={t('admin.tournaments.info.duration')}
                                 value={`${getDurationDays(tournament.start_date, tournament.end_date) + 1} days`}
                             />
-                             <InfoItem
+                            <InfoItem
                                 icon={<Table className="w-4 h-4 text-purple-500" />}
                                 label={"Laudade arv"}
                                 value={`${tournament.total_tables}`}
                             />
-                             <InfoItem
+                            <InfoItem
                                 icon={<Calendar className="w-4 h-4 text-purple-500" />}
                                 label={"Loodud"}
                                 value={`${formatDateString(tournament.created_at)}`}
