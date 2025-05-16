@@ -185,7 +185,7 @@ export default function TournamentList({ tournaments }: TournamentProps) {
                   <Link to={"/voistlused/" + tournament.id} preload="intent">
                     <CardHeader className="bg-secondary text-white p-0">
                       <div className="relative w-full aspect-[16/9]">
-                        <img className="absolute w-full h-full object-fill" src="/public/test/table_tennis_background.png" alt="Tournament background" />
+                        <img className="absolute w-full h-full object-fill" src="/pingpongtable.jpg" alt="Tournament background" />
                       </div>
                     </CardHeader>
                     <CardContent className="pt-4 p-0">
