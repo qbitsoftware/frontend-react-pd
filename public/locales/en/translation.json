@@ -73,6 +73,10 @@
       "name": "Ranking",
       "view_all": "View all"
     },
+    "sponsors": {
+      "name": "Sponsors",
+      "view_all": "View all"
+    },
     "best_performers": {
       "title": "Best Performers of the Month",
       "button": "Check more"
@@ -925,9 +929,9 @@
     "no_images": "No images",
     "no_images_subtitle": "Currently there are no images"
   },
-  "sponsors": {
-    "title": "Sponsors",
-    "description": "Our sponsors"
+  "adboard": {
+    "name": "Ad-board",
+    "description": "Ad board"
   },
   "media": {
     "no_content": "No media content available"
