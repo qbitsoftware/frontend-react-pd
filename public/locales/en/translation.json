@@ -73,6 +73,10 @@
       "name": "Ranking",
       "view_all": "View all"
     },
+    "adboard": {
+      "name": "Ad-board",
+      "description": "Ad board"
+    },
     "sponsors": {
       "name": "Sponsors",
       "view_all": "View all"
